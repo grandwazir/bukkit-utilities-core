@@ -31,14 +31,15 @@ public abstract class AbstractConfiguration implements Configuration {
   protected final Logger logger = new Logger(this.getClass());
 
   protected org.bukkit.configuration.file.YamlConfiguration configuration;
-  protected File file_name;
-
+ 
   private final Plugin plugin;
   private final File file;
+  private final String fileName;
 
-  public AbstractConfiguration(final Plugin plugin) throws IOException {
+  public AbstractConfiguration(final Plugin plugin, String fileName) throws IOException {
     this.plugin = plugin;
-    this.file = new File(plugin.getDataFolder() + "/" + this.file_name);
+    this.fileName = fileName;
+    this.file = new File(plugin.getDataFolder() + "/" + this.fileName);
     this.load();
     this.setDefaults();
   }
