@@ -56,8 +56,8 @@ public class CommandManager implements CommandExecutor {
           sender.sendMessage(ChatColor.YELLOW + "You must specify a command.");
         } else if (this.commands.containsKey(args[1])) {
           final Command c = this.commands.get(args[1]);
-          sender.sendMessage(ChatColor.LIGHT_PURPLE + c.getUsage());
-          sender.sendMessage(ChatColor.YELLOW + c.getDescription());
+          sender.sendMessage(ChatColor.LIGHT_PURPLE + "/" + command.getName() + " " + c.getName());
+          sender.sendMessage(ChatColor.AQUA + c.getDescription());
         } else {
           sender.sendMessage(ChatColor.RED + "/" + command.getName() + " help <command>");
           sender.sendMessage(ChatColor.YELLOW + "You must specify a valid command.");
@@ -71,7 +71,7 @@ public class CommandManager implements CommandExecutor {
       sender.sendMessage(ChatColor.AQUA + this.description);
       sender.sendMessage(ChatColor.GREEN + "Type /" + command.getName() + " help <command> for details on a command.");
       for (final Entry<String, Command> c : this.commands.entrySet()) {
-        sender.sendMessage(ChatColor.YELLOW + "- " + c.getValue().getUsage());
+        sender.sendMessage(ChatColor.YELLOW + "- /" + command.getName() + " " + c.getValue().getName() + " " + c.getValue().getUsage());
       }
     }
     return true;
@@ -86,7 +86,7 @@ public class CommandManager implements CommandExecutor {
    * @param command
    * An instance of the command that should be registered.
    */
-  protected void registerCommand(final String command, final Command executor) {
+  public void registerCommand(final String command, final Command executor) {
     this.commands.put(command, executor);
   }
 

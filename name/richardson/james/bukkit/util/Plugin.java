@@ -20,13 +20,13 @@
 package name.richardson.james.bukkit.util;
 
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class Plugin extends JavaPlugin {
 
   protected Logger logger = new Logger(this.getClass());
-
-  private Permission permission;
+  protected Permission permission;
 
   public void addPermission(final Permission permission, final boolean parentPlugin) {
     if (parentPlugin) {
@@ -38,6 +38,14 @@ public abstract class Plugin extends JavaPlugin {
 
   public Permission getPermission() {
     return this.permission;
+  }
+  
+  protected void setPermission() {
+    final String node = this.getDescription().getName() + ".*";
+    final String description = "Allow use of all " + this.getDescription().getName() + " commands";
+    Permission permission = new Permission(node, description, PermissionDefault.OP);
+    this.getServer().getPluginManager().addPermission(permission);
+    this.permission = permission;
   }
 
 }

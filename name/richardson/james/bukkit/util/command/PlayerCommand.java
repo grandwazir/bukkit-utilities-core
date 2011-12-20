@@ -38,18 +38,22 @@ public abstract class PlayerCommand implements Command {
 
   protected final Logger logger = new Logger(this.getClass());
 
-  protected final String name = null;
-  protected final String description = null;
-  protected final String permission_description = null;
-  protected final String usage = null;
-  protected final PermissionDefault permission_default = null;
-  protected final Permission permission = null;
-
   protected Map<String, Object> arguments = new HashMap<String, Object>();
-  protected Plugin plugin = null;
+  protected Plugin plugin;
 
-  public PlayerCommand(final Plugin plugin) {
+  private String description;
+  private String name;
+  private Permission permission;
+  private String permissionDescription;
+  private String usage;
+  
+  public PlayerCommand(Plugin plugin, String name, String description, String usage, String permissionDescription, Permission permission) {
     this.plugin = plugin;
+    this.name = name;
+    this.description = description;
+    this.permissionDescription = permissionDescription;
+    this.usage = usage;
+    this.permission = permission;
     plugin.addPermission(this.permission, true);
   }
 
@@ -61,30 +65,6 @@ public abstract class PlayerCommand implements Command {
     return Collections.unmodifiableMap(this.arguments);
   }
 
-  @Override
-  public String getDescription() {
-    return new String(this.description);
-  }
-
-  @Override
-  public String getName() {
-    return new String(this.name);
-  }
-
-  @Override
-  public Permission getPermission() {
-    return this.permission;
-  }
-
-  @Override
-  public String getPermissionDescription() {
-    return new String(this.permission_description);
-  }
-
-  @Override
-  public String getUsage() {
-    return new String(this.usage);
-  }
 
   /**
    * Check to see if a player has permission to use this command.
@@ -112,7 +92,7 @@ public abstract class PlayerCommand implements Command {
     } catch (final CommandUsageException exception) {
       sender.sendMessage(ChatColor.RED + exception.getMessage());
     } catch (final CommandArgumentException exception) {
-      sender.sendMessage(ChatColor.RED + this.getUsage());
+      sender.sendMessage(ChatColor.RED + "/" + command.getName() + " " + this.getUsage());
       sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
     }
     return true;
@@ -126,6 +106,31 @@ public abstract class PlayerCommand implements Command {
   @Override
   public void setArguments(final Map<String, Object> arguments) {
     this.arguments = arguments;
+  }
+  
+  @Override
+  public String getDescription() {
+    return this.description;
+  }
+
+  @Override
+  public String getName() {
+    return this.name;
+  }
+
+  @Override
+  public Permission getPermission() {
+    return this.permission;
+  }
+
+  @Override
+  public String getPermissionDescription() {
+    return this.permissionDescription;
+  }
+
+  @Override
+  public String getUsage() {
+    return this.usage;
   }
 
 }

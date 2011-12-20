@@ -29,8 +29,7 @@ public final class Logger {
   private static final Level DEBUG_LEVEL = Level.FINE;
   private static final java.util.logging.Logger parentLogger = java.util.logging.Logger.getLogger("Minecraft");
   private static final Set<Logger> registeredLoggers = new HashSet<Logger>();
-
-  private static boolean debugging = false;
+  private static final Set<String> pluginsDebugging = new HashSet<String>();
 
   private String prefix = "";
   private final java.util.logging.Logger logger;
@@ -45,8 +44,10 @@ public final class Logger {
     this.logger = java.util.logging.Logger.getLogger(parentClass.getName());
     this.logger.setParent(Logger.parentLogger);
     Logger.registeredLoggers.add(this);
-    if (Logger.debugging) {
-      this.setDebugging(true);
+    for (String plugin : pluginsDebugging) {
+      if (this.getLoggerName().contains(plugin)) {
+        this.setDebugging(true);
+      }
     }
   }
 
@@ -57,13 +58,13 @@ public final class Logger {
    * that messages are correctly logged. All newly created and existing loggers
    * will also have debugging enabled.
    */
-  public static void enableDebugging() {
-    Logger.debugging = true;
+  public static void enableDebugging(String plugin) {
+    pluginsDebugging.add(plugin);
     for (final Handler handler : Logger.parentLogger.getHandlers()) {
       handler.setLevel(Logger.DEBUG_LEVEL);
     }
     for (final Logger logger : Logger.registeredLoggers) {
-      logger.setDebugging(true);
+      if (logger.getLoggerName().contains(plugin)) logger.setDebugging(true);
     }
   }
 
@@ -76,6 +77,10 @@ public final class Logger {
     return new String(this.prefix);
   }
 
+  public String getLoggerName() {
+    return this.logger.getName();
+  }
+  
   /**
    * Set the prefix that goes in front of all the messages for all loggers.
    * 
@@ -93,7 +98,7 @@ public final class Logger {
    * The string that you wish to log.
    */
   public void config(final String message) {
-    this.logger.config(prefix + "<" + this.logger.getName() + "> " + message);
+    this.logger.config("<" + this.logger.getName() + "> " + message);
   }
 
   /**
@@ -103,7 +108,7 @@ public final class Logger {
    * The string that you wish to log.
    */
   public void debug(final String message) {
-    this.logger.fine(prefix + "<" + this.logger.getName() + "> " + message);
+    this.logger.fine("<" + this.logger.getName() + "> " + message);
   }
 
   /**
