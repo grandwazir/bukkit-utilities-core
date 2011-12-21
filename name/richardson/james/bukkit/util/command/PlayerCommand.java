@@ -78,6 +78,11 @@ public abstract class PlayerCommand implements Command {
 
   @Override
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
+    if (!sender.hasPermission(this.getPermission())) {
+      sender.sendMessage(ChatColor.RED + "You do not have permission to do this.");
+      return true;
+    }
+    
     try {
       final LinkedList<String> arguments = new LinkedList<String>();
       arguments.addAll(Arrays.asList(args));

@@ -32,7 +32,6 @@ public abstract class Database {
   
   public Database(EbeanServer database) {
     this.database = database;
-    this.validate();
   }
   
   public EbeanServer getEbeanServer() {
@@ -88,9 +87,5 @@ public abstract class Database {
     logger.debug(this.toString());
     return database.delete(records);
   }
-  
-  public abstract void validate();
-  
-  public abstract void upgrade(int schema);
 
 }
