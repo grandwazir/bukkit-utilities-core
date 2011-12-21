@@ -22,10 +22,12 @@ package name.richardson.james.bukkit.util.command;
 public class CommandArgumentException extends Exception {
 
   private static final long serialVersionUID = -224188893239232383L;
-  private String message;
+  private final String message;
+  private final String help;
 
-  public CommandArgumentException(final String message) {
-    this.setMessage(message);
+  public CommandArgumentException(final String message, String help) {
+    this.message = message;
+    this.help = help;
   }
 
   @Override
@@ -33,8 +35,8 @@ public class CommandArgumentException extends Exception {
     return this.message;
   }
 
-  public void setMessage(final String message) {
-    this.message = message;
+  public String getHelp() {
+    return help;
   }
 
 }

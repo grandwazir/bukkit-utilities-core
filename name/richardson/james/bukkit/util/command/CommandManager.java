@@ -56,8 +56,9 @@ public class CommandManager implements CommandExecutor {
           sender.sendMessage(ChatColor.YELLOW + "You must specify a command.");
         } else if (this.commands.containsKey(args[1])) {
           final Command c = this.commands.get(args[1]);
-          sender.sendMessage(ChatColor.LIGHT_PURPLE + "/" + command.getName() + " " + c.getName());
-          sender.sendMessage(ChatColor.AQUA + c.getDescription());
+          sender.sendMessage(ChatColor.LIGHT_PURPLE + c.getDescription());
+          sender.sendMessage(ChatColor.YELLOW + "/" + command.getName() + " " + c.getName() + " " + c.getUsage());
+          
         } else {
           sender.sendMessage(ChatColor.RED + "/" + command.getName() + " help <command>");
           sender.sendMessage(ChatColor.YELLOW + "You must specify a valid command.");

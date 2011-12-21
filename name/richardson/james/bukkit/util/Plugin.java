@@ -41,7 +41,7 @@ public abstract class Plugin extends JavaPlugin {
   }
   
   protected void setPermission() {
-    final String node = this.getDescription().getName() + ".*";
+    final String node = this.getDescription().getName().toLowerCase() + ".*";
     final String description = "Allow use of all " + this.getDescription().getName() + " commands";
     Permission permission = new Permission(node, description, PermissionDefault.OP);
     this.getServer().getPluginManager().addPermission(permission);

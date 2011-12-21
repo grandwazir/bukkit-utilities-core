@@ -37,10 +37,8 @@ import name.richardson.james.bukkit.util.Plugin;
 public abstract class PlayerCommand implements Command {
 
   protected final Logger logger = new Logger(this.getClass());
-
   protected Map<String, Object> arguments = new HashMap<String, Object>();
-  protected Plugin plugin;
-
+  
   private String description;
   private String name;
   private Permission permission;
@@ -48,7 +46,6 @@ public abstract class PlayerCommand implements Command {
   private String usage;
   
   public PlayerCommand(Plugin plugin, String name, String description, String usage, String permissionDescription, Permission permission) {
-    this.plugin = plugin;
     this.name = name;
     this.description = description;
     this.permissionDescription = permissionDescription;
@@ -92,8 +89,8 @@ public abstract class PlayerCommand implements Command {
     } catch (final CommandUsageException exception) {
       sender.sendMessage(ChatColor.RED + exception.getMessage());
     } catch (final CommandArgumentException exception) {
-      sender.sendMessage(ChatColor.RED + "/" + command.getName() + " " + this.getUsage());
-      sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
+      sender.sendMessage(ChatColor.RED + exception.getMessage());
+      sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
     }
     return true;
   }
