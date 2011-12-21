@@ -80,7 +80,7 @@ public abstract class Database {
   public void delete(Object record) {
     logger.debug("Deleting record from database.");
     logger.debug(this.toString());
-    database.delete(this);
+    database.delete(record);
   }
   
   public int delete(List<? extends Object> records) {

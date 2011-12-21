@@ -50,11 +50,12 @@ public abstract class PlayerCommand implements Command {
     this.permissionDescription = permissionDescription;
     this.usage = usage;
     this.permission = permission;
+    this.logger.setPrefix("[" + plugin.getDescription().getName() + "]");
     plugin.addPermission(this.permission, true);
   }
 
   @Override
-  public abstract void execute(CommandSender sender, Map<String, Object> arguments) throws CommandPermissionException, CommandUsageException;
+  public abstract void execute(CommandSender sender, Map<String, Object> arguments) throws CommandArgumentException, CommandPermissionException, CommandUsageException;
 
   @Override
   public Map<String, Object> getArguments() {

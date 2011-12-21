@@ -27,7 +27,7 @@ public abstract class Plugin extends JavaPlugin {
 
   protected Logger logger = new Logger(this.getClass());
   protected Permission permission;
-
+  
   public void addPermission(final Permission permission, final boolean parentPlugin) {
     if (parentPlugin) {
       permission.addParent(this.permission, true);

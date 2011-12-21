@@ -24,20 +24,14 @@ public class CommandUsageException extends Exception {
   private static final long serialVersionUID = 8443259919961526754L;
 
   private final String message;
-  private final String usage;
 
-  public CommandUsageException(final String message, final String usage) {
+  public CommandUsageException(final String message) {
     this.message = message;
-    this.usage = usage;
   }
 
   @Override
   public String getMessage() {
     return this.message;
-  }
-
-  public String getUsage() {
-    return this.usage;
   }
 
 }

@@ -28,7 +28,7 @@ import org.bukkit.permissions.Permission;
 
 public interface Command extends CommandExecutor {
 
-  void execute(CommandSender sender, Map<String, Object> arguments) throws CommandPermissionException, CommandUsageException;
+  void execute(CommandSender sender, Map<String, Object> arguments) throws CommandArgumentException, CommandPermissionException, CommandUsageException;
 
   Map<String, Object> getArguments();
 
