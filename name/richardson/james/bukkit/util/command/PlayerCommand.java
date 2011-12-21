@@ -50,7 +50,7 @@ public abstract class PlayerCommand implements Command {
     this.permissionDescription = permissionDescription;
     this.usage = usage;
     this.permission = permission;
-    this.logger.setPrefix("[" + plugin.getDescription().getName() + "]");
+    this.logger.setPrefix("[" + plugin.getDescription().getName() + "] ");
     plugin.addPermission(this.permission, true);
   }
 
