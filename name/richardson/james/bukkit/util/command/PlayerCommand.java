@@ -86,7 +86,10 @@ public abstract class PlayerCommand implements Command {
     try {
       final LinkedList<String> arguments = new LinkedList<String>();
       arguments.addAll(Arrays.asList(args));
-      arguments.remove(0);
+      // remove command name from argument list when this command is called as a subcommand
+      if (!arguments.isEmpty()) {
+        if (arguments.get(0).equalsIgnoreCase(this.getName())) arguments.remove(0);
+      }
       final Map<String, Object> parsedArguments = this.parseArguments(arguments);
       this.execute(sender, parsedArguments);
     } catch (final CommandPermissionException exception) {
