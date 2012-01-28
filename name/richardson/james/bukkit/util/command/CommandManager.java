@@ -72,7 +72,10 @@ public class CommandManager implements CommandExecutor {
       sender.sendMessage(ChatColor.AQUA + this.description);
       sender.sendMessage(ChatColor.GREEN + "Type /" + command.getName() + " help <command> for details on a command.");
       for (final Entry<String, Command> c : this.commands.entrySet()) {
-        sender.sendMessage(ChatColor.YELLOW + "- /" + command.getName() + " " + c.getValue().getName() + " " + c.getValue().getUsage());
+        // only display usage information for commands that the player is allowed to use.
+        if (sender.hasPermission(c.getValue().getPermission())) {
+          sender.sendMessage(ChatColor.YELLOW + "- /" + command.getName() + " " + c.getValue().getName() + " " + c.getValue().getUsage());
+        }
       }
     }
     return true;
