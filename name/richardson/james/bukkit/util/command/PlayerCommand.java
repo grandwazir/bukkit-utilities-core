@@ -80,6 +80,7 @@ public abstract class PlayerCommand implements Command {
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
     if (!sender.hasPermission(this.getPermission())) {
       sender.sendMessage(ChatColor.RED + "You do not have permission to do this.");
+      if (logger.isDebugging()) sender.sendMessage(ChatColor.DARK_PURPLE + "You require " + this.permission.getName() + " to do this.");
       return true;
     }
     
@@ -94,6 +95,8 @@ public abstract class PlayerCommand implements Command {
       this.execute(sender, parsedArguments);
     } catch (final CommandPermissionException exception) {
       sender.sendMessage(ChatColor.RED + "You do not have permission to do this.");
+      sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
+      if (logger.isDebugging()) sender.sendMessage(ChatColor.DARK_PURPLE + "You require " + this.permission.getName() + " to do this.");
     } catch (final CommandUsageException exception) {
       sender.sendMessage(ChatColor.RED + exception.getMessage());
     } catch (final CommandArgumentException exception) {
