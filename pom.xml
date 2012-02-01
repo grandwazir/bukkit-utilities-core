@@ -23,7 +23,7 @@
     <repository>  
       <id>release</id>  
       <name>My public repository</name>  
-      <url>scp://hephaestus.james.richardson.name/srv/www/repository.james.richardson.name</url>  
+      <url>scp://repository.james.richardson.name/srv/www/repository.james.richardson.name</url>  
     </repository>  
   </distributionManagement>    
   
