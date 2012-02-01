@@ -45,7 +45,6 @@ public class CommandManager implements CommandExecutor {
     return Collections.unmodifiableMap(this.commands);
   }
 
-  @Override
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
     if (args.length != 0) {
       if (this.commands.containsKey(args[0])) {

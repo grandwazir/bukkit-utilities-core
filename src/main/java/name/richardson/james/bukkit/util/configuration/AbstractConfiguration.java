@@ -44,7 +44,6 @@ public abstract class AbstractConfiguration implements Configuration {
     this.setDefaults();
   }
 
-  @Override
   public org.bukkit.configuration.file.YamlConfiguration getDefaults() throws IOException {
     final InputStream resource = this.plugin.getResource(file.getName());
     final org.bukkit.configuration.file.YamlConfiguration defaults = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(resource);
@@ -52,20 +51,17 @@ public abstract class AbstractConfiguration implements Configuration {
     return defaults;
   }
 
-  @Override
   public void load() {
     logger.debug(String.format("Loading configuration: %s.", file.getName()));
     logger.debug(String.format("Using path: %s.", file.getPath()));
     this.configuration = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
   }
 
-  @Override
   public void save() throws IOException {
     logger.debug(String.format("Saving configuration: %s.", file.getName()));
     this.configuration.save(file);
   }
 
-  @Override
   public void setDefaults() throws IOException {
     logger.debug(String.format("Apply default configuration."));
     final org.bukkit.configuration.file.YamlConfiguration defaults = this.getDefaults();

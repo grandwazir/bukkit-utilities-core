@@ -54,10 +54,8 @@ public abstract class PlayerCommand implements Command {
     plugin.addPermission(this.permission, true);
   }
 
-  @Override
   public abstract void execute(CommandSender sender, Map<String, Object> arguments) throws CommandArgumentException, CommandPermissionException, CommandUsageException;
 
-  @Override
   public Map<String, Object> getArguments() {
     return Collections.unmodifiableMap(this.arguments);
   }
@@ -76,7 +74,6 @@ public abstract class PlayerCommand implements Command {
     return sender.hasPermission(this.getPermission());
   }
 
-  @Override
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
     if (!sender.hasPermission(this.getPermission())) {
       sender.sendMessage(ChatColor.RED + "You do not have permission to do this.");
@@ -106,37 +103,30 @@ public abstract class PlayerCommand implements Command {
     return true;
   }
 
-  @Override
   public Map<String, Object> parseArguments(final List<String> arguments) throws CommandArgumentException {
     return new HashMap<String, Object>();
   }
 
-  @Override
   public void setArguments(final Map<String, Object> arguments) {
     this.arguments = arguments;
   }
   
-  @Override
   public String getDescription() {
     return this.description;
   }
 
-  @Override
   public String getName() {
     return this.name;
   }
 
-  @Override
   public Permission getPermission() {
     return this.permission;
   }
 
-  @Override
   public String getPermissionDescription() {
     return this.permissionDescription;
   }
 
-  @Override
   public String getUsage() {
     return this.usage;
   }
