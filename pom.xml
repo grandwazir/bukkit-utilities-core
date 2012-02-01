@@ -48,7 +48,7 @@
         <version>2.2.2</version>
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>   
-          <scmCommentPrefix>[RELEASE]  </scmCommentPrefix>       
+          <scmCommentPrefix>released @{project.version}: </scmCommentPrefix>       
         </configuration>
       </plugin>
   
