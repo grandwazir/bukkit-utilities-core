@@ -2,8 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>name.richardson.james.bukkit</groupId>
   <artifactId>bukkit-utilities</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
-  <name>Library to use across all my plugins.</name>
+  <version>1.0.2</version>
+  <name>BukkitUtilities</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,6 +69,14 @@
                 <!-- Push and tag release changes myself rather than let Maven do it -->  
                 <pushChanges>false</pushChanges>
                 <tagNameFormat>v@{project.version}</tagNameFormat>   
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>            
+                <compilerVersion>1.5</compilerVersion>
             </configuration>
           </plugin>
       </plugins>
