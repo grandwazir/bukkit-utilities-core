@@ -56,7 +56,7 @@ public class CommandManager implements CommandExecutor {
         } else if (this.commands.containsKey(args[1])) {
           final Command c = this.commands.get(args[1]);
           sender.sendMessage(ChatColor.LIGHT_PURPLE + c.getDescription());
-          sender.sendMessage(ChatColor.YELLOW + "/" + command.getName() + " " + c.getName() + " " + c.getUsage());
+          sender.sendMessage(ChatColor.RED + "/" + command.getName() + " " + c.getName() + " " + ChatColor.YELLOW + c.getUsage());
           
         } else {
           sender.sendMessage(ChatColor.RED + "/" + command.getName() + " help <command>");
@@ -73,7 +73,7 @@ public class CommandManager implements CommandExecutor {
       for (final Entry<String, Command> c : this.commands.entrySet()) {
         // only display usage information for commands that the player is allowed to use.
         if (sender.hasPermission(c.getValue().getPermission())) {
-          sender.sendMessage(ChatColor.YELLOW + "- " + ChatColor.RED + "/" + command.getName() + " " + ChatColor.YELLOW + c.getValue().getName() + " " + c.getValue().getUsage());
+          sender.sendMessage(ChatColor.YELLOW + "- " + ChatColor.RED + "/" + command.getName() + " " + c.getValue().getName() + " " + ChatColor.YELLOW + c.getValue().getUsage());
         }
       }
     }
