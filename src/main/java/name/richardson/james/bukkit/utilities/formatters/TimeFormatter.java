@@ -17,12 +17,12 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.util;
+package name.richardson.james.bukkit.utilities.formatters;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Time {
+public class TimeFormatter {
 
   public final static long HOURS = 24;
   public final static long MINUTES = 60;

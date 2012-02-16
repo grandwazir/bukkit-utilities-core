@@ -17,13 +17,15 @@
  * DimensionDoor. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.util;
+package name.richardson.james.bukkit.utilities.database;
 
 import java.util.List;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.ExampleExpression;
 import com.avaje.ebean.LikeType;
+
+import name.richardson.james.bukkit.utilities.internals.Logger;
 
 public abstract class Database {
 
@@ -51,6 +53,12 @@ public abstract class Database {
     final ExampleExpression expression = database.getExpressionFactory().exampleLike(record, true, LikeType.EQUAL_TO);
     return database.find(record.getClass()).where().add(expression).findRowCount();
   }
+  
+  public int count(Class<?> recordClass) {
+    logger.debug("Attempting to get row count matching a specific class.");
+    return database.find(recordClass).findRowCount();
+  }
+  
   
   public List<? extends Object> list(Object record) {
     logger.debug("Attempting to return records matching an example.");
@@ -83,7 +91,7 @@ public abstract class Database {
   }
   
   public int delete(List<? extends Object> records) {
-    logger.debug("Deleting record from database.");
+    logger.debug("Deleting records from database.");
     logger.debug(this.toString());
     return database.delete(records);
   }

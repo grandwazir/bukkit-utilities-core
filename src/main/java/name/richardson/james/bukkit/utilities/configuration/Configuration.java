@@ -17,7 +17,7 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.util.configuration;
+package name.richardson.james.bukkit.utilities.configuration;
 
 import java.io.IOException;
 

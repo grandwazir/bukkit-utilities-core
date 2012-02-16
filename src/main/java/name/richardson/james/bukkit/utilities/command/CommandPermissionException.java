@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 James Richardson.
  * 
- * CommandUsageException.java is part of BukkitUtilities.
+ * CommandPermissionException.java is part of BukkitUtilities.
  * 
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,21 +17,28 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.util.command;
+package name.richardson.james.bukkit.utilities.command;
 
-public class CommandUsageException extends Exception {
+import org.bukkit.permissions.Permission;
 
-  private static final long serialVersionUID = 8443259919961526754L;
+public class CommandPermissionException extends Exception {
+
+  private static final long serialVersionUID = 4498180605868829834L;
 
   private final String message;
+  private final Permission permission;
 
-  public CommandUsageException(final String message) {
+  public CommandPermissionException(final String message, final Permission permission) {
     this.message = message;
+    this.permission = permission;
   }
 
-  @Override
   public String getMessage() {
     return this.message;
+  }
+
+  public Permission getPermission() {
+    return this.permission;
   }
 
 }

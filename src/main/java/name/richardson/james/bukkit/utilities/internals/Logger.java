@@ -17,7 +17,7 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.util;
+package name.richardson.james.bukkit.utilities.internals;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +26,7 @@ import java.util.logging.Level;
 
 public final class Logger {
 
+  private static final Level NORMAL_LEVEL = Level.INFO;
   private static final Level DEBUG_LEVEL = Level.FINE;
   private static final java.util.logging.Logger parentLogger = java.util.logging.Logger.getLogger("Minecraft");
   private static final Set<Logger> registeredLoggers = new HashSet<Logger>();
@@ -58,14 +59,24 @@ public final class Logger {
    * that messages are correctly logged. All newly created and existing loggers
    * will also have debugging enabled.
    */
-  public static void enableDebugging(String plugin) {
-    pluginsDebugging.add(plugin);
-    for (final Handler handler : Logger.parentLogger.getHandlers()) {
-      handler.setLevel(Logger.DEBUG_LEVEL);
+  public static void setDebugging(org.bukkit.plugin.Plugin plugin, boolean value) {
+    final String pluginName = plugin.getDescription().getName().toLowerCase();
+    if (value == true) {
+      pluginsDebugging.add(pluginName);
+      for (final Handler handler : Logger.parentLogger.getHandlers()) {
+        handler.setLevel(Logger.DEBUG_LEVEL);
+      }
+    } else {
+      pluginsDebugging.remove(pluginName);
     }
     for (final Logger logger : Logger.registeredLoggers) {
-      if (logger.getLoggerName().contains(plugin)) logger.setDebugging(true);
+      if (logger.getLoggerName().contains(pluginName)) logger.setDebugging(value);
     }
+  }
+  
+  public static boolean isDebugging(org.bukkit.plugin.Plugin plugin) {
+    final String pluginName = plugin.getDescription().getName().toLowerCase();
+    return pluginsDebugging.contains(pluginName);
   }
 
   /**
@@ -137,7 +148,11 @@ public final class Logger {
    * true if it is should log messages, false otherwise.
    */
   public void setDebugging(final Boolean value) {
-    this.logger.setLevel(Logger.DEBUG_LEVEL);
+    if (value) {
+      this.logger.setLevel(Logger.DEBUG_LEVEL);
+    } else {
+      this.logger.setLevel(Logger.NORMAL_LEVEL);
+    }
   }
 
   /**

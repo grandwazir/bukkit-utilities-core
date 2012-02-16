@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 James Richardson.
  * 
- * Handler.java is part of BukkitUtilities.
+ * CommandUsageException.java is part of BukkitUtilities.
  * 
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,16 +17,20 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.util;
+package name.richardson.james.bukkit.utilities.command;
 
-abstract public class Handler {
+public class CommandUsageException extends Exception {
 
-  protected static final Logger logger = new Logger(Handler.class);
-  protected final String owner;
+  private static final long serialVersionUID = 8443259919961526754L;
 
-  public Handler(final Class<?> parentClass) {
-    this.owner = parentClass.getName();
-    Handler.logger.debug("New handler created on behalf of " + this.owner);
+  private final String message;
+
+  public CommandUsageException(final String message) {
+    this.message = message;
+  }
+
+  public String getMessage() {
+    return this.message;
   }
 
 }

@@ -17,7 +17,7 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.util.command;
+package name.richardson.james.bukkit.utilities.command;
 
 public class CommandArgumentException extends Exception {
 
