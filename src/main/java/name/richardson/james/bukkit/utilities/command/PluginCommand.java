@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -13,21 +14,10 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.permissions.Permission;
 
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
+import name.richardson.james.bukkit.utilities.plugin.Localisable;
 import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class PluginCommand.
- */
-public abstract class PluginCommand implements Command, PermissionsHolder {
-
-  public static final ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.RED;
-  public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
-
-  /**
-   * The resource bundle for generic messages which will be used across plugins.
-   */
-  private static final ResourceBundle messages = ResourceBundle.getBundle("BukkitUtilities");
+public abstract class PluginCommand implements Command, PermissionsHolder, Localisable {
 
   /** The plugin. */
   protected SimplePlugin plugin;
@@ -44,8 +34,6 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
   /** The permissions associated with this command */
   private final List<Permission> permissions = new LinkedList<Permission>();
 
-  private final Map<String, Object> arguments = new HashMap<String, Object>();
-
   public PluginCommand(final SimplePlugin plugin) {
     final String pathPrefix = this.getClass().getSimpleName().toLowerCase();
     this.name = plugin.getMessage(pathPrefix + "-name");
@@ -59,26 +47,8 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
     this.permissions.add(permission);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see name.richardson.james.bukkit.utilities.command.Command#getArguments()
-   */
-  public Map<String, Object> getArguments() {
-    return Collections.unmodifiableMap(this.arguments);
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see
-   * name.richardson.james.bukkit.util.plugin.Localisable#getMessage(java.lang
-   * .String)
-   */
-
-  public String getColouredUsage() {
-    String message = this.usage;
-    message = this.usage.replaceAll("<", REQUIRED_ARGUMENT_COLOUR + "<");
-    message = this.usage.replaceAll("[", OPTIONAL_ARGUMENT_COLOUR + "[");
-    return message;
+  public String getChoiceFormattedMessage(String key, Object[] arguments, Object[] formats, Double[] limits) {
+    return plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
   }
 
   /*
@@ -88,6 +58,15 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
    */
   public String getDescription() {
     return this.description;
+  }
+
+  public Locale getLocale() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public String getMessage(final String key) {
+    return this.plugin.getMessage(key);
   }
 
   /*
@@ -115,6 +94,15 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
     return Collections.unmodifiableList(this.permissions);
   }
 
+  public String getSimpleFormattedMessage(String key, Object[] arguments) {
+    return this.plugin.getSimpleFormattedMessage(key, arguments);
+  }
+
+  public String getSimpleFormattedMessage(final String key, final String argument) {
+    final String[] arguments = { argument };
+    return this.getSimpleFormattedMessage(key, arguments);
+  }
+
   /*
    * (non-Javadoc)
    * @see name.richardson.james.bukkit.utilities.command.Command#getUsage()
@@ -131,68 +119,47 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
    */
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
 
-    // create the argument list and remove the command name from the list
-    final List<String> arguments = new LinkedList<String>();
-    for (final String argument : args) {
-      if (!argument.equalsIgnoreCase(this.getName())) {
-        arguments.add(argument);
-      }
-    }
-
     if (!this.getClass().isAnnotationPresent(ConsoleCommand.class) && (sender instanceof ConsoleCommandSender)) {
-      // check if this command is available to the console.
-      // if it isn't and they try to use it give them an error message.
-      sender.sendMessage(ChatColor.RED + messages.getString("command-not-available-to-console"));
+      sender.sendMessage(ChatColor.RED + this.getMessage("command-not-available-to-console"));
       return true;
     }
 
-    for (final Permission permission : this.getPermissions()) {
-      // check to see if the user has one of the permissions required to use
-      // this command.
-      // if they do execute the command
-      if (sender.hasPermission(permission)) {
-        try {
-          this.parseArguments(arguments, sender);
-          this.execute(sender);
-        } catch (final CommandArgumentException exception) {
-          sender.sendMessage(ChatColor.RED + exception.getMessage());
-          sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
-        } catch (final CommandPermissionException exception) {
-          sender.sendMessage(ChatColor.RED + messages.getString("command-not-permitted"));
-          if (exception.getMessage() != null) {
-            sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
-          }
-          if (this.plugin.isDebugging()) {
-            // if debugging is enabled output the permission that is required.
-            sender.sendMessage(ChatColor.DARK_PURPLE + messages.getString(String.format("permission-required", exception.getPermission().getName())));
-          }
-        } catch (final CommandUsageException exception) {
-          sender.sendMessage(ChatColor.RED + exception.getMessage());
-        }
-        break;
-      }
+    if (!this.testPermission(sender)) {
+      sender.sendMessage(ChatColor.RED + this.getMessage("command-no-permission"));
+      return true;
+    }
+    
+    try {
+      this.parseArguments(args, sender);
+    } catch (CommandArgumentException exception) {
+      sender.sendMessage(ChatColor.RED + exception.getMessage());
+      sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
+      return true;
+    }
+    
+    try {
+      this.execute(sender);
+    } catch (final CommandArgumentException exception) {
+      sender.sendMessage(ChatColor.RED + exception.getMessage());
+      sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
+    } catch (final CommandPermissionException exception) {
+      sender.sendMessage(ChatColor.RED + this.getMessage("command-no-permission"));
+      if (exception.getMessage() != null) sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
+      if (this.plugin.isDebugging()) sender.sendMessage(ChatColor.DARK_PURPLE + this.getSimpleFormattedMessage("command-permission-required", exception.getPermission().getName()));
+    } catch (final CommandUsageException exception) {
+      sender.sendMessage(ChatColor.RED + exception.getMessage());
     }
 
     return true;
 
   }
-
-  public String getMessage(final String key) {
-    return this.plugin.getMessage(key);
+  
+  private boolean testPermission(CommandSender sender) {
+    for (Permission permission : this.permissions) {
+      if (sender.hasPermission(permission)) return true;
+    }
+    return false;
   }
 
-  private String getSimpleFormattedMessage(final String key, final Object[] arguments) {
-    return this.plugin.getSimpleFormattedMessage(key, arguments);
-  }
-
-  public String getSimpleFormattedMessage(final String key, final String argument) {
-    final String[] arguments = { argument };
-    return this.getSimpleFormattedMessage(key, arguments);
-  }
-
-  protected void setArguments(final Map<String, Object> arguments) {
-    this.arguments.clear();
-    this.arguments.putAll(arguments);
-  }
 
 }
