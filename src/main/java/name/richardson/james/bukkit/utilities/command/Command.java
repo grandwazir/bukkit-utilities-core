@@ -19,9 +19,6 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
@@ -32,24 +29,13 @@ public interface Command extends CommandExecutor, PermissionsHolder {
   /**
    * Execute a command.
    * 
-   * @param sender the CommandSender using this command
-   * @param arguments any arguments provided
+   * @param sender The CommandSender using this command.
+   * @param arguments Any arguments provided. This should not include any command labels such as command prefixes.
    * @throws CommandArgumentException if any of the arguments are invalid.
-   * @throws CommandPermissionException if the player does not have permission
-   *           to use the command.
-   * @throws CommandUsageException if the command is being used in an
-   *           inappropriate way.
+   * @throws CommandPermissionException if the player does not have permission to use the command.
+   * @throws CommandUsageException if the command is being used in an inappropriate way.
    */
   void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException;
-
-  /**
-   * Gets the arguments provided to this command.
-   * 
-   * @return the arguments as a Map
-   */
-  Map<String, Object> getArguments();
-
-  String getColouredUsage();
 
   /**
    * Gets the description.
@@ -78,6 +64,6 @@ public interface Command extends CommandExecutor, PermissionsHolder {
    * @param arguments the arguments provided by the CommandManager
    * @throws CommandArgumentException if any of the arguments are invalid.
    */
-  void parseArguments(List<String> arguments, CommandSender sender) throws CommandArgumentException;
+  void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException;
 
 }
