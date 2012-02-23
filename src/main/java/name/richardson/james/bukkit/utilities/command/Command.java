@@ -67,6 +67,8 @@ public interface Command extends CommandExecutor, PermissionsHolder {
    * @return the usage
    */
   String getUsage();
+  
+  String getColouredUsage();
 
   /**
    * Parse the command arguments.

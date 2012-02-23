@@ -3,6 +3,7 @@ package name.richardson.james.bukkit.utilities.plugin;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -64,7 +65,8 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
 
     // if no override is present, use built in localisation.
     if (messages == null) {
-      messages = ResourceBundle.getBundle("localisation", locale);
+      // to get around a bug where we might end up loading localisation files from other jars.
+      messages = ResourceBundle.getBundle(this.getDescription().getName().toLowerCase() + "-localisation", locale, this.getClassLoader());
       if (messages.getLocale() != null) {
         logger.debug(String.format("Using built in localisation: %s_%s.", locale.getLanguage(), locale.getCountry()));
       } else {
@@ -72,7 +74,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
       }
 
     }
-
+    
   }
 
   private FileInputStream getResourceBundleOverride(String path) {
@@ -99,10 +101,22 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
    * name.richardson.james.bukkit.util.plugin.Localisable#getMessage(java.lang
    * .String)
    */
-  public String getMessage(String message) {
-    return messages.getString(message);
+  public String getSimpleFormattedMessage(String key, Object[] arguments) {
+    MessageFormat formatter = new MessageFormat("");
+    formatter.setLocale(locale);
+    formatter.applyPattern(messages.getString(key));
+    return formatter.format(arguments);
+  }
+  
+  public String getSimpleFormattedMessage(String key, String argument) {
+    String [] arguments = {argument};
+    return getSimpleFormattedMessage(key, arguments);
   }
 
+  public String getMessage(String key) {
+    return messages.getString(key);
+  }
+  
   /*
    * (non-Javadoc)
    * @see name.richardson.james.bukkit.util.plugin.Localisable#getLocale()
@@ -133,7 +147,8 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
    * @see org.bukkit.plugin.Plugin#onDisable()
    */
   public void onDisable() {
-
+    String [] args = {this.getDescription().getName()};
+    logger.info(getSimpleFormattedMessage("plugin-disabled", args));
   }
 
   /*
@@ -146,9 +161,10 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
       setRootPermission();
       setResourceBundle();
     } catch (IOException e) {
-      logger.severe("Unable to close file stream!");
+      e.printStackTrace();
     }
-    logger.info(String.format(getMessage("plugin-enabled"), this.getDescription().getName()));
+    String [] args = {this.getDescription().getFullName()};
+    logger.info(getSimpleFormattedMessage("plugin-enabled", args));
   }
 
   /*
@@ -179,6 +195,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
   public void addPermission(Permission permission) {
     final PluginManager pm = this.getServer().getPluginManager();
     pm.addPermission(permission);
+    permissions.add(permission);
     logger.debug(String.format("Adding permission: %s (default: %s)", permission.getName(), permission.getDefault()));
   }
 
@@ -206,10 +223,10 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
   protected void setRootPermission() {
     final PluginManager pm = this.getServer().getPluginManager();
     final String node = this.getDescription().getName().toLowerCase() + ".*";
-    final String description = "Allow use of all " + this.getDescription().getName() + " commands";
+    String [] args = {this.getDescription().getName()};
+    final String description = this.getSimpleFormattedMessage("plugin-wildcard-description", args);
     Permission permission = new Permission(node, description, PermissionDefault.OP);
-    pm.addPermission(permission);
-    permissions.add(permission);
+    this.addPermission(permission);
   }
 
   /*

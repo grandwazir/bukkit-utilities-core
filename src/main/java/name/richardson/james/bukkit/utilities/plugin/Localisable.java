@@ -16,6 +16,10 @@ public interface Localisable {
    */
   public String getMessage(String message);
 
+  public String getSimpleFormattedMessage(String key, Object[] arguments);
+  
+  public String getSimpleFormattedMessage(String key, String argument);
+  
   /**
    * Gets the current locale.
    * 

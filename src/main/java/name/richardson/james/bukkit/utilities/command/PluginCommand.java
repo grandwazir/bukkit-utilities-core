@@ -1,5 +1,6 @@
 package name.richardson.james.bukkit.utilities.command;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,8 +23,11 @@ import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
  */
 public abstract class PluginCommand implements Command, PermissionsHolder {
 
+  public static final ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.RED;
+  public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
+  
   /** The resource bundle for generic messages which will be used across plugins. */
-  private static final ResourceBundle messages = ResourceBundle.getBundle("localisation-bukkit-utils");
+  private static final ResourceBundle messages = ResourceBundle.getBundle("BukkitUtilities");
   
   /** The plugin. */
   protected SimplePlugin plugin;
@@ -42,10 +46,11 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
 
   private final Map<String, Object> arguments = new HashMap<String, Object>();
   
-  public PluginCommand(SimplePlugin plugin, String name, String description, String usage) {
-    this.name = name;
-    this.description = description;
-    this.usage = usage;
+  public PluginCommand(SimplePlugin plugin) {
+    String pathPrefix = this.getClass().getSimpleName().toLowerCase();
+    this.name = plugin.getMessage(pathPrefix + "-name");
+    this.description = plugin.getMessage(pathPrefix + "-description");
+    this.usage = plugin.getMessage(pathPrefix + "-usage");
     this.plugin = plugin;
   }
   
@@ -63,7 +68,7 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
     if (!this.getClass().isAnnotationPresent(ConsoleCommand.class) && (sender instanceof ConsoleCommandSender)) {
       // check if this command is available to the console.
       // if it isn't and they try to use it give them an error message.
-      sender.sendMessage(ChatColor.RED + PluginCommand.getMessage("command-not-available-to-console"));
+      sender.sendMessage(ChatColor.RED + messages.getString("command-not-available-to-console"));
       return true;
     }
     
@@ -78,11 +83,11 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
           sender.sendMessage(ChatColor.RED + exception.getMessage());
           sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
         } catch (CommandPermissionException exception) {
-          sender.sendMessage(ChatColor.RED + PluginCommand.getMessage("command-not-permitted"));
+          sender.sendMessage(ChatColor.RED + messages.getString("command-not-permitted"));
           if (exception.getMessage() != null) sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
           if (this.plugin.isDebugging()) {
             // if debugging is enabled output the permission that is required.
-            sender.sendMessage(ChatColor.DARK_PURPLE + String.format(PluginCommand.getMessage("command-permission-required"), exception.getPermission().getName()));
+            sender.sendMessage(ChatColor.DARK_PURPLE + messages.getString(String.format("permission-required", exception.getPermission().getName())));
           }
         } catch (CommandUsageException exception) {
           sender.sendMessage(ChatColor.RED + exception.getMessage());
@@ -95,14 +100,24 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
    
   }
   
-  /**
-   * Gets the message.
-   *
-   * @param key the key
-   * @return the message
+  private String getMessage(String key) {
+    return plugin.getMessage(key);
+  }
+  
+  /*
+   * (non-Javadoc)
+   * @see
+   * name.richardson.james.bukkit.util.plugin.Localisable#getMessage(java.lang
+   * .String)
    */
-  private static String getMessage(String key) {
-    return messages.getString(key);
+  
+  private String getSimpleFormattedMessage(String key, String argument) {
+    String [] arguments = {argument};
+    return getSimpleFormattedMessage(key, arguments);
+  }
+  
+  private String getSimpleFormattedMessage(String key, Object[] arguments) {
+    return plugin.getSimpleFormattedMessage(key, arguments);
   }
 
   /* (non-Javadoc)
@@ -131,6 +146,13 @@ public abstract class PluginCommand implements Command, PermissionsHolder {
    */
   public String getUsage() {
     return this.usage;
+  }
+  
+  public String getColouredUsage() {
+    String message = this.usage;
+    message = this.usage.replaceAll("<", REQUIRED_ARGUMENT_COLOUR + "<");
+    message = this.usage.replaceAll("[", OPTIONAL_ARGUMENT_COLOUR + "[");
+    return message;
   }
 
   public void addPermission(Permission permission) {
