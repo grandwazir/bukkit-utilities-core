@@ -32,24 +32,9 @@ public final class Logger {
   private static final Set<Logger> registeredLoggers = new HashSet<Logger>();
   private static final Set<String> pluginsDebugging = new HashSet<String>();
 
-  private String prefix = "";
-  private final java.util.logging.Logger logger;
-
-  /**
-   * Create a new logger with the specified name.
-   * 
-   * @param className
-   * The name of the logger, should be the class it belongs to.
-   */
-  public Logger(final Class<?> parentClass) {
-    this.logger = java.util.logging.Logger.getLogger(parentClass.getName());
-    this.logger.setParent(Logger.parentLogger);
-    Logger.registeredLoggers.add(this);
-    for (String plugin : pluginsDebugging) {
-      if (this.getLoggerName().contains(plugin)) {
-        this.setDebugging(true);
-      }
-    }
+  public static boolean isDebugging(final org.bukkit.plugin.Plugin plugin) {
+    final String pluginName = plugin.getDescription().getName().toLowerCase();
+    return pluginsDebugging.contains(pluginName);
   }
 
   /**
@@ -59,7 +44,7 @@ public final class Logger {
    * that messages are correctly logged. All newly created and existing loggers
    * will also have debugging enabled.
    */
-  public static void setDebugging(org.bukkit.plugin.Plugin plugin, boolean value) {
+  public static void setDebugging(final org.bukkit.plugin.Plugin plugin, final boolean value) {
     final String pluginName = plugin.getDescription().getName().toLowerCase();
     if (value == true) {
       pluginsDebugging.add(pluginName);
@@ -70,13 +55,55 @@ public final class Logger {
       pluginsDebugging.remove(pluginName);
     }
     for (final Logger logger : Logger.registeredLoggers) {
-      if (logger.getLoggerName().contains(pluginName)) logger.setDebugging(value);
+      if (logger.getLoggerName().contains(pluginName)) {
+        logger.setDebugging(value);
+      }
     }
   }
-  
-  public static boolean isDebugging(org.bukkit.plugin.Plugin plugin) {
-    final String pluginName = plugin.getDescription().getName().toLowerCase();
-    return pluginsDebugging.contains(pluginName);
+
+  private String prefix = "";
+
+  private final java.util.logging.Logger logger;
+
+  /**
+   * Create a new logger with the specified name.
+   * 
+   * @param className
+   *          The name of the logger, should be the class it belongs to.
+   */
+  public Logger(final Class<?> parentClass) {
+    this.logger = java.util.logging.Logger.getLogger(parentClass.getName());
+    this.logger.setParent(Logger.parentLogger);
+    Logger.registeredLoggers.add(this);
+    for (final String plugin : pluginsDebugging) {
+      if (this.getLoggerName().contains(plugin)) {
+        this.setDebugging(true);
+      }
+    }
+  }
+
+  /**
+   * Log a configuration message with this logger.
+   * 
+   * @param message
+   *          The string that you wish to log.
+   */
+  public void config(final String message) {
+    this.logger.config("<" + this.logger.getName() + "> " + message);
+  }
+
+  /**
+   * Log a debug message with this logger.
+   * 
+   * @param message
+   *          The string that you wish to log.
+   */
+  public void debug(final String message) {
+    this.logger.fine("<" + this.logger.getName() + "> " + message);
+  }
+
+  public String getLoggerName() {
+    return this.logger.getName();
   }
 
   /**
@@ -88,48 +115,14 @@ public final class Logger {
     return new String(this.prefix);
   }
 
-  public String getLoggerName() {
-    return this.logger.getName();
-  }
-  
-  /**
-   * Set the prefix that goes in front of all the messages for all loggers.
-   * 
-   * @param prefix
-   * The prefix to use for all loggers.
-   */
-  public void setPrefix(final String prefix) {
-    this.prefix = prefix;
-  }
-
-  /**
-   * Log a configuration message with this logger.
-   * 
-   * @param message
-   * The string that you wish to log.
-   */
-  public void config(final String message) {
-    this.logger.config("<" + this.logger.getName() + "> " + message);
-  }
-
-  /**
-   * Log a debug message with this logger.
-   * 
-   * @param message
-   * The string that you wish to log.
-   */
-  public void debug(final String message) {
-    this.logger.fine("<" + this.logger.getName() + "> " + message);
-  }
-
   /**
    * Log a general message with this logger.
    * 
    * @param message
-   * The string that you wish to log.
+   *          The string that you wish to log.
    */
   public void info(final String message) {
-    this.logger.info(prefix + message);
+    this.logger.info(this.prefix + message);
   }
 
   /**
@@ -145,7 +138,7 @@ public final class Logger {
    * Set if a logger should be logging debug messages or not.
    * 
    * @param setDebugging
-   * true if it is should log messages, false otherwise.
+   *          true if it is should log messages, false otherwise.
    */
   public void setDebugging(final Boolean value) {
     if (value) {
@@ -156,23 +149,33 @@ public final class Logger {
   }
 
   /**
+   * Set the prefix that goes in front of all the messages for all loggers.
+   * 
+   * @param prefix
+   *          The prefix to use for all loggers.
+   */
+  public void setPrefix(final String prefix) {
+    this.prefix = prefix;
+  }
+
+  /**
    * Log a severe (fatal) message with this logger.
    * 
    * @param message
-   * The string that you wish to log.
+   *          The string that you wish to log.
    */
   public void severe(final String message) {
-    this.logger.severe(prefix + message);
+    this.logger.severe(this.prefix + message);
   }
 
   /**
    * Log a warning message with this logger.
    * 
    * @param message
-   * The string that you wish to log.
+   *          The string that you wish to log.
    */
   public void warning(final String message) {
-    this.logger.warning(prefix + message);
+    this.logger.warning(this.prefix + message);
   }
 
 }

@@ -32,12 +32,12 @@ public abstract class AbstractConfiguration implements Configuration {
   protected final Logger logger = new Logger(this.getClass());
 
   protected org.bukkit.configuration.file.YamlConfiguration configuration;
- 
+
   private final Plugin plugin;
   private final File file;
   private final String fileName;
 
-  public AbstractConfiguration(final Plugin plugin, String fileName) throws IOException {
+  public AbstractConfiguration(final Plugin plugin, final String fileName) throws IOException {
     this.plugin = plugin;
     this.fileName = fileName;
     this.file = new File(plugin.getDataFolder() + "/" + this.fileName);
@@ -46,25 +46,25 @@ public abstract class AbstractConfiguration implements Configuration {
   }
 
   public org.bukkit.configuration.file.YamlConfiguration getDefaults() throws IOException {
-    final InputStream resource = this.plugin.getResource(file.getName());
+    final InputStream resource = this.plugin.getResource(this.file.getName());
     final org.bukkit.configuration.file.YamlConfiguration defaults = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(resource);
     resource.close();
     return defaults;
   }
 
   public void load() {
-    logger.debug(String.format("Loading configuration: %s.", file.getName()));
-    logger.debug(String.format("Using path: %s.", file.getPath()));
-    this.configuration = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
+    this.logger.debug(String.format("Loading configuration: %s.", this.file.getName()));
+    this.logger.debug(String.format("Using path: %s.", this.file.getPath()));
+    this.configuration = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(this.file);
   }
 
   public void save() throws IOException {
-    logger.debug(String.format("Saving configuration: %s.", file.getName()));
-    this.configuration.save(file);
+    this.logger.debug(String.format("Saving configuration: %s.", this.file.getName()));
+    this.configuration.save(this.file);
   }
 
   public void setDefaults() throws IOException {
-    logger.debug(String.format("Apply default configuration."));
+    this.logger.debug(String.format("Apply default configuration."));
     final org.bukkit.configuration.file.YamlConfiguration defaults = this.getDefaults();
     this.configuration.setDefaults(defaults);
     this.configuration.options().copyDefaults(true);

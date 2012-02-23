@@ -25,18 +25,18 @@ public class CommandArgumentException extends Exception {
   private final String message;
   private final String help;
 
-  public CommandArgumentException(final String message, String help) {
+  public CommandArgumentException(final String message, final String help) {
     this.message = message;
     this.help = help;
+  }
+
+  public String getHelp() {
+    return this.help;
   }
 
   @Override
   public String getMessage() {
     return this.message;
-  }
-
-  public String getHelp() {
-    return help;
   }
 
 }

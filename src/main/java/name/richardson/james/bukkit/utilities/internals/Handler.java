@@ -19,7 +19,6 @@
 
 package name.richardson.james.bukkit.utilities.internals;
 
-
 abstract public class Handler {
 
   protected static final Logger logger = new Logger(Handler.class);

@@ -33,6 +33,7 @@ public class CommandPermissionException extends Exception {
     this.permission = permission;
   }
 
+  @Override
   public String getMessage() {
     return this.message;
   }

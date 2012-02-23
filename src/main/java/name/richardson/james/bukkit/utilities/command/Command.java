@@ -31,48 +31,50 @@ public interface Command extends CommandExecutor, PermissionsHolder {
 
   /**
    * Execute a command.
-   *
+   * 
    * @param sender the CommandSender using this command
    * @param arguments any arguments provided
    * @throws CommandArgumentException if any of the arguments are invalid.
-   * @throws CommandPermissionException if the player does not have permission to use the command.
-   * @throws CommandUsageException if the command is being used in an inappropriate way.
+   * @throws CommandPermissionException if the player does not have permission
+   *           to use the command.
+   * @throws CommandUsageException if the command is being used in an
+   *           inappropriate way.
    */
   void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException;
 
   /**
    * Gets the arguments provided to this command.
-   *
+   * 
    * @return the arguments as a Map
    */
   Map<String, Object> getArguments();
 
+  String getColouredUsage();
+
   /**
    * Gets the description.
-   *
+   * 
    * @return the description
    */
   String getDescription();
 
   /**
    * Gets the name of this command.
-   *
+   * 
    * @return the name
    */
   String getName();
 
   /**
    * Gets the usage.
-   *
+   * 
    * @return the usage
    */
   String getUsage();
-  
-  String getColouredUsage();
 
   /**
    * Parse the command arguments.
-   *
+   * 
    * @param arguments the arguments provided by the CommandManager
    * @throws CommandArgumentException if any of the arguments are invalid.
    */

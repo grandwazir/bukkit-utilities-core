@@ -37,7 +37,7 @@ public class TimeFormatter {
    * "<w> days, <x> hours, <y> minutes and (z) seconds"
    */
   public static String millisToLongDHMS(long duration) {
-    StringBuffer res = new StringBuffer();
+    final StringBuffer res = new StringBuffer();
     long temp = 0;
     if (duration >= ONE_SECOND) {
       temp = duration / ONE_DAY;
@@ -58,20 +58,22 @@ public class TimeFormatter {
         res.append(temp).append(" minute").append(temp > 1 ? "s" : "");
       }
 
-      if (!res.toString().equals("") && duration >= ONE_SECOND)
+      if (!res.toString().equals("") && (duration >= ONE_SECOND)) {
         res.append(" and ");
+      }
 
       temp = duration / ONE_SECOND;
-      if (temp > 0)
+      if (temp > 0) {
         res.append(temp).append(" second").append(temp > 1 ? "s" : "");
+      }
       return res.toString();
     } else {
       return "0 second";
     }
-    
+
   }
-  
-  public static Long parseTime(String timeString) {
+
+  public static Long parseTime(final String timeString) {
     long time;
 
     int weeks = 0;
@@ -80,24 +82,26 @@ public class TimeFormatter {
     int minutes = 0;
     int seconds = 0;
 
-    Pattern p = Pattern.compile("\\d+[a-z]{1}");
-    Matcher m = p.matcher(timeString);
+    final Pattern p = Pattern.compile("\\d+[a-z]{1}");
+    final Matcher m = p.matcher(timeString);
     boolean result = m.find();
 
     while (result) {
-      String argument = m.group();
+      final String argument = m.group();
 
-      if (argument.endsWith("w"))
+      if (argument.endsWith("w")) {
         weeks = Integer.parseInt(argument.substring(0, argument.length() - 1));
-      else if (argument.endsWith("d"))
+      } else if (argument.endsWith("d")) {
         days = Integer.parseInt(argument.substring(0, argument.length() - 1));
-      else if (argument.endsWith("h"))
+      } else if (argument.endsWith("h")) {
         hours = Integer.parseInt(argument.substring(0, argument.length() - 1));
-      else if (argument.endsWith("m"))
+      } else if (argument.endsWith("m")) {
         minutes = Integer.parseInt(argument.substring(0, argument.length() - 1));
-      else if (argument.endsWith("s"))
+      } else if (argument.endsWith("s")) {
         seconds = Integer.parseInt(argument.substring(0, argument.length() - 1));
-      else throw new NumberFormatException("Invalid time format");
+      } else {
+        throw new NumberFormatException("Invalid time format");
+      }
 
       result = m.find();
     }
@@ -114,6 +118,5 @@ public class TimeFormatter {
     return time;
 
   }
-  
-  
+
 }

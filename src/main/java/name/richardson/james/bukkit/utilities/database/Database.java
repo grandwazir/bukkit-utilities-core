@@ -31,69 +31,68 @@ public abstract class Database {
 
   protected EbeanServer database;
   protected Logger logger = new Logger(this.getClass());
-  
-  public Database(EbeanServer database) {
+
+  public Database(final EbeanServer database) {
     this.database = database;
   }
-  
+
+  public int count(final Class<?> recordClass) {
+    this.logger.debug("Attempting to get row count matching a specific class.");
+    return this.database.find(recordClass).findRowCount();
+  }
+
+  public int count(final Object record) {
+    this.logger.debug("Attempting to get row count using an example.");
+    this.logger.debug(record.toString());
+    final ExampleExpression expression = this.database.getExpressionFactory().exampleLike(record, true, LikeType.EQUAL_TO);
+    return this.database.find(record.getClass()).where().add(expression).findRowCount();
+  }
+
+  public int delete(final List<? extends Object> records) {
+    this.logger.debug("Deleting records from database.");
+    this.logger.debug(this.toString());
+    return this.database.delete(records);
+  }
+
+  public void delete(final Object record) {
+    this.logger.debug("Deleting record from database.");
+    this.logger.debug(this.toString());
+    this.database.delete(record);
+  }
+
+  public List<? extends Object> find(final Object record) {
+    this.logger.debug("Attempting to return records matching an example.");
+    this.logger.debug(record.toString());
+    final ExampleExpression expression = this.database.getExpressionFactory().exampleLike(record, true, LikeType.EQUAL_TO);
+    return this.database.find(record.getClass()).where().add(expression).findList();
+  }
+
   public EbeanServer getEbeanServer() {
-    return database;
+    return this.database;
   }
-  
-  public List<? extends Object> find(Object record) {
-    logger.debug("Attempting to return records matching an example.");
-    logger.debug(record.toString());
-    final ExampleExpression expression = database.getExpressionFactory().exampleLike(record, true, LikeType.EQUAL_TO);
-    return database.find(record.getClass()).where().add(expression).findList();
+
+  public List<? extends Object> list(final Class<?> record) {
+    this.logger.debug("Attempting to return records matching the class: " + record.getName());
+    this.logger.debug(record.toString());
+    return this.database.find(record).findList();
   }
-  
-  public int count(Object record) {
-    logger.debug("Attempting to get row count using an example.");
-    logger.debug(record.toString());
-    final ExampleExpression expression = database.getExpressionFactory().exampleLike(record, true, LikeType.EQUAL_TO);
-    return database.find(record.getClass()).where().add(expression).findRowCount();
+
+  public List<? extends Object> list(final Object record) {
+    this.logger.debug("Attempting to return records matching an example.");
+    this.logger.debug(record.toString());
+    final ExampleExpression expression = this.database.getExpressionFactory().exampleLike(record, true, LikeType.EQUAL_TO);
+    return this.database.find(record.getClass()).where().add(expression).findList();
   }
-  
-  public int count(Class<?> recordClass) {
-    logger.debug("Attempting to get row count matching a specific class.");
-    return database.find(recordClass).findRowCount();
+
+  public int save(final List<? extends Object> records) {
+    this.logger.debug("Saving records to database.");
+    return this.database.save(records);
   }
-  
-  
-  public List<? extends Object> list(Object record) {
-    logger.debug("Attempting to return records matching an example.");
-    logger.debug(record.toString());
-    final ExampleExpression expression = database.getExpressionFactory().exampleLike(record, true, LikeType.EQUAL_TO);
-    return database.find(record.getClass()).where().add(expression).findList();
-  }
-  
-  public List<? extends Object> list(Class<?> record) {
-    logger.debug("Attempting to return records matching the class: " + record.getName());
-    logger.debug(record.toString());
-    return database.find(record).findList();
-  }
-  
-  public void save(Object record) {
-    logger.debug("Saving record to database.");
-    logger.debug(record.toString());
-    database.save(record);
-  }
-  
-  public int save(List<? extends Object> records) {
-    logger.debug("Saving records to database.");
-    return database.save(records);
-  }
-  
-  public void delete(Object record) {
-    logger.debug("Deleting record from database.");
-    logger.debug(this.toString());
-    database.delete(record);
-  }
-  
-  public int delete(List<? extends Object> records) {
-    logger.debug("Deleting records from database.");
-    logger.debug(this.toString());
-    return database.delete(records);
+
+  public void save(final Object record) {
+    this.logger.debug("Saving record to database.");
+    this.logger.debug(record.toString());
+    this.database.save(record);
   }
 
 }
