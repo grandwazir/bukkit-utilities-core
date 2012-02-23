@@ -1,28 +1,35 @@
 package name.richardson.james.bukkit.utilities.command;
 
-import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
 
+import name.richardson.james.bukkit.utilities.plugin.Localisable;
 import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
 
-public final class CommandManager implements CommandExecutor {
-
-  private static final ResourceBundle messages = ResourceBundle.getBundle("BukkitUtilities");
+public final class CommandManager implements CommandExecutor, Localisable {
 
   private final SimplePlugin plugin;
 
   private final Map<String, Command> commands = new HashMap<String, Command>();
 
+  /** The full name of the plugin including version */
+  private String pluginName;
+
+  /** The localised description of the plugin  */
+  private String pluginDescription;
+
   public CommandManager(final SimplePlugin plugin) {
     this.plugin = plugin;
+    this.pluginName = plugin.getDescription().getFullName();
+    this.pluginDescription = plugin.getMessage("plugin-description");
   }
 
   public void addCommand(final PluginCommand command) {
@@ -39,75 +46,81 @@ public final class CommandManager implements CommandExecutor {
 
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
 
-    if (args.length != 0) {
-      // if the arguments are not empty assume we have a command to execute
-      final String name = args[0];
-      if (this.commands.containsKey(name)) {
-        // pass the details on to the relevant command for processing
-        this.commands.get(name).onCommand(sender, cmd, label, args);
-      } else {
-        // send invalid command message to the player and tell them how to get
-        // help
-        sender.sendMessage(ChatColor.RED + this.getMessage("invalid-command"));
-        final String[] mArgs = { cmd.getName() };
-        sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("list-all-commands", mArgs));
-      }
-    } else if ((args.length == 2) && args[0].equalsIgnoreCase(this.getMessage("help-command"))) {
-      // if the user has provided enough arguments to look up additional help
-      // for a command attempt to do so.
-      final String name = args[1];
-      if (this.commands.containsKey(name)) {
-        // check to see if command provided is valid.
-        final Command command = this.commands.get(name);
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
-        // build argument list for formatting
-        this.getCommandHelpEntry(cmd.getName(), command);
-      } else {
-        // inform the sender how to get the more general help
-        sender.sendMessage(ChatColor.RED + this.getMessage("invalid-command"));
-        final String[] mArgs = { label, this.getMessage("help") };
-        sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("list-all-commands", mArgs));
-      }
-    } else {
-      // if no arguments have been provided, output default help
-      sender.sendMessage(ChatColor.LIGHT_PURPLE + this.plugin.getDescription().getFullName());
-      sender.sendMessage(ChatColor.AQUA + this.plugin.getDescription().getDescription());
-      final String[] mArgs = { label, this.getMessage("help-command") };
-      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("help-header", mArgs));
-      for (final Command command : this.commands.values()) {
-        for (final Permission permission : command.getPermissions()) {
-          if (sender.hasPermission(permission)) {
-            this.getCommandHelpEntry(cmd.getName(), command);
-            break;
-          }
+    if (args.length == 0) {
+      // display command listing and help
+      sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
+      sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
+      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("commandmanager-help-usage", cmd.getName()));
+      for (Command command : commands.values()) {
+        if (command.testPermission(sender)) {
+          sender.sendMessage(this.getCommandHelpEntry(label, command));
         }
       }
+      return true;
+    } 
+      
+    if (args.length != 0 && this.commands.containsKey(args[0].toLowerCase())) {
+      // execute the command
+      final Command command = commands.get(args[0]);
+      String[] arguments = this.prepareArguments(args, args[0]);
+      command.onCommand(sender, cmd, null, arguments);
+      return true;
+    } else if (args.length == 2 && args[0].equalsIgnoreCase(this.getMessage("commandmanager-help-command"))) {
+      if (commands.containsKey(args[1]) && commands.get(args[1]).testPermission(sender)) {
+        final Command command = commands.get(args[1]);
+        sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
+        sender.sendMessage(this.getCommandHelpEntry(label, command));
+      } else {
+        sender.sendMessage(ChatColor.RED + this.getMessage("commandmanager-invalid-command"));
+        sender.sendMessage(ChatColor.YELLOW + this.getMessage("commandmanager-list-commands-hint"));
+      }
+      return true;
+    } else {
+      sender.sendMessage(ChatColor.RED + this.getMessage("commandmanager-invalid-command"));
+      sender.sendMessage(ChatColor.YELLOW + this.getMessage("commandmanager-list-commands-hint"));
+      return true;
     }
 
-    return true;
+  }
 
+  private String[] prepareArguments(String[] args, String name) {
+    List<String> arguments = new ArrayList<String>();
+    for (String argument : args) {
+      if (!argument.equalsIgnoreCase(name)) arguments.add(argument);
+    }
+    return (String[]) arguments.toArray();
   }
 
   private String getCommandHelpEntry(final String label, final Command command) {
-    final String[] mArgs = { ChatColor.YELLOW + label, ChatColor.AQUA + command.getName(), command.getColouredUsage() };
-    return this.getSimpleFormattedMessage("command-entry", mArgs);
+    String usage = command.getUsage();
+    usage = usage.replaceAll("<", ChatColor.RED + "<");
+    usage = usage.replaceAll("[", ChatColor.AQUA + "[");
+    final String[] arguments = { ChatColor.YELLOW + label, ChatColor.AQUA + command.getName(), usage };
+    return this.getSimpleFormattedMessage("commandmanager-help-entry", arguments);
   }
 
-  private String getMessage(final String key) {
-    return CommandManager.messages.getString(key);
+
+  public Locale getLocale() {
+    return this.plugin.getLocale();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see
-   * name.richardson.james.bukkit.util.plugin.Localisable#getMessage(java.lang
-   * .String)
-   */
-  private String getSimpleFormattedMessage(final String key, final Object[] arguments) {
-    final MessageFormat formatter = new MessageFormat("");
-    formatter.setLocale(this.plugin.getLocale());
-    formatter.applyPattern(CommandManager.messages.getString(key));
-    return formatter.format(arguments);
+  public String getMessage(String key) {
+    return this.plugin.getMessage(key);
+  }
+  
+
+  public String getSimpleFormattedMessage(String key, Object[] arguments) {
+    return this.plugin.getSimpleFormattedMessage(key, arguments);
+  }
+
+  public String getSimpleFormattedMessage(final String key, final String argument) {
+    final String[] arguments = { argument };
+    return this.plugin.getSimpleFormattedMessage(key, arguments);
+  }
+  
+
+  public String getChoiceFormattedMessage(String key, Object[] arguments, Object[] formats, Double[] limits) {
+    return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
   }
 
 }

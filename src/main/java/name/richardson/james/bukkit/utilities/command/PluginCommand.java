@@ -1,12 +1,9 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -47,8 +44,8 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     this.permissions.add(permission);
   }
 
-  public String getChoiceFormattedMessage(String key, Object[] arguments, Object[] formats, Double[] limits) {
-    return plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
+  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits, double choice) {
+    return plugin.getChoiceFormattedMessage(key, arguments, formats, limits, choice);
   }
 
   /*
@@ -154,7 +151,7 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
 
   }
   
-  private boolean testPermission(CommandSender sender) {
+  public boolean testPermission(CommandSender sender) {
     for (Permission permission : this.permissions) {
       if (sender.hasPermission(permission)) return true;
     }

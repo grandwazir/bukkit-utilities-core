@@ -65,5 +65,7 @@ public interface Command extends CommandExecutor, PermissionsHolder {
    * @throws CommandArgumentException if any of the arguments are invalid.
    */
   void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException;
+  
+  public boolean testPermission(CommandSender sender);
 
 }

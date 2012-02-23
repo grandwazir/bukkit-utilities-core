@@ -61,6 +61,6 @@ public interface Localisable {
    * @param limits The limits as Doubles. For example {0,1}.
    * @return The localised message matching the key supplied and with the placeholder replaced.
    */
-  public String getChoiceFormattedMessage(String key, Object[] arguments, Object[] formats, Double[] limits);
+  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, Double[] limits);
   
 }
