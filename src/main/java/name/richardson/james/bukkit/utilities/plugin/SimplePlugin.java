@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ChoiceFormat;
+import java.text.Format;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -122,10 +123,11 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     return this.getSimpleFormattedMessage(key, arguments);
   }
 
-  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits, double choice) {
-    final ChoiceFormat formatter = new ChoiceFormat(limits, formats);
-    formatter.applyPattern(this.messages.getString(key));
-    return formatter.format(choice);
+  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits) {
+    final MessageFormat formatter = new MessageFormat(this.messages.getString(key));
+    final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
+    formatter.setFormatByArgumentIndex(0, cFormatter);
+    return formatter.format(arguments);
   }
   
   /*

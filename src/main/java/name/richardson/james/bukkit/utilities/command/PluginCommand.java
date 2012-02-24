@@ -44,8 +44,8 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     this.permissions.add(permission);
   }
 
-  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits, double choice) {
-    return plugin.getChoiceFormattedMessage(key, arguments, formats, limits, choice);
+  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits) {
+    return plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
   }
 
   /*
@@ -157,6 +157,5 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     }
     return false;
   }
-
 
 }

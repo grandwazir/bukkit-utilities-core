@@ -117,10 +117,11 @@ public final class CommandManager implements CommandExecutor, Localisable {
     final String[] arguments = { argument };
     return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
-  
 
-  public String getChoiceFormattedMessage(String key, Object[] arguments, Object[] formats, Double[] limits) {
+  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits) {
     return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
   }
+  
+
 
 }

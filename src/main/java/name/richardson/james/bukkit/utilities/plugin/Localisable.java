@@ -56,11 +56,11 @@ public interface Localisable {
    * This method returns a localised message replacing place holder in the string with the arguments provided. Additionally it alters the formatting of the message depending on the formats and limits provided. This can return messages such as "1 ban" or "2 bans".
    *
    * @param key Specifies the key of the message to look up in the ResourceBundle.
-   * @param arguments The arguments to use to format the messages and replace the place holder.
    * @param formats The formats to use when matched to a limit. For example {"no bans", "one ban"}.
    * @param limits The limits as Doubles. For example {0,1}.
+   * @param choice The format to use.
    * @return The localised message matching the key supplied and with the placeholder replaced.
    */
-  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, Double[] limits);
+  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits);
   
 }
