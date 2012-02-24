@@ -14,6 +14,9 @@ import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
 
 public final class CommandManager implements CommandExecutor, Localisable {
 
+  public static final ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.RED;
+  public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
+  
   private final SimplePlugin plugin;
 
   private final Map<String, Command> commands = new HashMap<String, Command>();
@@ -96,9 +99,9 @@ public final class CommandManager implements CommandExecutor, Localisable {
 
   private String getCommandHelpEntry(final String label, final Command command) {
     String usage = command.getUsage();
-    usage = usage.replaceAll("\\<", ChatColor.RED + "<");
-    usage = usage.replaceAll("\\[", ChatColor.YELLOW + "[");
-    final String[] arguments = {label, ChatColor.RED + command.getName(), usage };
+    usage = usage.replaceAll("\\<", REQUIRED_ARGUMENT_COLOUR + "<");
+    usage = usage.replaceAll("\\[", OPTIONAL_ARGUMENT_COLOUR + "[");
+    final String[] arguments = {label, REQUIRED_ARGUMENT_COLOUR + command.getName(), usage };
     return this.getSimpleFormattedMessage("commandmanager-help-entry", arguments);
   }
 
