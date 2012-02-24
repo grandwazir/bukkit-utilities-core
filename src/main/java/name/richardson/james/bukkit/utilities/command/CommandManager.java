@@ -56,7 +56,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
       sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("commandmanager-help-usage", messages));
       for (Command command : commands.values()) {
         if (command.testPermission(sender)) {
-          sender.sendMessage(this.getCommandHelpEntry(label, command));
+          sender.sendMessage(ChatColor.YELLOW + this.getCommandHelpEntry(label, command));
         }
       }
       return true;
@@ -97,8 +97,8 @@ public final class CommandManager implements CommandExecutor, Localisable {
   private String getCommandHelpEntry(final String label, final Command command) {
     String usage = command.getUsage();
     usage = usage.replaceAll("\\<", ChatColor.RED + "<");
-    usage = usage.replaceAll("\\[", ChatColor.AQUA + "[");
-    final String[] arguments = { ChatColor.YELLOW + label, ChatColor.AQUA + command.getName(), usage };
+    usage = usage.replaceAll("\\[", ChatColor.YELLOW + "[");
+    final String[] arguments = {label, ChatColor.RED + command.getName(), usage };
     return this.getSimpleFormattedMessage("commandmanager-help-entry", arguments);
   }
 
