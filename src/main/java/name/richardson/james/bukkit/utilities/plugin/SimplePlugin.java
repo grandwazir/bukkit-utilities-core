@@ -112,9 +112,8 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
    * .String)
    */
   public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
-    final MessageFormat formatter = new MessageFormat("");
+    final MessageFormat formatter = new MessageFormat(this.messages.getString(key));
     formatter.setLocale(this.locale);
-    formatter.applyPattern(this.messages.getString(key));
     return formatter.format(arguments);
   }
 
@@ -240,8 +239,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
   protected void setRootPermission() {
     // final PluginManager pm = this.getServer().getPluginManager();
     final String node = this.getDescription().getName().toLowerCase() + ".*";
-    final String[] args = { this.getDescription().getName() };
-    final String description = this.getSimpleFormattedMessage("plugin-wildcard-description", args);
+    final String description = this.getSimpleFormattedMessage("plugin-wildcard-description", this.getDescription().getName());
     final Permission permission = new Permission(node, description, PermissionDefault.OP);
     this.addPermission(permission);
   }

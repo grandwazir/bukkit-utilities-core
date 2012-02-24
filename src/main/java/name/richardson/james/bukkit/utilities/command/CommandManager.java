@@ -1,9 +1,7 @@
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -21,15 +19,19 @@ public final class CommandManager implements CommandExecutor, Localisable {
   private final Map<String, Command> commands = new HashMap<String, Command>();
 
   /** The full name of the plugin including version */
-  private String pluginName;
+  private final String pluginName;
 
   /** The localised description of the plugin  */
-  private String pluginDescription;
+  private final String pluginDescription;
+
+  /** the localised name of the help command */
+  private final String helpCommand;
 
   public CommandManager(final SimplePlugin plugin) {
     this.plugin = plugin;
     this.pluginName = plugin.getDescription().getFullName();
     this.pluginDescription = plugin.getMessage("plugin-description");
+    this.helpCommand = plugin.getMessage("commandmanager-help-command");
   }
 
   public void addCommand(final PluginCommand command) {
@@ -50,7 +52,8 @@ public final class CommandManager implements CommandExecutor, Localisable {
       // display command listing and help
       sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
       sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
-      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("commandmanager-help-usage", cmd.getName()));
+      String[] messages = {cmd.getName(), this.helpCommand};
+      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("commandmanager-help-usage", messages));
       for (Command command : commands.values()) {
         if (command.testPermission(sender)) {
           sender.sendMessage(this.getCommandHelpEntry(label, command));
@@ -84,17 +87,18 @@ public final class CommandManager implements CommandExecutor, Localisable {
   }
 
   private String[] prepareArguments(String[] args, String name) {
-    List<String> arguments = new ArrayList<String>();
-    for (String argument : args) {
-      if (!argument.equalsIgnoreCase(name)) arguments.add(argument);
+    if (args[0].equalsIgnoreCase(name)) {
+      String[] arguments = new String[args.length - 1];
+      System.arraycopy(args, 1, arguments, 0, args.length - 1);
+      return arguments;
     }
-    return (String[]) arguments.toArray();
+    return args;
   }
 
   private String getCommandHelpEntry(final String label, final Command command) {
     String usage = command.getUsage();
-    usage = usage.replaceAll("<", ChatColor.RED + "<");
-    usage = usage.replaceAll("[", ChatColor.AQUA + "[");
+    usage = usage.replaceAll("\\<", ChatColor.RED + "<");
+    usage = usage.replaceAll("\\[", ChatColor.AQUA + "[");
     final String[] arguments = { ChatColor.YELLOW + label, ChatColor.AQUA + command.getName(), usage };
     return this.getSimpleFormattedMessage("commandmanager-help-entry", arguments);
   }
