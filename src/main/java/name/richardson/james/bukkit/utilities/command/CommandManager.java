@@ -68,20 +68,19 @@ public final class CommandManager implements CommandExecutor, Localisable {
       String[] arguments = this.prepareArguments(args, args[0]);
       command.onCommand(sender, cmd, null, arguments);
       return true;
-    } else if (args.length == 2 && args[0].equalsIgnoreCase(this.getMessage("commandmanager-help-command"))) {
+    } else if (args.length == 2 && args[0].equalsIgnoreCase(this.helpCommand)) {
       if (commands.containsKey(args[1]) && commands.get(args[1]).testPermission(sender)) {
         final Command command = commands.get(args[1]);
         sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
         sender.sendMessage(this.getCommandHelpEntry(label, command));
       } else {
         sender.sendMessage(ChatColor.RED + this.getMessage("commandmanager-invalid-command"));
-        sender.sendMessage(ChatColor.YELLOW + this.getMessage("commandmanager-list-commands-hint"));
+        sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("commandmanager-list-commands-hint", cmd.getName()));
       }
       return true;
     } else {
       sender.sendMessage(ChatColor.RED + this.getMessage("commandmanager-invalid-command"));
-      sender.sendMessage(ChatColor.YELLOW + this.getMessage("commandmanager-list-commands-hint"));
-      return true;
+      sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("commandmanager-list-commands-hint", cmd.getName()));      return true;
     }
 
   }
