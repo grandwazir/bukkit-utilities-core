@@ -75,7 +75,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
       if (commands.containsKey(args[1]) && commands.get(args[1]).testPermission(sender)) {
         final Command command = commands.get(args[1]);
         sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
-        sender.sendMessage(this.getCommandHelpEntry(label, command));
+        sender.sendMessage(ChatColor.YELLOW + this.getCommandHelpEntry(label, command));
       } else {
         sender.sendMessage(ChatColor.RED + this.getMessage("commandmanager-invalid-command"));
         sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("commandmanager-list-commands-hint", cmd.getName()));
