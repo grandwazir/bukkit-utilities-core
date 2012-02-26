@@ -1,0 +1,44 @@
+Changelog for BukkitUtilities (v2.0.1-SNAPSHOT)
+
+2012-02-26 12:26:41 +0000    updated README file (James Richardson)
+
+v2.0.0
+2012-02-24 19:45:53 +0000    fix colour issue when using /handler help <command> (James Richardson)
+2012-02-24 17:04:03 +0000    Changed colours in CommandManager (James Richardson)
+2012-02-24 07:16:12 +0000    fix colour issue in CommandManager (James Richardson)
+2012-02-24 07:12:26 +0000    fix not including CommandManager name in message to user (James Richardson)
+2012-02-24 07:08:53 +0000    escape control chars in regular expressions (James Richardson)
+2012-02-24 06:17:33 +0000    implemented ChoiceFormatting correctly (James Richardson)
+2012-02-23 04:01:55 +0000    implement choiceformatter refactored CommandManager and PluginCommand (James Richardson)
+2012-02-23 02:51:56 +0000    update PluginCommand (James Richardson)
+2012-02-23 02:17:04 +0000    remove Maps from argument handling (James Richardson)
+2012-02-23 02:13:15 +0000    clean up (James Richardson)
+2012-02-23 01:36:34 +0000    added new localisation options (James Richardson)
+
+v1.1.0
+2012-02-16 03:09:06 +0000    refactoring, support for localising plugins (James Richardson)
+
+v1.0.2
+2012-02-02 06:03:58 +0000    changed colour formatting for help command (James Richardson)
+2012-02-02 05:57:25 +0000    updated pom (James Richardson)
+
+v1.0.0
+2012-02-01 22:55:31 +0000    nope that does not work (James Richardson)
+2012-02-01 22:54:44 +0000    adding version to commit? (James Richardson)
+2012-02-01 22:50:48 +0000    spacing issue in scm prefix (James Richardson)
+2012-02-01 22:49:16 +0000    changed settings for release plugin (James Richardson)
+2012-02-01 22:45:58 +0000    more coaxing (James Richardson)
+2012-02-01 22:34:29 +0000    attempting to persuade maven to release (James Richardson)
+2012-02-01 22:26:29 +0000    changed to use proper subdomain (James Richardson)
+2012-02-01 22:22:20 +0000    converted to use Maven (James Richardson)
+2012-01-31 19:29:27 +0000    fixed argument handling when command is not a sub command changed formatting of CommandHandler only show commands which a player has permission to access (James Richardson)
+2012-01-28 14:51:08 +0000    only display usage information for commands the CommandSender is allowed to use (James Richardson)
+2012-01-28 14:30:54 +0000    command arguments are parsed correctly when used as a root command (James Richardson)
+2011-12-21 23:21:29 +0000    check permissions of commands before handing to execute (James Richardson)
+2011-12-21 19:43:04 +0000    Put a space after the prefix (James Richardson)
+2011-12-21 19:41:26 +0000    fixes while developing DimensionDoor (James Richardson)
+2011-12-21 12:57:21 +0000    fixed stray import (James Richardson)
+2011-12-21 12:23:04 +0000    database class and more helpful error messages on commands (James Richardson)
+2011-12-20 07:25:22 +0000    minor additions while working on TimedMessages (James Richardson)
+2011-12-20 02:48:57 +0000    AbstractConfiguration now requires fileName as part of the constructor (James Richardson)
+2011-12-20 02:24:52 +0000    first commit (James Richardson)
