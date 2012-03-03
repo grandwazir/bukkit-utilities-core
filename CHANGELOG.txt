@@ -1,5 +1,7 @@
-Changelog for BukkitUtilities (v2.0.1-SNAPSHOT)
+Changelog for BukkitUtilities (v2.0.1)
 
+2012-02-27 18:41:27 +0000    build against Bukkit 1.1-R4 (James Richardson)
+2012-02-26 12:29:04 +0000    added CHANGELOG generation (James Richardson)
 2012-02-26 12:26:41 +0000    updated README file (James Richardson)
 
 v2.0.0
