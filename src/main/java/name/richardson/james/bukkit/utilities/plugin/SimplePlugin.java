@@ -18,6 +18,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.internals.Logger;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 
@@ -114,7 +115,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
   public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
     final MessageFormat formatter = new MessageFormat(this.messages.getString(key));
     formatter.setLocale(this.locale);
-    return formatter.format(arguments);
+    return ColourFormatter.replace("&", formatter.format(arguments));
   }
 
   public String getSimpleFormattedMessage(final String key, final String argument) {
@@ -126,7 +127,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     final MessageFormat formatter = new MessageFormat(this.messages.getString(key));
     final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
     formatter.setFormatByArgumentIndex(0, cFormatter);
-    return formatter.format(arguments);
+    return ColourFormatter.replace("&", formatter.format(arguments));
   }
   
   /*
