@@ -1,7 +1,7 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -19,7 +19,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
   
   private final SimplePlugin plugin;
 
-  private final Map<String, Command> commands = new HashMap<String, Command>();
+  private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
 
   /** The full name of the plugin including version */
   private final String pluginName;
