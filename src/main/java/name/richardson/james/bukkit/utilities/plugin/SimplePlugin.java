@@ -118,8 +118,8 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     return ColourFormatter.replace("&", formatter.format(arguments));
   }
 
-  public String getSimpleFormattedMessage(final String key, final String argument) {
-    final String[] arguments = { argument };
+  public String getSimpleFormattedMessage(final String key, final Object argument) {
+    final Object[] arguments = { argument };
     return this.getSimpleFormattedMessage(key, arguments);
   }
 

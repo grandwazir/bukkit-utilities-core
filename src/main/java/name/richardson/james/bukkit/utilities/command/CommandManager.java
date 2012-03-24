@@ -119,8 +119,8 @@ public final class CommandManager implements CommandExecutor, Localisable {
     return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 
-  public String getSimpleFormattedMessage(final String key, final String argument) {
-    final String[] arguments = { argument };
+  public String getSimpleFormattedMessage(final String key, final Object argument) {
+    final Object[] arguments = { argument };
     return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 

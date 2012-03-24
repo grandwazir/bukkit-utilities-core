@@ -48,7 +48,7 @@ public interface Localisable {
    * @param argument The argument to use to format the message and replace the place holder.
    * @return The localised message matching the key supplied and with the placeholder replaced.
    */
-  public String getSimpleFormattedMessage(String key, String argument);
+  public String getSimpleFormattedMessage(String key, Object argument);
 
   /**
    * Gets the choice formatted message.
