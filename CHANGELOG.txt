@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v2.1.4-SNAPSHOT)
 
+2012-03-24 23:12:11 +0000    Made getSimpleFormattedMessage consistent (James Richardson)
 2012-03-24 19:32:58 +0000    Allow ColourCodes in localisation files (James Richardson)
 
 v2.1.3
