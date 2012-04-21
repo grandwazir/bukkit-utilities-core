@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 James Richardson.
+ * Copyright (c) 2012 James Richardson.
  * 
- * Time.java is part of BukkitUtilities.
+ * TimeFormatter.java is part of BukkitUtilities.
  * 
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License along with
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-
 package name.richardson.james.bukkit.utilities.formatters;
 
 import java.util.regex.Matcher;

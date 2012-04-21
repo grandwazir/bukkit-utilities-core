@@ -1,10 +1,27 @@
+/*******************************************************************************
+ * Copyright (c) 2012 James Richardson.
+ * 
+ * SimplePlugin.java is part of BukkitUtilities.
+ * 
+ * BukkitUtilities is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * BukkitUtilities is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.plugin;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ChoiceFormat;
-import java.text.Format;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -52,6 +69,13 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     pm.addPermission(permission);
     this.permissions.add(permission);
     this.logger.debug(String.format("Adding permission: %s (default: %s)", permission.getName(), permission.getDefault()));
+  }
+
+  public String getChoiceFormattedMessage(final String key, final Object[] arguments, final String[] formats, final double[] limits) {
+    final MessageFormat formatter = new MessageFormat(this.messages.getString(key));
+    final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
+    formatter.setFormatByArgumentIndex(0, cFormatter);
+    return ColourFormatter.replace("&", formatter.format(arguments));
   }
 
   /*
@@ -106,6 +130,11 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     return this.permissions.get(0);
   }
 
+  public String getSimpleFormattedMessage(final String key, final Object argument) {
+    final Object[] arguments = { argument };
+    return this.getSimpleFormattedMessage(key, arguments);
+  }
+
   /*
    * (non-Javadoc)
    * @see
@@ -118,18 +147,6 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     return ColourFormatter.replace("&", formatter.format(arguments));
   }
 
-  public String getSimpleFormattedMessage(final String key, final Object argument) {
-    final Object[] arguments = { argument };
-    return this.getSimpleFormattedMessage(key, arguments);
-  }
-
-  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits) {
-    final MessageFormat formatter = new MessageFormat(this.messages.getString(key));
-    final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
-    formatter.setFormatByArgumentIndex(0, cFormatter);
-    return ColourFormatter.replace("&", formatter.format(arguments));
-  }
-  
   /*
    * (non-Javadoc)
    * @see name.richardson.james.bukkit.util.plugin.Debuggable#isDebugging()
@@ -142,6 +159,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
    * (non-Javadoc)
    * @see org.bukkit.plugin.Plugin#onDisable()
    */
+  @Override
   public void onDisable() {
     final String[] args = { this.getDescription().getName() };
     this.logger.info(this.getSimpleFormattedMessage("plugin-disabled", args));
@@ -151,6 +169,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
    * (non-Javadoc)
    * @see org.bukkit.plugin.Plugin#onEnable()
    */
+  @Override
   public void onEnable() {
     try {
       this.setLoggerPrefix();

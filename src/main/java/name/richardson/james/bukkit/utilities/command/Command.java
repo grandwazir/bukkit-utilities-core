@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 James Richardson.
+ * Copyright (c) 2012 James Richardson.
  * 
  * Command.java is part of BukkitUtilities.
  * 
@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License along with
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-
 package name.richardson.james.bukkit.utilities.command;
 
 import org.bukkit.command.CommandExecutor;
@@ -27,45 +26,54 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 public interface Command extends CommandExecutor, PermissionsHolder {
 
   /**
+   * Check if a player has permission to use this command.
+   * 
+   * @param sender the CommandSender attempting to use the command.
+   * @return true if they are allowed to use the command, false otherwise.
+   */
+  public boolean testPermission(CommandSender sender);
+
+  /**
    * Execute a command.
    * 
    * @param sender The CommandSender using this command.
-   * @param arguments Any arguments provided. This should not include any command labels such as command prefixes.
    * @throws CommandArgumentException if any of the arguments are invalid.
-   * @throws CommandPermissionException if the player does not have permission to use the command.
-   * @throws CommandUsageException if the command is being used in an inappropriate way.
+   * @throws CommandPermissionException if the player does not have permission
+   *           to use the command.
+   * @throws CommandUsageException if the command is being used in an
+   *           inappropriate way.
    */
   void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException;
 
   /**
    * Gets the description.
    * 
-   * @return the description
+   * @return a brief description of what the command does.
    */
   String getDescription();
 
   /**
    * Gets the name of this command.
    * 
-   * @return the name
+   * @return the name of the command.
    */
   String getName();
 
   /**
    * Gets the usage.
    * 
-   * @return the usage
+   * @return a brief string detailing how to use the command.
    */
   String getUsage();
 
   /**
-   * Parse the command arguments.
+   * Parse and validate the given command arguments.
    * 
    * @param arguments the arguments provided by the CommandManager
-   * @throws CommandArgumentException if any of the arguments are invalid.
+   * @param sender the sender
+   * @throws CommandArgumentException if any of the arguments are invalid or
+   *           missing.
    */
   void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException;
-  
-  public boolean testPermission(CommandSender sender);
 
 }

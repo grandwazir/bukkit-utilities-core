@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2012 James Richardson.
+ * 
+ * PluginCommand.java is part of BukkitUtilities.
+ * 
+ * BukkitUtilities is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * BukkitUtilities is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collections;
@@ -44,8 +62,8 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     this.permissions.add(permission);
   }
 
-  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits) {
-    return plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
+  public String getChoiceFormattedMessage(final String key, final Object[] arguments, final String[] formats, final double[] limits) {
+    return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
   }
 
   /*
@@ -91,13 +109,13 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     return Collections.unmodifiableList(this.permissions);
   }
 
-  public String getSimpleFormattedMessage(String key, Object[] arguments) {
-    return this.plugin.getSimpleFormattedMessage(key, arguments);
-  }
-
   public String getSimpleFormattedMessage(final String key, final Object argument) {
     final Object[] arguments = { argument };
     return this.getSimpleFormattedMessage(key, arguments);
+  }
+
+  public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
+    return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 
   /*
@@ -125,15 +143,15 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
       sender.sendMessage(ChatColor.RED + this.getMessage("command-no-permission"));
       return true;
     }
-    
+
     try {
       this.parseArguments(args, sender);
-    } catch (CommandArgumentException exception) {
+    } catch (final CommandArgumentException exception) {
       sender.sendMessage(ChatColor.RED + exception.getMessage());
       sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
       return true;
     }
-    
+
     try {
       this.execute(sender);
     } catch (final CommandArgumentException exception) {
@@ -141,8 +159,12 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
       sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
     } catch (final CommandPermissionException exception) {
       sender.sendMessage(ChatColor.RED + this.getMessage("command-no-permission"));
-      if (exception.getMessage() != null) sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
-      if (this.plugin.isDebugging()) sender.sendMessage(ChatColor.DARK_PURPLE + this.getSimpleFormattedMessage("command-permission-required", exception.getPermission().getName()));
+      if (exception.getMessage() != null) {
+        sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
+      }
+      if (this.plugin.isDebugging()) {
+        sender.sendMessage(ChatColor.DARK_PURPLE + this.getSimpleFormattedMessage("command-permission-required", exception.getPermission().getName()));
+      }
     } catch (final CommandUsageException exception) {
       sender.sendMessage(ChatColor.RED + exception.getMessage());
     }
@@ -150,10 +172,12 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     return true;
 
   }
-  
-  public boolean testPermission(CommandSender sender) {
-    for (Permission permission : this.permissions) {
-      if (sender.hasPermission(permission)) return true;
+
+  public boolean testPermission(final CommandSender sender) {
+    for (final Permission permission : this.permissions) {
+      if (sender.hasPermission(permission)) {
+        return true;
+      }
     }
     return false;
   }

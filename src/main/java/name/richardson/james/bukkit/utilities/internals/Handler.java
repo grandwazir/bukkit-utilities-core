@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 James Richardson.
+ * Copyright (c) 2012 James Richardson.
  * 
  * Handler.java is part of BukkitUtilities.
  * 
@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License along with
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-
 package name.richardson.james.bukkit.utilities.internals;
 
 abstract public class Handler {

@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2012 James Richardson.
+ * 
+ * CommandManager.java is part of BukkitUtilities.
+ * 
+ * BukkitUtilities is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * BukkitUtilities is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collections;
@@ -16,7 +34,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
 
   public static final ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.RED;
   public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
-  
+
   private final SimplePlugin plugin;
 
   private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
@@ -24,7 +42,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
   /** The full name of the plugin including version */
   private final String pluginName;
 
-  /** The localised description of the plugin  */
+  /** The localised description of the plugin */
   private final String pluginDescription;
 
   /** the localised name of the help command */
@@ -45,8 +63,29 @@ public final class CommandManager implements CommandExecutor, Localisable {
     this.commands.put(name, command);
   }
 
+  public String getChoiceFormattedMessage(final String key, final Object[] arguments, final String[] formats, final double[] limits) {
+    return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
+  }
+
   public Map<String, Command> getCommands() {
     return Collections.unmodifiableMap(this.commands);
+  }
+
+  public Locale getLocale() {
+    return this.plugin.getLocale();
+  }
+
+  public String getMessage(final String key) {
+    return this.plugin.getMessage(key);
+  }
+
+  public String getSimpleFormattedMessage(final String key, final Object argument) {
+    final Object[] arguments = { argument };
+    return this.plugin.getSimpleFormattedMessage(key, arguments);
+  }
+
+  public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
+    return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
@@ -55,25 +94,25 @@ public final class CommandManager implements CommandExecutor, Localisable {
       // display command listing and help
       sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
       sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
-      String[] messages = {cmd.getName(), this.helpCommand};
+      final String[] messages = { cmd.getName(), this.helpCommand };
       sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("commandmanager-help-usage", messages));
-      for (Command command : commands.values()) {
+      for (final Command command : this.commands.values()) {
         if (command.testPermission(sender)) {
           sender.sendMessage(ChatColor.YELLOW + this.getCommandHelpEntry(label, command));
         }
       }
       return true;
-    } 
-      
-    if (args.length != 0 && this.commands.containsKey(args[0].toLowerCase())) {
+    }
+
+    if ((args.length != 0) && this.commands.containsKey(args[0].toLowerCase())) {
       // execute the command
-      final Command command = commands.get(args[0]);
-      String[] arguments = this.prepareArguments(args, args[0]);
+      final Command command = this.commands.get(args[0]);
+      final String[] arguments = this.prepareArguments(args, args[0]);
       command.onCommand(sender, cmd, null, arguments);
       return true;
-    } else if (args.length == 2 && args[0].equalsIgnoreCase(this.helpCommand)) {
-      if (commands.containsKey(args[1]) && commands.get(args[1]).testPermission(sender)) {
-        final Command command = commands.get(args[1]);
+    } else if ((args.length == 2) && args[0].equalsIgnoreCase(this.helpCommand)) {
+      if (this.commands.containsKey(args[1]) && this.commands.get(args[1]).testPermission(sender)) {
+        final Command command = this.commands.get(args[1]);
         sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
         sender.sendMessage(ChatColor.YELLOW + this.getCommandHelpEntry(label, command));
       } else {
@@ -83,51 +122,27 @@ public final class CommandManager implements CommandExecutor, Localisable {
       return true;
     } else {
       sender.sendMessage(ChatColor.RED + this.getMessage("commandmanager-invalid-command"));
-      sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("commandmanager-list-commands-hint", cmd.getName()));      return true;
+      sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("commandmanager-list-commands-hint", cmd.getName()));
+      return true;
     }
 
-  }
-
-  private String[] prepareArguments(String[] args, String name) {
-    if (args[0].equalsIgnoreCase(name)) {
-      String[] arguments = new String[args.length - 1];
-      System.arraycopy(args, 1, arguments, 0, args.length - 1);
-      return arguments;
-    }
-    return args;
   }
 
   private String getCommandHelpEntry(final String label, final Command command) {
     String usage = command.getUsage();
     usage = usage.replaceAll("\\<", REQUIRED_ARGUMENT_COLOUR + "<");
     usage = usage.replaceAll("\\[", OPTIONAL_ARGUMENT_COLOUR + "[");
-    final String[] arguments = {label, REQUIRED_ARGUMENT_COLOUR + command.getName(), usage };
+    final String[] arguments = { label, REQUIRED_ARGUMENT_COLOUR + command.getName(), usage };
     return this.getSimpleFormattedMessage("commandmanager-help-entry", arguments);
   }
 
-
-  public Locale getLocale() {
-    return this.plugin.getLocale();
+  private String[] prepareArguments(final String[] args, final String name) {
+    if (args[0].equalsIgnoreCase(name)) {
+      final String[] arguments = new String[args.length - 1];
+      System.arraycopy(args, 1, arguments, 0, args.length - 1);
+      return arguments;
+    }
+    return args;
   }
-
-  public String getMessage(String key) {
-    return this.plugin.getMessage(key);
-  }
-  
-
-  public String getSimpleFormattedMessage(String key, Object[] arguments) {
-    return this.plugin.getSimpleFormattedMessage(key, arguments);
-  }
-
-  public String getSimpleFormattedMessage(final String key, final Object argument) {
-    final Object[] arguments = { argument };
-    return this.plugin.getSimpleFormattedMessage(key, arguments);
-  }
-
-  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits) {
-    return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
-  }
-  
-
 
 }
