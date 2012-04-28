@@ -34,7 +34,7 @@ import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
 
 public abstract class PluginCommand implements Command, PermissionsHolder, Localisable {
 
-  /** The plugin. */
+  /** The plugin that is command belongs to. */
   protected SimplePlugin plugin;
 
   /** The description of what this command does */
