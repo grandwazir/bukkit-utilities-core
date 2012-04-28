@@ -83,7 +83,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
    * @see name.richardson.james.bukkit.util.plugin.Localisable#getLocale()
    */
   public Locale getLocale() {
-    return (Locale) this.locale.clone();
+    return this.locale;
   }
 
   public String getMessage(final String key) {
