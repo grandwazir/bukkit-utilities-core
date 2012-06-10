@@ -3,10 +3,6 @@ package name.richardson.james.bukkit.utilities.updater;
 import java.net.URL;
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface Updatable.
- */
 public interface Updatable {
 
   /**

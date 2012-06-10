@@ -21,6 +21,7 @@ package name.richardson.james.bukkit.utilities.plugin;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -38,13 +39,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.internals.Logger;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
+import name.richardson.james.bukkit.utilities.updater.Updatable;
 
 /**
  * This class provides a basic implementation of the Debuggable, Localisable and
  * Permissions interface for a standard plugin. It is provided as a convenience
  * to avoid duplicating the same code across numerous plugins.
  */
-public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder {
+public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder, Updatable {
 
   /** The console logger. */
   protected final Logger logger = new Logger(this.getClass());
@@ -263,5 +265,23 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     final Permission permission = new Permission(node, description, PermissionDefault.OP);
     this.addPermission(permission);
   }
+  
+  public boolean update(String version) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+  
+
+  public List<String> getVersionList() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  
+
+  public boolean isNewVersionAvailable() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
 
 }
