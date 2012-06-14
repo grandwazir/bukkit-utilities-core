@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v2.2.0-SNAPSHOT)
 
+2012-06-14 01:53:06 +0100    add default method for getRepositoryURL (James Richardson)
 2012-06-14 01:47:41 +0100    bump Bukkit version to 1.2.5-R4.0 (James Richardson)
 2012-06-14 01:46:24 +0100    add ability for plugins to automatically update (James Richardson)
 2012-06-10 21:13:44 +0100    added relevant methods to SimplePlugin (James Richardson)

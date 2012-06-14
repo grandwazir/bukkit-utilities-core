@@ -38,7 +38,9 @@ public class PluginUpdater implements Runnable {
   private URL getMavenMetaDataURL() throws MalformedURLException {
     StringBuilder path = new StringBuilder();
     path.append(this.plugin.getRepositoryURL());
+    path.append("/");
     path.append(this.plugin.getGroupID().replace(".", "/"));
+    path.append("/");
     path.append(this.plugin.getArtifactID());
     path.append("/maven-metadata.xml");
     return new URL(path.toString());
@@ -64,16 +66,20 @@ public class PluginUpdater implements Runnable {
 
   public void run() {
     
+    this.logger.setPrefix("[" + plugin.getName() + "] ");
     logger.info(this.plugin.getMessage("updater-checking-for-new-version"));
     
     try {
       this.parseMavenMetaData();
     } catch (IOException e) {
       logger.warning(this.plugin.getMessage("updater-unable-to-save-file"));
+      e.printStackTrace();
     } catch (SAXException e) {
       logger.warning(this.plugin.getMessage("updater-unable-to-read-metadata"));
+      e.printStackTrace();
     } catch (ParserConfigurationException e) {
       logger.warning(this.plugin.getMessage("updater-unable-to-read-metadata"));
+      e.printStackTrace();
     }
     
     if (this.isNewVersionAvailable()) {
@@ -90,8 +96,10 @@ public class PluginUpdater implements Runnable {
         this.fetchFile(this.getPluginURL(), new File(path.toString()));
       } catch (MalformedURLException e) {
         logger.warning(this.plugin.getMessage("updater-unable-to-get-plugin"));
+        e.printStackTrace();
       } catch (IOException e) {
         logger.warning(this.plugin.getMessage("updater-unable-to-save-file"));
+        e.printStackTrace();
       }
     }
     
