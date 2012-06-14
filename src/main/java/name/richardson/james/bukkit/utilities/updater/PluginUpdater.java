@@ -108,7 +108,7 @@ public class PluginUpdater implements Runnable {
           // normalise the plugin name as necessary
           this.normalisePluginFileName();
           this.fetchFile(this.getPluginURL(), storage);
-          logger.info(this.plugin.getMessage("updater-plugin-updated"));
+          logger.info(this.plugin.getSimpleFormattedMessage("updater-plugin-updated", this.manifest.getCurrentVersion()));
         } catch (MalformedURLException e) {
           logger.warning(this.plugin.getMessage("updater-unable-to-get-plugin"));
           e.printStackTrace();
