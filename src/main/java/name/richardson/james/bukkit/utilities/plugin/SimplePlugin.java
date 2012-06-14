@@ -55,7 +55,7 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
   protected final Logger logger = new Logger(this.getClass());
   
   /** A plugin updater for this plugin **/
-  private final PluginUpdater updater = new PluginUpdater(this);
+  private PluginUpdater updater;
 
   /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
@@ -272,7 +272,8 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     this.addPermission(permission);
   }
   
-  protected void update() {
+  protected void update(boolean installUpdates) {
+    if (this.updater == null) this.updater = new PluginUpdater(this, installUpdates);
     Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(this, this.updater);
   }
   
