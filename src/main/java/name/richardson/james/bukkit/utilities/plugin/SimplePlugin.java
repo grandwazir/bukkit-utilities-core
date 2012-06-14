@@ -21,6 +21,7 @@ package name.richardson.james.bukkit.utilities.plugin;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
@@ -273,6 +274,14 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
   
   protected void update() {
     Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(this, this.updater);
+  }
+  
+  public URL getRepositoryURL() {
+    try {
+      return new URL("http://repository.james.richardson.name/releases");
+    } catch (MalformedURLException e) {
+      return null;
+    }
   }
 
 }
