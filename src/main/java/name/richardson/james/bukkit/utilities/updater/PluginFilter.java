@@ -14,6 +14,8 @@ public class PluginFilter implements FilenameFilter {
   }
   
   public boolean accept(File directory, String name) {
+    File file = new File(directory.getPath() + File.separatorChar + name);
+    if (file.isDirectory()) return false;
     if (name.contains(this.name)) return true;
     if (name.contains(this.name.toLowerCase())) return true;
     return false;
