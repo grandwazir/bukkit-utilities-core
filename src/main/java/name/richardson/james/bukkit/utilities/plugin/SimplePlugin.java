@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
@@ -39,6 +40,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.internals.Logger;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
 /**
@@ -50,6 +52,9 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
 
   /** The console logger. */
   protected final Logger logger = new Logger(this.getClass());
+  
+  /** A plugin updater for this plugin **/
+  private final PluginUpdater updater = new PluginUpdater(this);
 
   /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
@@ -266,22 +271,8 @@ public abstract class SimplePlugin extends JavaPlugin implements Debuggable, Loc
     this.addPermission(permission);
   }
   
-  public boolean update(String version) {
-    // TODO Auto-generated method stub
-    return false;
+  protected void update() {
+    Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(this, this.updater);
   }
-  
-
-  public List<String> getVersionList() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-
-  public boolean isNewVersionAvailable() {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
 
 }
