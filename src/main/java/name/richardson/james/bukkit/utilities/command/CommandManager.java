@@ -28,14 +28,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import name.richardson.james.bukkit.utilities.plugin.Localisable;
-import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
+import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public final class CommandManager implements CommandExecutor, Localisable {
 
   public static final ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.RED;
   public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
 
-  private final SimplePlugin plugin;
+  private final SkeletonPlugin plugin;
 
   private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
 
@@ -48,7 +48,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
   /** the localised name of the help command */
   private final String helpCommand;
 
-  public CommandManager(final SimplePlugin plugin) {
+  public CommandManager(final SkeletonPlugin plugin) {
     this.plugin = plugin;
     this.pluginName = plugin.getDescription().getFullName();
     this.pluginDescription = plugin.getMessage("plugin-description");

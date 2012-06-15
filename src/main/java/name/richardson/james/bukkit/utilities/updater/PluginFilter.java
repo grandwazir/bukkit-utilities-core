@@ -3,13 +3,13 @@ package name.richardson.james.bukkit.utilities.updater;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
+import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public class PluginFilter implements FilenameFilter {
 
   private final String name;
   
-  public PluginFilter(SimplePlugin plugin) {
+  public PluginFilter(SkeletonPlugin plugin) {
     name = plugin.getName();
   }
   

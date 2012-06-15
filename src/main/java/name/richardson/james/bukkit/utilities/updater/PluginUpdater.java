@@ -13,22 +13,27 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.xml.sax.SAXException;
 
+import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 import name.richardson.james.bukkit.utilities.internals.Logger;
-import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
 
 public class PluginUpdater implements Runnable {
 
+  /* The logger for this class */
   private final Logger logger = new Logger(PluginUpdater.class);
   
-  private final SimplePlugin plugin;
+  /* The plugin that this updater belongs to */
+  private final SkeletonPlugin plugin;
   
+  /* A reference to the downloaded Maven manifest from the remote repository */ 
   private MavenManifest manifest;
 
-  private boolean installUpdates;
+  /* The state that the updater should operate in */
+  private final State state;
+
   
-  public PluginUpdater(SimplePlugin plugin, boolean install) {
+  public PluginUpdater(SkeletonPlugin plugin, State state) {
     this.plugin = plugin;
-    this.installUpdates = install;
+    this.state = state;
     if (plugin.isDebugging()) logger.setDebugging(true);
   }
 
@@ -92,7 +97,7 @@ public class PluginUpdater implements Runnable {
     }
     
     if (this.isNewVersionAvailable()) {
-      if (this.installUpdates) {
+      if (this.state == State.AUTOMATIC) {
         try {
           // create the path for the updated plugin
           StringBuilder path = new StringBuilder();

@@ -30,12 +30,12 @@ import org.bukkit.permissions.Permission;
 
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 import name.richardson.james.bukkit.utilities.plugin.Localisable;
-import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
+import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public abstract class PluginCommand implements Command, PermissionsHolder, Localisable {
 
   /** The plugin that is command belongs to. */
-  protected SimplePlugin plugin;
+  protected SkeletonPlugin plugin;
 
   /** The description of what this command does */
   private final String description;
@@ -49,7 +49,7 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
   /** The permissions associated with this command */
   private final List<Permission> permissions = new LinkedList<Permission>();
 
-  public PluginCommand(final SimplePlugin plugin) {
+  public PluginCommand(final SkeletonPlugin plugin) {
     final String pathPrefix = this.getClass().getSimpleName().toLowerCase();
     this.name = plugin.getMessage(pathPrefix + "-name");
     this.description = plugin.getMessage(pathPrefix + "-description");

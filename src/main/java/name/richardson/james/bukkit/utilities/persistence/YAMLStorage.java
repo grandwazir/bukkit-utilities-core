@@ -1,45 +1,30 @@
-/*******************************************************************************
- * Copyright (c) 2012 James Richardson.
- * 
- * AbstractConfiguration.java is part of BukkitUtilities.
- * 
- * BukkitUtilities is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * BukkitUtilities is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
-package name.richardson.james.bukkit.utilities.configuration;
+package name.richardson.james.bukkit.utilities.persistence;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.internals.Logger;
 
-public abstract class AbstractConfiguration implements Configuration {
+public class YAMLStorage {
 
+  /* The logger assigned to this class */
   protected final Logger logger = new Logger(this.getClass());
 
+  /* The original bukkit YAML configuration that we are wrapping around */
   protected org.bukkit.configuration.file.YamlConfiguration configuration;
 
-  private final Plugin plugin;
+  /* A handle to the storage file on disk */
   private final File file;
-  private final String fileName;
 
-  public AbstractConfiguration(final Plugin plugin, final String fileName) throws IOException {
+  private final JavaPlugin plugin;
+
+  public YAMLStorage(JavaPlugin plugin, String name) throws IOException {
     this.plugin = plugin;
-    this.fileName = fileName;
-    this.file = new File(plugin.getDataFolder() + "/" + this.fileName);
+    this.file = new File(plugin.getDataFolder() + File.separator + name);
     this.load();
     this.setDefaults();
   }
@@ -69,5 +54,5 @@ public abstract class AbstractConfiguration implements Configuration {
     this.configuration.options().copyDefaults(true);
     this.save();
   }
-
+  
 }

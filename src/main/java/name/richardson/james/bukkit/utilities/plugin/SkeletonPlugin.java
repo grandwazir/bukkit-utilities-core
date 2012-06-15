@@ -3,6 +3,8 @@ package name.richardson.james.bukkit.utilities.plugin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import org.bukkit.permissions.Permission;
@@ -18,12 +21,18 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.internals.Logger;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
+import name.richardson.james.bukkit.utilities.updater.Updatable;
 
-public class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder {
+public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder, Updatable {
 
+  /* The configuration file for this plugin */
+  private PluginConfiguration configuration;
+  
   /* A list of resource bundles used by the plugin */
   private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
   
@@ -31,13 +40,10 @@ public class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisabl
   private final Logger logger;
 
   /* The locale of the system the plugin is running on */
-  private Locale locale = Locale.getDefault();
+  private final Locale locale = Locale.getDefault();
 
-    /** A list of permissions owned by this plugin */
+  /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
-  
-  protected 
-  
   
   public SkeletonPlugin() {
     this.logger = new Logger(this.getClass());
@@ -147,10 +153,12 @@ public class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisabl
     
     // attempt to load the resource bundles for the plugin
     try {
-      this.loadResourceBundles();
+      this.loadInitialConfiguration();
       this.loadConfiguration();
+      this.loadResourceBundles();
       this.setupPersistence();
       this.registerEvents();
+      this.setRootPermission();
       this.registerPermissions();
       this.registerCommands();
       this.updatePlugin();
@@ -166,12 +174,17 @@ public class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisabl
     
   }
 
+  private void loadInitialConfiguration() throws IOException {
+    this.configuration = new PluginConfiguration(this);
+    if (this.configuration.isDebugging()) this.setDebugging(true);
+  }
+
   public void setDebugging(boolean value) {
     Logger.setDebugging(this, value);
   }
   
-  private void loadConfiguration() {
-    this.logger.debug("No configuration to load!");
+  private void loadConfiguration() throws IOException {
+    // Nothing to do!
   }
 
   private void loadResourceBundles() throws IOException {
@@ -225,8 +238,9 @@ public class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisabl
   }
   
   private void updatePlugin() {
-    // TODO Auto-generated method stub
-    
+    // schedule a random delay so all BukkitUtilities plugins do not attempt to update at the same time.
+    long delay = new Random().nextInt(20);
+    this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new PluginUpdater(this, this.configuration.getAutomaticUpdaterState()), delay);
   }
   
   /**
@@ -237,11 +251,23 @@ public class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisabl
    * based on the name of the plugin.
    */
   protected void setRootPermission() {
-    // final PluginManager pm = this.getServer().getPluginManager();
     final String node = this.getDescription().getName().toLowerCase() + ".*";
     final String description = this.getSimpleFormattedMessage("plugin-wildcard-description", this.getDescription().getName());
     final Permission permission = new Permission(node, description, PermissionDefault.OP);
     this.addPermission(permission);
+  }
+  
+  public URL getRepositoryURL() {
+    try {
+      switch (this.configuration.getAutomaticUpdaterBranch()) {
+      case DEVELOPMENT:
+        return new URL("http://repository.james.richardson.name/snapshots");
+      default:
+        return new URL("http://repository.james.richardson.name/releases");
+      }
+    } catch (MalformedURLException e) {
+      return null;
+    }
   }
   
 }
