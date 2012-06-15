@@ -1,5 +1,7 @@
 Changelog for BukkitUtilities (v3.0.3-SNAPSHOT)
 
+2012-06-15 20:50:45 +0100    Further updated localisation (James Richardson)
+2012-06-15 20:49:21 +0100    amended localisation (James Richardson)
 2012-06-15 20:38:31 +0100    finished refactoring (James Richardson)
 2012-06-15 19:25:28 +0100    work in progress (James Richardson)
 

@@ -175,6 +175,11 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     
   }
 
+  protected void loadConfiguration() throws IOException {
+    // TODO Auto-generated method stub
+    
+  }
+
   private void loadInitialConfiguration() throws IOException {
     this.configuration = new PluginConfiguration(this);
     if (this.configuration.isDebugging()) this.setDebugging(true);
@@ -190,15 +195,15 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     this.setCoreResourceBundle();
   }
 
-  private void registerCommands() {
+  protected void registerCommands() {
     // No commands to register!
   }
 
-  private void registerEvents() {
+  protected void registerEvents() {
     // No events to register!
   }
   
-  private void registerPermissions() {
+  protected void registerPermissions() {
     // No permissions to register
   }
 
@@ -230,7 +235,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     
   }
 
-  private void setupPersistence() {
+  protected void setupPersistence() {
     // Nothing to persist!
   }
   
