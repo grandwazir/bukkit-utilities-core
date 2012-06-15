@@ -84,7 +84,14 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
         return bundle.getString(key);
       }
     }
-    throw new MissingResourceException("Encountered a missing key in the localisation of the plugin. This should NOT happen. Please report this as a bug.", "PropertyResourceBundle", key);
+    // Additional debugging for when localisation goes wrong
+    StringBuilder message = new StringBuilder();
+    message.append("Encountered a missing key in the localisation of the plugin. This should NOT happen. Please report this as a bug.");
+    for (ResourceBundle bundle : this.bundles) {
+      message.append(" Key list for linked bundle: ");
+      message.append(bundle.keySet().toString());
+    }
+    throw new MissingResourceException(message.toString(), "PropertyResourceBundle", key);
   }
 
   public Permission getPermission(final int index) {
@@ -155,8 +162,8 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     // attempt to load the resource bundles for the plugin
     try {
       this.loadInitialConfiguration();
-      this.loadConfiguration();
       this.loadResourceBundles();
+      this.loadConfiguration();
       this.setupPersistence();
       this.registerEvents();
       this.setRootPermission();
