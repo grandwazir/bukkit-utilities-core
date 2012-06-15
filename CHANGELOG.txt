@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v3.0.3-SNAPSHOT)
 
+2012-06-15 21:31:10 +0100    Fix issue where some plugins may rely on resourcebundles before they are loaded. (James Richardson)
 2012-06-15 21:14:37 +0100    changed scope of logger (James Richardson)
 2012-06-15 21:00:55 +0100    added debug messages in stubs to remind me to create them in plugins (James Richardson)
 2012-06-15 20:59:14 +0100    * 20 to convert ticks to seconds (James Richardson)

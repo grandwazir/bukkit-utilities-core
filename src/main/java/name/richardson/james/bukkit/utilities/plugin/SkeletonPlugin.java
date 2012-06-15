@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -174,6 +175,10 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
       this.logger.severe(this.getMessage("io-exception"));
       e.printStackTrace();
       this.setEnabled(false);
+    } catch (SQLException e) {
+      this.logger.severe(this.getMessage("panic"));
+      e.printStackTrace();
+      this.setEnabled(false);
     } finally {
       if (!this.isEnabled()) return;
     }
@@ -242,7 +247,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     
   }
 
-  protected void setupPersistence() {
+  protected void setupPersistence() throws SQLException {
     logger.debug("Skipping setting up persistence.");
   }
   
