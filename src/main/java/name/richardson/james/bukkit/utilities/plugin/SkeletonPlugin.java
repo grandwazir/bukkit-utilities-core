@@ -196,15 +196,15 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   }
 
   protected void registerCommands() {
-    // No commands to register!
+    logger.debug("Skipping registering commands.");
   }
 
   protected void registerEvents() {
-    // No events to register!
+    logger.debug("Skipping registering events and listeners.");
   }
   
   protected void registerPermissions() {
-    // No permissions to register
+    logger.debug("Skipping registering permissions.");
   }
 
   private void setCoreResourceBundle() {
@@ -236,12 +236,12 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   }
 
   protected void setupPersistence() {
-    // Nothing to persist!
+    logger.debug("Skipping setting up persistence.");
   }
   
   private void updatePlugin() {
     // schedule a random delay so all BukkitUtilities plugins do not attempt to update at the same time.
-    long delay = new Random().nextInt(20);
+    long delay = new Random().nextInt(20) * 20;
     this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new PluginUpdater(this, this.configuration.getAutomaticUpdaterState()), delay);
   }
   
