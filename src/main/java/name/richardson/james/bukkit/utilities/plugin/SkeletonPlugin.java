@@ -37,7 +37,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
   
   /* The logger that belongs to this plugin */
-  private final Logger logger;
+  protected final Logger logger;
 
   /* The locale of the system the plugin is running on */
   private final Locale locale = Locale.getDefault();

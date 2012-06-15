@@ -1,5 +1,7 @@
 Changelog for BukkitUtilities (v3.0.3-SNAPSHOT)
 
+2012-06-15 21:00:55 +0100    added debug messages in stubs to remind me to create them in plugins (James Richardson)
+2012-06-15 20:59:14 +0100    * 20 to convert ticks to seconds (James Richardson)
 2012-06-15 20:50:45 +0100    Further updated localisation (James Richardson)
 2012-06-15 20:49:21 +0100    amended localisation (James Richardson)
 2012-06-15 20:38:31 +0100    finished refactoring (James Richardson)
