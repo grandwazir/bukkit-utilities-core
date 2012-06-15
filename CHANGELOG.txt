@@ -1,5 +1,16 @@
-Changelog for BukkitUtilities (v3.0.0-SNAPSHOT)
+Changelog for BukkitUtilities (v3.0.3-SNAPSHOT)
 
+2012-06-15 20:38:31 +0100    finished refactoring (James Richardson)
+2012-06-15 19:25:28 +0100    work in progress (James Richardson)
+
+v3.0.2
+2012-06-14 05:19:25 +0100    only match files not directories (James Richardson)
+
+v3.0.1
+2012-06-14 04:44:53 +0100    fix bug where updated version number was not correctly being passed for localisation (James Richardson)
+
+v3.0.0
+2012-06-14 04:39:02 +0100    Finish added automatic updating capability (James Richardson)
 2012-06-14 02:03:33 +0100    add debugging messages and fix bug in getMavenmetaDataURL (James Richardson)
 2012-06-14 01:53:06 +0100    add default method for getRepositoryURL (James Richardson)
 2012-06-14 01:47:41 +0100    bump Bukkit version to 1.2.5-R4.0 (James Richardson)

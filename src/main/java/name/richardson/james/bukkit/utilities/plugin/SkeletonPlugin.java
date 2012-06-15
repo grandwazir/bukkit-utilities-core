@@ -143,7 +143,8 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   }
 
   public void onDisable() {
-    
+    this.getServer().getScheduler().cancelTasks(this);
+    logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
   }
 
   public final void onEnable() {
@@ -181,10 +182,6 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
 
   public void setDebugging(boolean value) {
     Logger.setDebugging(this, value);
-  }
-  
-  private void loadConfiguration() throws IOException {
-    // Nothing to do!
   }
 
   private void loadResourceBundles() throws IOException {
