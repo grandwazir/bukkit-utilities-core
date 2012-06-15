@@ -4,4 +4,6 @@ name.richardson.james.bukkit.utilities.database
 name.richardson.james.bukkit.utilities.formatters
 name.richardson.james.bukkit.utilities.internals
 name.richardson.james.bukkit.utilities.permissions
+name.richardson.james.bukkit.utilities.persistence
 name.richardson.james.bukkit.utilities.plugin
+name.richardson.james.bukkit.utilities.updater
