@@ -1,8 +1,11 @@
 package name.richardson.james.bukkit.utilities.persistence;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+
+import javax.persistence.PersistenceException;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.ExampleExpression;
@@ -12,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.internals.Logger;
 
-public abstract class SQLStorage implements Storage {
+public class SQLStorage {
 
   /* The logger assigned to this class */
   protected final Logger logger = new Logger(this.getClass());
@@ -21,10 +24,14 @@ public abstract class SQLStorage implements Storage {
   private final EbeanServer database;
   
   /* Database classes that are in use by this plugin */
-  private final List<Class<?>> classes = new LinkedList<Class<?>>();
+  private final List<Class<?>> classes;
+
+  private final JavaPlugin plugin;
   
-  public SQLStorage(JavaPlugin plugin) {
+  public SQLStorage(JavaPlugin plugin, List<Class<?>> classes) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
     this.database = plugin.getDatabase();
+    this.classes = classes;
+    this.plugin = plugin;
     this.load();
     this.setDefaults();
   }
@@ -92,6 +99,22 @@ public abstract class SQLStorage implements Storage {
     this.logger.debug("Saving " + record.getClass().getSimpleName() + " to the database.");
     this.logger.debug(record.toString());
     this.database.save(record);
+  }
+
+  private void load() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    Method installDDLMethod = plugin.getClass().getDeclaredMethod("installDDL", (Class<?>[]) null);
+    installDDLMethod.setAccessible(true);
+    for (Class<?> record : this.classes) {
+      try {
+        this.count(record);
+      } catch (final PersistenceException ex) {
+        installDDLMethod.invoke(this.plugin, (Object[]) null);
+      }
+    }
+  }
+
+  public void setDefaults() {
+    logger.debug("Skipping setting default database records");
   }
 
 }

@@ -1,5 +1,8 @@
 Changelog for BukkitUtilities (v3.1.1-SNAPSHOT)
 
+2012-07-07 01:20:09 +0100    add helper methods (James Richardson)
+2012-07-07 01:12:41 +0100    deprecate Database (James Richardson)
+2012-07-07 01:05:46 +0100    create SQLStorage (James Richardson)
 2012-06-16 01:18:58 +0100    pick up files named after the artifact id (James Richardson)
 
 v3.1.0
