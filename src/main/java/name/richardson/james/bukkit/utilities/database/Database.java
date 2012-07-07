@@ -26,6 +26,7 @@ import com.avaje.ebean.LikeType;
 
 import name.richardson.james.bukkit.utilities.internals.Logger;
 
+@Deprecated
 public abstract class Database {
 
   protected EbeanServer database;
