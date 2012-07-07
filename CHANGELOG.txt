@@ -1,5 +1,9 @@
-Changelog for BukkitUtilities (v3.0.3-SNAPSHOT)
+Changelog for BukkitUtilities (v3.1.1-SNAPSHOT)
 
+2012-06-16 01:18:58 +0100    pick up files named after the artifact id (James Richardson)
+
+v3.1.0
+2012-06-16 00:43:24 +0100    preparing to release (James Richardson)
 2012-06-15 21:44:50 +0100    added more generic messages (James Richardson)
 2012-06-15 21:31:10 +0100    Fix issue where some plugins may rely on resourcebundles before they are loaded. (James Richardson)
 2012-06-15 21:14:37 +0100    changed scope of logger (James Richardson)
