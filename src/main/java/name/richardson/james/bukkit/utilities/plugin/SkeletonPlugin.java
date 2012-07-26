@@ -91,7 +91,9 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     }
     // Additional debugging for when localisation goes wrong
     StringBuilder message = new StringBuilder();
-    message.append("Encountered a missing key in the localisation of the plugin. This should NOT happen. Please report this as a bug.");
+    message.append("Encountered a missing key '");
+    message.append(key);
+    message.append("' in the localisation of the plugin. This should NOT happen. Please report this as a bug.");
     for (ResourceBundle bundle : this.bundles) {
       message.append(" Key list for linked bundle: ");
       message.append(bundle.keySet().toString());
