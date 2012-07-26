@@ -81,7 +81,8 @@ public final class CommandManager implements CommandExecutor, Localisable {
     return this.plugin.getMessage(key);
   }
 
-  public String getSimpleFormattedMessage(final String key, final Object argument) {
+  public String getSimpleFormattedMessage(String key, final Object argument) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
     final Object[] arguments = { argument };
     return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
