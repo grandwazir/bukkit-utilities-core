@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.0.0-SNAPSHOT)
 
+2012-07-26 20:29:12 +0100    change scope (James Richardson)
 2012-07-26 20:24:27 +0100    made localisation exception more useful (James Richardson)
 2012-07-26 20:15:46 +0100    use getMessage instead of plugin.getMessage (James Richardson)
 2012-07-26 19:40:13 +0100    implements MetricListener (James Richardson)

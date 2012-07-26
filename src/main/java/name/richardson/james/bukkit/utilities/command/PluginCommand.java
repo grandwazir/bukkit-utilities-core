@@ -52,8 +52,8 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
   public PluginCommand(final SkeletonPlugin plugin) {
     this.plugin = plugin;
     this.name = this.getMessage("name");
-    this.description = plugin.getMessage("description");
-    this.usage = plugin.getMessage("usage");
+    this.description = this.getMessage("description");
+    this.usage = this.getMessage("usage");
   }
 
   public void addPermission(final Permission permission) {
