@@ -111,7 +111,6 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
   }
 
   public String getSimpleFormattedMessage(String key, final Object argument) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
     final Object[] arguments = { argument };
     return this.getSimpleFormattedMessage(key, arguments);
   }
