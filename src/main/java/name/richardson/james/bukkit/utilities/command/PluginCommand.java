@@ -138,12 +138,12 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
 
     if (!this.getClass().isAnnotationPresent(ConsoleCommand.class) && (sender instanceof ConsoleCommandSender)) {
-      sender.sendMessage(ChatColor.RED + this.getMessage("command-not-available-to-console"));
+      sender.sendMessage(ChatColor.RED + this.plugin.getMessage("plugincommand.not-available-to-console"));
       return true;
     }
 
     if (!this.testPermission(sender)) {
-      sender.sendMessage(ChatColor.RED + this.getMessage("command-no-permission"));
+      sender.sendMessage(ChatColor.RED + this.plugin.getMessage("plugincommand.no-permission"));
       return true;
     }
 
@@ -161,12 +161,12 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
       sender.sendMessage(ChatColor.RED + exception.getMessage());
       sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
     } catch (final CommandPermissionException exception) {
-      sender.sendMessage(ChatColor.RED + this.getMessage("command-no-permission"));
+      sender.sendMessage(ChatColor.RED + this.plugin.getMessage("plugincommand.no-permission"));
       if (exception.getMessage() != null) {
         sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
       }
       if (this.plugin.isDebugging()) {
-        sender.sendMessage(ChatColor.DARK_PURPLE + this.getSimpleFormattedMessage("command-permission-required", exception.getPermission().getName()));
+        sender.sendMessage(ChatColor.DARK_PURPLE + this.plugin.getSimpleFormattedMessage("plugincommand.permission-required", exception.getPermission().getName()));
       }
     } catch (final CommandUsageException exception) {
       sender.sendMessage(ChatColor.RED + exception.getMessage());

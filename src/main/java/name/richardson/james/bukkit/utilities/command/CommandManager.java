@@ -52,7 +52,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
     this.plugin = plugin;
     this.pluginName = plugin.getDescription().getFullName();
     this.pluginDescription = plugin.getMessage("plugin-description");
-    this.helpCommand = plugin.getMessage("commandmanager-help-command");
+    this.helpCommand = this.getMessage("help-command");
   }
 
   public void addCommand(final PluginCommand command) {
@@ -98,7 +98,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
       sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
       sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
       final String[] messages = { cmd.getName(), this.helpCommand };
-      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("commandmanager-help-usage", messages));
+      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("help-usage", messages));
       for (final Command command : this.commands.values()) {
         if (command.testPermission(sender)) {
           sender.sendMessage(ChatColor.YELLOW + this.getCommandHelpEntry(label, command));
@@ -119,13 +119,13 @@ public final class CommandManager implements CommandExecutor, Localisable {
         sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
         sender.sendMessage(ChatColor.YELLOW + this.getCommandHelpEntry(label, command));
       } else {
-        sender.sendMessage(ChatColor.RED + this.getMessage("commandmanager-invalid-command"));
-        sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("commandmanager-list-commands-hint", cmd.getName()));
+        sender.sendMessage(ChatColor.RED + this.getMessage("invalid-command"));
+        sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
       }
       return true;
     } else {
-      sender.sendMessage(ChatColor.RED + this.getMessage("commandmanager-invalid-command"));
-      sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("commandmanager-list-commands-hint", cmd.getName()));
+      sender.sendMessage(ChatColor.RED + this.getMessage("invalid-command"));
+      sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
       return true;
     }
 
@@ -136,7 +136,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
     usage = usage.replaceAll("\\<", REQUIRED_ARGUMENT_COLOUR + "<");
     usage = usage.replaceAll("\\[", OPTIONAL_ARGUMENT_COLOUR + "[");
     final String[] arguments = { label, REQUIRED_ARGUMENT_COLOUR + command.getName(), usage };
-    return this.getSimpleFormattedMessage("commandmanager-help-entry", arguments);
+    return this.getSimpleFormattedMessage("help-entry", arguments);
   }
 
   private String[] prepareArguments(final String[] args, final String name) {

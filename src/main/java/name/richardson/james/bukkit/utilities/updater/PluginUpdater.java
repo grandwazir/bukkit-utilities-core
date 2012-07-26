@@ -67,18 +67,18 @@ public class PluginUpdater implements Runnable, Localisable {
   public void run() {
     
     this.logger.setPrefix("[" + plugin.getName() + "] ");
-    logger.debug(this.plugin.getMessage("checking-for-new-version"));
+    logger.debug(this.getMessage("checking-for-new-version"));
     
     try {
       this.parseMavenMetaData();
     } catch (IOException e) {
-      logger.warning(this.plugin.getMessage("unable-to-save-file"));
+      logger.warning(this.getMessage("unable-to-save-file"));
       e.printStackTrace();
     } catch (SAXException e) {
-      logger.warning(this.plugin.getMessage("unable-to-read-metadata"));
+      logger.warning(this.getMessage("unable-to-read-metadata"));
       e.printStackTrace();
     } catch (ParserConfigurationException e) {
-      logger.warning(this.plugin.getMessage("unable-to-read-metadata"));
+      logger.warning(this.getMessage("unable-to-read-metadata"));
       e.printStackTrace();
     }
     
@@ -101,16 +101,16 @@ public class PluginUpdater implements Runnable, Localisable {
           // normalise the plugin name as necessary
           this.normalisePluginFileName();
           this.fetchFile(this.getPluginURL(), storage);
-          logger.info(this.plugin.getSimpleFormattedMessage("plugin-updated", this.manifest.getCurrentVersion()));
+          logger.info(this.getSimpleFormattedMessage("plugin-updated", this.manifest.getCurrentVersion()));
         } catch (MalformedURLException e) {
-          logger.warning(this.plugin.getMessage("unable-to-get-plugin"));
+          logger.warning(this.getMessage("unable-to-get-plugin"));
           e.printStackTrace();
         } catch (IOException e) {
-          logger.warning(this.plugin.getMessage("unable-to-save-file"));
+          logger.warning(this.getMessage("unable-to-save-file"));
           e.printStackTrace();
         }
       } else {
-        logger.info(this.plugin.getSimpleFormattedMessage("newer-version-available", this.manifest.getCurrentVersion()));
+        logger.info(this.getSimpleFormattedMessage("newer-version-available", this.manifest.getCurrentVersion()));
       }
     } 
   }
@@ -165,7 +165,6 @@ public class PluginUpdater implements Runnable, Localisable {
     path.append(".jar");
     return new URL(path.toString());
   }
-  
 
   private boolean isNewVersionAvailable() {
     DefaultArtifactVersion current = new DefaultArtifactVersion(plugin.getDescription().getVersion());
@@ -179,7 +178,6 @@ public class PluginUpdater implements Runnable, Localisable {
     }
   }
   
-
   private void normalisePluginFileName() {
     String name = plugin.getName() + ".jar";
     File plugin = this.getPluginFile();
