@@ -86,8 +86,10 @@ public class PluginUpdater implements Runnable, Localisable {
       if (this.state == State.AUTOMATIC) {
         try {
           // create the path for the updated plugin
+          File updateFolder = this.plugin.getServer().getUpdateFolderFile();
+          if (!updateFolder.exists()) updateFolder.mkdirs();
           StringBuilder path = new StringBuilder();
-          path.append(this.plugin.getServer().getUpdateFolderFile().getAbsolutePath());
+          path.append(updateFolder.getAbsolutePath());
           path.append(File.separatorChar);
           path.append(this.plugin.getDescription().getName());
           path.append(".jar");
