@@ -192,11 +192,16 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     
   }
 
-  protected void setupMetrics() throws IOException {
+  private void setupMetrics() throws IOException {
     metrics = new Metrics(this);
+    this.setupCustomMetrics();
     metrics.start();
   }
   
+
+  protected void setupCustomMetrics() {
+    this.logger.debug("Skipping setting up custom metrics");
+  }
 
   protected void loadConfiguration() throws IOException {
     // TODO Auto-generated method stub

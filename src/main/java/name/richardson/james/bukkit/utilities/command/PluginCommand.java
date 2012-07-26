@@ -81,8 +81,9 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     return null;
   }
 
-  public String getMessage(final String key) {
-    return this.plugin.getMessage(this.getClass().getSimpleName().toLowerCase() + key);
+  public String getMessage(String key) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
+    return this.plugin.getMessage(key);
   }
 
   /*
