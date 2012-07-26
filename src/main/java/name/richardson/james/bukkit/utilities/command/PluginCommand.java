@@ -50,11 +50,10 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
   private final List<Permission> permissions = new LinkedList<Permission>();
 
   public PluginCommand(final SkeletonPlugin plugin) {
-    final String pathPrefix = this.getClass().getSimpleName().toLowerCase();
-    this.name = plugin.getMessage(pathPrefix + "-name");
-    this.description = plugin.getMessage(pathPrefix + "-description");
-    this.usage = plugin.getMessage(pathPrefix + "-usage");
     this.plugin = plugin;
+    this.name = this.getMessage("name");
+    this.description = plugin.getMessage("description");
+    this.usage = plugin.getMessage("usage");
   }
 
   public void addPermission(final Permission permission) {

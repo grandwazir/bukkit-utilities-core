@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.0.0-SNAPSHOT)
 
+2012-07-26 19:40:13 +0100    implements MetricListener (James Richardson)
 2012-07-26 19:17:57 +0100    removed double lines (James Richardson)
 2012-07-26 19:14:15 +0100    add ability to disable stats collection (James Richardson)
 2012-07-26 19:10:12 +0100    create the update folder if it does not exist (James Richardson)

@@ -167,11 +167,11 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     // attempt to load the resource bundles for the plugin
     try {
       this.loadInitialConfiguration();
-      this.setupMetrics();
       this.loadResourceBundles();
       this.loadConfiguration();
       this.setupPersistence();
       this.registerEvents();
+      this.setupMetrics();
       this.setRootPermission();
       this.registerPermissions();
       this.registerCommands();
@@ -192,20 +192,12 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     
   }
 
-  private void setupMetrics() throws IOException {
-    metrics = new Metrics(this);
-    this.setupCustomMetrics();
-    metrics.start();
-  }
-  
-
-  protected void setupCustomMetrics() {
-    this.logger.debug("Skipping setting up custom metrics");
+  protected void setupMetrics() throws IOException {
+    logger.debug("Skipping setting up metrics.");
   }
 
   protected void loadConfiguration() throws IOException {
-    // TODO Auto-generated method stub
-    
+    logger.debug("Skipping loadfing plugin specific configuration.");
   }
 
   private void loadInitialConfiguration() throws IOException {

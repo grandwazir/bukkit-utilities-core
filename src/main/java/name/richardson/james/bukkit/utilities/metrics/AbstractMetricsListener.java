@@ -9,13 +9,13 @@ public abstract class AbstractMetricsListener implements Listener {
 
   private Metrics metrics;
 
-  public void MetricListener(final JavaPlugin plugin) throws IOException {
+  public AbstractMetricsListener(final JavaPlugin plugin) throws IOException {
     this.metrics = new Metrics(plugin);
     this.setupCustomMetrics();
     this.metrics.start();
   }
 
-  private void setupCustomMetrics() {
+  protected void setupCustomMetrics() {
     // For downstream plugins to override.
   }
 
