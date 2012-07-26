@@ -52,6 +52,13 @@ public class SQLStorage {
     this.initalise();
   }
   
+  public SQLStorage(final JavaPlugin plugin, DataSourceConfig config) {
+    this.plugin = plugin;
+    this.classes = plugin.getDatabaseClasses();
+    this.dataSourceConfiguration = config;
+    this.initalise();
+  }
+  
   public SQLStorage(final JavaPlugin plugin, List<Class<?>> classes) {
     this.plugin = plugin;
     this.classes = classes;
@@ -61,13 +68,6 @@ public class SQLStorage {
   public SQLStorage(final JavaPlugin plugin, List<Class<?>> classes, DataSourceConfig config) {
     this.plugin = plugin;
     this.classes = classes;
-    this.dataSourceConfiguration = config;
-    this.initalise();
-  }
-  
-  public SQLStorage(final JavaPlugin plugin, DataSourceConfig config) {
-    this.plugin = plugin;
-    this.classes = plugin.getDatabaseClasses();
     this.dataSourceConfiguration = config;
     this.initalise();
   }
@@ -133,6 +133,10 @@ public class SQLStorage {
     return this.ebeanServer;
   }
 
+  public SQLSchema getSchema() {
+    return schema;
+  }
+
   public boolean isUsingSQLLite() {
     return this.dataSourceConfiguration.getDriver().equalsIgnoreCase("org.sqlite.JDBC");
   }
@@ -145,19 +149,20 @@ public class SQLStorage {
     this.logger.debug(record.toString());
     return this.ebeanServer.find(record).findList();
   }
+  
 
   public int save(final List<? extends Object> records) {
     this.logger.debug("Saving " + String.valueOf(records.size()) + " record(s) to the database.");
     return this.ebeanServer.save(records);
   }
   
-
   public void save(final Object record) {
     this.logger.debug("Saving " + record.getClass().getSimpleName() + " to the database.");
     this.logger.debug(record.toString());
     this.ebeanServer.save(record);
   }
   
+
   private void initalise() {
     if (this.ebeanServer != null) {
       throw new IllegalStateException("Database is already initalised!");
@@ -228,7 +233,6 @@ public class SQLStorage {
     this.dataSourceConfiguration = this.serverConfiguration.getDataSourceConfig();
     this.dataSourceConfiguration.setUrl(this.replaceDatabaseString(this.dataSourceConfiguration.getUrl()));
   }
-  
 
   private void setServerConfiguration() {
     this.serverConfiguration.setDefaultServer(false);
