@@ -102,7 +102,7 @@ public class SQLStorage {
   }
 
   private void load() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-    Method installDDLMethod = plugin.getClass().getDeclaredMethod("installDDL", (Class<?>[]) null);
+    Method installDDLMethod = JavaPlugin.class.getDeclaredMethod("installDDL", (Class<?>[]) null);
     installDDLMethod.setAccessible(true);
     for (Class<?> record : this.classes) {
       try {

@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v3.1.1-SNAPSHOT)
 
+2012-07-07 01:43:35 +0100    use reflection to installDDL (James Richardson)
 2012-07-07 01:20:09 +0100    add helper methods (James Richardson)
 2012-07-07 01:12:41 +0100    deprecate Database (James Richardson)
 2012-07-07 01:05:46 +0100    create SQLStorage (James Richardson)
