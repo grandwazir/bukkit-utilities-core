@@ -16,12 +16,12 @@ public class PluginConfiguration extends YAMLStorage {
     super(plugin, "config.yml");
   }
   
-  public boolean isDebugging() {
-    return this.configuration.getBoolean("debugging");
-  }
-  
-  public void setDebugging(boolean value) {
-    this.configuration.set("debugging", value);
+  public Branch getAutomaticUpdaterBranch() {
+    try {
+      return Branch.valueOf(this.configuration.getString("automatic-updates.branch").toUpperCase());
+    } catch (IllegalArgumentException e) {
+      return Branch.STABLE;
+    }
   }
   
   public State getAutomaticUpdaterState() {
@@ -30,6 +30,23 @@ public class PluginConfiguration extends YAMLStorage {
       return State.valueOf(this.configuration.getString("automatic-updates.method").toUpperCase());
     } catch (IllegalArgumentException e) {
       return State.OFF;
+    }
+  }
+  
+  public boolean isCollectingStats() {
+    return this.configuration.getBoolean("send-anonymous-statistics", true);
+  }
+  
+  public boolean isDebugging() {
+    return this.configuration.getBoolean("debugging");
+  }
+  
+  public void setAutomaticUpdaterBranch(Branch branch) {
+    switch (branch) {
+    case STABLE: 
+      this.configuration.set("automatic-updates.branch", "stable");
+    case DEVELOPMENT: 
+      this.configuration.set("automatic-updates.enabled", "development");
     }
   }
   
@@ -46,22 +63,12 @@ public class PluginConfiguration extends YAMLStorage {
     }
   }
   
-  public Branch getAutomaticUpdaterBranch() {
-    try {
-      return Branch.valueOf(this.configuration.getString("automatic-updates.branch").toUpperCase());
-    } catch (IllegalArgumentException e) {
-      return Branch.STABLE;
-    }
+  public void setCollectingStats(boolean value) {
+    this.configuration.set("send-anonymous-statistics", value);
   }
   
-  public void setAutomaticUpdaterBranch(Branch branch) {
-    switch (branch) {
-    case STABLE: 
-      this.configuration.set("automatic-updates.branch", "stable");
-    case DEVELOPMENT: 
-      this.configuration.set("automatic-updates.enabled", "development");
-    }
+  public void setDebugging(boolean value) {
+    this.configuration.set("debugging", value);
   }
-  
 
 }
