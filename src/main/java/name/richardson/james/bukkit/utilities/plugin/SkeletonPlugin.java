@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.internals.Logger;
+import name.richardson.james.bukkit.utilities.metrics.Metrics;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
@@ -45,6 +46,9 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
 
   /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
+
+  /* The metrics service for this plugin */
+  private Metrics metrics;
   
   public SkeletonPlugin() {
     this.logger = new Logger(this.getClass());
@@ -163,6 +167,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     // attempt to load the resource bundles for the plugin
     try {
       this.loadInitialConfiguration();
+      this.setupMetrics();
       this.loadResourceBundles();
       this.loadConfiguration();
       this.setupPersistence();
@@ -185,6 +190,23 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     
     this.logger.info(this.getSimpleFormattedMessage("plugin-enabled", this.getDescription().getFullName()));
     
+  }
+
+  private void setupMetrics() {
+    try {
+      metrics = new Metrics(this.getDescription().getVersion(), this.getAuthorList());
+    }
+    
+  }
+  
+  private String getAuthorList() {
+    StringBuilder builder = new StringBuilder(); 
+    for (String author : this.getDescription().getAuthors()) {
+      builder.append(author);
+      builder.append(", ");
+    }
+    builder.delete(builder.length() - 2, builder.length());
+    return builder.toString();
   }
 
   protected void loadConfiguration() throws IOException {

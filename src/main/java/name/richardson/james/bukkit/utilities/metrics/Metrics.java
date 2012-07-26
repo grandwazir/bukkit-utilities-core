@@ -68,6 +68,149 @@ import java.util.logging.Level;
 public class Metrics {
 
     /**
+     * Represents a custom graph on the website
+     */
+    public static class Graph {
+
+        /**
+         * The graph's name, alphanumeric and spaces only :)
+         * If it does not comply to the above when submitted, it is rejected
+         */
+        private final String name;
+
+        /**
+         * The set of plotters that are contained within this graph
+         */
+        private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
+
+        private Graph(final String name) {
+            this.name = name;
+        }
+
+        /**
+         * Add a plotter to the graph, which will be used to plot entries
+         *
+         * @param plotter
+         */
+        public void addPlotter(final Plotter plotter) {
+            plotters.add(plotter);
+        }
+
+        @Override
+        public boolean equals(final Object object) {
+            if (!(object instanceof Graph)) {
+                return false;
+            }
+
+            final Graph graph = (Graph) object;
+            return graph.name.equals(name);
+        }
+
+        /**
+         * Gets the graph's name
+         *
+         * @return
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
+         *
+         * @return
+         */
+        public Set<Plotter> getPlotters() {
+            return Collections.unmodifiableSet(plotters);
+        }
+
+        @Override
+        public int hashCode() {
+            return name.hashCode();
+        }
+
+        /**
+         * Remove a plotter from the graph
+         *
+         * @param plotter
+         */
+        public void removePlotter(final Plotter plotter) {
+            plotters.remove(plotter);
+        }
+
+        /**
+         * Called when the server owner decides to opt-out of Metrics while the server is running.
+         */
+        protected void onOptOut(){}
+
+    }
+
+    /**
+     * Interface used to collect custom data for a plugin
+     */
+    public static abstract class Plotter {
+
+        /**
+         * The plot's name
+         */
+        private final String name;
+
+        /**
+         * Construct a plotter with the default plot name
+         */
+        public Plotter() {
+            this("Default");
+        }
+
+        /**
+         * Construct a plotter with a specific plot name
+         *
+         * @param name
+         */
+        public Plotter(final String name) {
+            this.name = name;
+        }
+
+        @Override
+        public boolean equals(final Object object) {
+            if (!(object instanceof Plotter)) {
+                return false;
+            }
+
+            final Plotter plotter = (Plotter) object;
+            return plotter.name.equals(name) && plotter.getValue() == getValue();
+        }
+
+        /**
+         * Get the column name for the plotted point
+         *
+         * @return the plotted point's column name
+         */
+        public String getColumnName() {
+            return name;
+        }
+
+        /**
+         * Get the current value for the plotted point
+         *
+         * @return
+         */
+        public abstract int getValue();
+
+        @Override
+        public int hashCode() {
+            return getColumnName().hashCode();
+        }
+
+        /**
+         * Called after the website graphs have been updated
+         */
+        public void reset() {
+        }
+
+    }
+
+    /**
      * The current revision number
      */
     private final static int REVISION = 5;
@@ -94,6 +237,34 @@ public class Metrics {
     private static final int PING_INTERVAL = 10;
 
     /**
+     * Encode text as UTF-8
+     *
+     * @param text
+     * @return
+     */
+    private static String encode(final String text) throws UnsupportedEncodingException {
+        return URLEncoder.encode(text, "UTF-8");
+    }
+
+    /**
+     * <p>Encode a key/value data pair to be used in a HTTP post request. This INCLUDES a & so the first
+     * key/value pair MUST be included manually, e.g:</p>
+     * <code>
+     * StringBuffer data = new StringBuffer();
+     * data.append(encode("guid")).append('=').append(encode(guid));
+     * encodeDataPair(data, "version", description.getVersion());
+     * </code>
+     *
+     * @param buffer
+     * @param key
+     * @param value
+     * @return
+     */
+    private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException {
+        buffer.append('&').append(encode(key)).append('=').append(encode(value));
+    }
+    
+    /**
      * The plugin this metrics submits for
      */
     private final Plugin plugin;
@@ -112,7 +283,7 @@ public class Metrics {
      * The plugin configuration file
      */
     private final YamlConfiguration configuration;
-    
+
     /**
      * The plugin configuration file
      */
@@ -122,7 +293,7 @@ public class Metrics {
      * Unique server id
      */
     private final String guid;
-
+    
     /**
      * Lock for synchronization
      */
@@ -133,13 +304,16 @@ public class Metrics {
      */
     private volatile int taskId = -1;
 
-    public Metrics(final Plugin plugin) throws IOException {
+    private final String authors;
+
+    public Metrics(final Plugin plugin, String authors) throws IOException {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
 
         this.plugin = plugin;
-
+        this.authors = getAuthorList();
+        
         // load the config
         configurationFile = getConfigFile();
         configuration = YamlConfiguration.loadConfiguration(configurationFile);
@@ -156,6 +330,36 @@ public class Metrics {
 
         // Load the guid then
         guid = configuration.getString("guid");
+    }
+
+    /**
+     * Adds a custom data plotter to the default graph
+     *
+     * @param plotter
+     */
+    public void addCustomData(final Plotter plotter) {
+        if (plotter == null) {
+            throw new IllegalArgumentException("Plotter cannot be null");
+        }
+
+        // Add the plotter to the graph o/
+        defaultGraph.addPlotter(plotter);
+
+        // Ensure the default graph is included in the submitted graphs
+        graphs.add(defaultGraph);
+    }
+
+    /**
+     * Add a Graph object to Metrics that represents data for the plugin that should be sent to the backend
+     *
+     * @param graph
+     */
+    public void addGraph(final Graph graph) {
+        if (graph == null) {
+            throw new IllegalArgumentException("Graph cannot be null");
+        }
+
+        graphs.add(graph);
     }
 
     /**
@@ -181,33 +385,84 @@ public class Metrics {
     }
 
     /**
-     * Add a Graph object to Metrics that represents data for the plugin that should be sent to the backend
+     * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
      *
-     * @param graph
+     * @throws IOException
      */
-    public void addGraph(final Graph graph) {
-        if (graph == null) {
-            throw new IllegalArgumentException("Graph cannot be null");
-        }
+    public void disable() throws IOException {
+        // This has to be synchronized or it can collide with the check in the task.
+        synchronized (optOutLock) {
+            // Check if the server owner has already set opt-out, if not, set it.
+            if (!isOptOut()) {
+                configuration.set("opt-out", true);
+                configuration.save(configurationFile);
+            }
 
-        graphs.add(graph);
+            // Disable Task, if it is running
+            if (taskId > 0) {
+                this.plugin.getServer().getScheduler().cancelTask(taskId);
+                taskId = -1;
+            }
+        }
     }
 
     /**
-     * Adds a custom data plotter to the default graph
-     *
-     * @param plotter
-     */
-    public void addCustomData(final Plotter plotter) {
-        if (plotter == null) {
-            throw new IllegalArgumentException("Plotter cannot be null");
+    * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
+    *
+    * @throws IOException
+    */
+    public void enable() throws IOException {
+        // This has to be synchronized or it can collide with the check in the task.
+        synchronized (optOutLock) {
+          // Check if the server owner has already set opt-out, if not, set it.
+          if (isOptOut()) {
+            configuration.set("opt-out", false);
+            configuration.save(configurationFile);
+          }
+
+          // Enable Task, if it is not running
+          if (taskId < 0) {
+            start();
+          }
         }
+    }
 
-        // Add the plotter to the graph o/
-        defaultGraph.addPlotter(plotter);
+    /**
+     * Gets the File object of the config file that should be used to store data such as the GUID and opt-out status
+     *
+     * @return the File object for the config file
+     */
+    public File getConfigFile() {
+        // I believe the easiest way to get the base folder (e.g craftbukkit set via -P) for plugins to use
+        // is to abuse the plugin object we already have
+        // plugin.getDataFolder() => base/plugins/PluginA/
+        // pluginsFolder => base/plugins/
+        // The base is not necessarily relative to the startup directory.
+        File pluginsFolder = plugin.getDataFolder().getParentFile();
 
-        // Ensure the default graph is included in the submitted graphs
-        graphs.add(defaultGraph);
+        // return => base/plugins/PluginMetrics/config.yml
+        return new File(new File(pluginsFolder, "PluginMetrics"), "config.yml");
+    }
+
+    /**
+     * Has the server owner denied plugin metrics?
+     *
+     * @return
+     */
+    public boolean isOptOut() {
+        synchronized(optOutLock) {
+            try {
+                // Reload the metrics file
+                configuration.load(getConfigFile());
+            } catch (IOException ex) {
+                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                return true;
+            } catch (InvalidConfigurationException ex) {
+                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                return true;
+            }
+            return configuration.getBoolean("opt-out", false);
+        }
     }
 
     /**
@@ -267,85 +522,28 @@ public class Metrics {
         }
     }
 
+    private String getAuthorList() {
+      StringBuilder builder = new StringBuilder(); 
+      for (String author : this.plugin.getDescription().getAuthors()) {
+        builder.append(author);
+        builder.append(", ");
+      }
+      builder.delete(builder.length() - 2, builder.length());
+      return builder.toString();
+    }
+
     /**
-     * Has the server owner denied plugin metrics?
+     * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
      *
      * @return
      */
-    public boolean isOptOut() {
-        synchronized(optOutLock) {
-            try {
-                // Reload the metrics file
-                configuration.load(getConfigFile());
-            } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
-                return true;
-            } catch (InvalidConfigurationException ex) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
-                return true;
-            }
-            return configuration.getBoolean("opt-out", false);
+    private boolean isMineshafterPresent() {
+        try {
+            Class.forName("mineshafter.MineServer");
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-    }
-
-    /**
-    * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
-    *
-    * @throws IOException
-    */
-    public void enable() throws IOException {
-        // This has to be synchronized or it can collide with the check in the task.
-        synchronized (optOutLock) {
-          // Check if the server owner has already set opt-out, if not, set it.
-          if (isOptOut()) {
-            configuration.set("opt-out", false);
-            configuration.save(configurationFile);
-          }
-
-          // Enable Task, if it is not running
-          if (taskId < 0) {
-            start();
-          }
-        }
-    }
-
-    /**
-     * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
-     *
-     * @throws IOException
-     */
-    public void disable() throws IOException {
-        // This has to be synchronized or it can collide with the check in the task.
-        synchronized (optOutLock) {
-            // Check if the server owner has already set opt-out, if not, set it.
-            if (!isOptOut()) {
-                configuration.set("opt-out", true);
-                configuration.save(configurationFile);
-            }
-
-            // Disable Task, if it is running
-            if (taskId > 0) {
-                this.plugin.getServer().getScheduler().cancelTask(taskId);
-                taskId = -1;
-            }
-        }
-    }
-
-    /**
-     * Gets the File object of the config file that should be used to store data such as the GUID and opt-out status
-     *
-     * @return the File object for the config file
-     */
-    public File getConfigFile() {
-        // I believe the easiest way to get the base folder (e.g craftbukkit set via -P) for plugins to use
-        // is to abuse the plugin object we already have
-        // plugin.getDataFolder() => base/plugins/PluginA/
-        // pluginsFolder => base/plugins/
-        // The base is not necessarily relative to the startup directory.
-        File pluginsFolder = plugin.getDataFolder().getParentFile();
-
-        // return => base/plugins/PluginMetrics/config.yml
-        return new File(new File(pluginsFolder, "PluginMetrics"), "config.yml");
     }
 
     /**
@@ -358,6 +556,7 @@ public class Metrics {
         // Construct the post data
         final StringBuilder data = new StringBuilder();
         data.append(encode("guid")).append('=').append(encode(guid));
+        encodeDataPair(data, "authors", authors);
         encodeDataPair(data, "version", description.getVersion());
         encodeDataPair(data, "server", Bukkit.getVersion());
         encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
@@ -439,191 +638,6 @@ public class Metrics {
                 }
             }
         }
-    }
-
-    /**
-     * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
-     *
-     * @return
-     */
-    private boolean isMineshafterPresent() {
-        try {
-            Class.forName("mineshafter.MineServer");
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * <p>Encode a key/value data pair to be used in a HTTP post request. This INCLUDES a & so the first
-     * key/value pair MUST be included manually, e.g:</p>
-     * <code>
-     * StringBuffer data = new StringBuffer();
-     * data.append(encode("guid")).append('=').append(encode(guid));
-     * encodeDataPair(data, "version", description.getVersion());
-     * </code>
-     *
-     * @param buffer
-     * @param key
-     * @param value
-     * @return
-     */
-    private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException {
-        buffer.append('&').append(encode(key)).append('=').append(encode(value));
-    }
-
-    /**
-     * Encode text as UTF-8
-     *
-     * @param text
-     * @return
-     */
-    private static String encode(final String text) throws UnsupportedEncodingException {
-        return URLEncoder.encode(text, "UTF-8");
-    }
-
-    /**
-     * Represents a custom graph on the website
-     */
-    public static class Graph {
-
-        /**
-         * The graph's name, alphanumeric and spaces only :)
-         * If it does not comply to the above when submitted, it is rejected
-         */
-        private final String name;
-
-        /**
-         * The set of plotters that are contained within this graph
-         */
-        private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
-
-        private Graph(final String name) {
-            this.name = name;
-        }
-
-        /**
-         * Gets the graph's name
-         *
-         * @return
-         */
-        public String getName() {
-            return name;
-        }
-
-        /**
-         * Add a plotter to the graph, which will be used to plot entries
-         *
-         * @param plotter
-         */
-        public void addPlotter(final Plotter plotter) {
-            plotters.add(plotter);
-        }
-
-        /**
-         * Remove a plotter from the graph
-         *
-         * @param plotter
-         */
-        public void removePlotter(final Plotter plotter) {
-            plotters.remove(plotter);
-        }
-
-        /**
-         * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
-         *
-         * @return
-         */
-        public Set<Plotter> getPlotters() {
-            return Collections.unmodifiableSet(plotters);
-        }
-
-        @Override
-        public int hashCode() {
-            return name.hashCode();
-        }
-
-        @Override
-        public boolean equals(final Object object) {
-            if (!(object instanceof Graph)) {
-                return false;
-            }
-
-            final Graph graph = (Graph) object;
-            return graph.name.equals(name);
-        }
-
-        /**
-         * Called when the server owner decides to opt-out of Metrics while the server is running.
-         */
-        protected void onOptOut(){}
-
-    }
-
-    /**
-     * Interface used to collect custom data for a plugin
-     */
-    public static abstract class Plotter {
-
-        /**
-         * The plot's name
-         */
-        private final String name;
-
-        /**
-         * Construct a plotter with the default plot name
-         */
-        public Plotter() {
-            this("Default");
-        }
-
-        /**
-         * Construct a plotter with a specific plot name
-         *
-         * @param name
-         */
-        public Plotter(final String name) {
-            this.name = name;
-        }
-
-        /**
-         * Get the current value for the plotted point
-         *
-         * @return
-         */
-        public abstract int getValue();
-
-        /**
-         * Get the column name for the plotted point
-         *
-         * @return the plotted point's column name
-         */
-        public String getColumnName() {
-            return name;
-        }
-
-        /**
-         * Called after the website graphs have been updated
-         */
-        public void reset() {
-        }
-
-        @Override
-        public int hashCode() {
-            return getColumnName().hashCode();
-        }
-
-        @Override
-        public boolean equals(final Object object) {
-            if (!(object instanceof Plotter)) {
-                return false;
-            }
-
-            final Plotter plotter = (Plotter) object;
-            return plotter.name.equals(name) && plotter.getValue() == getValue();
-        }
-
     }
 
 }
