@@ -181,7 +181,6 @@ public class SQLStorage {
     this.loadDatabase();
     this.installSchema();
   }
-  
 
   private void installSchema() {
     if (!this.isSchemaPresent()) {
@@ -192,8 +191,7 @@ public class SQLStorage {
         throw new RuntimeException("Failed to create database schema!");
       }
     }
-  }
-  
+  } 
 
   private boolean isSchemaPresent() {
     for (final Class<?> ebean : this.classes) {
@@ -205,7 +203,6 @@ public class SQLStorage {
     }
     return true;
   }
-  
 
   private void loadDatabase() {
     ClassLoader currentClassLoader = null;
@@ -220,14 +217,12 @@ public class SQLStorage {
       }
     }
   }
-  
 
   private String replaceDatabaseString(String url) {
     url = url.replaceAll("\\{DIR\\}", this.plugin.getDataFolder().getPath().replaceAll("\\\\", "/") + "/");
     url = url.replaceAll("\\{NAME\\}", this.plugin.getDescription().getName().replaceAll("[^\\w_-]", ""));
     return url;
   }
-  
 
   private void setDataSourceConfiguration() {
     this.dataSourceConfiguration = this.serverConfiguration.getDataSourceConfig();
