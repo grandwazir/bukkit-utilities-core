@@ -63,7 +63,8 @@ public final class CommandManager implements CommandExecutor, Localisable {
     this.commands.put(name, command);
   }
 
-  public String getChoiceFormattedMessage(final String key, final Object[] arguments, final String[] formats, final double[] limits) {
+  public String getChoiceFormattedMessage(String key, final Object[] arguments, final String[] formats, final double[] limits) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
     return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
   }
 
@@ -75,7 +76,8 @@ public final class CommandManager implements CommandExecutor, Localisable {
     return this.plugin.getLocale();
   }
 
-  public String getMessage(final String key) {
+  public String getMessage(String key) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
     return this.plugin.getMessage(key);
   }
 
@@ -84,7 +86,8 @@ public final class CommandManager implements CommandExecutor, Localisable {
     return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 
-  public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
+  public String getSimpleFormattedMessage(String key, final Object[] arguments) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
     return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 

@@ -62,7 +62,8 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     this.permissions.add(permission);
   }
 
-  public String getChoiceFormattedMessage(final String key, final Object[] arguments, final String[] formats, final double[] limits) {
+  public String getChoiceFormattedMessage(String key, final Object[] arguments, final String[] formats, final double[] limits) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
     return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
   }
 
@@ -81,7 +82,7 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
   }
 
   public String getMessage(final String key) {
-    return this.plugin.getMessage(key);
+    return this.plugin.getMessage(this.getClass().getSimpleName().toLowerCase() + key);
   }
 
   /*
@@ -109,12 +110,14 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     return Collections.unmodifiableList(this.permissions);
   }
 
-  public String getSimpleFormattedMessage(final String key, final Object argument) {
+  public String getSimpleFormattedMessage(String key, final Object argument) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
     final Object[] arguments = { argument };
     return this.getSimpleFormattedMessage(key, arguments);
   }
 
-  public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
+  public String getSimpleFormattedMessage(String key, final Object[] arguments) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
     return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 
