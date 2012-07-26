@@ -284,4 +284,8 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     }
   }
   
+  public String getGroupID() {
+    return "name.richardson.james.bukkit";
+  }
+  
 }
