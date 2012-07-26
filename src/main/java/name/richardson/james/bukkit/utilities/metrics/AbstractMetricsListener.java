@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class AbstractMetricsListener implements Listener {
 
-  private Metrics metrics;
+  protected Metrics metrics;
 
   public AbstractMetricsListener(final JavaPlugin plugin) throws IOException {
     this.metrics = new Metrics(plugin);
