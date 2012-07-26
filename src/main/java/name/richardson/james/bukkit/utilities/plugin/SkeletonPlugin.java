@@ -48,7 +48,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   private final List<Permission> permissions = new LinkedList<Permission>();
 
   /* The metrics service for this plugin */
-  private Metrics metrics;
+  protected Metrics metrics;
   
   public SkeletonPlugin() {
     this.logger = new Logger(this.getClass());
@@ -192,22 +192,11 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     
   }
 
-  private void setupMetrics() {
-    try {
-      metrics = new Metrics(this.getDescription().getVersion(), this.getAuthorList());
-    }
-    
+  protected void setupMetrics() throws IOException {
+    metrics = new Metrics(this);
+    metrics.start();
   }
   
-  private String getAuthorList() {
-    StringBuilder builder = new StringBuilder(); 
-    for (String author : this.getDescription().getAuthors()) {
-      builder.append(author);
-      builder.append(", ");
-    }
-    builder.delete(builder.length() - 2, builder.length());
-    return builder.toString();
-  }
 
   protected void loadConfiguration() throws IOException {
     // TODO Auto-generated method stub

@@ -306,7 +306,7 @@ public class Metrics {
 
     private final String authors;
 
-    public Metrics(final Plugin plugin, String authors) throws IOException {
+    public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
