@@ -118,7 +118,7 @@ public class SQLSchema {
     }
 
     // Print the new script
-    // System.out.println(newScript);
+    System.out.println(newScript);
 
     // Return the fixed script
     return newScript;

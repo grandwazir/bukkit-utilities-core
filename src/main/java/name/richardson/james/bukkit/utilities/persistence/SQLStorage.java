@@ -19,6 +19,8 @@ import name.richardson.james.bukkit.utilities.internals.Logger;
 
 public class SQLStorage {
 
+  private static final boolean debugging = true;
+  
   /* The logger assigned to this class */
   protected final Logger logger = new Logger(this.getClass());
 
@@ -117,10 +119,6 @@ public class SQLStorage {
     return this.ebeanServer.find(record.getClass()).where().add(expression).findList();
   }
 
-  public List<Class<?>> getDatabaseClasses() {
-    return Collections.unmodifiableList(this.classes);
-  }
-
   public String getDatabasePlatform() {
     return this.dataSourceConfiguration.getDriver();
   }
@@ -144,7 +142,7 @@ public class SQLStorage {
   public List<? extends Object> list(final Class<?> record) {
     this.logger.debug("Attempting to return all records matching the class: " + record.getName());
     if (!this.classes.contains(record)) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("That is not a valid database class");
     }
     this.logger.debug(record.toString());
     return this.ebeanServer.find(record).findList();
@@ -164,6 +162,9 @@ public class SQLStorage {
   
 
   private void initalise() {
+    if (SQLStorage.debugging) logger.setDebugging(true);
+    logger.debug("Initalising database...");
+    
     if (this.ebeanServer != null) {
       throw new IllegalStateException("Database is already initalised!");
     }
@@ -184,16 +185,18 @@ public class SQLStorage {
 
   private void installSchema() {
     if (!this.isSchemaPresent()) {
+      logger.debug("Installing database schema.");
       try {
         final SQLSchema schema = new SQLSchema(this.plugin, this.ebeanServer, this.isUsingSQLLite());
         schema.runGenerateDDL();
       } catch (final Exception exception) {
-        throw new RuntimeException("Failed to create database schema!");
+        throw new RuntimeException("Failed to create database schema! " + exception);
       }
     }
   } 
 
   private boolean isSchemaPresent() {
+    logger.debug("Checking if current schema is present.");
     for (final Class<?> ebean : this.classes) {
       try {
         this.ebeanServer.find(ebean).findRowCount();
@@ -205,6 +208,7 @@ public class SQLStorage {
   }
 
   private void loadDatabase() {
+    logger.debug("Loading database.");
     ClassLoader currentClassLoader = null;
 
     try {
@@ -225,14 +229,18 @@ public class SQLStorage {
   }
 
   private void setDataSourceConfiguration() {
+    logger.debug("Configuring data source using Bukkit configuration.");
     this.dataSourceConfiguration = this.serverConfiguration.getDataSourceConfig();
     this.dataSourceConfiguration.setUrl(this.replaceDatabaseString(this.dataSourceConfiguration.getUrl()));
   }
 
   private void setServerConfiguration() {
+    logger.debug("Establishing server configuration.");
     this.serverConfiguration.setDefaultServer(false);
     this.serverConfiguration.setRegister(false);
+    logger.debug("Registering database classes.");
     this.serverConfiguration.setClasses(this.classes);
+    logger.debug(this.serverConfiguration.getClasses().size() + " classes registered.");
     this.serverConfiguration.setName(this.plugin.getName());
     this.server.configureDbConfig(this.serverConfiguration);
   }
