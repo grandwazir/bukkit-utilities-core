@@ -21,18 +21,17 @@ package name.richardson.james.bukkit.utilities.command;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.permissions.Permission;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisable;
+import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
-public abstract class PluginCommand implements Command, PermissionsHolder, Localisable {
+public abstract class PluginCommand extends Localised implements Command, PermissionsHolder {
 
   /** The plugin that is command belongs to. */
   protected SkeletonPlugin plugin;
@@ -50,6 +49,7 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
   private final List<Permission> permissions = new LinkedList<Permission>();
 
   public PluginCommand(final SkeletonPlugin plugin) {
+    super(plugin);
     this.plugin = plugin;
     this.name = this.getMessage("name");
     this.description = this.getMessage("description");
@@ -61,11 +61,6 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
     this.permissions.add(permission);
   }
 
-  public String getChoiceFormattedMessage(String key, final Object[] arguments, final String[] formats, final double[] limits) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
-  }
-
   /*
    * (non-Javadoc)
    * @see
@@ -73,16 +68,6 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
    */
   public String getDescription() {
     return this.description;
-  }
-
-  public Locale getLocale() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public String getMessage(String key) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getMessage(key);
   }
 
   /*
@@ -108,16 +93,6 @@ public abstract class PluginCommand implements Command, PermissionsHolder, Local
 
   public List<Permission> getPermissions() {
     return Collections.unmodifiableList(this.permissions);
-  }
-
-  public String getSimpleFormattedMessage(String key, final Object argument) {
-    final Object[] arguments = { argument };
-    return this.getSimpleFormattedMessage(key, arguments);
-  }
-
-  public String getSimpleFormattedMessage(String key, final Object[] arguments) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 
   /*

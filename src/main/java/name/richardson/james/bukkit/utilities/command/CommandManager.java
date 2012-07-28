@@ -28,9 +28,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisable;
+import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
-public final class CommandManager implements CommandExecutor, Localisable {
+public final class CommandManager extends Localised implements CommandExecutor {
 
   public static final ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.RED;
   public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
@@ -49,6 +50,7 @@ public final class CommandManager implements CommandExecutor, Localisable {
   private final String helpCommand;
 
   public CommandManager(final SkeletonPlugin plugin) {
+    super(plugin);
     this.plugin = plugin;
     this.pluginName = plugin.getDescription().getFullName();
     this.pluginDescription = plugin.getMessage("plugin-description");
@@ -63,33 +65,8 @@ public final class CommandManager implements CommandExecutor, Localisable {
     this.commands.put(name, command);
   }
 
-  public String getChoiceFormattedMessage(String key, final Object[] arguments, final String[] formats, final double[] limits) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
-  }
-
   public Map<String, Command> getCommands() {
     return Collections.unmodifiableMap(this.commands);
-  }
-
-  public Locale getLocale() {
-    return this.plugin.getLocale();
-  }
-
-  public String getMessage(String key) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getMessage(key);
-  }
-
-  public String getSimpleFormattedMessage(String key, final Object argument) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    final Object[] arguments = { argument };
-    return this.plugin.getSimpleFormattedMessage(key, arguments);
-  }
-
-  public String getSimpleFormattedMessage(String key, final Object[] arguments) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
