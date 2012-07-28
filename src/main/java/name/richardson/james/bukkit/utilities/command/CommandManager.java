@@ -71,13 +71,13 @@ public final class CommandManager extends Localised implements CommandExecutor {
 
     if (args.length == 0) {
       // display command listing and help
-      sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
-      sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
+      sender.sendMessage(this.pluginName);
+      sender.sendMessage(this.pluginDescription);
       final String[] messages = { cmd.getName(), this.helpCommand };
-      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("help-usage", messages));
+      sender.sendMessage(this.getSimpleFormattedMessage("help-usage", messages));
       for (final Command command : this.commands.values()) {
         if (command.testPermission(sender)) {
-          sender.sendMessage(ChatColor.YELLOW + this.getCommandHelpEntry(label, command));
+          sender.sendMessage(this.getCommandHelpEntry(label, command));
         }
       }
       return true;
@@ -92,16 +92,16 @@ public final class CommandManager extends Localised implements CommandExecutor {
     } else if ((args.length == 2) && args[0].equalsIgnoreCase(this.helpCommand)) {
       if (this.commands.containsKey(args[1]) && this.commands.get(args[1]).testPermission(sender)) {
         final Command command = this.commands.get(args[1]);
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
-        sender.sendMessage(ChatColor.YELLOW + this.getCommandHelpEntry(label, command));
+        sender.sendMessage(command.getDescription());
+        sender.sendMessage(this.getCommandHelpEntry(label, command));
       } else {
-        sender.sendMessage(ChatColor.RED + this.getMessage("invalid-command"));
-        sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
+        sender.sendMessage(this.getMessage("invalid-command"));
+        sender.sendMessage(this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
       }
       return true;
     } else {
-      sender.sendMessage(ChatColor.RED + this.getMessage("invalid-command"));
-      sender.sendMessage(ChatColor.YELLOW + this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
+      sender.sendMessage(this.getMessage("invalid-command"));
+      sender.sendMessage(this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
       return true;
     }
 

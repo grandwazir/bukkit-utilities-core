@@ -1,6 +1,5 @@
-package name.richardson.james.bukkit.utilities.plugin;
+package name.richardson.james.bukkit.utilities.internals;
 
-import name.richardson.james.bukkit.utilities.internals.Logger;
 
 public interface Loggable {
 

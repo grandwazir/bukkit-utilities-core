@@ -20,12 +20,10 @@ package name.richardson.james.bukkit.utilities.internals;
 
 abstract public class Handler {
 
-  protected static final Logger logger = new Logger(Handler.class);
-  protected final String owner;
+  protected final Logger logger = new Logger(this.getClass());
 
   public Handler(final Class<?> parentClass) {
-    this.owner = parentClass.getName();
-    Handler.logger.debug("New handler created on behalf of " + this.owner);
+    logger.debug("New handler created on behalf of " + parentClass.getName());
   }
 
 }
