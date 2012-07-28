@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.permissions.Permission;
 
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
@@ -112,12 +113,14 @@ public abstract class PluginCommand extends Localised implements Command, Permis
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
 
     if (!this.getClass().isAnnotationPresent(ConsoleCommand.class) && (sender instanceof ConsoleCommandSender)) {
-      sender.sendMessage(ChatColor.RED + this.plugin.getMessage("plugincommand.not-available-to-console"));
+      String message = ColourFormatter.replace("&", this.plugin.getMessage("plugincommand.not-available-to-console"));
+      sender.sendMessage(message);
       return true;
     }
 
     if (!this.testPermission(sender)) {
-      sender.sendMessage(ChatColor.RED + this.plugin.getMessage("plugincommand.no-permission"));
+      String message = ColourFormatter.replace("&", this.plugin.getMessage("plugincommand.no-permission"));
+      sender.sendMessage(message);
       return true;
     }
 
@@ -135,12 +138,12 @@ public abstract class PluginCommand extends Localised implements Command, Permis
       sender.sendMessage(ChatColor.RED + exception.getMessage());
       sender.sendMessage(ChatColor.YELLOW + exception.getHelp());
     } catch (final CommandPermissionException exception) {
-      sender.sendMessage(ChatColor.RED + this.plugin.getMessage("plugincommand.no-permission"));
+      sender.sendMessage(ColourFormatter.replace("&", this.plugin.getMessage("plugincommand.no-permission")));
       if (exception.getMessage() != null) {
         sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
       }
       if (this.plugin.isDebugging()) {
-        sender.sendMessage(ChatColor.DARK_PURPLE + this.plugin.getSimpleFormattedMessage("plugincommand.permission-required", exception.getPermission().getName()));
+        sender.sendMessage(ColourFormatter.replace("&", this.plugin.getSimpleFormattedMessage("plugincommand.permission-required", exception.getPermission().getName())));
       }
     } catch (final CommandUsageException exception) {
       sender.sendMessage(ChatColor.RED + exception.getMessage());

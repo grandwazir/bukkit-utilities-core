@@ -47,9 +47,6 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
 
   /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
-
-  /* The metrics service for this plugin */
-  protected Metrics metrics;
   
   public SkeletonPlugin() {
     this.logger = new Logger(this.getClass());
@@ -180,10 +177,14 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
       this.registerCommands();
       this.updatePlugin();
     } catch (IOException e) {
-      this.logger.severe(this.getMessage("io-exception"));
+      this.logger.severe(this.getMessage("panic"));
       e.printStackTrace();
       this.setEnabled(false);
     } catch (SQLException e) {
+      this.logger.severe(this.getMessage("panic"));
+      e.printStackTrace();
+      this.setEnabled(false);
+    } catch (Exception e) {
       this.logger.severe(this.getMessage("panic"));
       e.printStackTrace();
       this.setEnabled(false);
@@ -200,10 +201,11 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   }
 
   protected void loadConfiguration() throws IOException {
-    logger.debug("Skipping loadfing plugin specific configuration.");
+    logger.debug("Skipping loading plugin specific configuration.");
   }
 
   private void loadInitialConfiguration() throws IOException {
+    logger.debug("Loading initial configuration.");
     this.configuration = new PluginConfiguration(this);
     if (this.configuration.isDebugging()) this.setDebugging(true);
   }

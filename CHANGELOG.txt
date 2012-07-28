@@ -1,5 +1,10 @@
 Changelog for BukkitUtilities (v4.0.0-SNAPSHOT)
 
+2012-07-28 19:40:35 +0100    member sorting (James Richardson)
+2012-07-28 19:36:48 +0100    further refactoring (James Richardson)
+2012-07-28 19:17:27 +0100    Adding debugging to AbstractMetrics (James Richardson)
+2012-07-28 19:05:42 +0100    PluginManager and CommandManager now extend Localised (James Richardson)
+2012-07-28 18:56:08 +0100    refactoring localisation (James Richardson)
 2012-07-27 14:09:37 +0100    added debugging messages (James Richardson)
 2012-07-26 20:59:11 +0100    fix bug where simpleclass name was being added twice (James Richardson)
 2012-07-26 20:55:18 +0100    fix key reference (James Richardson)
