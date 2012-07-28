@@ -31,25 +31,26 @@ import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public final class CommandManager extends Localised implements CommandExecutor {
 
-  public static final ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.RED;
+  /** The colour given to optional arguments */
   public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
 
-  private final SkeletonPlugin plugin;
+  /** The colour given to required arguments */
+  public static final ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.RED;
 
+  /** A collection of all the commands registered to this manager */
   private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
-
-  /** The full name of the plugin including version */
-  private final String pluginName;
-
-  /** The localised description of the plugin */
-  private final String pluginDescription;
 
   /** the localised name of the help command */
   private final String helpCommand;
 
+  /** The localised description of the plugin */
+  private final String pluginDescription;
+
+  /** The full name of the plugin including version */
+  private final String pluginName;
+
   public CommandManager(final SkeletonPlugin plugin) {
     super(plugin);
-    this.plugin = plugin;
     this.pluginName = plugin.getDescription().getFullName();
     this.pluginDescription = plugin.getMessage("plugin-description");
     this.helpCommand = this.getMessage("help-command");
