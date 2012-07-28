@@ -20,14 +20,12 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisable;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 

@@ -43,28 +43,28 @@ public interface Command extends CommandExecutor, PermissionsHolder {
    * @throws CommandUsageException if the command is being used in an
    *           inappropriate way.
    */
-  void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException;
+  public void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException;
 
   /**
    * Gets the description.
    * 
    * @return a brief description of what the command does.
    */
-  String getDescription();
+  public String getDescription();
 
   /**
    * Gets the name of this command.
    * 
    * @return the name of the command.
    */
-  String getName();
+  public String getName();
 
   /**
    * Gets the usage.
    * 
    * @return a brief string detailing how to use the command.
    */
-  String getUsage();
+   String getUsage();
 
   /**
    * Parse and validate the given command arguments.
@@ -74,6 +74,6 @@ public interface Command extends CommandExecutor, PermissionsHolder {
    * @throws CommandArgumentException if any of the arguments are invalid or
    *           missing.
    */
-  void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException;
+   public void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException;
 
 }
