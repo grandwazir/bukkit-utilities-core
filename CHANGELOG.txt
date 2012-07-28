@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.0.0-SNAPSHOT)
 
+2012-07-27 14:09:37 +0100    added debugging messages (James Richardson)
 2012-07-26 20:59:11 +0100    fix bug where simpleclass name was being added twice (James Richardson)
 2012-07-26 20:55:18 +0100    fix key reference (James Richardson)
 2012-07-26 20:41:27 +0100    various localisation issues (James Richardson)

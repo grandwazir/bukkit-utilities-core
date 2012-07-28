@@ -27,7 +27,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import name.richardson.james.bukkit.utilities.plugin.Localisable;
+import name.richardson.james.bukkit.utilities.localisation.Localisable;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public final class CommandManager implements CommandExecutor, Localisable {

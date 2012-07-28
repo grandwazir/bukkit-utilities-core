@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.internals.Logger;
+import name.richardson.james.bukkit.utilities.localisation.Localisable;
 import name.richardson.james.bukkit.utilities.metrics.Metrics;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;

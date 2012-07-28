@@ -304,7 +304,6 @@ public class Metrics {
      */
     private volatile int taskId = -1;
 
-    private final String authors;
 
     public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
@@ -312,7 +311,6 @@ public class Metrics {
         }
 
         this.plugin = plugin;
-        this.authors = getAuthorList();
         
         // load the config
         configurationFile = getConfigFile();
@@ -522,16 +520,6 @@ public class Metrics {
         }
     }
 
-    private String getAuthorList() {
-      StringBuilder builder = new StringBuilder(); 
-      for (String author : this.plugin.getDescription().getAuthors()) {
-        builder.append(author);
-        builder.append(", ");
-      }
-      builder.delete(builder.length() - 2, builder.length());
-      return builder.toString();
-    }
-
     /**
      * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
      *
@@ -556,7 +544,6 @@ public class Metrics {
         // Construct the post data
         final StringBuilder data = new StringBuilder();
         data.append(encode("guid")).append('=').append(encode(guid));
-        encodeDataPair(data, "authors", authors);
         encodeDataPair(data, "version", description.getVersion());
         encodeDataPair(data, "server", Bukkit.getVersion());
         encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));

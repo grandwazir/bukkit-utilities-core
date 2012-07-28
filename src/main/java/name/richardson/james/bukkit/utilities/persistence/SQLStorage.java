@@ -1,8 +1,11 @@
 package name.richardson.james.bukkit.utilities.persistence;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
@@ -16,8 +19,10 @@ import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.internals.Logger;
+import name.richardson.james.bukkit.utilities.localisation.Localisable;
+import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
-public class SQLStorage {
+public class SQLStorage implements Localisable {
 
   private static final boolean debugging = true;
   
@@ -28,7 +33,7 @@ public class SQLStorage {
   private final List<Class<?>> classes;
 
   /* The plugin that is using this storage */
-  private final JavaPlugin plugin;
+  private final SkeletonPlugin plugin;
 
   /* The classloader of the plugin */
   private ClassLoader classLoader;
@@ -48,26 +53,26 @@ public class SQLStorage {
   /* The schema used by this storage object */
   private SQLSchema schema;
 
-  public SQLStorage(final JavaPlugin plugin) {
+  public SQLStorage(final SkeletonPlugin plugin) {
     this.plugin = plugin;
     this.classes = plugin.getDatabaseClasses();
     this.initalise();
   }
   
-  public SQLStorage(final JavaPlugin plugin, DataSourceConfig config) {
+  public SQLStorage(final SkeletonPlugin plugin, DataSourceConfig config) {
     this.plugin = plugin;
     this.classes = plugin.getDatabaseClasses();
     this.dataSourceConfiguration = config;
     this.initalise();
   }
   
-  public SQLStorage(final JavaPlugin plugin, List<Class<?>> classes) {
+  public SQLStorage(final SkeletonPlugin plugin, List<Class<?>> classes) {
     this.plugin = plugin;
     this.classes = classes;
     this.initalise();
   }
   
-  public SQLStorage(final JavaPlugin plugin, List<Class<?>> classes, DataSourceConfig config) {
+  public SQLStorage(final SkeletonPlugin plugin, List<Class<?>> classes, DataSourceConfig config) {
     this.plugin = plugin;
     this.classes = classes;
     this.dataSourceConfiguration = config;
@@ -149,9 +154,9 @@ public class SQLStorage {
   }
   
 
-  public int save(final List<? extends Object> records) {
-    this.logger.debug("Saving " + String.valueOf(records.size()) + " record(s) to the database.");
-    return this.ebeanServer.save(records);
+  public int save(final Object[] records) {
+    this.logger.debug("Saving " + String.valueOf(records.length) + " record(s) to the database.");
+    return this.ebeanServer.save(Arrays.asList(records));
   }
   
   public void save(final Object record) {
@@ -162,7 +167,7 @@ public class SQLStorage {
   
 
   private void initalise() {
-    if (SQLStorage.debugging) logger.setDebugging(true);
+    if (plugin.isDebugging()) logger.setDebugging(true);
     logger.debug("Initalising database...");
     
     if (this.ebeanServer != null) {
@@ -185,15 +190,41 @@ public class SQLStorage {
 
   private void installSchema() {
     if (!this.isSchemaPresent()) {
-      logger.debug("Installing database schema.");
+      logger.warning(this.getMessage("schema-invalid"));
+      logger.info(this.getMessage("create-schema"));
       try {
-        final SQLSchema schema = new SQLSchema(this.plugin, this.ebeanServer, this.isUsingSQLLite());
+        SQLSchema schema = new SQLSchema(this.plugin, this.ebeanServer, this.isUsingSQLLite());
+        this.beforeDatabaseDrop();
+        schema.runDropDDL();
+        if (this.isUsingSQLLite()) {
+          schema = new SQLSchema(this.plugin, this.ebeanServer, this.isUsingSQLLite());
+          this.loadDatabase();
+        }
+        this.afterDatabaseDrop();
+        this.beforeDatabaseCreate();
         schema.runGenerateDDL();
+        this.afterDatabaseCreate();
       } catch (final Exception exception) {
         throw new RuntimeException("Failed to create database schema! " + exception);
       }
     }
   } 
+
+  protected void beforeDatabaseCreate() {
+    logger.debug("Skipping before database create.");
+  }
+
+  protected void afterDatabaseCreate() {
+    logger.debug("Skipping after database create.");
+  }
+
+  protected void beforeDatabaseDrop() {
+    logger.debug("Skipping before database drop.");
+  }
+  
+  protected void afterDatabaseDrop() {
+    logger.debug("Skipping after database drop.");
+  }
 
   private boolean isSchemaPresent() {
     logger.debug("Checking if current schema is present.");
@@ -244,5 +275,30 @@ public class SQLStorage {
     this.serverConfiguration.setName(this.plugin.getName());
     this.server.configureDbConfig(this.serverConfiguration);
   }
+  
+  public String getChoiceFormattedMessage(String key, final Object[] arguments, final String[] formats, final double[] limits) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
+    return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
+  }
+  
+  public Locale getLocale() {
+    return this.plugin.getLocale();
+  }
+
+  public String getMessage(String key) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
+    return this.plugin.getMessage(key);
+  }
+  
+  public String getSimpleFormattedMessage(String key, final Object argument) {
+    final Object[] arguments = { argument };
+    return this.getSimpleFormattedMessage(key, arguments);
+  }
+
+  public String getSimpleFormattedMessage(String key, final Object[] arguments) {
+    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
+    return this.plugin.getSimpleFormattedMessage(key, arguments);
+  }
+
 
 }

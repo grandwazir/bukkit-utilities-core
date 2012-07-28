@@ -14,9 +14,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.xml.sax.SAXException;
 
-import name.richardson.james.bukkit.utilities.plugin.Localisable;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 import name.richardson.james.bukkit.utilities.internals.Logger;
+import name.richardson.james.bukkit.utilities.localisation.Localisable;
 
 public class PluginUpdater implements Runnable, Localisable {
 

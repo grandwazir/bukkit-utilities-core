@@ -28,8 +28,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.permissions.Permission;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisable;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
-import name.richardson.james.bukkit.utilities.plugin.Localisable;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public abstract class PluginCommand implements Command, PermissionsHolder, Localisable {
