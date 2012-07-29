@@ -26,6 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
@@ -96,12 +97,12 @@ public final class CommandManager extends Localised implements CommandExecutor {
         sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
         sender.sendMessage(this.getCommandHelpEntry(label, command));
       } else {
-        sender.sendMessage(this.getMessage("invalid-command"));
+        sender.sendMessage(ColourFormatter.replace("&", this.getMessage("invalid-command")));
         sender.sendMessage(this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
       }
       return true;
     } else {
-      sender.sendMessage(this.getMessage("invalid-command"));
+      sender.sendMessage(ColourFormatter.replace("&", this.getMessage("invalid-command")));
       sender.sendMessage(this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
       return true;
     }
