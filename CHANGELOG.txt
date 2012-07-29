@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.0.0-SNAPSHOT)
 
+2012-07-29 02:15:36 +0100    colour formatting issue (James Richardson)
 2012-07-29 00:20:17 +0100    various bug fixes (James Richardson)
 2012-07-28 19:40:35 +0100    member sorting (James Richardson)
 2012-07-28 19:36:48 +0100    further refactoring (James Richardson)

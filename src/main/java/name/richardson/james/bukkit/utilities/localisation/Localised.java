@@ -2,6 +2,8 @@ package name.richardson.james.bukkit.utilities.localisation;
 
 import java.util.Locale;
 
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
+
 /**
  * A base abstract class to be used by objects which intend to localise messages
  * through a plugin's resource bundles.
@@ -32,7 +34,7 @@ public class Localised implements Localisable {
    */
   public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits) {
     key = prefix + key;
-    return plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
+    return ColourFormatter.replace("&", plugin.getChoiceFormattedMessage(key, arguments, formats, limits));
   }
 
   /*
@@ -51,7 +53,7 @@ public class Localised implements Localisable {
    */
   public String getMessage(String key) {
     key = prefix + key;
-    return plugin.getMessage(key);
+    return ColourFormatter.replace("&", plugin.getMessage(key));
   }
 
   /*
@@ -61,7 +63,7 @@ public class Localised implements Localisable {
    */
   public String getSimpleFormattedMessage(String key, Object argument) {
     key = prefix + key;
-    return plugin.getSimpleFormattedMessage(key, argument);
+    return ColourFormatter.replace("&", plugin.getSimpleFormattedMessage(key, argument));
   }
 
   /*
@@ -71,7 +73,7 @@ public class Localised implements Localisable {
    */
   public String getSimpleFormattedMessage(String key, Object[] arguments) {
     key = prefix + key;
-    return plugin.getSimpleFormattedMessage(key, arguments);
+    return ColourFormatter.replace("&", plugin.getSimpleFormattedMessage(key, arguments));
   }
 
 }

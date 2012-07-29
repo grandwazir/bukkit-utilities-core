@@ -24,16 +24,6 @@ public abstract class AbstractMetricsListener implements Listener {
   public AbstractMetricsListener(final JavaPlugin plugin) throws IOException {
     logger.debug("Starting metrics collection.");
     this.metrics = new Metrics(plugin);
-    this.setupCustomMetrics();
-  }
-
-  
-  /**
-   * Setup any plugin specific metrics.
-   */
-  protected void setupCustomMetrics() {
-    logger.debug("Skipping custom metrics configuration.");
-    this.metrics.start();
   }
 
 }
