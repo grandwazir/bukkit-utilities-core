@@ -34,7 +34,7 @@ import name.richardson.james.bukkit.utilities.updater.Updatable;
 public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder, Updatable {
 
   /* The configuration file for this plugin */
-  private PluginConfiguration configuration;
+  protected PluginConfiguration configuration;
   
   /* A list of resource bundles used by the plugin */
   private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
@@ -70,7 +70,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     final MessageFormat formatter = new MessageFormat(this.getMessage(key));
     final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
     formatter.setFormatByArgumentIndex(0, cFormatter);
-    return ColourFormatter.replace("&", formatter.format(arguments));
+    return formatter.format(arguments);
   }
 
   public Locale getLocale() {
@@ -147,7 +147,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
     final MessageFormat formatter = new MessageFormat(this.getMessage(key));
     formatter.setLocale(this.locale);
-    return ColourFormatter.replace("&", formatter.format(arguments));
+    return formatter.format(arguments);
   }
   
   public boolean isDebugging() {
