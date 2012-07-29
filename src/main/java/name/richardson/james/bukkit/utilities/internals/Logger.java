@@ -25,11 +25,11 @@ import java.util.logging.Level;
 
 public final class Logger {
 
-  private static final Level NORMAL_LEVEL = Level.INFO;
   private static final Level DEBUG_LEVEL = Level.FINE;
+  private static final Level NORMAL_LEVEL = Level.INFO;
   private static final java.util.logging.Logger parentLogger = java.util.logging.Logger.getLogger("Minecraft");
-  private static final Set<Logger> registeredLoggers = new HashSet<Logger>();
   private static final Set<String> pluginsDebugging = new HashSet<String>();
+  private static final Set<Logger> registeredLoggers = new HashSet<Logger>();
 
   public static boolean isDebugging(final org.bukkit.plugin.Plugin plugin) {
     final String pluginName = plugin.getDescription().getName().toLowerCase();
@@ -60,9 +60,9 @@ public final class Logger {
     }
   }
 
-  private String prefix = "";
-
   private final java.util.logging.Logger logger;
+
+  private String prefix = "";
 
   /**
    * Create a new logger with the specified name.

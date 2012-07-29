@@ -23,10 +23,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
-import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.internals.Logger;
 import name.richardson.james.bukkit.utilities.localisation.Localisable;
-import name.richardson.james.bukkit.utilities.metrics.Metrics;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
@@ -35,23 +33,23 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
 
   /* The configuration file for this plugin */
   protected PluginConfiguration configuration;
-  
-  /* A list of resource bundles used by the plugin */
-  private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
-  
+
   /* The logger that belongs to this plugin */
   protected final Logger logger;
+
+  /* A list of resource bundles used by the plugin */
+  private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
 
   /* The locale of the system the plugin is running on */
   private final Locale locale = Locale.getDefault();
 
   /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
-  
+
   public SkeletonPlugin() {
     this.logger = new Logger(this.getClass());
   }
-  
+
   /*
    * (non-Javadoc)
    * @see
@@ -64,7 +62,6 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     this.permissions.add(permission);
     this.logger.debug(String.format("Adding permission: %s (default: %s)", permission.getName(), permission.getDefault()));
   }
-  
 
   public String getChoiceFormattedMessage(final String key, final Object[] arguments, final String[] formats, final double[] limits) {
     final MessageFormat formatter = new MessageFormat(this.getMessage(key));
@@ -73,26 +70,30 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     return formatter.format(arguments);
   }
 
+  public String getGroupID() {
+    return "name.richardson.james.bukkit";
+  }
+
   public Locale getLocale() {
     return this.locale;
   }
 
   public final String getLoggerPrefix() {
-    return logger.getPrefix();
+    return this.logger.getPrefix();
   }
 
   public String getMessage(final String key) {
-    for (ResourceBundle bundle : this.bundles) {
+    for (final ResourceBundle bundle : this.bundles) {
       if (bundle.keySet().contains(key)) {
         return bundle.getString(key);
       }
     }
     // Additional debugging for when localisation goes wrong
-    StringBuilder message = new StringBuilder();
+    final StringBuilder message = new StringBuilder();
     message.append("Encountered a missing key '");
     message.append(key);
     message.append("' in the localisation of the plugin. This should NOT happen. Please report this as a bug.");
-    for (ResourceBundle bundle : this.bundles) {
+    for (final ResourceBundle bundle : this.bundles) {
       message.append(" Key list for linked bundle: ");
       message.append(bundle.keySet().toString());
     }
@@ -125,7 +126,20 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   public List<Permission> getPermissions() {
     return Collections.unmodifiableList(this.permissions);
   }
-  
+
+  public URL getRepositoryURL() {
+    try {
+      switch (this.configuration.getAutomaticUpdaterBranch()) {
+      case DEVELOPMENT:
+        return new URL("http://repository.james.richardson.name/snapshots");
+      default:
+        return new URL("http://repository.james.richardson.name/releases");
+      }
+    } catch (final MalformedURLException e) {
+      return null;
+    }
+  }
+
   /*
    * Get the root permission associated with this plugin.
    * The root permission should be a wildcard style permission (eg.
@@ -138,32 +152,34 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   public Permission getRootPermission() {
     return this.permissions.get(0);
   }
-  
+
   public String getSimpleFormattedMessage(final String key, final Object argument) {
     final Object[] arguments = { argument };
     return this.getSimpleFormattedMessage(key, arguments);
   }
-  
+
   public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
     final MessageFormat formatter = new MessageFormat(this.getMessage(key));
     formatter.setLocale(this.locale);
     return formatter.format(arguments);
   }
-  
+
   public boolean isDebugging() {
     return Logger.isDebugging(this);
   }
 
+  @Override
   public void onDisable() {
     this.getServer().getScheduler().cancelTasks(this);
-    logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
+    this.logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
   }
 
+  @Override
   public final void onEnable() {
     // set the prefix of the logger for this plugin
     // all other classes attached to this plugin should use the same prefix
     this.logger.setPrefix("[" + this.getName() + "] ");
-    
+
     // attempt to load the resource bundles for the plugin
     try {
       this.loadInitialConfiguration();
@@ -176,100 +192,48 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
       this.registerPermissions();
       this.registerCommands();
       this.updatePlugin();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       this.logger.severe(this.getMessage("panic"));
       e.printStackTrace();
       this.setEnabled(false);
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       this.logger.severe(this.getMessage("panic"));
       e.printStackTrace();
       this.setEnabled(false);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       this.logger.severe(this.getMessage("panic"));
       e.printStackTrace();
       this.setEnabled(false);
     } finally {
-      if (!this.isEnabled()) return;
+      if (!this.isEnabled()) {
+        return;
+      }
     }
-    
+
     this.logger.info(this.getSimpleFormattedMessage("plugin-enabled", this.getDescription().getFullName()));
-    
+
   }
 
-  protected void setupMetrics() throws IOException {
-    logger.debug("Skipping setting up metrics.");
-  }
-
-  protected void loadConfiguration() throws IOException {
-    logger.debug("Skipping loading plugin specific configuration.");
-  }
-
-  private void loadInitialConfiguration() throws IOException {
-    logger.debug("Loading initial configuration.");
-    this.configuration = new PluginConfiguration(this);
-    if (this.configuration.isDebugging()) this.setDebugging(true);
-  }
-
-  public void setDebugging(boolean value) {
+  public void setDebugging(final boolean value) {
     Logger.setDebugging(this, value);
   }
 
-  private void loadResourceBundles() throws IOException {
-    this.logger.debug("Loading resource bundles...");
-    this.setPluginResourceBundle();
-    this.setCoreResourceBundle();
+  protected void loadConfiguration() throws IOException {
+    this.logger.debug("Skipping loading plugin specific configuration.");
   }
 
   protected void registerCommands() {
-    logger.debug("Skipping registering commands.");
+    this.logger.debug("Skipping registering commands.");
   }
 
   protected void registerEvents() {
-    logger.debug("Skipping registering events and listeners.");
+    this.logger.debug("Skipping registering events and listeners.");
   }
-  
+
   protected void registerPermissions() {
-    logger.debug("Skipping registering permissions.");
+    this.logger.debug("Skipping registering permissions.");
   }
 
-  private void setCoreResourceBundle() {
-    final ResourceBundle bundle = ResourceBundle.getBundle("bukkitutilities-localisation", this.locale, this.getClassLoader());
-    this.bundles.add(bundle);
-    this.logger.debug("Using default BukkitUtilities localisation.");
-  }
-
-  private void setPluginResourceBundle() throws IOException {
-    final String path = this.getDataFolder().getAbsolutePath() + File.separator + "localisation.properties";
-    final File customBundle = new File(path);
-    
-    // check for any overrides placed in the plugin data directory
-    if (customBundle.exists()) {
-      final FileInputStream stream = new FileInputStream(customBundle);
-      this.bundles.add(new PropertyResourceBundle(stream));
-      this.logger.debug("Using plugin localisation override located at: " + path);
-    // if no override is present, use built in localisation.
-    } else {
-      final ResourceBundle bundle = ResourceBundle.getBundle(this.getName().toLowerCase() + "-localisation", this.locale, this.getClassLoader());
-      this.bundles.add(bundle);
-      if (bundle.getLocale() != null) {
-        this.logger.debug(String.format("Using plugin localisation: %s_%s.", this.locale.getLanguage(), this.locale.getCountry()));
-      } else {
-        this.logger.debug("Using default plugin localisation.");
-      }
-    }
-    
-  }
-
-  protected void setupPersistence() throws SQLException {
-    logger.debug("Skipping setting up persistence.");
-  }
-  
-  private void updatePlugin() {
-    // schedule a random delay so all BukkitUtilities plugins do not attempt to update at the same time.
-    long delay = new Random().nextInt(20) * 20;
-    this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new PluginUpdater(this, this.configuration.getAutomaticUpdaterState()), delay);
-  }
-  
   /**
    * Sets the root permission for this object.
    * 
@@ -283,22 +247,62 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     final Permission permission = new Permission(node, description, PermissionDefault.OP);
     this.addPermission(permission);
   }
-  
-  public URL getRepositoryURL() {
-    try {
-      switch (this.configuration.getAutomaticUpdaterBranch()) {
-      case DEVELOPMENT:
-        return new URL("http://repository.james.richardson.name/snapshots");
-      default:
-        return new URL("http://repository.james.richardson.name/releases");
-      }
-    } catch (MalformedURLException e) {
-      return null;
+
+  protected void setupMetrics() throws IOException {
+    this.logger.debug("Skipping setting up metrics.");
+  }
+
+  protected void setupPersistence() throws SQLException {
+    this.logger.debug("Skipping setting up persistence.");
+  }
+
+  private void loadInitialConfiguration() throws IOException {
+    this.logger.debug("Loading initial configuration.");
+    this.configuration = new PluginConfiguration(this);
+    if (this.configuration.isDebugging()) {
+      this.setDebugging(true);
     }
   }
-  
-  public String getGroupID() {
-    return "name.richardson.james.bukkit";
+
+  private void loadResourceBundles() throws IOException {
+    this.logger.debug("Loading resource bundles...");
+    this.setPluginResourceBundle();
+    this.setCoreResourceBundle();
   }
-  
+
+  private void setCoreResourceBundle() {
+    final ResourceBundle bundle = ResourceBundle.getBundle("bukkitutilities-localisation", this.locale, this.getClassLoader());
+    this.bundles.add(bundle);
+    this.logger.debug("Using default BukkitUtilities localisation.");
+  }
+
+  private void setPluginResourceBundle() throws IOException {
+    final String path = this.getDataFolder().getAbsolutePath() + File.separator + "localisation.properties";
+    final File customBundle = new File(path);
+
+    // check for any overrides placed in the plugin data directory
+    if (customBundle.exists()) {
+      final FileInputStream stream = new FileInputStream(customBundle);
+      this.bundles.add(new PropertyResourceBundle(stream));
+      this.logger.debug("Using plugin localisation override located at: " + path);
+      // if no override is present, use built in localisation.
+    } else {
+      final ResourceBundle bundle = ResourceBundle.getBundle(this.getName().toLowerCase() + "-localisation", this.locale, this.getClassLoader());
+      this.bundles.add(bundle);
+      if (bundle.getLocale() != null) {
+        this.logger.debug(String.format("Using plugin localisation: %s_%s.", this.locale.getLanguage(), this.locale.getCountry()));
+      } else {
+        this.logger.debug("Using default plugin localisation.");
+      }
+    }
+
+  }
+
+  private void updatePlugin() {
+    // schedule a random delay so all BukkitUtilities plugins do not attempt to
+    // update at the same time.
+    final long delay = new Random().nextInt(20) * 20;
+    this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new PluginUpdater(this, this.configuration.getAutomaticUpdaterState()), delay);
+  }
+
 }

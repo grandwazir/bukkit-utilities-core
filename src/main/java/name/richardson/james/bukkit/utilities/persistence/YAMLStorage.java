@@ -10,18 +10,18 @@ import name.richardson.james.bukkit.utilities.internals.Logger;
 
 public class YAMLStorage {
 
-  /* The logger assigned to this class */
-  protected final Logger logger = new Logger(this.getClass());
-
   /* The original bukkit YAML configuration that we are wrapping around */
   protected org.bukkit.configuration.file.YamlConfiguration configuration;
+
+  /* The logger assigned to this class */
+  protected final Logger logger = new Logger(this.getClass());
 
   /* A handle to the storage file on disk */
   private final File file;
 
   private final JavaPlugin plugin;
 
-  public YAMLStorage(JavaPlugin plugin, String name) throws IOException {
+  public YAMLStorage(final JavaPlugin plugin, final String name) throws IOException {
     this.plugin = plugin;
     this.file = new File(plugin.getDataFolder() + File.separator + name);
     this.load();
@@ -53,5 +53,5 @@ public class YAMLStorage {
     this.configuration.options().copyDefaults(true);
     this.save();
   }
-  
+
 }

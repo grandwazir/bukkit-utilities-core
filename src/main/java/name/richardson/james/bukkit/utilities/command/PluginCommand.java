@@ -43,11 +43,11 @@ public abstract class PluginCommand extends Localised implements Command, Permis
   /** The name of this command */
   private final String name;
 
-  /** The usage message for this command */
-  private final String usage;
-
   /** The permissions associated with this command */
   private final List<Permission> permissions = new LinkedList<Permission>();
+
+  /** The usage message for this command */
+  private final String usage;
 
   public PluginCommand(final SkeletonPlugin plugin) {
     super(plugin);
@@ -113,13 +113,13 @@ public abstract class PluginCommand extends Localised implements Command, Permis
   public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
 
     if (!this.getClass().isAnnotationPresent(ConsoleCommand.class) && (sender instanceof ConsoleCommandSender)) {
-      String message = ColourFormatter.replace("&", this.plugin.getMessage("plugincommand.not-available-to-console"));
+      final String message = ColourFormatter.replace("&", this.plugin.getMessage("plugincommand.not-available-to-console"));
       sender.sendMessage(message);
       return true;
     }
 
     if (!this.testPermission(sender)) {
-      String message = ColourFormatter.replace("&", this.plugin.getMessage("plugincommand.no-permission"));
+      final String message = ColourFormatter.replace("&", this.plugin.getMessage("plugincommand.no-permission"));
       sender.sendMessage(message);
       return true;
     }

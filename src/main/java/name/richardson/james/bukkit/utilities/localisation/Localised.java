@@ -10,18 +10,18 @@ import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
  */
 public class Localised implements Localisable {
 
-  /** The key prefix to apply to all lookups through this class */
-  private final String prefix;
-
   /** The base localisation class */
   private final Localisable plugin;
+
+  /** The key prefix to apply to all lookups through this class */
+  private final String prefix;
 
   /**
    * Instantiates a new localised class
    * 
    * @param plugin the base localisation object, usually a plugin.
    */
-  public Localised(Localisable plugin) {
+  public Localised(final Localisable plugin) {
     this.prefix = this.getClass().getSimpleName().toLowerCase() + ".";
     this.plugin = plugin;
   }
@@ -32,9 +32,9 @@ public class Localised implements Localisable {
    * getChoiceFormattedMessage(java.lang.String, java.lang.Object[],
    * java.lang.String[], double[])
    */
-  public String getChoiceFormattedMessage(String key, Object[] arguments, String[] formats, double[] limits) {
-    key = prefix + key;
-    return ColourFormatter.replace("&", plugin.getChoiceFormattedMessage(key, arguments, formats, limits));
+  public String getChoiceFormattedMessage(String key, final Object[] arguments, final String[] formats, final double[] limits) {
+    key = this.prefix + key;
+    return ColourFormatter.replace("&", this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits));
   }
 
   /*
@@ -42,7 +42,7 @@ public class Localised implements Localisable {
    * @see name.richardson.james.bukkit.utilities.plugin.Localisable#getLocale()
    */
   public Locale getLocale() {
-    return plugin.getLocale();
+    return this.plugin.getLocale();
   }
 
   /*
@@ -52,8 +52,8 @@ public class Localised implements Localisable {
    * .lang.String)
    */
   public String getMessage(String key) {
-    key = prefix + key;
-    return ColourFormatter.replace("&", plugin.getMessage(key));
+    key = this.prefix + key;
+    return ColourFormatter.replace("&", this.plugin.getMessage(key));
   }
 
   /*
@@ -61,9 +61,9 @@ public class Localised implements Localisable {
    * @see name.richardson.james.bukkit.utilities.plugin.Localisable#
    * getSimpleFormattedMessage(java.lang.String, java.lang.Object)
    */
-  public String getSimpleFormattedMessage(String key, Object argument) {
-    key = prefix + key;
-    return ColourFormatter.replace("&", plugin.getSimpleFormattedMessage(key, argument));
+  public String getSimpleFormattedMessage(String key, final Object argument) {
+    key = this.prefix + key;
+    return ColourFormatter.replace("&", this.plugin.getSimpleFormattedMessage(key, argument));
   }
 
   /*
@@ -71,9 +71,9 @@ public class Localised implements Localisable {
    * @see name.richardson.james.bukkit.utilities.plugin.Localisable#
    * getSimpleFormattedMessage(java.lang.String, java.lang.Object[])
    */
-  public String getSimpleFormattedMessage(String key, Object[] arguments) {
-    key = prefix + key;
-    return ColourFormatter.replace("&", plugin.getSimpleFormattedMessage(key, arguments));
+  public String getSimpleFormattedMessage(String key, final Object[] arguments) {
+    key = this.prefix + key;
+    return ColourFormatter.replace("&", this.plugin.getSimpleFormattedMessage(key, arguments));
   }
 
 }

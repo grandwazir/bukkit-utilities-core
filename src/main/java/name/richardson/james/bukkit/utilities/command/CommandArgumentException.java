@@ -21,8 +21,8 @@ package name.richardson.james.bukkit.utilities.command;
 public class CommandArgumentException extends Exception {
 
   private static final long serialVersionUID = -224188893239232383L;
-  private final String message;
   private final String help;
+  private final String message;
 
   public CommandArgumentException(final String message, final String help) {
     this.message = message;

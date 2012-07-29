@@ -24,21 +24,21 @@ public class MavenManifest {
     final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
     final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
     final Document doc = docBuilder.parse(file);
-    
+
     // normalize text representation
     doc.getDocumentElement().normalize();
 
-    NodeList root = doc.getChildNodes();
-    
+    final NodeList root = doc.getChildNodes();
+
     // navigate down to get the versioning node
-    Node meta = getNode("metadata", root);
-    Node versioning = getNode("versioning", meta.getChildNodes());
-    Node versions = getNode("versions", versioning.getChildNodes());
-    
+    final Node meta = this.getNode("metadata", root);
+    final Node versioning = this.getNode("versioning", meta.getChildNodes());
+    final Node versions = this.getNode("versions", versioning.getChildNodes());
+
     // get a list of versions
-    NodeList nodes = versions.getChildNodes();
+    final NodeList nodes = versions.getChildNodes();
     this.setVersionList(nodes);
-    
+
     file.deleteOnExit();
 
   }
@@ -51,18 +51,6 @@ public class MavenManifest {
     return Collections.unmodifiableList(this.versionList);
   }
 
-  private void setVersionList(NodeList nodes) {
-    versionList.clear();
-    int i = 0;
-    while (i <= nodes.getLength() - 1) {
-      Node node = nodes.item(i);
-      if (node.getNodeName().equalsIgnoreCase("version")) {
-        versionList.add(0, node.getChildNodes().item(0).getNodeValue());
-      } 
-      i++;
-    }
-  }
-  
   private Node getNode(final String tagName, final NodeList nodes) {
     for (int x = 0; x < nodes.getLength(); x++) {
       final Node node = nodes.item(x);
@@ -72,6 +60,18 @@ public class MavenManifest {
     }
 
     return null;
+  }
+
+  private void setVersionList(final NodeList nodes) {
+    this.versionList.clear();
+    int i = 0;
+    while (i <= (nodes.getLength() - 1)) {
+      final Node node = nodes.item(i);
+      if (node.getNodeName().equalsIgnoreCase("version")) {
+        this.versionList.add(0, node.getChildNodes().item(0).getNodeValue());
+      }
+      i++;
+    }
   }
 
 }

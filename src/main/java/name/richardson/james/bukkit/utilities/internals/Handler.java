@@ -23,7 +23,7 @@ abstract public class Handler {
   protected final Logger logger = new Logger(this.getClass());
 
   public Handler(final Class<?> parentClass) {
-    logger.debug("New handler created on behalf of " + parentClass.getName());
+    this.logger.debug("New handler created on behalf of " + parentClass.getName());
   }
 
 }

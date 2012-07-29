@@ -26,14 +26,6 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 public interface Command extends CommandExecutor, PermissionsHolder {
 
   /**
-   * Check if a player has permission to use this command.
-   * 
-   * @param sender the CommandSender attempting to use the command.
-   * @return true if they are allowed to use the command, false otherwise.
-   */
-  public boolean testPermission(CommandSender sender);
-
-  /**
    * Execute a command.
    * 
    * @param sender The CommandSender using this command.
@@ -60,13 +52,6 @@ public interface Command extends CommandExecutor, PermissionsHolder {
   public String getName();
 
   /**
-   * Gets the usage.
-   * 
-   * @return a brief string detailing how to use the command.
-   */
-   String getUsage();
-
-  /**
    * Parse and validate the given command arguments.
    * 
    * @param arguments the arguments provided by the CommandManager
@@ -74,6 +59,21 @@ public interface Command extends CommandExecutor, PermissionsHolder {
    * @throws CommandArgumentException if any of the arguments are invalid or
    *           missing.
    */
-   public void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException;
+  public void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException;
+
+  /**
+   * Check if a player has permission to use this command.
+   * 
+   * @param sender the CommandSender attempting to use the command.
+   * @return true if they are allowed to use the command, false otherwise.
+   */
+  public boolean testPermission(CommandSender sender);
+
+  /**
+   * Gets the usage.
+   * 
+   * @return a brief string detailing how to use the command.
+   */
+  String getUsage();
 
 }
