@@ -34,9 +34,10 @@ import org.xml.sax.SAXException;
 
 import name.richardson.james.bukkit.utilities.internals.Logger;
 import name.richardson.james.bukkit.utilities.localisation.Localisable;
+import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
-public class PluginUpdater implements Runnable, Localisable {
+public class PluginUpdater extends Localised implements Runnable {
 
   /* The logger for this class */
   private final Logger logger = new Logger(PluginUpdater.class);
@@ -51,36 +52,12 @@ public class PluginUpdater implements Runnable, Localisable {
   private final State state;
 
   public PluginUpdater(final SkeletonPlugin plugin, final State state) {
+    super(plugin);
     this.plugin = plugin;
     this.state = state;
     if (plugin.isDebugging()) {
       this.logger.setDebugging(true);
     }
-  }
-
-  public String getChoiceFormattedMessage(String key, final Object[] arguments, final String[] formats, final double[] limits) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getChoiceFormattedMessage(key, arguments, formats, limits);
-  }
-
-  public Locale getLocale() {
-    return this.plugin.getLocale();
-  }
-
-  public String getMessage(String key) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getMessage(key);
-  }
-
-  public String getSimpleFormattedMessage(String key, final Object argument) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    final Object[] arguments = { argument };
-    return this.getSimpleFormattedMessage(key, arguments);
-  }
-
-  public String getSimpleFormattedMessage(String key, final Object[] arguments) {
-    key = this.getClass().getSimpleName().toLowerCase() + "." + key;
-    return this.plugin.getSimpleFormattedMessage(key, arguments);
   }
 
   public void run() {
