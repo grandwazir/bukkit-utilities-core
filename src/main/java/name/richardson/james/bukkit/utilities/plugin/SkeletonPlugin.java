@@ -45,6 +45,7 @@ import name.richardson.james.bukkit.utilities.internals.Logger;
 import name.richardson.james.bukkit.utilities.localisation.Localisable;
 import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
+import name.richardson.james.bukkit.utilities.updater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
 public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder, Updatable {
@@ -317,10 +318,10 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   }
 
   private void updatePlugin() {
-    // schedule a random delay so all BukkitUtilities plugins do not attempt to
-    // update at the same time.
-    final long delay = new Random().nextInt(20) * 20;
-    this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new PluginUpdater(this, this.configuration.getAutomaticUpdaterState()), delay);
+    if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
+      final long delay = new Random().nextInt(20) * 20;
+      this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new PluginUpdater(this, this.configuration.getAutomaticUpdaterState()), delay);
+    }
   }
 
 }
