@@ -79,7 +79,10 @@ public class PluginUpdater extends Localised implements Runnable {
     }
 
     if (this.isNewVersionAvailable()) {
-      if (this.state == State.AUTOMATIC) {
+      switch (this.state) {
+      case AUTOMATIC:
+        this.logger.warning("automatic-updating-disabled");
+        /*
         try {
           // create the path for the updated plugin
           final File updateFolder = this.plugin.getServer().getUpdateFolderFile();
@@ -107,9 +110,11 @@ public class PluginUpdater extends Localised implements Runnable {
           this.logger.warning(this.getMessage("unable-to-save-file"));
           e.printStackTrace();
         }
-      } else {
-        this.logger.info(this.getSimpleFormattedMessage("newer-version-available", this.manifest.getCurrentVersion()));
+        */
+      case NOTIFY:
+        this.logger.info(this.getSimpleFormattedMessage("newer-version-available", this.manifest.getCurrentVersion())); 
       }
+      
     }
   }
 
