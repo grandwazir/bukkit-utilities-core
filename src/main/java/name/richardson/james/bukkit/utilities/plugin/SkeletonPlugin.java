@@ -112,10 +112,6 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     message.append("Encountered a missing key '");
     message.append(key);
     message.append("' in the localisation of the plugin. This should NOT happen. Please report this as a bug.");
-    for (final ResourceBundle bundle : this.bundles) {
-      message.append(" Key list for linked bundle: ");
-      message.append(bundle.keySet().toString());
-    }
     throw new MissingResourceException(message.toString(), "PropertyResourceBundle", key);
   }
 
