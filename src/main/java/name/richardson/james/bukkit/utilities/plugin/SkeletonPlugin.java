@@ -203,11 +203,11 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     try {
       this.loadInitialConfiguration();
       this.loadResourceBundles();
+      this.setRootPermission();
       this.loadConfiguration();
       this.setupPersistence();
       this.registerEvents();
       this.setupMetrics();
-      this.setRootPermission();
       this.registerPermissions();
       this.registerCommands();
       this.updatePlugin();
