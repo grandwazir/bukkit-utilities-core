@@ -5,18 +5,12 @@
   <name>BukkitUtilities</name>
   <description>A utility library containing reusuable classes and implementations for use with Bukkit.</description>
 
-  <scm>
-    <connection>scm:git:git://github.com/grandwazir/BukkitUtilities.git/</connection>
-    <developerConnection>scm:git:git@github.com:grandwazir/BukkitUtilities.git</developerConnection>
-    <url>https://github.com/grandwazir/BukkitUtilities</url>
-  </scm>
-   
   <parent>
      <groupId>name.richardson.james.bukkit</groupId>
      <artifactId>parent-pom</artifactId>
      <version>1</version>
   </parent>
-
+  
   <dependencies>
      <dependency>
 	   <groupId>org.apache.maven</groupId>

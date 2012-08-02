@@ -25,7 +25,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -33,7 +32,6 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.xml.sax.SAXException;
 
 import name.richardson.james.bukkit.utilities.internals.Logger;
-import name.richardson.james.bukkit.utilities.localisation.Localisable;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
@@ -81,7 +79,7 @@ public class PluginUpdater extends Localised implements Runnable {
     if (this.isNewVersionAvailable()) {
       switch (this.state) {
       case AUTOMATIC:
-        this.logger.warning("automatic-updating-disabled");
+        this.logger.warning(this.getMessage("automatic-updating-disabled"));
         /*
         try {
           // create the path for the updated plugin
@@ -139,18 +137,16 @@ public class PluginUpdater extends Localised implements Runnable {
     return new URL(path.toString());
   }
 
-  // This is used to search the plugin directory and then change the name of the
-  // plugin
-  // if necessary. The .jar should match the name of the plugin as defined in
-  // plugin.yml.
-  // This is necessary otherwise the updater in Bukkit will not work.
+  /**
   private File getPluginFile() {
     final File plugins = this.plugin.getDataFolder().getParentFile();
     final String[] files = plugins.list(new PluginFilter(this.plugin));
     this.logger.debug(files.toString());
     return new File(this.plugin.getDataFolder().getParentFile().toString() + File.separatorChar + files[0]);
   }
+  */
 
+  /** Commented out for reasons explained above
   private URL getPluginURL() throws MalformedURLException {
     final String version = this.manifest.getCurrentVersion();
     final StringBuilder path = new StringBuilder();
@@ -168,7 +164,8 @@ public class PluginUpdater extends Localised implements Runnable {
     path.append(".jar");
     return new URL(path.toString());
   }
-
+  */
+  
   private boolean isNewVersionAvailable() {
     final DefaultArtifactVersion current = new DefaultArtifactVersion(this.plugin.getDescription().getVersion());
     this.logger.debug("Current local version: " + current.toString());
@@ -180,7 +177,8 @@ public class PluginUpdater extends Localised implements Runnable {
       return false;
     }
   }
-
+ 
+  /**
   private void normalisePluginFileName() {
     final String name = this.plugin.getName() + ".jar";
     final File plugin = this.getPluginFile();
@@ -189,7 +187,8 @@ public class PluginUpdater extends Localised implements Runnable {
       final File file = new File(plugin.getParentFile().toString() + File.separatorChar + name);
       plugin.renameTo(file);
     }
-  }
+  } 
+  */
 
   private void parseMavenMetaData() throws IOException, SAXException, ParserConfigurationException {
     final File temp = File.createTempFile(this.plugin.getClass().getSimpleName() + "-", null);

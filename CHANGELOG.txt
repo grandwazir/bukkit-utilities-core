@@ -1,5 +1,9 @@
-Changelog for BukkitUtilities (v4.0.1)
+Changelog for BukkitUtilities (v4.0.2-SNAPSHOT)
 
+
+v4.0.1
+2012-08-02 08:14:05 +0100    testing release (James Richardson)
+2012-08-02 08:12:54 +0100    now using parent pom (James Richardson)
 2012-08-02 07:20:23 +0100    change to release (James Richardson)
 2012-08-01 00:02:49 +0100    remove additional debugging infomation (James Richardson)
 2012-07-31 22:49:49 +0100    register root permission earlier (James Richardson)
