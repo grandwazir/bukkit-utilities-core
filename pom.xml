@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>name.richardson.james.bukkit</groupId>
   <artifactId>bukkit-utilities</artifactId>
-  <version>4.0.1-SNAPSHOT</version>
+  <version>4.0.1</version>
   <name>BukkitUtilities</name>
   <url>http://grandwazir.github.com/${project.name}/</url>
   
