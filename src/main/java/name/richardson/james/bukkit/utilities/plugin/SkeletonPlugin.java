@@ -51,7 +51,7 @@ import name.richardson.james.bukkit.utilities.updater.Updatable;
 public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder, Updatable {
 
   /* The configuration file for this plugin */
-  protected PluginConfiguration configuration;
+  private PluginConfiguration configuration;
 
   /* The logger that belongs to this plugin */
   protected final Logger logger;
@@ -115,6 +115,10 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     throw new MissingResourceException(message.toString(), "PropertyResourceBundle", key);
   }
 
+  public Class<? extends PluginConfiguration> getConfiguration() {
+    return configuration;
+  }
+  
   public Permission getPermission(final int index) {
     if (this.permissions.size() > index) {
       return this.permissions.get(index);
@@ -144,7 +148,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
 
   public URL getRepositoryURL() {
     try {
-      switch (this.configuration.getAutomaticUpdaterBranch()) {
+      switch (this.configuration.) {
       case DEVELOPMENT:
         return new URL("http://repository.james.richardson.name/snapshots");
       default:
@@ -197,10 +201,9 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
 
     // attempt to load the resource bundles for the plugin
     try {
-      this.loadInitialConfiguration();
       this.loadResourceBundles();
-      this.setRootPermission();
       this.loadConfiguration();
+      this.setRootPermission();
       this.setupPersistence();
       this.registerEvents();
       this.setupMetrics();
@@ -234,7 +237,9 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   }
 
   protected void loadConfiguration() throws IOException {
-    this.logger.debug("Skipping loading plugin specific configuration.");
+    this.logger.debug("Loading initial configuration.");
+    this.configuration = new PluginConfiguration(this);
+    if (this.configuration.isDebugging()) this.setDebugging(true);
   }
 
   protected void registerCommands() {
@@ -269,14 +274,6 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
 
   protected void setupPersistence() throws SQLException {
     this.logger.debug("Skipping setting up persistence.");
-  }
-
-  private void loadInitialConfiguration() throws IOException {
-    this.logger.debug("Loading initial configuration.");
-    this.configuration = new PluginConfiguration(this);
-    if (this.configuration.isDebugging()) {
-      this.setDebugging(true);
-    }
   }
 
   private void loadResourceBundles() throws IOException {
