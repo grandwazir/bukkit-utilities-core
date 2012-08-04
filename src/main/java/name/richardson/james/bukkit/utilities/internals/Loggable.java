@@ -24,10 +24,6 @@ public interface Loggable {
 
   public String getLoggerPrefix();
 
-  public boolean isDebugging();
-
-  public void setDebugging();
-
   public void setLoggerPrefix();
 
 }
