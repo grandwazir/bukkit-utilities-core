@@ -48,10 +48,7 @@ import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
-public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder, Updatable {
-
-  /* The logger that belongs to this plugin */
-  protected final Logger logger;
+public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, Localisable, Updatable {
 
   /* A list of resource bundles used by the plugin */
   private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
@@ -62,12 +59,11 @@ public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, L
   /* The locale of the system the plugin is running on */
   private final Locale locale = Locale.getDefault();
 
+  /* The logger that belongs to this plugin */
+  private final name.richardson.james.bukkit.utilities.logging.Logger logger;
+
   /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
-
-  public AbstractPlugin() {
-    this.logger = new Logger(this.getClass());
-  }
 
   /*
    * (non-Javadoc)
@@ -87,10 +83,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, L
     final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
     formatter.setFormatByArgumentIndex(0, cFormatter);
     return formatter.format(arguments);
-  }
-
-  public Class<? extends PluginConfiguration> getConfiguration() {
-    return this.configuration;
   }
 
   public String getGroupID() {
