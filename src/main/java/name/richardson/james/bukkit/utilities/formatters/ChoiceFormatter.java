@@ -9,7 +9,7 @@ public final class ChoiceFormatter {
 
   private Localisation localisation;
   
-  private String message;
+  private String message = "{0}";
 
   private Object[] arguments;
 
