@@ -22,11 +22,11 @@ import java.io.IOException;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import name.richardson.james.bukkit.utilities.persistence.YAMLStorage;
+import name.richardson.james.bukkit.utilities.persistence.AbstractYAMLStorage;
 import name.richardson.james.bukkit.utilities.updater.Branch;
 import name.richardson.james.bukkit.utilities.updater.State;
 
-public class PluginConfiguration extends YAMLStorage {
+public class PluginConfiguration extends AbstractYAMLStorage {
 
   public static String NAME = "config.yml";
 

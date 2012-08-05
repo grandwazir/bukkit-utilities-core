@@ -22,54 +22,55 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import name.richardson.james.bukkit.utilities.internals.Logger;
+import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
-public class YAMLStorage {
+public abstract class AbstractYAMLStorage extends AbstractStorage {
 
-  /* The original bukkit YAML configuration that we are wrapping around */
-  protected org.bukkit.configuration.file.YamlConfiguration configuration;
+  private YamlConfiguration configuration;
 
-  /* The logger assigned to this class */
-  protected final Logger logger = new Logger(this.getClass());
-
-  /* A handle to the storage file on disk */
   private final File file;
 
-  private final JavaPlugin plugin;
-
-  public YAMLStorage(final JavaPlugin plugin, final String name) throws IOException {
-    this.plugin = plugin;
-    this.file = new File(plugin.getDataFolder() + File.separator + name);
+  public AbstractYAMLStorage(final Plugin plugin, final String fileName) throws IOException {
+    super(plugin);
+    this.file = new File(plugin.getDataFolder() + File.separator + fileName);
     this.load();
-    this.setDefaults();
+    this.setDefaults(plugin.getResource(this.file.getName()));
   }
 
-  public org.bukkit.configuration.file.YamlConfiguration getDefaults() throws IOException {
-    final InputStream resource = this.plugin.getResource(this.file.getName());
+  public void save(final Object... objects) {
+    return;
+  }
+
+  protected YamlConfiguration getDefaults(final InputStream resource) throws IOException {
     final org.bukkit.configuration.file.YamlConfiguration defaults = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(resource);
     resource.close();
     return defaults;
   }
 
-  public void load() {
-    this.logger.debug(String.format("Loading configuration: %s.", this.file.getName()));
-    this.logger.debug(String.format("Using path: %s.", this.file.getPath()));
+  protected void load() {
+    this.getLogger().debug(AbstractYAMLStorage.class, "loading-configuration", this.getClass());
+    this.getLogger().debug(AbstractYAMLStorage.class, "using-path", this.file.getPath());
     this.configuration = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(this.file);
   }
 
-  public void save() throws IOException {
-    this.logger.debug(String.format("Saving configuration: %s.", this.file.getName()));
-    this.configuration.save(this.file);
+  protected void save() {
+    try {
+      this.getLogger().debug(AbstractYAMLStorage.class, "saving-configuration", this.file.getName());
+      this.configuration.save(this.file);
+    } catch (IOException e) {
+      this.getLogger().severe(this, "unable-to-save");
+      e.printStackTrace();
+    }
   }
 
-  public void setDefaults() throws IOException {
-    this.logger.debug(String.format("Apply default configuration."));
-    final org.bukkit.configuration.file.YamlConfiguration defaults = this.getDefaults();
+  protected void setDefaults(final InputStream resource) throws IOException {
+    final org.bukkit.configuration.file.YamlConfiguration defaults = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(resource);
+    resource.close();
+    this.getLogger().debug(AbstractYAMLStorage.class, "setting-defaults");
     this.configuration.setDefaults(defaults);
     this.configuration.options().copyDefaults(true);
-    this.save();
   }
 
 }
