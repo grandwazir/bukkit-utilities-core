@@ -84,9 +84,9 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
 
   @Override
   public final void onEnable() {
-    try {
-      this.setLogging();
+    try {     
       this.loadLocalisation();
+      this.setLogging();
       this.loadConfiguration();
       this.setPermissions();
       this.establishPersistence();
@@ -131,7 +131,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
   }
 
   protected void setLogging() {
-    this.logger = new ConsoleLogger(this.getLogger());
+    this.logger = new ConsoleLogger(this.getLogger(), this.localisation);
     this.logger.setPrefix("[" + this.getName() + "] ");
   }
 
