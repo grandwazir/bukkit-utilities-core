@@ -149,7 +149,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
   }
 
   private void loadLocalisation() throws IOException {
-    final ResourceBundle[] bundles = { ResourceBundleLoader.getBundle("bukkitutilities-localisation"), ResourceBundleLoader.getBundle(this.getName().toLowerCase(), this.getDataFolder()) };
+    final ResourceBundle[] bundles = { ResourceBundleLoader.getBundle("bukkitutilities"), ResourceBundleLoader.getBundle(this.getName().toLowerCase(), this.getDataFolder()) };
     this.localisation = new ResourceBundleLocalisation(bundles);
   }
 
