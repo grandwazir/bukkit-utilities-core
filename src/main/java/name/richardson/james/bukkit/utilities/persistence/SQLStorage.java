@@ -36,11 +36,12 @@ public class SQLStorage extends AbstractStorage {
     super(plugin); 
     this.classes = classes;
     this.serverConfig = configuration.getServerConfig(); 
+    this.serverConfig.setName(plugin.getName());
     this.datasourceConfig = configuration.getDataSourceConfig();
     this.setClassLoader(plugin);
   }
   
-  protected void initalise() {
+  public void initalise() {
     if (this.ebeanserver != null) this.getLogger().warning(SQLStorage.class, "already-initalised");
     this.load();
     if (!this.validate() || this.rebuild) {

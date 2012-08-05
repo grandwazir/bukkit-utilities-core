@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.1.0-SNAPSHOT)
 
+2012-08-06 00:39:54 +0100    database configuration (James Richardson)
 2012-08-05 21:29:17 +0100    missing key (James Richardson)
 2012-08-05 21:23:23 +0100    actually register the permission (James Richardson)
 2012-08-05 21:07:22 +0100    save config when loading (James Richardson)
