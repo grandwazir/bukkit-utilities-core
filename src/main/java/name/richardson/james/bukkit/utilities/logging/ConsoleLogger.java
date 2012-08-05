@@ -48,7 +48,7 @@ public final class ConsoleLogger extends AbstractLogger {
   public void info(Object object, String message, Object... elements) {
     if (!this.logger.isLoggable(Level.INFO)) return;
     String formattedMessage = this.localisation.getMessage(object, message, elements);
-    this.logger.config(ChatColor.stripColor(formattedMessage));
+    this.logger.info(ChatColor.stripColor(formattedMessage));
   }
 
   public boolean isDebugging() {
@@ -66,13 +66,13 @@ public final class ConsoleLogger extends AbstractLogger {
   public void severe(Object object, String message, Object... elements) {
     if (!this.logger.isLoggable(Level.SEVERE)) return;
     String formattedMessage = this.localisation.getMessage(object, message, elements);
-    this.logger.config(ChatColor.stripColor(formattedMessage));
+    this.logger.severe(ChatColor.stripColor(formattedMessage));
   }
 
   public void warning(Object object, String message, Object... elements) {
     if (!this.logger.isLoggable(Level.WARNING)) return;
     String formattedMessage = this.localisation.getMessage(object, message, elements);
-    this.logger.config(ChatColor.stripColor(formattedMessage));
+    this.logger.warning(ChatColor.stripColor(formattedMessage));
   }
 
   public String getName() {

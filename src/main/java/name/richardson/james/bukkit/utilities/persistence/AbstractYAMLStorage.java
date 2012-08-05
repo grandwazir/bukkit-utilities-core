@@ -44,14 +44,14 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
   }
 
   protected void load() {
-    this.getLogger().debug(AbstractYAMLStorage.class, "loading-configuration", this.getClass().getSimpleName());
-    this.getLogger().debug(AbstractYAMLStorage.class, "using-path", this.file.getPath());
+    this.getLogger().config(AbstractYAMLStorage.class, "loading-configuration", this.getClass().getSimpleName());
+    this.getLogger().config(AbstractYAMLStorage.class, "using-path", this.file.getPath());
     this.configuration = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(this.file);
   }
 
   protected void save() {
     try {
-      this.getLogger().debug(AbstractYAMLStorage.class, "saving-configuration", this.file.getName());
+      this.getLogger().config(AbstractYAMLStorage.class, "saving-configuration", this.file.getName());
       this.configuration.save(this.file);
     } catch (IOException e) {
       this.getLogger().severe(AbstractYAMLStorage.class, "unable-to-save");
@@ -62,7 +62,7 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
   protected void setDefaults(final InputStream resource) throws IOException {
     final org.bukkit.configuration.file.YamlConfiguration defaults = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(resource);
     resource.close();
-    this.getLogger().debug(AbstractYAMLStorage.class, "setting-defaults");
+    this.getLogger().config(AbstractYAMLStorage.class, "setting-defaults");
     this.configuration.setDefaults(defaults);
     this.configuration.options().copyDefaults(true);
   }
