@@ -12,27 +12,17 @@ public interface Logger {
   
   public void debug(Object object, String message, Object... elements);
   
-  public void config(String message);
-  
-  public void debug(Object object, String message);
-  
   public String getName();
  
   public String getPrefix();
   
   public void info(Object object, String message, Object... elements);
   
-  public void info(String message);
-  
   public boolean isDebugging();
   
   public void setDebugging(boolean value);
   
   public void setPrefix(String prefix);
-  
-  public void severe(String message);
-  
-  public void warning(String message);
   
   public void severe(Object object, String message, Object... elements);
   

@@ -44,7 +44,7 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
   }
 
   protected void load() {
-    this.getLogger().debug(AbstractYAMLStorage.class, "loading-configuration", this.getClass());
+    this.getLogger().debug(AbstractYAMLStorage.class, "loading-configuration", this.getClass().getSimpleName());
     this.getLogger().debug(AbstractYAMLStorage.class, "using-path", this.file.getPath());
     this.configuration = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(this.file);
   }
@@ -54,7 +54,7 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
       this.getLogger().debug(AbstractYAMLStorage.class, "saving-configuration", this.file.getName());
       this.configuration.save(this.file);
     } catch (IOException e) {
-      this.getLogger().severe(this, "unable-to-save");
+      this.getLogger().severe(AbstractYAMLStorage.class, "unable-to-save");
       e.printStackTrace();
     }
   }
