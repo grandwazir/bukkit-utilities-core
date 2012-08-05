@@ -72,5 +72,9 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
     this.configuration.setDefaults(defaults);
     this.configuration.options().copyDefaults(true);
   }
+  
+  protected YamlConfiguration getConfiguration() {
+    return this.configuration;
+  }
 
 }

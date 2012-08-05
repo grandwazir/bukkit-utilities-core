@@ -20,9 +20,8 @@ package name.richardson.james.bukkit.utilities.configuration;
 
 import java.io.IOException;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import name.richardson.james.bukkit.utilities.persistence.AbstractYAMLStorage;
+import name.richardson.james.bukkit.utilities.plugin.Plugin;
 import name.richardson.james.bukkit.utilities.updater.Branch;
 import name.richardson.james.bukkit.utilities.updater.State;
 
@@ -30,65 +29,58 @@ public class PluginConfiguration extends AbstractYAMLStorage {
 
   public static String NAME = "config.yml";
 
-  public PluginConfiguration(final JavaPlugin plugin) throws IOException {
+  public PluginConfiguration(Plugin plugin) throws IOException {
     super(plugin, "config.yml");
   }
 
   public Branch getAutomaticUpdaterBranch() {
     try {
-      return Branch.valueOf(this.configuration.getString("automatic-updates.branch").toUpperCase());
+      return Branch.valueOf(this.getConfiguration().getString("automatic-updates.branch", "STABLE"));
     } catch (final IllegalArgumentException e) {
       return Branch.STABLE;
     }
   }
 
   public State getAutomaticUpdaterState() {
-    if (!this.configuration.getBoolean("automatic-updates.enabled")) {
-      return State.OFF;
-    }
     try {
-      return State.valueOf(this.configuration.getString("automatic-updates.method").toUpperCase());
+      if (!this.getConfiguration().getBoolean("automatic-updates.enabled", true)) {
+        return State.OFF;
+      } else {
+        return State.valueOf(this.getConfiguration().getString("automatic-updates.method", "NOTIFY").toUpperCase());
+      }
     } catch (final IllegalArgumentException e) {
-      return State.OFF;
+        return State.NOTIFY;
     }
   }
 
   public boolean isCollectingStats() {
-    return this.configuration.getBoolean("send-anonymous-statistics", true);
+    return this.getConfiguration().getBoolean("send-anonymous-statistics", true);
   }
 
   public boolean isDebugging() {
-    return this.configuration.getBoolean("debugging");
+    return this.getConfiguration().getBoolean("debugging");
   }
 
   public void setAutomaticUpdaterBranch(final Branch branch) {
-    switch (branch) {
-    case STABLE:
-      this.configuration.set("automatic-updates.branch", "stable");
-    case DEVELOPMENT:
-      this.configuration.set("automatic-updates.enabled", "development");
-    }
+    this.getConfiguration().set("automatic-updates.branch", branch.toString());
   }
 
   public void setAutomaticUpdaterState(final State state) {
     switch (state) {
-    case AUTOMATIC:
-      this.configuration.set("automatic-updates.enabled", true);
-      this.configuration.set("automatic-updates.method", "automatic");
     case NOTIFY:
-      this.configuration.set("automatic-updates.enabled", true);
-      this.configuration.set("automatic-updates.method", "notify");
+      this.getConfiguration().set("automatic-updates.enabled", true);
+      this.getConfiguration().set("automatic-updates.method", "NOTIFY");
     case OFF:
-      this.configuration.set("automatic-updates.enabled", false);
+      this.getConfiguration().set("automatic-updates.enabled", false);
     }
   }
 
   public void setCollectingStats(final boolean value) {
-    this.configuration.set("send-anonymous-statistics", value);
+    this.getConfiguration().set("send-anonymous-statistics", value);
   }
 
   public void setDebugging(final boolean value) {
-    this.configuration.set("debugging", value);
+    this.getConfiguration().set("debugging", value);
   }
 
 }
