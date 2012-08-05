@@ -26,13 +26,22 @@ public class ResourceBundleLocalisation extends AbstractLocalisation {
   }
   
   private String getRawMessage(Object object, String key) {
-    key = object.getClass().getSimpleName().toLowerCase() + "." + key;
+    key = this.getClassName(object) + "." + key;
     for (ResourceBundle bundle : bundles) {
       if (bundle.containsKey(key)) {
         return bundle.getString(key);
       }
     }
     return key.toUpperCase();
+  }
+  
+  private String getClassName(Object object) {
+    if (object instanceof Class) {
+      Class<?> c = (Class<?>) object;
+      return c.getSimpleName().toLowerCase();
+    } else {
+      return object.getClass().getSimpleName().toLowerCase();
+    }
   }
   
 }
