@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.1.0-SNAPSHOT)
 
+2012-08-05 19:03:39 +0100    add keys (James Richardson)
 2012-08-05 18:51:34 +0100    change from debug to config fix bug where severe and warning was being logged at config (James Richardson)
 2012-08-05 18:46:20 +0100    delete raw options (James Richardson)
 2012-08-05 18:35:25 +0100    lookup class name correctly (James Richardson)
