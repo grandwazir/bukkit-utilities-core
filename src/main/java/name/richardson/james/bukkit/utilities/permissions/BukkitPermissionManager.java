@@ -52,6 +52,7 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
     if (this.rootPermission != null) {
       this.getLogger().warning(this, "root-permission-already-set", this.rootPermission.getName());
     } else {
+      this.rootPermission = permission;
       this.getLogger().debug(this, "root-permission-added", permission.getName(), permission.getDefault());
     }
   }
