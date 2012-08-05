@@ -48,7 +48,7 @@ import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
-public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, Localisable, Updatable {
+public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 
   /* A list of resource bundles used by the plugin */
   private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
@@ -65,26 +65,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, L
   /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
 
-  /*
-   * (non-Javadoc)
-   * @see
-   * name.richardson.james.bukkit.util.Permissions#setPermission(org.bukkit.
-   * permissions.Permission)
-   */
-  public void addPermission(final Permission permission) {
-    final PluginManager pm = this.getServer().getPluginManager();
-    pm.addPermission(permission);
-    this.permissions.add(permission);
-    this.logger.debug(String.format("Adding permission: %s (default: %s)", permission.getName(), permission.getDefault()));
-  }
-
-  public String getChoiceFormattedMessage(final String key, final Object[] arguments, final String[] formats, final double[] limits) {
-    final MessageFormat formatter = new MessageFormat(this.getMessage(key));
-    final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
-    formatter.setFormatByArgumentIndex(0, cFormatter);
-    return formatter.format(arguments);
-  }
-
   public String getGroupID() {
     return "name.richardson.james.bukkit";
   }
@@ -95,47 +75,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, L
 
   public final String getLoggerPrefix() {
     return this.logger.getPrefix();
-  }
-
-  public String getMessage(final String key) {
-    for (final ResourceBundle bundle : this.bundles) {
-      if (bundle.keySet().contains(key)) {
-        return bundle.getString(key);
-      }
-    }
-    // Additional debugging for when localisation goes wrong
-    final StringBuilder message = new StringBuilder();
-    message.append("Encountered a missing key '");
-    message.append(key);
-    message.append("' in the localisation of the plugin. This should NOT happen. Please report this as a bug.");
-    throw new MissingResourceException(message.toString(), "PropertyResourceBundle", key);
-  }
-
-  public Permission getPermission(final int index) {
-    if (this.permissions.size() > index) {
-      return this.permissions.get(index);
-    } else {
-      return null;
-    }
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see
-   * name.richardson.james.bukkit.util.Permissions#getPermission(java.lang.String
-   * )
-   */
-  public Permission getPermission(final String permission) {
-    final PluginManager pm = this.getServer().getPluginManager();
-    return pm.getPermission(permission);
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see name.richardson.james.bukkit.util.Permissions#getPermissions()
-   */
-  public List<Permission> getPermissions() {
-    return Collections.unmodifiableList(this.permissions);
   }
 
   public URL getRepositoryURL() {
@@ -149,30 +88,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, L
     } catch (final MalformedURLException e) {
       return null;
     }
-  }
-
-  /*
-   * Get the root permission associated with this plugin.
-   * The root permission should be a wildcard style permission (eg.
-   * banhammer.*), usually with
-   * other permissions attached through setting this permission as their parent.
-   * It should be implement so if a player is given this permission they are
-   * allowed to use all features of the plugin without restriction.
-   * @return permission
-   */
-  public Permission getRootPermission() {
-    return this.permissions.get(0);
-  }
-
-  public String getSimpleFormattedMessage(final String key, final Object argument) {
-    final Object[] arguments = { argument };
-    return this.getSimpleFormattedMessage(key, arguments);
-  }
-
-  public String getSimpleFormattedMessage(final String key, final Object[] arguments) {
-    final MessageFormat formatter = new MessageFormat(this.getMessage(key));
-    formatter.setLocale(this.locale);
-    return formatter.format(arguments);
   }
 
   public boolean isDebugging() {
