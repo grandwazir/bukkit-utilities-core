@@ -129,7 +129,7 @@ public class SQLStorage extends AbstractStorage {
   private String disableKeyConstraints(String script) {
     // disable keys at the start and renable at the end
     script = this.serverConfig.getDatabasePlatform().getDbDdlSyntax().getDisableReferentialIntegrity() + "\n" + script;
-    script = this.serverConfig.getDatabasePlatform().getDbDdlSyntax().getEnableReferentialIntegrity() + "\n" + script; 
+    script = "\n" + script + this.serverConfig.getDatabasePlatform().getDbDdlSyntax().getEnableReferentialIntegrity() + "\n"; 
     System.out.print(script);
     return script;
   }
