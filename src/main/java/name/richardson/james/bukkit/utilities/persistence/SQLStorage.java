@@ -67,6 +67,7 @@ public class SQLStorage extends AbstractStorage {
     Level level = java.util.logging.Logger.getLogger("").getLevel();
     ClassLoader currentClassLoader = null;
     try {
+      this.serverConfig.setClasses(classes);
       java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
       currentClassLoader = Thread.currentThread().getContextClassLoader();
       Thread.currentThread().setContextClassLoader(this.classLoader);
@@ -129,7 +130,7 @@ public class SQLStorage extends AbstractStorage {
   private String disableKeyConstraints(String script) {
     // disable keys at the start and renable at the end
     script = this.serverConfig.getDatabasePlatform().getDbDdlSyntax().getDisableReferentialIntegrity() + "\n" + script;
-    script = "\n" + script + this.serverConfig.getDatabasePlatform().getDbDdlSyntax().getEnableReferentialIntegrity() + "\n"; 
+    script = script + this.serverConfig.getDatabasePlatform().getDbDdlSyntax().getEnableReferentialIntegrity() + "\n"; 
     System.out.print(script);
     return script;
   }
