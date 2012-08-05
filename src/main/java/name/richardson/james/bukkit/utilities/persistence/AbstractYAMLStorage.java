@@ -36,17 +36,11 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
     super(plugin);
     this.file = new File(plugin.getDataFolder() + File.separator + fileName);
     this.load();
-    this.setDefaults(plugin.getResource(this.file.getName()));
+    this.setDefaults(plugin.getResource(fileName));
   }
 
   public void save(final Object... objects) {
     return;
-  }
-
-  protected YamlConfiguration getDefaults(final InputStream resource) throws IOException {
-    final org.bukkit.configuration.file.YamlConfiguration defaults = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(resource);
-    resource.close();
-    return defaults;
   }
 
   protected void load() {

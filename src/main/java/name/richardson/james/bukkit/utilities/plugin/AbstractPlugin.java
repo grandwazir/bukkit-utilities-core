@@ -131,7 +131,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
   }
 
   protected void setLogging() {
-    this.logger = new ConsoleLogger(this);
+    this.logger = new ConsoleLogger(this.getLogger());
     this.logger.setPrefix("[" + this.getName() + "] ");
   }
 
