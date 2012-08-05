@@ -31,6 +31,7 @@ public class PluginConfiguration extends AbstractYAMLStorage {
 
   public PluginConfiguration(Plugin plugin) throws IOException {
     super(plugin, "config.yml");
+    this.save();
   }
 
   public Branch getAutomaticUpdaterBranch() {
