@@ -41,14 +41,11 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
-import name.richardson.james.bukkit.utilities.internals.Logger;
-import name.richardson.james.bukkit.utilities.localisation.Localisable;
-import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
-public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
+public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
 
   /* A list of resource bundles used by the plugin */
   private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
