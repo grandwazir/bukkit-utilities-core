@@ -20,6 +20,8 @@ public interface Logger {
   
   public boolean isDebugging();
   
+  public void setDebugging(boolean value);
+  
   public void setPrefix(String prefix);
   
   public void severe(Object object, String message, Object... elements);

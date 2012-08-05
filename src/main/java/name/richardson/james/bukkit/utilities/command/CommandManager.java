@@ -26,11 +26,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
-import name.richardson.james.bukkit.utilities.localisation.Localised;
-import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
-public final class CommandManager extends Localised implements CommandExecutor {
+public final class CommandManager implements CommandExecutor {
 
   /** The colour given to optional arguments */
   public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
@@ -50,18 +50,25 @@ public final class CommandManager extends Localised implements CommandExecutor {
   /** The full name of the plugin including version */
   private final String pluginName;
 
-  public CommandManager(final SkeletonPlugin plugin) {
-    super(plugin);
-    this.pluginName = plugin.getDescription().getFullName();
-    this.pluginDescription = plugin.getMessage("plugin-description");
-    this.helpCommand = this.getMessage("help-command");
+  private final Localisation localisation;
+
+  private final Logger logger;
+
+  public CommandManager(Plugin plugin) {
+    this.localisation = plugin.getLocalisation();
+    this.logger = plugin.getCustomLogger();
+    this.pluginName = this.localisation.getMessage(plugin, "name");
+    this.pluginDescription = this.localisation.getMessage(plugin, "description");
+    this.helpCommand = this.localisation.getMessage(this, "help-command");
   }
 
-  public void addCommand(final PluginCommand command) {
+  public void addCommand(Command command) {
+    this.logger.debug(this, "adding-command", command.getName());
     this.commands.put(command.getName(), command);
   }
 
-  public void addCommand(final PluginCommand command, final String name) {
+  public void addCommand(Command command, final String name) {
+    this.logger.debug(this, "adding-command", command.getName());
     this.commands.put(name, command);
   }
 
@@ -75,8 +82,7 @@ public final class CommandManager extends Localised implements CommandExecutor {
       // display command listing and help
       sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
       sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
-      final String[] messages = { cmd.getName(), this.helpCommand };
-      sender.sendMessage(this.getSimpleFormattedMessage("help-usage", messages));
+      sender.sendMessage(this.localisation.getMessage(this, "help-usage", cmd.getName(), this.helpCommand));
       for (final Command command : this.commands.values()) {
         if (command.testPermission(sender)) {
           sender.sendMessage(this.getCommandHelpEntry(label, command));
@@ -97,13 +103,13 @@ public final class CommandManager extends Localised implements CommandExecutor {
         sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
         sender.sendMessage(this.getCommandHelpEntry(label, command));
       } else {
-        sender.sendMessage(ColourFormatter.replace("&", this.getMessage("invalid-command")));
-        sender.sendMessage(this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
+        sender.sendMessage(this.localisation.getMessage(this, "invalid-command"));
+        sender.sendMessage(this.localisation.getMessage(this, "list-commands", cmd.getName()));
       }
       return true;
     } else {
-      sender.sendMessage(ColourFormatter.replace("&", this.getMessage("invalid-command")));
-      sender.sendMessage(this.getSimpleFormattedMessage("list-commands-hint", cmd.getName()));
+      sender.sendMessage(this.localisation.getMessage(this, "invalid-command"));
+      sender.sendMessage(this.localisation.getMessage(this, "list-commands", cmd.getName()));
       return true;
     }
 
@@ -113,8 +119,7 @@ public final class CommandManager extends Localised implements CommandExecutor {
     String usage = command.getUsage();
     usage = usage.replaceAll("\\<", REQUIRED_ARGUMENT_COLOUR + "<");
     usage = usage.replaceAll("\\[", OPTIONAL_ARGUMENT_COLOUR + "[");
-    final String[] arguments = { label, REQUIRED_ARGUMENT_COLOUR + command.getName(), usage };
-    return this.getSimpleFormattedMessage("help-entry", arguments);
+    return this.localisation.getMessage(this, "help-entry", label, REQUIRED_ARGUMENT_COLOUR + command.getName(), usage);
   }
 
   private String[] prepareArguments(final String[] args, final String name) {
