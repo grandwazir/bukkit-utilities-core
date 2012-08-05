@@ -21,6 +21,9 @@ package name.richardson.james.bukkit.utilities.command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.logging.Logger;
+
 public interface Command extends CommandExecutor {
 
   /**
@@ -72,6 +75,10 @@ public interface Command extends CommandExecutor {
    * 
    * @return a brief string detailing how to use the command.
    */
-  String getUsage();
+  public String getUsage();
+  
+  public Localisation getLocalisation();
+  
+  public Logger getLogger();
 
 }

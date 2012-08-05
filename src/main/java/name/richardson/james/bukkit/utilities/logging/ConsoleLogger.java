@@ -65,5 +65,38 @@ public final class ConsoleLogger extends AbstractLogger {
   public String getName() {
     return this.logger.getName();
   }
+
+  
+  public void config(String message) {
+    if (!this.logger.isLoggable(Level.CONFIG)) return;
+    this.logger.config(message);
+  }
+  
+
+  public void debug(Object object, String message) {
+    if (!this.logger.isLoggable(Level.ALL)) return;
+    message = "<" + object.getClass().getName() + "> " + message;
+    this.logger.config(ChatColor.stripColor(message));
+  }
+  
+
+  public void info(String message) {
+    if (!this.logger.isLoggable(Level.INFO)) return;
+    this.logger.info(ChatColor.stripColor(message));
+    
+  }
+  
+
+  public void severe(String message) {
+    if (!this.logger.isLoggable(Level.SEVERE)) return;
+    this.logger.severe(ChatColor.stripColor(message));
+    
+  }
+  
+
+  public void warning(String message) {
+    if (!this.logger.isLoggable(Level.WARNING)) return;
+    this.logger.warning(ChatColor.stripColor(message));
+  }
   
 }

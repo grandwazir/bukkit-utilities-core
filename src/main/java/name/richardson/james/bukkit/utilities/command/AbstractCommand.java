@@ -105,5 +105,9 @@ public abstract class AbstractCommand implements Command {
   public Logger getLogger() {
     return this.logger;
   }
+  
+  public Localisation getLocalisation() {
+    return this.localisation;
+  }
 
 }

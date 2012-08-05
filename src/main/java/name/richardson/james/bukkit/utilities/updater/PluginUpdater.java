@@ -84,7 +84,7 @@ public class PluginUpdater implements Runnable, Listener {
 
   public void onPlayerJoin(final PlayerJoinEvent event) {
     final Player player = event.getPlayer();
-    if (this.plugin.getPermissionManager().hasPlayerPermission(player, this.plugin.getRootPermission())) {
+    if (this.plugin.getPermissionManager().hasPlayerPermission(player, this.plugin.getPermissionManager().getRootPermission())) {
       final String message = this.plugin.getLocalisation().getMessage(this, "new-version-available", this.plugin.getName(), this.manifest.getCurrentVersion());
       player.sendMessage(message);
     }

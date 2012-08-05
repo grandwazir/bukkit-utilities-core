@@ -30,6 +30,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLoader;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
@@ -158,6 +159,18 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
     if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
       new PluginUpdater(this, this.configuration.getAutomaticUpdaterState(), this.configuration.getAutomaticUpdaterBranch());
     }
+  }
+  
+  public PermissionManager getPermissionManager() {
+    return this.permissions;
+  }
+  
+  public Localisation getLocalisation() {
+    return this.localisation;
+  }
+  
+  public Logger getCustomLogger() {
+    return this.logger;
   }
 
 }

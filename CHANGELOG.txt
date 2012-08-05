@@ -1,5 +1,18 @@
-Changelog for BukkitUtilities (v4.0.1-SNAPSHOT)
+Changelog for BukkitUtilities (v4.1.0-SNAPSHOT)
 
+2012-08-05 08:35:33 +0100    bump version (James Richardson)
+2012-08-05 08:34:53 +0100    finished AbstractPlugin (James Richardson)
+2012-08-05 05:49:57 +0100    make changes to updater to keep dev.bukkit happy strip colours from messages before logging (James Richardson)
+2012-08-05 05:11:40 +0100    add debugging (James Richardson)
+2012-08-05 05:09:12 +0100    update PluginConfiguration (James Richardson)
+2012-08-05 05:03:12 +0100    new storage framework (James Richardson)
+2012-08-05 04:25:46 +0100    added new permission framework (James Richardson)
+2012-08-05 03:36:46 +0100    remove old methods (James Richardson)
+2012-08-05 03:35:04 +0100    finished new framework (James Richardson)
+2012-08-05 03:31:48 +0100    add new localisation framework (James Richardson)
+2012-08-05 02:44:00 +0100    new logging framework (James Richardson)
+2012-08-04 05:44:25 +0100    remove loadInitialConfiguration (James Richardson)
+2012-08-04 05:27:15 +0100    remove duplication (James Richardson)
 
 v4.0.0
 2012-08-02 09:49:36 +0100    will get it right this time! (James Richardson)
