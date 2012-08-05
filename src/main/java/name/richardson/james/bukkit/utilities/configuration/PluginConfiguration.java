@@ -22,8 +22,8 @@ import java.io.IOException;
 
 import name.richardson.james.bukkit.utilities.persistence.AbstractYAMLStorage;
 import name.richardson.james.bukkit.utilities.plugin.Plugin;
-import name.richardson.james.bukkit.utilities.updater.Branch;
-import name.richardson.james.bukkit.utilities.updater.State;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
 public class PluginConfiguration extends AbstractYAMLStorage {
 

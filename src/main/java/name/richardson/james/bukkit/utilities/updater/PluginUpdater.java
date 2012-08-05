@@ -21,156 +21,128 @@ package name.richardson.james.bukkit.utilities.updater;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Random;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.xml.sax.SAXException;
 
-import name.richardson.james.bukkit.utilities.internals.Logger;
-import name.richardson.james.bukkit.utilities.localisation.Localised;
-import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
+import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
-public class PluginUpdater extends Localised implements Runnable {
+public class PluginUpdater implements Runnable, Listener {
 
-  /* The logger for this class */
-  private final Logger logger = new Logger(PluginUpdater.class);
-
+  public enum State {
+    NOTIFY,
+    OFF
+  }
+  
+  public enum Branch {
+    DEVELOPMENT,
+    STABLE
+  }
+  
   /* A reference to the downloaded Maven manifest from the remote repository */
   private MavenManifest manifest;
-
-  /* The plugin that this updater belongs to */
-  private final SkeletonPlugin plugin;
 
   /* The state that the updater should operate in */
   private final State state;
 
-  public PluginUpdater(final SkeletonPlugin plugin, final State state) {
-    super(plugin);
-    this.plugin = plugin;
+  /* The branch of the maven repo to test against */
+  private final Branch branch;
+  
+  /* Random delay to wait for before updating */
+  final long delay = new Random().nextInt(20) * 20;
+
+  private final Logger logger;
+
+  private final String artifactId;
+
+  private final String groupId;
+
+  private final URL repositoryURL;
+
+  private final String version;
+
+  private Plugin plugin;
+  
+  public PluginUpdater(Plugin plugin, final State state, final Branch branch) {
+    this.branch = branch;
     this.state = state;
-    if (plugin.isDebugging()) {
-      this.logger.setDebugging(true);
-    }
+    this.logger = plugin.getCustomLogger();
+    this.version = plugin.getDescription().getVersion();
+    this.artifactId = plugin.getArtifactID();
+    this.groupId = plugin.getGroupID();
+    this.repositoryURL = plugin.getRepositoryURL();
+    this.plugin = plugin;
+    Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this, delay);
   }
 
   public void run() {
-
-    this.logger.setPrefix("[" + this.plugin.getName() + "] ");
-    this.logger.debug(this.getMessage("checking-for-new-version"));
-
     try {
       this.parseMavenMetaData();
-    } catch (final IOException e) {
-      this.logger.warning(this.getMessage("unable-to-save-file"));
-      e.printStackTrace();
-    } catch (final SAXException e) {
-      this.logger.warning(this.getMessage("unable-to-read-metadata"));
-      e.printStackTrace();
-    } catch (final ParserConfigurationException e) {
-      this.logger.warning(this.getMessage("unable-to-read-metadata"));
-      e.printStackTrace();
-    }
-
-    if (this.isNewVersionAvailable()) {
-      switch (this.state) {
-      case AUTOMATIC:
-        this.logger.warning(this.getMessage("automatic-updating-disabled"));
-        /*
-        try {
-          // create the path for the updated plugin
-          final File updateFolder = this.plugin.getServer().getUpdateFolderFile();
-          if (!updateFolder.exists()) {
-            updateFolder.mkdirs();
-          }
-          final StringBuilder path = new StringBuilder();
-          path.append(updateFolder.getAbsolutePath());
-          path.append(File.separatorChar);
-          path.append(this.plugin.getDescription().getName());
-          path.append(".jar");
-          // create the URL of the updated plugin
-          // download the update to the update folder
-          this.logger.debug("Path to save updated plugin: " + path);
-          final File storage = new File(path.toString());
-          storage.createNewFile();
-          // normalise the plugin name as necessary
-          this.normalisePluginFileName();
-          this.fetchFile(this.getPluginURL(), storage);
-          this.logger.info(this.getSimpleFormattedMessage("plugin-updated", this.manifest.getCurrentVersion()));
-        } catch (final MalformedURLException e) {
-          this.logger.warning(this.getMessage("unable-to-get-plugin"));
-          e.printStackTrace();
-        } catch (final IOException e) {
-          this.logger.warning(this.getMessage("unable-to-save-file"));
-          e.printStackTrace();
+      if (this.isNewVersionAvailable()) {
+        switch (this.state) {
+        case NOTIFY:
+          this.logger.info(this, "new-version-available", this.manifest.getCurrentVersion()); 
         }
-        */
-      case NOTIFY:
-        this.logger.info(this.getSimpleFormattedMessage("newer-version-available", this.manifest.getCurrentVersion())); 
       }
-      
+    } catch (final IOException e) {
+      this.logger.warning(this, "unable-to-read-metadata", this.artifactId);
+    } catch (final SAXException e) {
+      this.logger.warning(this, "unable-to-read-metadata", this.artifactId);
+    } catch (final ParserConfigurationException e) {
+      this.logger.warning(this, "unable-to-read-metadata", this.artifactId);
+    }
+  }
+  
+  public void onPlayerJoin(PlayerJoinEvent event) {
+    final Player player = event.getPlayer();
+    if (this.plugin.getPermissionManager().hasPlayerPermission(player, plugin.getRootPermission())) {
+      final String message = this.plugin.getLocalisation().getMessage(this, "new-version-available", this.plugin.getName(), this.manifest.getCurrentVersion());
+      player.sendMessage(message);
     }
   }
 
-  private void fetchFile(final URL url, final File storage) throws IOException {
-    this.logger.debug("Fetching resource from " + url.toString());
-    final ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-    this.logger.debug("Saving resources to " + storage.getPath());
-    final FileOutputStream fos = new FileOutputStream(storage);
-    fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-    rbc.close();
-    fos.close();
-  }
-
-  private URL getMavenMetaDataURL() throws MalformedURLException {
+  private void getMavenMetaData(File storage) throws IOException {
     final StringBuilder path = new StringBuilder();
-    path.append(this.plugin.getRepositoryURL());
+    path.append(this.repositoryURL);
     path.append("/");
-    path.append(this.plugin.getGroupID().replace(".", "/"));
+    path.append(this.groupId.replace(".", "/"));
     path.append("/");
-    path.append(this.plugin.getArtifactID());
+    path.append(this.artifactId);
     path.append("/maven-metadata.xml");
-    return new URL(path.toString());
+    URL url = new URL(path.toString());
+    // get the file 
+    ReadableByteChannel rbc = null;
+    FileOutputStream fos = null;
+    try {
+      this.logger.debug(this, "fetching-resource", url.toString()); 
+      rbc = Channels.newChannel(url.openStream());
+      this.logger.debug(this, "saving-resource", url.toString()); 
+      fos = new FileOutputStream(storage);
+      fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+    } finally {
+      rbc.close();
+      fos.close();
+    }
   }
 
-  /**
-  private File getPluginFile() {
-    final File plugins = this.plugin.getDataFolder().getParentFile();
-    final String[] files = plugins.list(new PluginFilter(this.plugin));
-    this.logger.debug(files.toString());
-    return new File(this.plugin.getDataFolder().getParentFile().toString() + File.separatorChar + files[0]);
-  }
-  */
 
-  /** Commented out for reasons explained above
-  private URL getPluginURL() throws MalformedURLException {
-    final String version = this.manifest.getCurrentVersion();
-    final StringBuilder path = new StringBuilder();
-    path.append(this.plugin.getRepositoryURL());
-    path.append("/");
-    path.append(this.plugin.getGroupID().replace(".", "/"));
-    path.append("/");
-    path.append(this.plugin.getArtifactID());
-    path.append("/");
-    path.append(version);
-    path.append("/");
-    path.append(this.plugin.getArtifactID());
-    path.append("-");
-    path.append(version);
-    path.append(".jar");
-    return new URL(path.toString());
-  }
-  */
   
   private boolean isNewVersionAvailable() {
-    final DefaultArtifactVersion current = new DefaultArtifactVersion(this.plugin.getDescription().getVersion());
-    this.logger.debug("Current local version: " + current.toString());
+    final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
+    this.logger.debug(this, "local-version", current.toString()); 
     final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
-    this.logger.debug("Latest remote version: " + target.toString());
+    this.logger.debug(this, "remote-version", target.toString()); 
     if (current.compareTo(target) == -1) {
       return true;
     } else {
@@ -178,21 +150,11 @@ public class PluginUpdater extends Localised implements Runnable {
     }
   }
  
-  /**
-  private void normalisePluginFileName() {
-    final String name = this.plugin.getName() + ".jar";
-    final File plugin = this.getPluginFile();
-    if (!plugin.getName().equals(name)) {
-      this.logger.debug("Plugin file name is inconsistent. Renaming to " + name + ".");
-      final File file = new File(plugin.getParentFile().toString() + File.separatorChar + name);
-      plugin.renameTo(file);
-    }
-  } 
-  */
+
 
   private void parseMavenMetaData() throws IOException, SAXException, ParserConfigurationException {
-    final File temp = File.createTempFile(this.plugin.getClass().getSimpleName() + "-", null);
-    this.fetchFile(this.getMavenMetaDataURL(), temp);
+    final File temp = File.createTempFile(artifactId, null);
+    this.getMavenMetaData(temp);
     this.manifest = new MavenManifest(temp);
   }
 

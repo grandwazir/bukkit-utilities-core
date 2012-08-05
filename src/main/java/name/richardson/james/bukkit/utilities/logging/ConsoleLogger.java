@@ -3,6 +3,8 @@ package name.richardson.james.bukkit.utilities.logging;
 import java.text.MessageFormat;
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
+
 public final class ConsoleLogger extends AbstractLogger {
 
   private final java.util.logging.Logger logger;
@@ -20,20 +22,20 @@ public final class ConsoleLogger extends AbstractLogger {
   public void config(Object object, String message, Object... elements) {
     if (!this.logger.isLoggable(Level.CONFIG)) return;
     final String formattedMessage = MessageFormat.format(message, elements);
-    this.logger.config(formattedMessage);
+    this.logger.config(ChatColor.stripColor(formattedMessage));
   }
 
   public void debug(Object object, String message, Object... elements) {
     if (!this.logger.isLoggable(Level.ALL)) return;
     message = "<" + object.getClass().getName() + "> " + message;
     String formattedMessage = MessageFormat.format(message, elements);
-    this.logger.config(formattedMessage);
+    this.logger.config(ChatColor.stripColor(formattedMessage));
   }
 
   public void info(Object object, String message, Object... elements) {
     if (!this.logger.isLoggable(Level.INFO)) return;
     String formattedMessage = MessageFormat.format(message, elements);
-    this.logger.config(formattedMessage);
+    this.logger.config(ChatColor.stripColor(formattedMessage));
   }
 
   public boolean isDebugging() {
@@ -51,13 +53,13 @@ public final class ConsoleLogger extends AbstractLogger {
   public void severe(Object object, String message, Object... elements) {
     if (!this.logger.isLoggable(Level.SEVERE)) return;
     String formattedMessage = MessageFormat.format(message, elements);
-    this.logger.config(formattedMessage);
+    this.logger.config(ChatColor.stripColor(formattedMessage));
   }
 
   public void warning(Object object, String message, Object... elements) {
     if (!this.logger.isLoggable(Level.WARNING)) return;
     String formattedMessage = MessageFormat.format(message, elements);
-    this.logger.config(formattedMessage);
+    this.logger.config(ChatColor.stripColor(formattedMessage));
   }
 
   public String getName() {
