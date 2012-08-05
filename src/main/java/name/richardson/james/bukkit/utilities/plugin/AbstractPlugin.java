@@ -48,10 +48,7 @@ import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
-public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder, Updatable {
-
-  /* The configuration file for this plugin */
-  private PluginConfiguration configuration;
+public abstract class AbstractPlugin extends JavaPlugin implements Debuggable, Localisable, PermissionsHolder, Updatable {
 
   /* The logger that belongs to this plugin */
   protected final Logger logger;
@@ -59,13 +56,16 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   /* A list of resource bundles used by the plugin */
   private final List<ResourceBundle> bundles = new LinkedList<ResourceBundle>();
 
+  /* The configuration file for this plugin */
+  private PluginConfiguration configuration;
+
   /* The locale of the system the plugin is running on */
   private final Locale locale = Locale.getDefault();
 
   /** A list of permissions owned by this plugin */
   private final List<Permission> permissions = new LinkedList<Permission>();
 
-  public SkeletonPlugin() {
+  public AbstractPlugin() {
     this.logger = new Logger(this.getClass());
   }
 
@@ -87,6 +87,10 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
     formatter.setFormatByArgumentIndex(0, cFormatter);
     return formatter.format(arguments);
+  }
+
+  public Class<? extends PluginConfiguration> getConfiguration() {
+    return this.configuration;
   }
 
   public String getGroupID() {
@@ -115,10 +119,6 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     throw new MissingResourceException(message.toString(), "PropertyResourceBundle", key);
   }
 
-  public Class<? extends PluginConfiguration> getConfiguration() {
-    return configuration;
-  }
-  
   public Permission getPermission(final int index) {
     if (this.permissions.size() > index) {
       return this.permissions.get(index);
@@ -203,7 +203,7 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     try {
       this.loadResourceBundles();
       this.loadConfiguration();
-      this.setRootPermission();
+      this.setPermissions();
       this.setupPersistence();
       this.registerEvents();
       this.setupMetrics();
@@ -239,7 +239,9 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
   protected void loadConfiguration() throws IOException {
     this.logger.debug("Loading initial configuration.");
     this.configuration = new PluginConfiguration(this);
-    if (this.configuration.isDebugging()) this.setDebugging(true);
+    if (this.configuration.isDebugging()) {
+      this.setDebugging(true);
+    }
   }
 
   protected void registerCommands() {
@@ -286,6 +288,14 @@ public abstract class SkeletonPlugin extends JavaPlugin implements Debuggable, L
     final ResourceBundle bundle = ResourceBundle.getBundle("bukkitutilities-localisation", this.locale, this.getClassLoader());
     this.bundles.add(bundle);
     this.logger.debug("Using default BukkitUtilities localisation.");
+  }
+
+  private void setPermissions() {
+    this.logger.debug("Setting permissions");
+    final String node = this.getDescription().getName().toLowerCase() + ".*";
+    final String description = this.getSimpleFormattedMessage("plugin-wildcard-description", this.getDescription().getName());
+    final Permission permission = new Permission(node, description, PermissionDefault.OP);
+    this.addPermission(permission);
   }
 
   private void setPluginResourceBundle() throws IOException {

@@ -29,10 +29,10 @@ import org.bukkit.permissions.Permission;
 
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
-import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
+import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
-public abstract class PluginCommand extends Localised implements Command, PermissionsHolder {
+public abstract class PluginCommand extends Localised implements Command, Permissions {
 
   /** The plugin that is command belongs to. */
   protected SkeletonPlugin plugin;

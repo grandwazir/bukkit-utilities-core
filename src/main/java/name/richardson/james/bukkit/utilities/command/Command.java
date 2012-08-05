@@ -21,9 +21,9 @@ package name.richardson.james.bukkit.utilities.command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import name.richardson.james.bukkit.utilities.permissions.PermissionsHolder;
+import name.richardson.james.bukkit.utilities.permissions.Permissions;
 
-public interface Command extends CommandExecutor, PermissionsHolder {
+public interface Command extends CommandExecutor, Permissions {
 
   /**
    * Execute a command.

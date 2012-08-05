@@ -32,7 +32,7 @@ import org.bukkit.permissions.Permission;
  * implement permissions to provide a shortcut for Commands to register new
  * permissions and to create wildcarded shortcuts for example.
  */
-public interface PermissionsHolder {
+public interface Permissions {
 
   /**
    * Registers a permission and adds it to the class's internal list.
