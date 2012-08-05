@@ -84,9 +84,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
 
   @Override
   public final void onEnable() {
-    // set the prefix of the logger for this plugin
-    // all other classes attached to this plugin should use the same prefix
-    this.logger.setPrefix("[" + this.getName() + "] ");
     try {
       this.setLogging();
       this.loadLocalisation();
@@ -135,6 +132,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
 
   protected void setLogging() {
     this.logger = new ConsoleLogger(this);
+    this.logger.setPrefix("[" + this.getName() + "] ");
   }
 
   protected void setPermissions() {
