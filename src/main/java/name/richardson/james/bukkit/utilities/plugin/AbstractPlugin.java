@@ -87,8 +87,8 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
     try {     
       this.loadLocalisation();
       this.setLogging();
-      this.loadConfiguration();
       this.setPermissions();
+      this.loadConfiguration();
       this.establishPersistence();
       this.registerCommands();
       this.registerListeners();

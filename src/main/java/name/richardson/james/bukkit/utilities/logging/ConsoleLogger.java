@@ -1,5 +1,6 @@
 package name.richardson.james.bukkit.utilities.logging;
 
+import java.util.logging.Handler;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -58,6 +59,9 @@ public final class ConsoleLogger extends AbstractLogger {
   public void setDebugging(boolean debugging) {
     if (debugging) {
       this.logger.setLevel(Logger.DEBUG_LEVEL);
+      for (final Handler handler : this.logger.getParent().getHandlers()) {
+        handler.setLevel(Level.ALL);
+      }
     } else {
       this.logger.setLevel(Logger.DEFAULT_LEVEL);
     }
