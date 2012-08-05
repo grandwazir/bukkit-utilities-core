@@ -57,7 +57,7 @@ public final class CommandManager implements CommandExecutor {
   public CommandManager(Plugin plugin) {
     this.localisation = plugin.getLocalisation();
     this.logger = plugin.getCustomLogger();
-    this.pluginName = this.localisation.getMessage(plugin, "name");
+    this.pluginName = plugin.getDescription().getFullName();
     this.pluginDescription = this.localisation.getMessage(plugin, "description");
     this.helpCommand = this.localisation.getMessage(this, "help-command");
   }
