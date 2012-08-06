@@ -1,21 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>bukkit-utilities</artifactId>
-  <version>4.1.0-SNAPSHOT</version>
+  <version>4.1.0</version>
   <name>BukkitUtilities</name>
   <description>A utility library containing reusuable classes and implementations for use with Bukkit.</description>
 
   <parent>
      <groupId>name.richardson.james.bukkit</groupId>
      <artifactId>parent-pom</artifactId>
-     <version>2</version>
+     <version>3</version>
   </parent>
   
   <dependencies>
      <dependency>
 	   <groupId>org.apache.maven</groupId>
 	   <artifactId>maven-artifact</artifactId>
-	   <version>3.0.3</version>
+	   <version>3.0.4</version>
      </dependency>
   </dependencies>
 
@@ -25,7 +25,7 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
              <!-- We want to bundle in Maven Artifact -->
-            <version>1.5</version>
+            <version>1.7.1</version>
             <executions>
               <execution>
                 <phase>package</phase>
