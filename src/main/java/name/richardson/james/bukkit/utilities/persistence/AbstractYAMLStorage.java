@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 James Richardson.
  * 
- * YAMLStorage.java is part of BukkitUtilities.
+ * AbstractYAMLStorage.java is part of BukkitUtilities.
  * 
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -43,6 +43,10 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
     return;
   }
 
+  protected YamlConfiguration getConfiguration() {
+    return this.configuration;
+  }
+
   protected void load() {
     this.getLogger().config(AbstractYAMLStorage.class, "loading-configuration", this.getClass().getSimpleName());
     this.getLogger().config(AbstractYAMLStorage.class, "using-path", this.file.getPath());
@@ -53,7 +57,7 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
     try {
       this.getLogger().config(AbstractYAMLStorage.class, "saving-configuration", this.file.getName());
       this.configuration.save(this.file);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       this.getLogger().severe(AbstractYAMLStorage.class, "unable-to-save");
       e.printStackTrace();
     }
@@ -65,10 +69,6 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
     this.getLogger().config(AbstractYAMLStorage.class, "setting-defaults");
     this.configuration.setDefaults(defaults);
     this.configuration.options().copyDefaults(true);
-  }
-  
-  protected YamlConfiguration getConfiguration() {
-    return this.configuration;
   }
 
 }

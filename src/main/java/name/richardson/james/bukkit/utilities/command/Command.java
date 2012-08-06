@@ -45,12 +45,23 @@ public interface Command extends CommandExecutor {
    */
   public String getDescription();
 
+  public Localisation getLocalisation();
+
+  public Logger getLogger();
+
   /**
    * Gets the name of this command.
    * 
    * @return the name of the command.
    */
   public String getName();
+
+  /**
+   * Gets the usage.
+   * 
+   * @return a brief string detailing how to use the command.
+   */
+  public String getUsage();
 
   /**
    * Parse and validate the given command arguments.
@@ -69,16 +80,5 @@ public interface Command extends CommandExecutor {
    * @return true if they are allowed to use the command, false otherwise.
    */
   public boolean testPermission(CommandSender sender);
-
-  /**
-   * Gets the usage.
-   * 
-   * @return a brief string detailing how to use the command.
-   */
-  public String getUsage();
-  
-  public Localisation getLocalisation();
-  
-  public Logger getLogger();
 
 }

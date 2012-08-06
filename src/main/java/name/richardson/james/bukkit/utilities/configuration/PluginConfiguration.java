@@ -29,7 +29,7 @@ public class PluginConfiguration extends AbstractYAMLStorage {
 
   public static String NAME = "config.yml";
 
-  public PluginConfiguration(Plugin plugin) throws IOException {
+  public PluginConfiguration(final Plugin plugin) throws IOException {
     super(plugin, "config.yml");
     this.save();
   }
@@ -50,7 +50,7 @@ public class PluginConfiguration extends AbstractYAMLStorage {
         return State.valueOf(this.getConfiguration().getString("automatic-updates.method", "NOTIFY").toUpperCase());
       }
     } catch (final IllegalArgumentException e) {
-        return State.NOTIFY;
+      return State.NOTIFY;
     }
   }
 

@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2012 James Richardson.
+ * 
+ * SQLStorage.java is part of BukkitUtilities.
+ * 
+ * BukkitUtilities is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * BukkitUtilities is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.persistence;
 
 import java.io.BufferedReader;
@@ -23,111 +41,68 @@ import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
 public class SQLStorage extends AbstractStorage {
 
-  private EbeanServer ebeanserver;
-  
-  private final ServerConfig serverConfig;
-  
-  private final DataSourceConfig datasourceConfig;
+  private final List<Class<?>> classes;
 
   private ClassLoader classLoader;
 
-  private final List<Class<?>> classes;
-  
-  private boolean rebuild;
-  
+  private final DataSourceConfig datasourceConfig;
+
+  private EbeanServer ebeanserver;
+
   private DdlGenerator generator;
 
-  public SQLStorage(Plugin plugin, DatabaseConfiguration configuration, List<Class<?>> classes) {
-    super(plugin); 
+  private boolean rebuild;
+
+  private final ServerConfig serverConfig;
+
+  public SQLStorage(final Plugin plugin, final DatabaseConfiguration configuration, final List<Class<?>> classes) {
+    super(plugin);
     this.classes = classes;
-    this.serverConfig = configuration.getServerConfig(); 
+    this.serverConfig = configuration.getServerConfig();
     this.serverConfig.setName(plugin.getName());
     this.datasourceConfig = configuration.getDataSourceConfig();
     this.setClassLoader(plugin);
   }
-  
+
+  public List<Class<?>> getClasses() {
+    return this.classes;
+  }
+
+  public EbeanServer getEbeanServer() {
+    return this.ebeanserver;
+  }
+
   public void initalise() {
-    if (this.ebeanserver != null) this.getLogger().warning(SQLStorage.class, "already-initalised");
+    if (this.ebeanserver != null) {
+      this.getLogger().warning(SQLStorage.class, "already-initalised");
+    }
     this.load();
     if (!this.validate() || this.rebuild) {
-      final SpiEbeanServer server = (SpiEbeanServer) ebeanserver;
+      final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
       this.generator = server.getDdlGenerator();
       this.drop();
       this.create();
       this.getLogger().info(SQLStorage.class, "rebuilt");
     }
   }
-  
-  public List<Class<?>> getClasses() {
-    return this.classes;
+
+  public void save(final Object... objects) {
+    // TODO Auto-generated method stub
+
   }
-  
-  private void setClassLoader(Plugin plugin) {
-    try {
-      final Method method = JavaPlugin.class.getDeclaredMethod("getClassLoader");
-      method.setAccessible(true);
-      this.classLoader = (ClassLoader) method.invoke(plugin);
-    } catch (final Exception exception) {
-      throw new RuntimeException("Failed to retrieve the ClassLoader of the plugin using Reflection", exception);
-    }
+
+  protected void afterDatabaseCreate() {
+    // TODO Auto-generated method stub
   }
-  
-  private void load() {
-    this.getLogger().debug(SQLStorage.class, "loading-database");
-    Level level = java.util.logging.Logger.getLogger("").getLevel();
-    ClassLoader currentClassLoader = null;
-    try {
-      this.serverConfig.setClasses(classes);
-      if (this.getLogger().isDebugging()) {
-        this.serverConfig.setLoggingToJavaLogger(true);
-        this.serverConfig.setLoggingLevel(LogLevel.SQL);
-      }
-      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
-      currentClassLoader = Thread.currentThread().getContextClassLoader();
-      Thread.currentThread().setContextClassLoader(this.classLoader);
-      this.ebeanserver = EbeanServerFactory.create(this.serverConfig);
-    } finally {
-      java.util.logging.Logger.getLogger("").setLevel(level);
-      if (currentClassLoader != null) {
-        Thread.currentThread().setContextClassLoader(currentClassLoader);
-      }
-    }
-  }
-  
-  private boolean validate() {
-    this.getLogger().debug(SQLStorage.class, "validating-database");
-    for (final Class<?> ebean : this.classes) {
-      try {
-        this.ebeanserver.find(ebean).findRowCount();
-      } catch (final Exception exception) {
-        this.getLogger().warning(SQLStorage.class, "validation-failed", exception.getLocalizedMessage());
-        return false;
-      }
-    }
-    this.getLogger().debug(SQLStorage.class, "validation-passed");
-    return true;
-  }
-  
-  private void drop() {
-    this.getLogger().debug(SQLStorage.class, "dropping-database");
-    this.beforeDatabaseDrop();
-    Level level = java.util.logging.Logger.getLogger("").getLevel();
-    try {
-      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
-      this.generator.runScript(true, this.generator.generateDropDdl());
-    } finally {
-      java.util.logging.Logger.getLogger("").setLevel(level);
-    }
-  }
-  
+
   protected void beforeDatabaseCreate() {
     // TODO Auto-generated method stub
-    
+
   }
 
   protected void beforeDatabaseDrop() {
     // TODO Auto-generated method stub
-    
+
   }
 
   protected void create() {
@@ -135,8 +110,10 @@ public class SQLStorage extends AbstractStorage {
     this.beforeDatabaseCreate();
     // reload the database this allows for removing classes
     String script = this.generator.generateCreateDdl();
-    Level level = java.util.logging.Logger.getLogger("").getLevel();
-    if (this.datasourceConfig.getDriver().contains("sqlite")) script = this.fixScript(script);
+    final Level level = java.util.logging.Logger.getLogger("").getLevel();
+    if (this.datasourceConfig.getDriver().contains("sqlite")) {
+      script = this.fixScript(script);
+    }
     try {
       java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
       this.load();
@@ -146,12 +123,20 @@ public class SQLStorage extends AbstractStorage {
     }
     this.afterDatabaseCreate();
   }
-  
-  protected void afterDatabaseCreate() {
-    // TODO Auto-generated method stub
+
+  private void drop() {
+    this.getLogger().debug(SQLStorage.class, "dropping-database");
+    this.beforeDatabaseDrop();
+    final Level level = java.util.logging.Logger.getLogger("").getLevel();
+    try {
+      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+      this.generator.runScript(true, this.generator.generateDropDdl());
+    } finally {
+      java.util.logging.Logger.getLogger("").setLevel(level);
+    }
   }
 
-  private String fixScript(String script) {
+  private String fixScript(final String script) {
     this.getLogger().debug(SQLStorage.class, "fixing-script");
     // Create a BufferedReader out of the potentially invalid script
     final BufferedReader scriptReader = new BufferedReader(new StringReader(script));
@@ -237,14 +222,50 @@ public class SQLStorage extends AbstractStorage {
     return newScript;
   }
 
-  public EbeanServer getEbeanServer() {
-    return this.ebeanserver;
+  private void load() {
+    this.getLogger().debug(SQLStorage.class, "loading-database");
+    final Level level = java.util.logging.Logger.getLogger("").getLevel();
+    ClassLoader currentClassLoader = null;
+    try {
+      this.serverConfig.setClasses(this.classes);
+      if (this.getLogger().isDebugging()) {
+        this.serverConfig.setLoggingToJavaLogger(true);
+        this.serverConfig.setLoggingLevel(LogLevel.SQL);
+      }
+      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+      currentClassLoader = Thread.currentThread().getContextClassLoader();
+      Thread.currentThread().setContextClassLoader(this.classLoader);
+      this.ebeanserver = EbeanServerFactory.create(this.serverConfig);
+    } finally {
+      java.util.logging.Logger.getLogger("").setLevel(level);
+      if (currentClassLoader != null) {
+        Thread.currentThread().setContextClassLoader(currentClassLoader);
+      }
+    }
   }
-  
-  
-  public void save(Object... objects) {
-    // TODO Auto-generated method stub
-    
+
+  private void setClassLoader(final Plugin plugin) {
+    try {
+      final Method method = JavaPlugin.class.getDeclaredMethod("getClassLoader");
+      method.setAccessible(true);
+      this.classLoader = (ClassLoader) method.invoke(plugin);
+    } catch (final Exception exception) {
+      throw new RuntimeException("Failed to retrieve the ClassLoader of the plugin using Reflection", exception);
+    }
   }
-  
+
+  private boolean validate() {
+    this.getLogger().debug(SQLStorage.class, "validating-database");
+    for (final Class<?> ebean : this.classes) {
+      try {
+        this.ebeanserver.find(ebean).findRowCount();
+      } catch (final Exception exception) {
+        this.getLogger().warning(SQLStorage.class, "validation-failed", exception.getLocalizedMessage());
+        return false;
+      }
+    }
+    this.getLogger().debug(SQLStorage.class, "validation-passed");
+    return true;
+  }
+
 }

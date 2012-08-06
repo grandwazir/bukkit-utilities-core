@@ -44,17 +44,17 @@ public final class CommandManager implements CommandExecutor {
   /** the localised name of the help command */
   private final String helpCommand;
 
+  private final Localisation localisation;
+
+  private final Logger logger;
+
   /** The localised description of the plugin */
   private final String pluginDescription;
 
   /** The full name of the plugin including version */
   private final String pluginName;
 
-  private final Localisation localisation;
-
-  private final Logger logger;
-
-  public CommandManager(Plugin plugin) {
+  public CommandManager(final Plugin plugin) {
     this.localisation = plugin.getLocalisation();
     this.logger = plugin.getCustomLogger();
     this.pluginName = plugin.getDescription().getFullName();
@@ -62,12 +62,12 @@ public final class CommandManager implements CommandExecutor {
     this.helpCommand = this.localisation.getMessage(this, "help-command");
   }
 
-  public void addCommand(Command command) {
+  public void addCommand(final Command command) {
     this.logger.debug(this, "adding-command", command.getClass().getSimpleName());
     this.commands.put(command.getName(), command);
   }
 
-  public void addCommand(Command command, final String name) {
+  public void addCommand(final Command command, final String name) {
     this.logger.debug(this, "adding-command", command.getClass().getSimpleName());
     this.commands.put(name, command);
   }

@@ -29,7 +29,7 @@ public class ColourFormatter {
     }
     return message;
   }
-  
+
   public static String replace(final String prefix, String message) {
     for (final ChatColor colour : ChatColor.values()) {
       final String pattern = "(?i)" + prefix + colour.name();

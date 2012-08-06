@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2012 James Richardson.
+ * 
+ * ChoiceFormatter.java is part of BukkitUtilities.
+ * 
+ * BukkitUtilities is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * BukkitUtilities is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.formatters;
 
 import java.text.ChoiceFormat;
@@ -7,41 +25,41 @@ import name.richardson.james.bukkit.utilities.localisation.Localisation;
 
 public final class ChoiceFormatter {
 
-  private Localisation localisation;
-  
-  private String message = "{0}";
-
   private Object[] arguments;
 
   private String[] formats;
 
   private double[] limits;
 
-  public ChoiceFormatter(Localisation localisation) {
+  private final Localisation localisation;
+
+  private String message = "{0}";
+
+  public ChoiceFormatter(final Localisation localisation) {
     this.localisation = localisation;
   }
-  
-  public void setFormats(String...formats) {
-    this.formats = formats;
+
+  public String getMessage() {
+    final MessageFormat formatter = new MessageFormat(this.message);
+    final ChoiceFormat cFormatter = new ChoiceFormat(this.limits, this.formats);
+    formatter.setFormatByArgumentIndex(0, cFormatter);
+    return formatter.format(this.arguments);
   }
-  
-  public void setLimits(double...limits) {
-    this.limits = limits;
-  }
-  
-  public void setMessage(Object object, String key) {
-    this.message = this.localisation.getMessage(object, key);
-  }
-  
-  public void setArguments(Object...arguments) {
+
+  public void setArguments(final Object... arguments) {
     this.arguments = arguments;
   }
-  
-  public String getMessage() {
-    final MessageFormat formatter = new MessageFormat(message);
-    final ChoiceFormat cFormatter = new ChoiceFormat(limits, formats);
-    formatter.setFormatByArgumentIndex(0, cFormatter);
-    return formatter.format(arguments);
+
+  public void setFormats(final String... formats) {
+    this.formats = formats;
   }
-  
+
+  public void setLimits(final double... limits) {
+    this.limits = limits;
+  }
+
+  public void setMessage(final Object object, final String key) {
+    this.message = this.localisation.getMessage(object, key);
+  }
+
 }

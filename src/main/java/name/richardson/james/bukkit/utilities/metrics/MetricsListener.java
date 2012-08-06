@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 James Richardson.
  * 
- * AbstractMetricsListener.java is part of BukkitUtilities.
+ * MetricsListener.java is part of BukkitUtilities.
  * 
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -25,12 +25,12 @@ import name.richardson.james.bukkit.utilities.plugin.Plugin;
 public class MetricsListener {
 
   private Metrics metrics;
-  
-  public MetricsListener(Plugin plugin) {
+
+  public MetricsListener(final Plugin plugin) {
     try {
       this.metrics = new Metrics(plugin);
       this.metrics.start();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
   }

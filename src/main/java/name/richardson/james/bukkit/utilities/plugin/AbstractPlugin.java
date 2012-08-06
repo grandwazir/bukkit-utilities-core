@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 James Richardson.
  * 
- * SkeletonPlugin.java is part of BukkitUtilities.
+ * AbstractPlugin.java is part of BukkitUtilities.
  * 
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -56,12 +56,24 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
 
   private PermissionManager permissions;
 
+  public Logger getCustomLogger() {
+    return this.logger;
+  }
+
   public String getGroupID() {
     return "name.richardson.james.bukkit";
   }
 
   public Locale getLocale() {
     return this.locale;
+  }
+
+  public Localisation getLocalisation() {
+    return this.localisation;
+  }
+
+  public PermissionManager getPermissionManager() {
+    return this.permissions;
   }
 
   public URL getRepositoryURL() {
@@ -84,7 +96,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
 
   @Override
   public final void onEnable() {
-    try {     
+    try {
       this.loadLocalisation();
       this.setLogging();
       this.setPermissions();
@@ -157,18 +169,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
     if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
       new PluginUpdater(this, this.configuration.getAutomaticUpdaterState(), this.configuration.getAutomaticUpdaterBranch());
     }
-  }
-  
-  public PermissionManager getPermissionManager() {
-    return this.permissions;
-  }
-  
-  public Localisation getLocalisation() {
-    return this.localisation;
-  }
-  
-  public Logger getCustomLogger() {
-    return this.logger;
   }
 
 }
