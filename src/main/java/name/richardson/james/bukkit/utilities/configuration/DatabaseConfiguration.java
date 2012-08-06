@@ -43,6 +43,7 @@ public final class DatabaseConfiguration extends AbstractYAMLStorage {
     if (this.dataSourceConfig == null) {
       ConfigurationSection section = this.getConfiguration().getConfigurationSection("database");
       this.dataSourceConfig = this.serverConfig.getDataSourceConfig();
+      this.dataSourceConfig.setUrl(this.replaceDatabaseString(this.dataSourceConfig.getUrl()));
       if (section.get("username") != null) this.dataSourceConfig.setUsername(section.getString("username"));
       if (section.get("password") != null) this.dataSourceConfig.setPassword((section.getString("password")));
       if (section.get("url") != null) this.dataSourceConfig.setUrl(this.replaceDatabaseString((section.getString("url"))));
