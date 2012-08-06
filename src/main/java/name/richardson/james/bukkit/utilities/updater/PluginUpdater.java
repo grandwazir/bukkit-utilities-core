@@ -96,7 +96,7 @@ public class PluginUpdater implements Runnable, Listener {
       if (this.isNewVersionAvailable()) {
         switch (this.state) {
         case NOTIFY:
-          this.logger.info(this, "new-version-available", this.manifest.getCurrentVersion());
+          this.logger.info(this, "new-version-available", this.plugin.getName(), this.manifest.getCurrentVersion());
         }
       }
     } catch (final IOException e) {

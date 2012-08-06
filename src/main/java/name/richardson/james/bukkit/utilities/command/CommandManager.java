@@ -63,12 +63,12 @@ public final class CommandManager implements CommandExecutor {
   }
 
   public void addCommand(Command command) {
-    this.logger.debug(this, "adding-command", command.getName());
+    this.logger.debug(this, "adding-command", command.getClass().getSimpleName());
     this.commands.put(command.getName(), command);
   }
 
   public void addCommand(Command command, final String name) {
-    this.logger.debug(this, "adding-command", command.getName());
+    this.logger.debug(this, "adding-command", command.getClass().getSimpleName());
     this.commands.put(name, command);
   }
 

@@ -10,6 +10,7 @@ import java.util.logging.Level;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
+import com.avaje.ebean.LogLevel;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
@@ -53,7 +54,7 @@ public class SQLStorage extends AbstractStorage {
       this.generator = server.getDdlGenerator();
       this.drop();
       this.create();
-      this.getLogger().info(SQLStorage.class, "already-initalised");
+      this.getLogger().info(SQLStorage.class, "rebuilt");
     }
   }
   
@@ -77,6 +78,10 @@ public class SQLStorage extends AbstractStorage {
     ClassLoader currentClassLoader = null;
     try {
       this.serverConfig.setClasses(classes);
+      if (this.getLogger().isDebugging()) {
+        this.serverConfig.setLoggingToJavaLogger(true);
+        this.serverConfig.setLoggingLevel(LogLevel.SQL);
+      }
       java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
       currentClassLoader = Thread.currentThread().getContextClassLoader();
       Thread.currentThread().setContextClassLoader(this.classLoader);
@@ -90,7 +95,7 @@ public class SQLStorage extends AbstractStorage {
   }
   
   private boolean validate() {
-    this.getLogger().debug(SQLStorage.class, "validing-database");
+    this.getLogger().debug(SQLStorage.class, "validating-database");
     for (final Class<?> ebean : this.classes) {
       try {
         this.ebeanserver.find(ebean).findRowCount();
@@ -129,12 +134,12 @@ public class SQLStorage extends AbstractStorage {
     this.getLogger().debug(SQLStorage.class, "creating-database");
     this.beforeDatabaseCreate();
     // reload the database this allows for removing classes
-    this.load();
     String script = this.generator.generateCreateDdl();
     Level level = java.util.logging.Logger.getLogger("").getLevel();
     if (this.datasourceConfig.getDriver().contains("sqlite")) script = this.fixScript(script);
     try {
       java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+      this.load();
       this.generator.runScript(false, script);
     } finally {
       java.util.logging.Logger.getLogger("").setLevel(level);

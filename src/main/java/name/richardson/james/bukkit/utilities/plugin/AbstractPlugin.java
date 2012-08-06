@@ -35,6 +35,7 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLoader;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
 import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.metrics.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
@@ -79,7 +80,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
   @Override
   public void onDisable() {
     this.getServer().getScheduler().cancelTasks(this);
-    this.logger.info(AbstractPlugin.class, "disabled", this.getName());
   }
 
   @Override
@@ -145,7 +145,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
   }
 
   protected void setupMetrics() throws IOException {
-    return;
+    new MetricsListener(this);
   }
 
   private void loadLocalisation() throws IOException {
