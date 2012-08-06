@@ -1,6 +1,10 @@
 package name.richardson.james.bukkit.utilities.persistence;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -49,7 +53,12 @@ public class SQLStorage extends AbstractStorage {
       this.generator = server.getDdlGenerator();
       this.drop();
       this.create();
+      this.getLogger().info(SQLStorage.class, "already-initalised");
     }
+  }
+  
+  public List<Class<?>> getClasses() {
+    return this.classes;
   }
   
   private void setClassLoader(Plugin plugin) {
@@ -62,8 +71,8 @@ public class SQLStorage extends AbstractStorage {
     }
   }
   
-  protected void load() {
-    this.getLogger().warning(SQLStorage.class, "loading-database");
+  private void load() {
+    this.getLogger().debug(SQLStorage.class, "loading-database");
     Level level = java.util.logging.Logger.getLogger("").getLevel();
     ClassLoader currentClassLoader = null;
     try {
@@ -80,13 +89,13 @@ public class SQLStorage extends AbstractStorage {
     }
   }
   
-  protected boolean validate() {
+  private boolean validate() {
     this.getLogger().debug(SQLStorage.class, "validing-database");
     for (final Class<?> ebean : this.classes) {
       try {
         this.ebeanserver.find(ebean).findRowCount();
       } catch (final Exception exception) {
-        this.getLogger().debug(SQLStorage.class, "validation-failed", exception.getLocalizedMessage());
+        this.getLogger().warning(SQLStorage.class, "validation-failed", exception.getLocalizedMessage());
         return false;
       }
     }
@@ -94,45 +103,133 @@ public class SQLStorage extends AbstractStorage {
     return true;
   }
   
-  protected void drop() {
+  private void drop() {
+    this.getLogger().debug(SQLStorage.class, "dropping-database");
     this.beforeDatabaseDrop();
-    this.generator.runScript(true, this.generator.generateDropDdl());
-    if (this.datasourceConfig.getDriver().contains("sqlite")) {
-      this.load();
+    Level level = java.util.logging.Logger.getLogger("").getLevel();
+    try {
+      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+      this.generator.runScript(true, this.generator.generateDropDdl());
+    } finally {
+      java.util.logging.Logger.getLogger("").setLevel(level);
     }
-    this.beforeDatabaseCreate();
   }
   
-  private void beforeDatabaseCreate() {
+  protected void beforeDatabaseCreate() {
     // TODO Auto-generated method stub
     
   }
 
-  private void beforeDatabaseDrop() {
+  protected void beforeDatabaseDrop() {
     // TODO Auto-generated method stub
     
   }
 
   protected void create() {
+    this.getLogger().debug(SQLStorage.class, "creating-database");
     this.beforeDatabaseCreate();
+    // reload the database this allows for removing classes
+    this.load();
     String script = this.generator.generateCreateDdl();
-    script = this.disableKeyConstraints(script);
-    this.generator.runScript(false, script);
+    Level level = java.util.logging.Logger.getLogger("").getLevel();
+    if (this.datasourceConfig.getDriver().contains("sqlite")) script = this.fixScript(script);
+    try {
+      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+      this.generator.runScript(false, script);
+    } finally {
+      java.util.logging.Logger.getLogger("").setLevel(level);
+    }
     this.afterDatabaseCreate();
   }
   
-  private void afterDatabaseCreate() {
+  protected void afterDatabaseCreate() {
     // TODO Auto-generated method stub
-    
   }
 
-  //* this fixes a bug where using SQLlite you can not set foreign key constraits with an alter table statement. Without this fix using foreign keys will cause an exception. See http://www.sqlite.org/foreignkeys.html#fk_schemacommands for details. 
-  private String disableKeyConstraints(String script) {
-    // disable keys at the start and renable at the end
-    script = this.serverConfig.getDatabasePlatform().getDbDdlSyntax().getDisableReferentialIntegrity() + "\n" + script;
-    script = script + this.serverConfig.getDatabasePlatform().getDbDdlSyntax().getEnableReferentialIntegrity() + "\n"; 
-    System.out.print(script);
-    return script;
+  private String fixScript(String script) {
+    this.getLogger().debug(SQLStorage.class, "fixing-script");
+    // Create a BufferedReader out of the potentially invalid script
+    final BufferedReader scriptReader = new BufferedReader(new StringReader(script));
+    // Create an array to store all the lines
+    final List<String> scriptLines = new ArrayList<String>();
+    // Create some additional variables for keeping track of tables
+    final HashMap<String, Integer> foundTables = new HashMap<String, Integer>();
+    // The name of the table we are currently reviewing
+    String currentTable = null;
+    int tableOffset = 0;
+
+    try {
+      // Loop through all lines
+      String currentLine;
+      while ((currentLine = scriptReader.readLine()) != null) {
+
+        // Trim the current line to remove trailing spaces
+        currentLine = currentLine.trim();
+        // Add the current line to the rest of the lines
+        scriptLines.add(currentLine.trim());
+
+        // Check if the current line is of any use
+        if (currentLine.startsWith("create table")) {
+          // Found a table, so get its name and remember the line it has been
+          // encountered on
+          currentTable = currentLine.split(" ", 4)[2];
+          foundTables.put(currentLine.split(" ", 3)[2], scriptLines.size() - 1);
+        } else if (currentLine.startsWith(";") && (currentTable != null) && !currentTable.equals("")) {
+          // Found the end of a table definition, so update the entry
+          final int index = scriptLines.size() - 1;
+          foundTables.put(currentTable, index);
+          // Remove the last ")" from the previous line
+          String previousLine = scriptLines.get(index - 1);
+          previousLine = previousLine.substring(0, previousLine.length() - 1);
+          scriptLines.set(index - 1, previousLine);
+          // Change ";" to ");" on the current line
+          scriptLines.set(index, ");");
+          // Reset the table-tracker
+          currentTable = null;
+          // Found a potentially unsupported action
+        } else if (currentLine.startsWith("alter table")) {
+          final String[] alterTableLine = currentLine.split(" ", 4);
+
+          if (alterTableLine[3].startsWith("add constraint")) {
+            // Found an unsupported action: ALTER TABLE using ADD CONSTRAINT
+            final String[] addConstraintLine = alterTableLine[3].split(" ", 4);
+
+            // Check if this line can be fixed somehow
+            if (addConstraintLine[3].startsWith("foreign key")) {
+              // Calculate the index of last line of the current table
+              final int tableLastLine = foundTables.get(alterTableLine[2]) + tableOffset;
+              // Add a "," to the previous line
+              scriptLines.set(tableLastLine - 1, scriptLines.get(tableLastLine - 1) + ",");
+              // Add the constraint as a new line - Remove the ";" on the end
+              final String constraintLine = String.format("%s %s %s", addConstraintLine[1], addConstraintLine[2], addConstraintLine[3]);
+              scriptLines.add(tableLastLine, constraintLine.substring(0, constraintLine.length() - 1));
+              // Remove this line and raise the table offset because a line has
+              // been inserted.
+              scriptLines.remove(scriptLines.size() - 1);
+              tableOffset++;
+            } else {
+              // Exception: This line cannot be fixed but is known the be
+              // unsupported by SQLite.
+              throw new RuntimeException("Unsupported action encountered: ALTER TABLE using ADD CONSTRAINT with " + addConstraintLine[3]);
+            }
+          }
+        }
+      }
+    } catch (final Exception exception) {
+      throw new RuntimeException("Failed to valid the CreateDDL script!");
+    }
+
+    // Turn all the lines back into a single string
+    String newScript = "";
+    for (final String newLine : scriptLines) {
+      newScript += newLine + "\n";
+    }
+
+    // Print the new script
+    // System.out.println(newScript);
+
+    // Return the fixed script
+    return newScript;
   }
 
   public EbeanServer getEbeanServer() {

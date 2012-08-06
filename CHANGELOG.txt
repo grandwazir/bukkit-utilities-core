@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.1.0-SNAPSHOT)
 
+2012-08-06 00:53:55 +0100    remember to set classes (James Richardson)
 2012-08-06 00:49:23 +0100    not creating script correctly (James Richardson)
 2012-08-06 00:46:07 +0100    forgot to set name (James Richardson)
 2012-08-06 00:39:54 +0100    database configuration (James Richardson)

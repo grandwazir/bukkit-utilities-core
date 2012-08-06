@@ -85,7 +85,6 @@ public abstract class AbstractCommand implements Command {
     return true;
   }
 
-
   public String getDescription() {
     return this.description;
   }
@@ -110,4 +109,12 @@ public abstract class AbstractCommand implements Command {
     return this.localisation;
   }
 
+  public Permission getRootPermission() {
+    return this.permission;
+  }
+  
+  public PermissionManager getPermissionManager() {
+    return this.permissions;
+  }
+  
 }
