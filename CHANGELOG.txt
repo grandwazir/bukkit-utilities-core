@@ -1,5 +1,11 @@
 Changelog for BukkitUtilities (v4.1.0-SNAPSHOT)
 
+2012-08-08 05:49:55 +0100    nag plugin admins when a plugin need to be updated (James Richardson)
+2012-08-08 02:19:25 +0100    remove back tick (James Richardson)
+2012-08-08 02:19:10 +0100    spell check (James Richardson)
+2012-08-08 02:17:45 +0100    fix formatting (James Richardson)
+2012-08-08 02:11:11 +0100    update README (James Richardson)
+2012-08-07 01:11:49 +0100    include classloader to avoid interesting errors (James Richardson)
 2012-08-06 20:59:54 +0100    clean up (James Richardson)
 2012-08-06 20:52:59 +0100    added missing key (James Richardson)
 2012-08-06 20:51:55 +0100    removed disable message added new version notification (James Richardson)
