@@ -1,7 +1,9 @@
 BukkitUtilities - A reusable library for Bukkit.
 ====================================
 
-BukkitUtilities is a library for the Minecraft wrapper [Bukkit](http://bukkit.org/) that enables rapid development of plugins by providing classes and interfaces for common tasks. The aim of the library is to reduce the amount of boiler plate code which is duplicated between plugins and provide a consistent approach to a number of problems. At the moment it is used exclusively by all the plugins that I maintain or develop. 
+BukkitUtilities is a library for the Minecraft wrapper [Bukkit](http://bukkit.org/) that enables rapid development of plugins by providing classes and interfaces for common tasks. 
+
+The aim of the library is to reduce the amount of boiler plate code which is duplicated between plugins and provide a consistent approach to a number of problems. At the moment it is used exclusively by all the plugins that I maintain or develop. 
 
 ## Features
 
@@ -22,8 +24,6 @@ BukkitUtilities is free software: you can redistribute it and/or modify it under
 
 BukkitUtilities is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with BukkitUtilities. If not, see http://www.gnu.org/licenses.
-
 ## Documentation
 
 Many of the features specific to BukkitUtilities such as localisation, updater and database support are documented [here on the wiki](https://github.com/grandwazir/BukkitUtilities/wiki), rather than duplicate the same information several times over plugins which use the library. Please refer to this documentation rather than writing your own if you are using the library in your own plugin.
@@ -36,30 +36,23 @@ The likelihood is if you are using a plugin which requires BukkitUtilities, it h
 
 If however you wish to use BukkitUtilities in your own plugin, the best way to get a copy is add the following to the pom.xml of your Maven project. This will automatically download the dependency when you next compile your plugin.
 
-   <repositories>
-      <repository>
-        <id>my-repo</id>
-        <url>http://repository.james.richardson.name</url>
-      </repository>
-   </repositories>
+    <repositories>
+       <repository>
+         <id>my-repo</id>
+         <url>http://repository.james.richardson.name</url>
+       </repository>
+    </repositories>
 
-   <dependencies>
-      <dependency>
-            <groupId>name.richardson.james.bukkit</groupId>
-            <artifactId>bukkit-utilities</artifactId>
-            <version>RELEASE</version>
-      </dependency>
-   </dependencies>
+    <dependencies>
+       <dependency>
+             <groupId>name.richardson.james.bukkit</groupId>
+             <artifactId>bukkit-utilities</artifactId>
+             <version>RELEASE</version>
+       </dependency>
+    </dependencies>`
 
 Alternatively if you do not wish to use Maven you can download the latest version from [GitHub](https://github.com/grandwazir/BukkitUtilities/downloads) or from the [repository](http://repository.james.richardson.name/releases/name/richardson/james/bukkit/bukkit-utilities) directly.
 
 ## Reporting issues
 
 If you are a server administrator and you are encountering an issue with a plugin that uses BukkitUtilities, you should contact the author of that plugin directly for support. If you are a plugin developer and you want to make a bug report or feature request please do so using the [issue tracking](https://github.com/grandwazir/BukkitUtilities/issues) on GitHub.
-
-
-
-
-
-
-
