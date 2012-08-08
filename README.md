@@ -16,7 +16,7 @@ The aim of the library is to reduce the amount of boiler plate code which is dup
 - ColourFormatter for replacing colour names with colour codes.
 - TimeFormatter for converting long to human readable time and back again.
 - Basic metrics implementation.
-- Automatic update checking based on referring the maven repository.
+- Automatic update checking based on referring to a Maven repository.
 
 ## License
 
