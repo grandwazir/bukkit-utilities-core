@@ -49,7 +49,7 @@ If however you wish to use BukkitUtilities in your own plugin, the best way to g
              <artifactId>bukkit-utilities</artifactId>
              <version>RELEASE</version>
        </dependency>
-    </dependencies>`
+    </dependencies>
 
 Alternatively if you do not wish to use Maven you can download the latest version from [GitHub](https://github.com/grandwazir/BukkitUtilities/downloads) or from the [repository](http://repository.james.richardson.name/releases/name/richardson/james/bukkit/bukkit-utilities) directly.
 
