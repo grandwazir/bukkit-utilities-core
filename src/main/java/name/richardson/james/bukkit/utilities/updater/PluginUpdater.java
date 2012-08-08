@@ -31,6 +31,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.xml.sax.SAXException;
@@ -82,6 +84,7 @@ public class PluginUpdater implements Runnable, Listener {
     Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this, this.delay);
   }
 
+  @EventHandler(priority=EventPriority.NORMAL)
   public void onPlayerJoin(final PlayerJoinEvent event) {
     final Player player = event.getPlayer();
     if (this.plugin.getPermissionManager().hasPlayerPermission(player, this.plugin.getPermissionManager().getRootPermission())) {
@@ -96,6 +99,7 @@ public class PluginUpdater implements Runnable, Listener {
       if (this.isNewVersionAvailable()) {
         switch (this.state) {
         case NOTIFY:
+          Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
           this.logger.info(this, "new-version-available", this.plugin.getName(), this.manifest.getCurrentVersion());
         }
       }
