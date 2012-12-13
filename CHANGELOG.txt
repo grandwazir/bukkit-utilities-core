@@ -1,5 +1,8 @@
-Changelog for BukkitUtilities (v4.1.0-SNAPSHOT)
+Changelog for BukkitUtilities (v4.1.1-SNAPSHOT)
 
+
+v4.1.0
+2012-08-08 06:00:44 +0100    changelog (James Richardson)
 2012-08-08 05:49:55 +0100    nag plugin admins when a plugin need to be updated (James Richardson)
 2012-08-08 02:19:25 +0100    remove back tick (James Richardson)
 2012-08-08 02:19:10 +0100    spell check (James Richardson)
