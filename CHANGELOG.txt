@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.2.0-SNAPSHOT)
 
+2013-03-24 18:29:40 +0000    implemented tab completion (James Richardson)
 2013-03-24 16:53:13 +0000    fix double prefix appearing (James Richardson)
 2013-03-24 16:26:48 +0000    bump the version slightly (James Richardson)
 2013-03-24 16:24:50 +0000    updated dependencies (James Richardson)
