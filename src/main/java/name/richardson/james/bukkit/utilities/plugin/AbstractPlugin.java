@@ -104,7 +104,9 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
       this.establishPersistence();
       this.registerCommands();
       this.registerListeners();
-      this.setupMetrics();
+      if (configuration.isCollectingStats()) {
+        this.setupMetrics();
+      }
       this.updatePlugin();
     } catch (final IOException e) {
       this.logger.severe("panic");
