@@ -74,7 +74,7 @@ public class SQLStorage extends AbstractStorage {
 
   public void initalise() {
     if (this.ebeanserver != null) {
-      this.getLogger().warning(SQLStorage.class, "already-initalised");
+      this.getLogger().warning(this.getLocalisation().getMessage(SQLStorage.class, "already-initalised"));
     }
     this.load();
     if (!this.validate() || this.rebuild) {
@@ -82,7 +82,7 @@ public class SQLStorage extends AbstractStorage {
       this.generator = server.getDdlGenerator();
       this.drop();
       this.create();
-      this.getLogger().info(SQLStorage.class, "rebuilt");
+      this.getLogger().info(this.getLocalisation().getMessage(SQLStorage.class, "rebuilt"));
     }
   }
 
@@ -106,7 +106,7 @@ public class SQLStorage extends AbstractStorage {
   }
 
   protected void create() {
-    this.getLogger().debug(SQLStorage.class, "creating-database");
+    this.getLogger().debug(this.getLocalisation().getMessage(SQLStorage.class, "creating-database"));
     this.beforeDatabaseCreate();
     // reload the database this allows for removing classes
     String script = this.generator.generateCreateDdl();
@@ -125,7 +125,7 @@ public class SQLStorage extends AbstractStorage {
   }
 
   private void drop() {
-    this.getLogger().debug(SQLStorage.class, "dropping-database");
+    this.getLogger().debug(this.getLocalisation().getMessage(SQLStorage.class, "dropping-database"));
     this.beforeDatabaseDrop();
     final Level level = java.util.logging.Logger.getLogger("").getLevel();
     try {
@@ -137,7 +137,7 @@ public class SQLStorage extends AbstractStorage {
   }
 
   private String fixScript(final String script) {
-    this.getLogger().debug(SQLStorage.class, "fixing-script");
+    this.getLogger().debug(this.getLocalisation().getMessage(SQLStorage.class, "fixing-script"));
     // Create a BufferedReader out of the potentially invalid script
     final BufferedReader scriptReader = new BufferedReader(new StringReader(script));
     // Create an array to store all the lines
@@ -223,7 +223,7 @@ public class SQLStorage extends AbstractStorage {
   }
 
   private void load() {
-    this.getLogger().debug(SQLStorage.class, "loading-database");
+    this.getLogger().debug(this.getLocalisation().getMessage(SQLStorage.class, "loading-database"));
     final Level level = java.util.logging.Logger.getLogger("").getLevel();
     ClassLoader currentClassLoader = null;
     try {
@@ -260,7 +260,7 @@ public class SQLStorage extends AbstractStorage {
       try {
         this.ebeanserver.find(ebean).findRowCount();
       } catch (final Exception exception) {
-        this.getLogger().warning(SQLStorage.class, "validation-failed", exception.getLocalizedMessage());
+        this.getLogger().warning(this.getLocalisation().getMessage(SQLStorage.class, "validation-failed", exception.getLocalizedMessage()));
         return false;
       }
     }

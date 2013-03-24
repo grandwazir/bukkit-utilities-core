@@ -96,19 +96,16 @@ public class PluginUpdater implements Runnable, Listener {
   public void run() {
     try {
       this.parseMavenMetaData();
-      if (this.isNewVersionAvailable()) {
-        switch (this.state) {
-        case NOTIFY:
-          Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
-          this.logger.info(this, "new-version-available", this.plugin.getName(), this.manifest.getCurrentVersion());
-        }
+      if (this.isNewVersionAvailable() && this.state == State.NOTIFY) {
+        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        this.logger.info(this.plugin.getLocalisation().getMessage(this, "new-version-available", this.plugin.getName(), this.manifest.getCurrentVersion()));
       }
     } catch (final IOException e) {
-      this.logger.warning(this, "unable-to-read-metadata", this.artifactId);
+      this.logger.warning(this.plugin.getLocalisation().getMessage(this, "unable-to-read-metadata", this.artifactId));
     } catch (final SAXException e) {
-      this.logger.warning(this, "unable-to-read-metadata", this.artifactId);
+      this.logger.warning(this.plugin.getLocalisation().getMessage(this, "unable-to-read-metadata", this.artifactId));
     } catch (final ParserConfigurationException e) {
-      this.logger.warning(this, "unable-to-read-metadata", this.artifactId);
+      this.logger.warning(this.plugin.getLocalisation().getMessage(this, "unable-to-read-metadata", this.artifactId));
     }
   }
 
@@ -125,9 +122,9 @@ public class PluginUpdater implements Runnable, Listener {
     ReadableByteChannel rbc = null;
     FileOutputStream fos = null;
     try {
-      this.logger.debug(this, "fetching-resource", url.toString());
+      this.logger.debug(this.plugin.getLocalisation().getMessage(this, "fetching-resource", url.toString()));
       rbc = Channels.newChannel(url.openStream());
-      this.logger.debug(this, "saving-resource", url.toString());
+      this.logger.debug(this.plugin.getLocalisation().getMessage(this, "saving-resource", url.toString()));
       fos = new FileOutputStream(storage);
       fos.getChannel().transferFrom(rbc, 0, 1 << 24);
     } finally {
@@ -138,9 +135,9 @@ public class PluginUpdater implements Runnable, Listener {
 
   private boolean isNewVersionAvailable() {
     final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
-    this.logger.debug(this, "local-version", current.toString());
+    this.logger.debug(this.plugin.getLocalisation().getMessage(this, "local-version", current.toString()));
     final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
-    this.logger.debug(this, "remote-version", target.toString());
+    this.logger.debug(this.plugin.getLocalisation().getMessage(this, "remote-version", target.toString()));
     if (current.compareTo(target) == -1) {
       return true;
     } else {
