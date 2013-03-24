@@ -36,16 +36,9 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
     this.pluginManager = Bukkit.getServer().getPluginManager();
   }
 
-  public void addPermission(final Permission permission, final boolean attachToRoot) {
-    if (attachToRoot) {
-      permission.addParent(this.getRootPermission(), true);
-    }
-    if (this.pluginManager.getPermission(permission.getName()) == null) {
-      this.pluginManager.addPermission(permission);
-      this.getLogger().debug(this, "permission-added", permission.getName(), permission.getDefault());
-    } else {
-      this.getLogger().warning(this, "permission-already-exists", permission.getName());
-    }
+  public void addPermission(final Permission permission) {
+    this.pluginManager.addPermission(permission);
+    this.getLogger().debug(String.format("Adding permission: %s (%s)", permission.getName(), permission.getDefault().toString()));
   }
 
   public Permission getPermission(final String name) {
@@ -56,23 +49,19 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
     return this.rootPermission;
   }
 
-  public boolean hasPlayerPermission(final Permissible player, final Permission permission) {
-    this.getLogger().debug(this, "checking-permission", permission.getName());
-    return player.hasPermission(permission);
+  public boolean hasPlayerPermission(final Permissible permissible, final Permission permission) {
+    boolean result = permissible.hasPermission(permission);
+    this.getLogger().debug(String.format("Checking permission: %s has %s? %b", permissible.toString(), permission.getName(), result));
+    return result;
   }
 
-  public boolean hasPlayerPermission(final Permissible player, final String name) {
-    this.getLogger().debug(this, "checking-permission", name);
-    return player.hasPermission(name);
+  public boolean hasPlayerPermission(final Permissible permissible, final String name) {
+    return this.hasPlayerPermission(permissible, this.getPermission(name));
   }
 
   public void setRootPermission(final Permission permission) {
-    if (this.rootPermission != null) {
-      this.getLogger().warning(this, "root-permission-already-set", this.rootPermission.getName());
-    } else {
-      this.rootPermission = permission;
-      this.getLogger().debug(this, "root-permission-added", permission.getName(), permission.getDefault());
-    }
+    this.addPermission(permission);
+    this.getLogger().debug(String.format("Setting root permission: %s (%s)", permission.getName(), permission.getDefault().toString()));
   }
 
 }

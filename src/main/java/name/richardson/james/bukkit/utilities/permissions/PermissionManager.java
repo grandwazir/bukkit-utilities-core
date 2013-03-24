@@ -23,8 +23,8 @@ import org.bukkit.permissions.Permission;
 
 public interface PermissionManager {
 
-  public void addPermission(Permission permission, boolean attachToRoot);
-
+  public void addPermission(Permission permission);
+  
   public Permission getPermission(String name);
 
   public Permission getRootPermission();
