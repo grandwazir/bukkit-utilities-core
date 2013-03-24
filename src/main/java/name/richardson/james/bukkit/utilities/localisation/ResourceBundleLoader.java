@@ -27,10 +27,25 @@ import java.util.ResourceBundle;
 
 public class ResourceBundleLoader {
 
+  /**
+   * Load a resource bundle
+   *
+   * @param loader the ClassLoader of the plugin
+   * @param name the name of the bundle to load.
+   * @return the bundle
+   */
   public static ResourceBundle getBundle(ClassLoader loader, final String name) {
     return ResourceBundle.getBundle(name + "-localisation", Locale.getDefault(), loader);
   }
 
+  /**
+   * Load any overridden bundles in the plugin data folder.
+   *
+   * @param loader the ClassLoader of the plugin
+   * @param name the name of the bundle to load
+   * @param dataFolder the data folder
+   * @return the bundle
+   */
   public static ResourceBundle getBundle(ClassLoader loader, final String name, final File dataFolder) {
     try {
       final String path = dataFolder.getAbsolutePath() + File.separator + "localisation.properties";

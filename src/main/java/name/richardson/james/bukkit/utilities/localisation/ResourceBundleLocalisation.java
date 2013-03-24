@@ -24,10 +24,6 @@ import java.util.ResourceBundle;
 
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class ResourceBundleLocalisation.
- */
 public class ResourceBundleLocalisation implements Localisation {
 
   /** The resource bundles that form this localisation. */
