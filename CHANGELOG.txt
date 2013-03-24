@@ -1,5 +1,16 @@
 Changelog for BukkitUtilities (v4.1.1-SNAPSHOT)
 
+2013-03-24 16:21:35 +0000    move logic for stats collection up one level (James Richardson)
+2013-03-24 16:20:23 +0000    error registering permissions (James Richardson)
+2013-03-24 16:19:24 +0000    fix broken logging messages (James Richardson)
+2013-03-24 16:05:57 +0000    more readable (James Richardson)
+2013-03-24 15:55:58 +0000    new way of registering permissions (James Richardson)
+2013-03-24 15:03:58 +0000    much cleaner and sensible debug messages (James Richardson)
+2013-03-24 14:53:18 +0000    finished refactoring localisation (James Richardson)
+2013-03-24 14:35:26 +0000    implemented new Localisation method (James Richardson)
+2013-03-24 14:11:02 +0000    refreshed resource bundle localisation (James Richardson)
+2013-03-24 13:48:26 +0000    added new Localizable interface to replace old one (James Richardson)
+2012-12-13 22:53:02 +0000    Builds cleanly on a new system (James Richardson)
 
 v4.1.0
 2012-08-08 06:00:44 +0100    changelog (James Richardson)
