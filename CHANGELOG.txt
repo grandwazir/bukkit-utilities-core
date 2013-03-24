@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v4.1.1-SNAPSHOT)
 
+2013-03-24 16:24:50 +0000    updated dependencies (James Richardson)
 2013-03-24 16:21:35 +0000    move logic for stats collection up one level (James Richardson)
 2013-03-24 16:20:23 +0000    error registering permissions (James Richardson)
 2013-03-24 16:19:24 +0000    fix broken logging messages (James Richardson)
