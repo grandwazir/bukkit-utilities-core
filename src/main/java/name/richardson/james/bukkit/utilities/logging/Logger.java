@@ -20,30 +20,87 @@ package name.richardson.james.bukkit.utilities.logging;
 
 import java.util.logging.Level;
 
+
 public interface Logger {
 
+  /** The Constant DEBUG_LEVEL. */
   public final static Level DEBUG_LEVEL = Level.ALL;
 
+  /** The Constant DEFAULT_LEVEL. */
   public final static Level DEFAULT_LEVEL = Level.INFO;
 
-  public void config(Object object, String message, Object... elements);
+  /**
+   * Record a configuration message to the log.
+   *
+   * @param message the message
+   */
+  public void config(String message);
 
-  public void debug(Object object, String message, Object... elements);
+  /**
+   * Record a debug message to the log with the SimpleName of the object
+   * provided as a prefix.
+   *
+   * @param object the object
+   * @param message the message
+   */
+  public void debug(Object object, String message);
 
-  public String getName();
+  /**
+   * Record a debug message to the log.
+   *
+   * @param message the message
+   */
+  public void debug(String message);
 
+  /**
+   * Gets the prefix that is applied at the start of all messages issued from
+   * this logger.
+   * 
+   * @return the prefix
+   */
   public String getPrefix();
 
-  public void info(Object object, String message, Object... elements);
+  /**
+   * Record a informative message to the log.
+   * 
+   * @param message
+   */
+  public void info(String message);
 
+  /**
+   * Checks if we are logging debug messages.
+   * 
+   * @return true, if is debugging
+   */
   public boolean isDebugging();
 
+  /**
+   * Sets if we should record debugging messages.
+   *
+   * @param value the new debugging
+   */
   public void setDebugging(boolean value);
 
+  /**
+   * Sets the prefix that is applied at the start of all messages issued from
+   * this logger.
+   * 
+   * @param prefix
+   */
   public void setPrefix(String prefix);
 
-  public void severe(Object object, String message, Object... elements);
+  /**
+   * Record a error to the log.
+   *
+   * @param message
+   */
+  public void severe(String message);
 
-  public void warning(Object object, String message, Object... elements);
+  /**
+   * Record a warning to the log.
+   * 
+   * @param message
+   */
+  public void warning(String message);
 
 }

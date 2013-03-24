@@ -21,60 +21,87 @@ package name.richardson.james.bukkit.utilities.logging;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 
-import org.bukkit.ChatColor;
-
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-
 public final class ConsoleLogger extends AbstractLogger {
 
-  private final Localisation localisation;
-
+  /** The logger. */
   private final java.util.logging.Logger logger;
 
-  public ConsoleLogger(final java.util.logging.Logger logger, final Localisation localisation) {
+  /**
+   * Instantiates a new console logger.
+   *
+   * @param logger
+   */
+  public ConsoleLogger(final java.util.logging.Logger logger) {
     this.logger = logger;
     this.logger.setLevel(Logger.DEFAULT_LEVEL);
-    this.localisation = localisation;
   }
 
-  public ConsoleLogger(final Object owner, final Localisation localisation) {
+  /**
+   * Instantiates a new console logger with a name matching the SimpleName of the object provided.
+   *
+   * @param owner
+   */
+  public ConsoleLogger(final Object owner) {
     this.logger = java.util.logging.Logger.getLogger(owner.getClass().getName());
     this.logger.setLevel(Logger.DEFAULT_LEVEL);
-    this.localisation = localisation;
   }
 
-  public void config(final Object object, final String message, final Object... elements) {
-    if (!this.logger.isLoggable(Level.CONFIG)) {
-      return;
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.logging.Logger#config(java.lang.String)
+   */
+  public void config(String message) {
+    if (this.logger.isLoggable(Level.CONFIG)) {
+      this.logger.config(this.getPrefix() + message);
     }
-    final String formattedMessage = this.localisation.getMessage(object, message, elements);
-    this.logger.config(ChatColor.stripColor(formattedMessage));
   }
 
-  public void debug(final Object object, final String message, final Object... elements) {
-    if (!this.logger.isLoggable(Level.ALL)) {
-      return;
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.logging.Logger#debug(java.lang.Object, java.lang.String)
+   */
+  public void debug(Object object, String message) {
+    if (this.logger.isLoggable(Level.FINE)) {
+      this.logger.fine(this.getDebugPrefix(object) + message);
     }
-    final String formattedMessage = this.getDebugPrefix(object) + this.localisation.getMessage(object, message, elements);
-    this.logger.fine((ChatColor.stripColor(formattedMessage)));
   }
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.logging.Logger#debug(java.lang.String)
+   */
+  public void debug(String message) {
+    if (this.logger.isLoggable(Level.FINE)) {
+      this.logger.fine(this.getPrefix() + message);
+    }
+  }
+
+  /**
+   * Gets the name.
+   *
+   * @return the name
+   */
   public String getName() {
     return this.logger.getName();
   }
 
-  public void info(final Object object, final String message, final Object... elements) {
-    if (!this.logger.isLoggable(Level.INFO)) {
-      return;
+  
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.logging.Logger#info(java.lang.String)
+   */
+  public void info(String message) {
+    if (this.logger.isLoggable(Level.INFO)) {
+      this.logger.info(this.getPrefix() + message);
     }
-    final String formattedMessage = this.localisation.getMessage(object, message, elements);
-    this.logger.info(ChatColor.stripColor(formattedMessage));
   }
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.logging.Logger#isDebugging()
+   */
   public boolean isDebugging() {
     return this.logger.isLoggable(Logger.DEBUG_LEVEL);
   }
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.logging.Logger#setDebugging(boolean)
+   */
   public void setDebugging(final boolean debugging) {
     if (debugging) {
       this.logger.setLevel(Logger.DEBUG_LEVEL);
@@ -86,22 +113,30 @@ public final class ConsoleLogger extends AbstractLogger {
     }
   }
 
-  public void severe(final Object object, final String message, final Object... elements) {
-    if (!this.logger.isLoggable(Level.SEVERE)) {
-      return;
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.logging.Logger#severe(java.lang.String)
+   */
+  public void severe(String message) {
+    if (this.logger.isLoggable(Level.SEVERE)) {
+      this.logger.severe(this.getPrefix() + message);
     }
-    final String formattedMessage = this.localisation.getMessage(object, message, elements);
-    this.logger.severe(ChatColor.stripColor(formattedMessage));
   }
 
-  public void warning(final Object object, final String message, final Object... elements) {
-    if (!this.logger.isLoggable(Level.WARNING)) {
-      return;
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.logging.Logger#warning(java.lang.String)
+   */
+  public void warning(String message) {
+    if (this.logger.isLoggable(Level.WARNING)) {
+      this.logger.warning(this.getPrefix() + message);
     }
-    final String formattedMessage = this.localisation.getMessage(object, message, elements);
-    this.logger.warning(ChatColor.stripColor(formattedMessage));
   }
 
+  /**
+   * Gets the additional prefix for debug messages.
+   *
+   * @param object the object
+   * @return the debug prefix
+   */
   private String getDebugPrefix(final Object object) {
     if (object instanceof Class) {
       final Class<?> c = (Class<?>) object;

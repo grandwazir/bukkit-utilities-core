@@ -107,11 +107,11 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
       this.setupMetrics();
       this.updatePlugin();
     } catch (final IOException e) {
-      this.logger.severe(AbstractPlugin.class, "panic");
+      this.logger.severe("panic");
       e.printStackTrace();
       this.setEnabled(false);
     } catch (final SQLException e) {
-      this.logger.severe(AbstractPlugin.class, "panic");
+      this.logger.severe("panic");
       e.printStackTrace();
       this.setEnabled(false);
     } catch (final Exception e) {
@@ -142,7 +142,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
   }
 
   protected void setLogging() {
-    this.logger = new ConsoleLogger(this.getLogger(), this.localisation);
+    this.logger = new ConsoleLogger(this.getLogger());
     this.logger.setPrefix("[" + this.getName() + "] ");
   }
 

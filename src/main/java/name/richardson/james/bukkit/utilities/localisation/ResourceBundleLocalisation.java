@@ -28,7 +28,7 @@ import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 /**
  * The Class ResourceBundleLocalisation.
  */
-public class ResourceBundleLocalisation implements Localizable {
+public class ResourceBundleLocalisation implements Localisation {
 
   /** The resource bundles that form this localisation. */
   private final ResourceBundle[] bundles;

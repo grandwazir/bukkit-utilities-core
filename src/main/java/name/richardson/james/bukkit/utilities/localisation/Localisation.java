@@ -1,35 +1,59 @@
-/*******************************************************************************
- * Copyright (c) 2012 James Richardson.
- * 
- * Localisation.java is part of BukkitUtilities.
- * 
- * BukkitUtilities is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * BukkitUtilities is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
 package name.richardson.james.bukkit.utilities.localisation;
-
-import java.util.Locale;
-
-import name.richardson.james.bukkit.utilities.formatters.ChoiceFormatter;
 
 public interface Localisation {
 
-  public ChoiceFormatter getChoiceFormatter();
+  /**
+   * Gets a localised message. 
+   * 
+   * This method assumes that the owner is this object calling the method,
+   * @param key
+   * @return localised message
+   */
+  public String getMessage(String key);
 
-  public Locale getLocale();
+  /**
+   * Gets a localised message with inserted elements. 
+   * 
+   * Returns a message that uses the additional supplied elements to replace tokens in the base
+   * message. Elements will be coerced into their respective String value.
+   * 
+   * Tokens will be replaced in the order that the elements are provided.
+   * 
+   * @param key
+   * @param elements
+   * a variable length array of elements to replace tokens in the message.
+   * @return localised message
+   */
+  public String getMessage(String key, Object... elements);
 
-  public String getMessage(Object object, String key);
+  /**
+   * Gets a localised message with a specific prefix. 
+   * 
+   * If a class is supplied as the prefix the SimpleName of the class is converted into lowercase and
+   * used. Otherwise the object will be coerced into a String.
+   * 
+   * @param prefix
+   * @param key
+   * @return localised message
+   */
+  public String getMessage(Object prefix, String key);
 
-  public String getMessage(Object object, String key, Object... elements);
+  /**
+   * Gets a localised message with a specific prefix and inserted elements. 
+   * 
+   * If a class is supplied as the prefix the SimpleName of the class is converted into lowercase and
+   * used. Otherwise the object will be coerced into a String.
+   * 
+   * Returns a message that uses the additional supplied elements to replace tokens in the base
+   * message. Elements will be coerced into their respective String value.
+   * 
+   * Tokens will be replaced in the order that the elements are provided.
+   * 
+   * @param prefix
+   * @param key
+   * @param elements
+   * @return localised message
+   */
+  public String getMessage(Object prefix, String key, Object... elements);
 
 }
