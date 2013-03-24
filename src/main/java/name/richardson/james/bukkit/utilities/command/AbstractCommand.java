@@ -129,7 +129,8 @@ public abstract class AbstractCommand implements Command {
   }
 
   private void registerInitialPermissions() {
-    this.permissions.add(this.permissionManager.createPermission(this, "use-permission", PermissionDefault.OP, permissionManager.getRootPermission(), true));
+    Permission permission = this.permissionManager.createPermission(this, "use-permission", PermissionDefault.OP, permissionManager.getRootPermission(), true);
+    this.permissions.add(permission);
   }
 
 }
