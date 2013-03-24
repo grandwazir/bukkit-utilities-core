@@ -20,10 +20,15 @@ package name.richardson.james.bukkit.utilities.permissions;
 
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public interface PermissionManager {
 
   public void addPermission(Permission permission);
+  
+  public Permission createPermission(Object object, String key, PermissionDefault permissionDefault);
+  
+  public Permission createPermission(Object object, String key, PermissionDefault permissionDefault, Permission parent, boolean parentDefault);
   
   public Permission getPermission(String name);
 
@@ -34,5 +39,5 @@ public interface PermissionManager {
   public boolean hasPlayerPermission(Permissible player, String name);
 
   public void setRootPermission(Permission permission);
-
+  
 }

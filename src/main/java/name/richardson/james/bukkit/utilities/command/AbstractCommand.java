@@ -18,6 +18,9 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -39,20 +42,20 @@ public abstract class AbstractCommand implements Command {
 
   private final String name;
 
-  private Permission permission;
-
-  private final PermissionManager permissions;
+  private final PermissionManager permissionManager;
+  
+  private final List<Permission> permissions = new ArrayList<Permission>();
 
   private final String usage;
 
   public AbstractCommand(final Plugin plugin, final boolean wildcard) {
     this.localisation = plugin.getLocalisation();
     this.logger = plugin.getCustomLogger();
-    this.permissions = plugin.getPermissionManager();
+    this.permissionManager = plugin.getPermissionManager();
     this.name = this.localisation.getMessage(this, "name");
     this.description = this.localisation.getMessage(this, "description");
     this.usage = this.localisation.getMessage(this, "usage");
-    this.registerPermissions(wildcard);
+    this.registerInitialPermissions();
   }
 
   public String getDescription() {
@@ -72,11 +75,7 @@ public abstract class AbstractCommand implements Command {
   }
 
   public PermissionManager getPermissionManager() {
-    return this.permissions;
-  }
-
-  public Permission getRootPermission() {
-    return this.permission;
+    return this.permissionManager;
   }
 
   public String getUsage() {
@@ -123,25 +122,14 @@ public abstract class AbstractCommand implements Command {
   }
 
   public boolean testPermission(final CommandSender sender) {
-    return this.permissions.hasPlayerPermission(sender, this.permission);
+    for (Permission permission : this.permissions) {
+      if (this.permissionManager.hasPlayerPermission(sender, permission)) return true;
+    }
+    return false;
   }
 
-  protected void registerPermissions(final boolean wildcard) {
-    final String prefix = this.permissions.getRootPermission().getName().replace("*", "");
-    Permission wildcardPermission = null;
-    // create the wild card permission if required
-    if (wildcard) {
-      final String wildcardDescription = this.localisation.getMessage(AbstractCommand.class, "wildcard-permission-description", this.name);
-      wildcardPermission = new Permission(prefix + this.getName() + ".*", wildcardDescription, PermissionDefault.OP);
-      this.permissions.addPermission(wildcardPermission, true);
-    }
-    // create the base permission
-    final Permission base = new Permission(prefix + this.getName(), this.localisation.getMessage(AbstractCommand.class, "permission-description"), PermissionDefault.OP);
-    if (wildcardPermission != null) {
-      base.addParent(wildcardPermission, true);
-    }
-    this.permissions.addPermission(base, false);
-    this.permission = base;
+  private void registerInitialPermissions() {
+    this.permissions.add(this.permissionManager.createPermission(this, "use-permission", PermissionDefault.OP, permissionManager.getRootPermission(), true));
   }
 
 }

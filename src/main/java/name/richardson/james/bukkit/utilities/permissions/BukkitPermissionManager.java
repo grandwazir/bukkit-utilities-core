@@ -21,23 +21,27 @@ package name.richardson.james.bukkit.utilities.permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
 public class BukkitPermissionManager extends AbstractPermissionManager {
 
   private final PluginManager pluginManager;
-
+  
   private Permission rootPermission;
+
+  private Localisation localisation;
 
   public BukkitPermissionManager(final Plugin plugin) {
     super(plugin);
+    this.localisation = plugin.getLocalisation();
     this.pluginManager = Bukkit.getServer().getPluginManager();
   }
 
   public void addPermission(final Permission permission) {
-    this.pluginManager.addPermission(permission);
     this.getLogger().debug(String.format("Adding permission: %s (%s)", permission.getName(), permission.getDefault().toString()));
   }
 
@@ -64,4 +68,24 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
     this.getLogger().debug(String.format("Setting root permission: %s (%s)", permission.getName(), permission.getDefault().toString()));
   }
 
+  public Permission createPermission(Object object, String key, PermissionDefault permissionDefault) {
+    String name = this.localisation.getMessage(object, key + ".name");
+    String description = this.localisation.getMessage(object, key + ".description");
+    Permission permission = new Permission(name, description, permissionDefault);
+    this.addPermission(permission);
+    return permission;
+  }
+  
+  public Permission createPermission(Object object, String key, PermissionDefault permissionDefault, Permission parent, boolean parentDefault) {
+    String name = this.resolveName(this.localisation.getMessage(object, key + ".name"), parent);
+    String description = this.localisation.getMessage(object, key + ".description");
+    Permission permission = new Permission(name, description, permissionDefault);
+    this.addPermission(permission);
+    return permission; 
+  }
+
+  private String resolveName(String name, Permission parent) {
+    String resolvedName = String.format("%s.%s", parent.getName(), name.replace(parent.getName(), ""));
+    return resolvedName;
+  } 
 }
