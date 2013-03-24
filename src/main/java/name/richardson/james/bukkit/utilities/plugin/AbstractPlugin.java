@@ -146,11 +146,9 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
   protected void setLogging() {
     this.logger = new ConsoleLogger(this.getLogger());
     this.logger.setPrefix("[" + this.getName() + "] ");
-    this.logger.debug(this, "Console logger established");
   }
 
   protected void setPermissions() {
-    this.getCustomLogger().debug("BLAH");
     this.permissions = new BukkitPermissionManager(this);
     final String node = this.getDescription().getName().toLowerCase();
     final String description = this.localisation.getMessage(AbstractPlugin.class, "permission-description", this.getDescription().getName());
