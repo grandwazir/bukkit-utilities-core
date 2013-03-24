@@ -18,19 +18,22 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.logging.Logger;
 import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
-public final class CommandManager implements CommandExecutor {
+public final class CommandManager implements CommandExecutor, TabCompleter {
 
   /** The colour given to optional arguments */
   public static final ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
@@ -128,6 +131,16 @@ public final class CommandManager implements CommandExecutor {
       return arguments;
     }
     return args;
+  }
+
+  public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+    List<String> list = new ArrayList<String>();
+    if (args.length <= 1 ) {
+      list.addAll(this.commands.keySet());
+      return list;
+    } else {
+      return list;
+    }
   }
 
 }

@@ -49,7 +49,7 @@ public abstract class AbstractYAMLStorage extends AbstractStorage {
 
   protected void load() {
     this.getLogger().config(String.format("Loading configuration: %s", this.getClass().getSimpleName()));
-    this.getLogger().config(String.format("Using path: %s", this.getClass().getSimpleName()));
+    this.getLogger().config(String.format("Using path: %s", this.file.getAbsolutePath()));
     this.configuration = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(this.file);
   }
 

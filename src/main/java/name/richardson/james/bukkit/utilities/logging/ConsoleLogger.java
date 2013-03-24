@@ -51,7 +51,7 @@ public final class ConsoleLogger extends AbstractLogger {
    */
   public void config(String message) {
     if (this.logger.isLoggable(Level.CONFIG)) {
-      this.logger.config(this.getPrefix() + message);
+      this.logger.config(message);
     }
   }
 
@@ -59,7 +59,7 @@ public final class ConsoleLogger extends AbstractLogger {
    * @see name.richardson.james.bukkit.utilities.logging.Logger#debug(java.lang.Object, java.lang.String)
    */
   public void debug(Object object, String message) {
-    if (this.logger.isLoggable(Level.FINE)) {
+    if (this.logger.isLoggable(Level.ALL)) {
       this.logger.fine(this.getDebugPrefix(object) + message);
     }
   }
@@ -68,8 +68,8 @@ public final class ConsoleLogger extends AbstractLogger {
    * @see name.richardson.james.bukkit.utilities.logging.Logger#debug(java.lang.String)
    */
   public void debug(String message) {
-    if (this.logger.isLoggable(Level.FINE)) {
-      this.logger.fine(this.getPrefix() + message);
+    if (this.logger.isLoggable(Level.ALL)) {
+      this.logger.fine(message);
     }
   }
 
@@ -88,7 +88,7 @@ public final class ConsoleLogger extends AbstractLogger {
    */
   public void info(String message) {
     if (this.logger.isLoggable(Level.INFO)) {
-      this.logger.info(this.getPrefix() + message);
+      this.logger.info(message);
     }
   }
 
@@ -118,7 +118,7 @@ public final class ConsoleLogger extends AbstractLogger {
    */
   public void severe(String message) {
     if (this.logger.isLoggable(Level.SEVERE)) {
-      this.logger.severe(this.getPrefix() + message);
+      this.logger.severe(message);
     }
   }
 
@@ -127,7 +127,7 @@ public final class ConsoleLogger extends AbstractLogger {
    */
   public void warning(String message) {
     if (this.logger.isLoggable(Level.WARNING)) {
-      this.logger.warning(this.getPrefix() + message);
+      this.logger.warning(message);
     }
   }
 
