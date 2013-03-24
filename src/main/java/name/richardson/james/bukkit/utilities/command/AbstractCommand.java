@@ -19,11 +19,13 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -48,7 +50,7 @@ public abstract class AbstractCommand implements Command {
 
   private final String usage;
 
-  public AbstractCommand(final Plugin plugin, final boolean wildcard) {
+  public AbstractCommand(final Plugin plugin) {
     this.localisation = plugin.getLocalisation();
     this.logger = plugin.getCustomLogger();
     this.permissionManager = plugin.getPermissionManager();
@@ -74,6 +76,18 @@ public abstract class AbstractCommand implements Command {
     return this.name;
   }
 
+  public void addPermission(Permission permission) {
+    this.permissions.add(permission);
+  }
+  
+  public void removePermission(Permission permission) {
+    this.permissions.remove(permission);
+  }
+  
+  public List<Permission> getPermissions() {
+    return Collections.unmodifiableList(this.permissions);
+  }
+  
   public PermissionManager getPermissionManager() {
     return this.permissionManager;
   }
@@ -129,7 +143,7 @@ public abstract class AbstractCommand implements Command {
   }
 
   private void registerInitialPermissions() {
-    Permission permission = this.permissionManager.createPermission(this, "use-permission", PermissionDefault.OP, permissionManager.getRootPermission(), true);
+    Permission permission = this.permissionManager.createPermission(this, "use", PermissionDefault.OP, permissionManager.getRootPermission(), true);
     this.permissions.add(permission);
   }
 

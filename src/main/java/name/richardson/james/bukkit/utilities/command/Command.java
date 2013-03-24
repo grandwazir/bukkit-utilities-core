@@ -20,11 +20,12 @@ package name.richardson.james.bukkit.utilities.command;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.logging.Logger;
 
-public interface Command extends CommandExecutor {
+public interface Command extends CommandExecutor, TabCompleter {
 
   /**
    * Execute a command.

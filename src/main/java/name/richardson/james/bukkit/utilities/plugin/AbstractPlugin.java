@@ -155,7 +155,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
     final String node = this.getDescription().getName().toLowerCase();
     final String description = this.localisation.getMessage(AbstractPlugin.class, "permission-description", this.getDescription().getName());
     final Permission permission = new Permission(node, description, PermissionDefault.OP);
-    this.permissions.addPermission(permission);
     this.permissions.setRootPermission(permission);
   }
 

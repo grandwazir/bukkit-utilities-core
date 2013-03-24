@@ -42,7 +42,8 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
   }
 
   public void addPermission(final Permission permission) {
-    this.getLogger().debug(String.format("Adding permission: %s (%s)", permission.getName(), permission.getDefault().toString()));
+    this.pluginManager.addPermission(permission);
+    this.getLogger().debug(this, String.format("Adding permission: %s (%s)", permission.getName(), permission.getDefault().toString()));
   }
 
   public Permission getPermission(final String name) {
@@ -55,7 +56,7 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
 
   public boolean hasPlayerPermission(final Permissible permissible, final Permission permission) {
     boolean result = permissible.hasPermission(permission);
-    this.getLogger().debug(String.format("Checking permission: %s has %s? %b", permissible.toString(), permission.getName(), result));
+    this.getLogger().debug(this, String.format("Checking permission: %s has %s? %b", permissible.toString(), permission.getName(), result));
     return result;
   }
 
@@ -65,7 +66,8 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
 
   public void setRootPermission(final Permission permission) {
     this.addPermission(permission);
-    this.getLogger().debug(String.format("Setting root permission: %s (%s)", permission.getName(), permission.getDefault().toString()));
+    this.rootPermission = permission;
+    this.getLogger().debug(this, String.format("Setting root permission: %s (%s)", permission.getName(), permission.getDefault().toString()));
   }
 
   public Permission createPermission(Object object, String key, PermissionDefault permissionDefault) {

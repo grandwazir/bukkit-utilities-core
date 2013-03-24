@@ -134,12 +134,23 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
   }
 
   public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+    this.logger.debug(String.format("%s supplied %s arguments for completion", sender.getName(), String.valueOf(args.length)));
     List<String> list = new ArrayList<String>();
     if (args.length <= 1 ) {
       list.addAll(this.commands.keySet());
+      list.add("help");
       return list;
     } else {
-      return list;
+      if (this.commands.containsKey(args[0])) {
+        Command command = commands.get(args[0]);
+        this.logger.debug(String.format("Passing tab completion to %s", command.getName()));
+        return command.onTabComplete(sender, cmd, label, prepareArguments(args, args[0]));
+      } else if (args[0].equalsIgnoreCase("help")) {
+        list.addAll(this.commands.keySet());
+        return list;
+      } else {
+        return list;
+      }
     }
   }
 
