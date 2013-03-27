@@ -1,5 +1,11 @@
-Changelog for BukkitUtilities (v4.2.0-SNAPSHOT)
+Changelog for BukkitUtilities (v4.2.1-SNAPSHOT)
 
+2013-03-27 04:51:47 +0000    assign permission to parents (James Richardson)
+2013-03-27 04:50:28 +0000    do not tab complete to commands the player can not access (James Richardson)
+2013-03-24 18:33:27 +0000    remove stray debugging messages (James Richardson)
+
+v4.2.0
+2013-03-24 18:30:34 +0000    changelog (James Richardson)
 2013-03-24 18:29:40 +0000    implemented tab completion (James Richardson)
 2013-03-24 16:53:13 +0000    fix double prefix appearing (James Richardson)
 2013-03-24 16:26:48 +0000    bump the version slightly (James Richardson)

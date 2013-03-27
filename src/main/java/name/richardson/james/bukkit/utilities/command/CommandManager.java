@@ -150,7 +150,11 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
         this.logger.debug(String.format("Passing tab completion to %s", command.getName()));
         return command.onTabComplete(sender, cmd, label, prepareArguments(args, args[0]));
       } else if (args[0].equalsIgnoreCase("help")) {
-        list.addAll(this.commands.keySet());
+        for (Command command : this.commands.values()) {
+          if (command.testPermission(sender)) {
+            list.add(command.getName());
+          }
+        }    
         return list;
       } else {
         return list;
