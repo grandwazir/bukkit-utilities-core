@@ -74,6 +74,7 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
     String name = this.localisation.getMessage(object, key + ".name");
     String description = this.localisation.getMessage(object, key + ".description");
     Permission permission = new Permission(name, description, permissionDefault);
+    permission.addParent(this.getRootPermission(), true);
     this.addPermission(permission);
     return permission;
   }
@@ -82,6 +83,7 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
     String name = this.resolveName(this.localisation.getMessage(object, key + ".name"), parent);
     String description = this.localisation.getMessage(object, key + ".description");
     Permission permission = new Permission(name, description, permissionDefault);
+    permission.addParent(parent, parentDefault);
     this.addPermission(permission);
     return permission; 
   }
