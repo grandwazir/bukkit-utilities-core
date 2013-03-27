@@ -140,7 +140,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
       list.add("help");
       for (Command command : this.commands.values()) {
         if (command.testPermission(sender)) {
-          list.add(command.getName());
+            if (args.length < 1 || command.getName().startsWith(args[0])) {
+              list.add(command.getName());
+            }
         }
       }     
       return list;
@@ -152,7 +154,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
       } else if (args[0].equalsIgnoreCase("help")) {
         for (Command command : this.commands.values()) {
           if (command.testPermission(sender)) {
-            list.add(command.getName());
+            if (command.getName().startsWith(args[0])) {
+              list.add(command.getName());
+            }
           }
         }    
         return list;
