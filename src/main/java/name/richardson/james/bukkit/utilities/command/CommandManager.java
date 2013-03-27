@@ -137,8 +137,12 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
     this.logger.debug(String.format("%s supplied %s arguments for completion", sender.getName(), String.valueOf(args.length)));
     List<String> list = new ArrayList<String>();
     if (args.length <= 1 ) {
-      list.addAll(this.commands.keySet());
       list.add("help");
+      for (Command command : this.commands.values()) {
+        if (command.testPermission(sender)) {
+          list.add(command.getName());
+        }
+      }     
       return list;
     } else {
       if (this.commands.containsKey(args[0])) {
