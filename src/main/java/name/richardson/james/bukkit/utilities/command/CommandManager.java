@@ -136,13 +136,13 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
   public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
     this.logger.debug(String.format("%s supplied %s arguments for completion", sender.getName(), String.valueOf(args.length)));
     List<String> list = new ArrayList<String>();
-    if (args.length <= 1 ) {
-      list.add("help");
+    if (args.length == 1 ) {
+      if ("help".startsWith(args[0])) {
+        list.add("help");
+      }
       for (Command command : this.commands.values()) {
-        if (command.testPermission(sender)) {
-            if (args.length < 1 || command.getName().startsWith(args[0])) {
-              list.add(command.getName());
-            }
+        if (command.testPermission(sender) && command.getName().startsWith(args[0])) {
+          list.add(command.getName());
         }
       }     
       return list;
@@ -154,7 +154,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
       } else if (args[0].equalsIgnoreCase("help")) {
         for (Command command : this.commands.values()) {
           if (command.testPermission(sender)) {
-            if (command.getName().startsWith(args[0])) {
+            if (command.getName().startsWith(args[1])) {
               list.add(command.getName());
             }
           }
