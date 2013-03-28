@@ -61,7 +61,9 @@ public class BukkitPermissionManager extends AbstractPermissionManager {
   }
 
   public boolean hasPlayerPermission(final Permissible permissible, final String name) {
-    return this.hasPlayerPermission(permissible, this.getPermission(name));
+    boolean result = permissible.hasPermission(name);
+    this.getLogger().debug(this, String.format("Checking permission: %s has %s? %b", permissible.toString(), name, result));
+    return result;
   }
 
   public void setRootPermission(final Permission permission) {
