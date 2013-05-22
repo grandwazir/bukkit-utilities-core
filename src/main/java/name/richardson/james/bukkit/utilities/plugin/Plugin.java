@@ -23,7 +23,7 @@ import name.richardson.james.bukkit.utilities.logging.Logger;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
-public interface Plugin extends org.bukkit.plugin.Plugin, Updatable {
+public interface Plugin extends org.bukkit.plugin.Plugin, Updatable, Debuggable {
 
   public Logger getCustomLogger();
 

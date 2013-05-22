@@ -20,6 +20,9 @@ package name.richardson.james.bukkit.utilities.updater;
 
 import java.net.URL;
 
+/**
+ * The Interface Updatable.
+ */
 public interface Updatable {
 
   /**

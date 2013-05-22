@@ -8,7 +8,7 @@
   <parent>
      <groupId>name.richardson.james.bukkit</groupId>
      <artifactId>default-pom</artifactId>
-     <version>3</version>
+     <version>5</version>
   </parent>
 
   <repositories>
@@ -24,6 +24,15 @@
 	   <artifactId>maven-artifact</artifactId>
 	   <version>3.0.5</version>
      </dependency>
+       <dependencies>
+     <!-- Set dependency on Bukkit -->
+     <dependency>
+           <groupId>org.bukkit</groupId>
+           <artifactId>bukkit</artifactId>
+           <version>1.4.7-R1.0</version>
+     </dependency>
+  </dependencies>
+
   </dependencies>
 
   <build>
