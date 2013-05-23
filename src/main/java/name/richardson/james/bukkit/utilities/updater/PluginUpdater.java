@@ -71,6 +71,7 @@ public class PluginUpdater implements Listener, Runnable {
 		this.repositoryURL = plugin.getRepositoryURL();
 		this.localisation = localisation;
 		this.pluginName = plugin.getName();
+		this.logger.setPrefix("[" + pluginName + "] ");
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)

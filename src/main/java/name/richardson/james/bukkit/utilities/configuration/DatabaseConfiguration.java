@@ -20,6 +20,7 @@ package name.richardson.james.bukkit.utilities.configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
@@ -29,7 +30,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import name.richardson.james.bukkit.utilities.persistence.YAMLStorage;
-import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
 public final class DatabaseConfiguration extends YAMLStorage {
 
@@ -41,9 +41,9 @@ public final class DatabaseConfiguration extends YAMLStorage {
 
   private ServerConfig serverConfig;
 
-  public DatabaseConfiguration(final Plugin plugin) throws IOException {
-    super(plugin, FILE_NAME);
-    this.folder = plugin.getDataFolder();
+  public DatabaseConfiguration(final InputStream defaults, final File folder) throws IOException {
+    super(FILE_NAME, defaults);
+    this.folder = folder;
   }
 
   public DataSourceConfig getDataSourceConfig() {

@@ -37,13 +37,16 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.configuration.DatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
+import name.richardson.james.bukkit.utilities.logging.Logger;
 import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
-public class SQLStorage extends AbstractStorage {
+public class SQLStorage {
 
   private final List<Class<?>> classes;
 
-  private ClassLoader classLoader;
+  private final ClassLoader classLoader;
 
   private final DataSourceConfig datasourceConfig;
 
@@ -55,13 +58,16 @@ public class SQLStorage extends AbstractStorage {
 
   private final ServerConfig serverConfig;
 
-  public SQLStorage(final Plugin plugin, final DatabaseConfiguration configuration, final List<Class<?>> classes) {
-    super(plugin);
+	private final Logger logger = new ConsoleLogger(this.getClass().getName());
+	
+	private final Localisation localisation;
+
+  public SQLStorage(final DatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName, final ClassLoader classLoader) {
     this.classes = classes;
     this.serverConfig = configuration.getServerConfig();
-    this.serverConfig.setName(plugin.getName());
+    this.serverConfig.setName(pluginName);
     this.datasourceConfig = configuration.getDataSourceConfig();
-    this.setClassLoader(plugin);
+    this.classLoader = classLoader;
   }
 
   public List<Class<?>> getClasses() {
@@ -74,7 +80,7 @@ public class SQLStorage extends AbstractStorage {
 
   public void initalise() {
     if (this.ebeanserver != null) {
-      this.getLogger().warning(this.getLocalisation().getMessage(SQLStorage.class, "already-initalised"));
+      this.logger.warning(this.localisation.getMessage(SQLStorage.class, "already-initalised"));
     }
     this.load();
     if (!this.validate() || this.rebuild) {
@@ -82,7 +88,7 @@ public class SQLStorage extends AbstractStorage {
       this.generator = server.getDdlGenerator();
       this.drop();
       this.create();
-      this.getLogger().info(this.getLocalisation().getMessage(SQLStorage.class, "rebuilt"));
+      this.logger.info(this.localisation.getMessage(SQLStorage.class, "rebuilt"));
     }
   }
 
@@ -106,7 +112,7 @@ public class SQLStorage extends AbstractStorage {
   }
 
   protected void create() {
-    this.getLogger().debug(this.getLocalisation().getMessage(SQLStorage.class, "creating-database"));
+    this.logger.debug(this.localisation.getMessage(SQLStorage.class, "creating-database"));
     this.beforeDatabaseCreate();
     // reload the database this allows for removing classes
     String script = this.generator.generateCreateDdl();
@@ -125,7 +131,7 @@ public class SQLStorage extends AbstractStorage {
   }
 
   private void drop() {
-    this.getLogger().debug(this.getLocalisation().getMessage(SQLStorage.class, "dropping-database"));
+    this.logger.debug(this.localisation.getMessage(SQLStorage.class, "dropping-database"));
     this.beforeDatabaseDrop();
     final Level level = java.util.logging.Logger.getLogger("").getLevel();
     try {
@@ -137,7 +143,7 @@ public class SQLStorage extends AbstractStorage {
   }
 
   private String fixScript(final String script) {
-    this.getLogger().debug(this.getLocalisation().getMessage(SQLStorage.class, "fixing-script"));
+    this.logger.debug(this.localisation.getMessage(SQLStorage.class, "fixing-script"));
     // Create a BufferedReader out of the potentially invalid script
     final BufferedReader scriptReader = new BufferedReader(new StringReader(script));
     // Create an array to store all the lines
@@ -223,12 +229,12 @@ public class SQLStorage extends AbstractStorage {
   }
 
   private void load() {
-    this.getLogger().debug(this.getLocalisation().getMessage(SQLStorage.class, "loading-database"));
+    this.logger.debug(this.localisation.getMessage(SQLStorage.class, "loading-database"));
     final Level level = java.util.logging.Logger.getLogger("").getLevel();
     ClassLoader currentClassLoader = null;
     try {
       this.serverConfig.setClasses(this.classes);
-      if (this.getLogger().isDebugging()) {
+      if (this.logger.isDebugging()) {
         this.serverConfig.setLoggingToJavaLogger(true);
         this.serverConfig.setLoggingLevel(LogLevel.SQL);
       }
@@ -244,27 +250,17 @@ public class SQLStorage extends AbstractStorage {
     }
   }
 
-  private void setClassLoader(final Plugin plugin) {
-    try {
-      final Method method = JavaPlugin.class.getDeclaredMethod("getClassLoader");
-      method.setAccessible(true);
-      this.classLoader = (ClassLoader) method.invoke(plugin);
-    } catch (final Exception exception) {
-      throw new RuntimeException("Failed to retrieve the ClassLoader of the plugin using Reflection", exception);
-    }
-  }
-
   private boolean validate() {
-    this.getLogger().debug(SQLStorage.class, "validating-database");
+    this.logger.debug(SQLStorage.class, "validating-database");
     for (final Class<?> ebean : this.classes) {
       try {
         this.ebeanserver.find(ebean).findRowCount();
       } catch (final Exception exception) {
-        this.getLogger().warning(this.getLocalisation().getMessage(SQLStorage.class, "validation-failed", exception.getLocalizedMessage()));
+        this.logger.warning(this.localisation.getMessage(SQLStorage.class, "validation-failed", exception.getLocalizedMessage()));
         return false;
       }
     }
-    this.getLogger().debug(SQLStorage.class, "validation-passed");
+    this.logger.debug(SQLStorage.class, "validation-passed");
     return true;
   }
 

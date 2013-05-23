@@ -46,8 +46,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable, De
 
 	/* The configuration file for this plugin */
 	private PluginConfiguration configuration;
-	/* The locale of the system the plugin is running on */
-	private final Locale locale = Locale.getDefault();
 	/* The resource bundle being used for localisation */
 	private ResourceBundleLocalisation localisation;
 	/* The custom logger that belongs to this plugin */

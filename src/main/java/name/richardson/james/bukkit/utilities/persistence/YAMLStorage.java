@@ -22,32 +22,31 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
 import name.richardson.james.bukkit.utilities.logging.Logger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class YAMLStorage {
 
-  protected YamlConfiguration configuration;
+	private YamlConfiguration configuration;
 
-  protected final File file;
+  private final File file;
 
-  protected final Logger logger;
+  private final Logger logger = new ConsoleLogger(this.getClass().getName());
 
   private final YamlConfiguration defaultConfiguration;
 
-  public YAMLStorage(final File file, final InputStream defaults, final Logger logger) throws IOException {
+  public YAMLStorage(final File file, final InputStream defaults) throws IOException {
     this.file = file;
-    this.logger = logger;
     this.defaultConfiguration = YamlConfiguration.loadConfiguration(defaults);
     defaults.close();
     this.load();
     this.setDefaults();
   }
 
-  public YAMLStorage(final String filePath, final InputStream defaults, final Logger logger) throws IOException {
+  public YAMLStorage(final String filePath, final InputStream defaults) throws IOException {
     this.file = new File(filePath);
-    this.logger = logger;
     this.defaultConfiguration = YamlConfiguration.loadConfiguration(defaults);
     defaults.close();
     this.load();
@@ -75,6 +74,10 @@ public class YAMLStorage {
     final String path = this.file.getAbsolutePath();
     this.logger.config("Using path: " + path);
     this.configuration = YamlConfiguration.loadConfiguration(this.file);
+  }
+  
+  protected YamlConfiguration getConfiguration() {
+  	return this.configuration;
   }
 
 }
