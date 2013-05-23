@@ -28,10 +28,10 @@ import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
-import name.richardson.james.bukkit.utilities.persistence.AbstractYAMLStorage;
+import name.richardson.james.bukkit.utilities.persistence.YAMLStorage;
 import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
-public final class DatabaseConfiguration extends AbstractYAMLStorage {
+public final class DatabaseConfiguration extends YAMLStorage {
 
   public static final String FILE_NAME = "database.yml";
 

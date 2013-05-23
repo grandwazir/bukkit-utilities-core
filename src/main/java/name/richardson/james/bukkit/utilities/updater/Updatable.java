@@ -45,5 +45,9 @@ public interface Updatable {
    * @return the repository url
    */
   public URL getRepositoryURL();
-
+  
+  public String getName();
+  
+  public String getVersion();
+  
 }

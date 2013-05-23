@@ -20,7 +20,7 @@ package name.richardson.james.bukkit.utilities.metrics;
 
 import java.io.IOException;
 
-import name.richardson.james.bukkit.utilities.plugin.Plugin;
+import org.bukkit.plugin.Plugin;
 
 public class MetricsListener {
 

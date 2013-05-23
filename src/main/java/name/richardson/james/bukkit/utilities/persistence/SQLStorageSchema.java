@@ -30,7 +30,7 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class SQLSchema {
+public class SQLStorageSchema {
 
   private final String dropDDL;
 
@@ -38,7 +38,7 @@ public class SQLSchema {
 
   private final DdlGenerator generator;
 
-  public SQLSchema(final JavaPlugin plugin, final EbeanServer ebeanServer, final boolean validateDDL) {
+  public SQLStorageSchema(final JavaPlugin plugin, final EbeanServer ebeanServer, final boolean validateDDL) {
     final SpiEbeanServer server = (SpiEbeanServer) ebeanServer;
     this.generator = server.getDdlGenerator();
     this.dropDDL = this.generator.generateDropDdl();

@@ -24,131 +24,121 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.Random;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.bukkit.Bukkit;
+import org.xml.sax.SAXException;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.xml.sax.SAXException;
+import org.bukkit.permissions.Permission;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
 import name.richardson.james.bukkit.utilities.logging.Logger;
-import name.richardson.james.bukkit.utilities.plugin.Plugin;
+import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 
-public class PluginUpdater implements Runnable, Listener {
+public class PluginUpdater implements Listener, Runnable {
 
-  public enum Branch {
-    DEVELOPMENT,
-    STABLE
-  }
+	public enum Branch {
+		DEVELOPMENT, STABLE
+	}
+	public enum State {
+		NOTIFY, OFF
+	}
 
-  public enum State {
-    NOTIFY,
-    OFF
-  }
+	private final String artifactId;
+	private final String groupId;
+	private final Localisation localisation;
+	private final Logger logger = new ConsoleLogger(this.getClass().getName());
+	/* A reference to the downloaded Maven manifest from the remote repository */
+	private MavenManifest manifest;
+	private final Permission permission;
+	private final BukkitPermissionManager permissions = new BukkitPermissionManager();
+	private final String pluginName;
+	private final URL repositoryURL;
+	private final String version;
 
-  private final String artifactId;
+	public PluginUpdater(final Updatable plugin, final Localisation localisation) {
+		this.permission = this.permissions.getPermission(plugin.getName().toLowerCase());
+		this.version = plugin.getVersion();
+		this.artifactId = plugin.getArtifactID();
+		this.groupId = plugin.getGroupID();
+		this.repositoryURL = plugin.getRepositoryURL();
+		this.localisation = localisation;
+		this.pluginName = plugin.getName();
+	}
 
-  /* Random delay to wait for before updating */
-  private final long delay = new Random().nextInt(20) * 20;
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerJoin(final PlayerJoinEvent event) {
+		final Player player = event.getPlayer();
+		final boolean permitted = this.permissions.hasPermission(player, this.permission);
+		if (permitted) {
+			final String message = this.localisation.getMessage(this, "new-version-available", this.pluginName,
+					this.manifest.getCurrentVersion());
+			player.sendMessage(message);
+		}
+	}
 
-  private final String groupId;
+	public void run() {
+		try {
+			this.parseMavenMetaData();
+			if (this.isNewVersionAvailable()) {
+				this.logger.info(this.localisation.getMessage(this, "new-version-available", this.pluginName,
+						this.manifest.getCurrentVersion()));
+			}
+		} catch (final IOException e) {
+			this.logger.warning(this.localisation.getMessage(this, "unable-to-read-metadata", this.artifactId));
+		} catch (final SAXException e) {
+			this.logger.warning(this.localisation.getMessage(this, "unable-to-read-metadata", this.artifactId));
+		} catch (final ParserConfigurationException e) {
+			this.logger.warning(this.localisation.getMessage(this, "unable-to-read-metadata", this.artifactId));
+		}
+	}
 
-  private final Logger logger;
+	private void getMavenMetaData(final File storage) throws IOException {
+		final StringBuilder path = new StringBuilder();
+		path.append(this.repositoryURL);
+		path.append("/");
+		path.append(this.groupId.replace(".", "/"));
+		path.append("/");
+		path.append(this.artifactId);
+		path.append("/maven-metadata.xml");
+		final URL url = new URL(path.toString());
+		// get the file
+		ReadableByteChannel rbc = null;
+		FileOutputStream fos = null;
+		try {
+			this.logger.debug(this.localisation.getMessage(this, "fetching-resource", url.toString()));
+			rbc = Channels.newChannel(url.openStream());
+			this.logger.debug(this.localisation.getMessage(this, "saving-resource", url.toString()));
+			fos = new FileOutputStream(storage);
+			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+		} finally {
+			rbc.close();
+			fos.close();
+		}
+	}
 
-  /* A reference to the downloaded Maven manifest from the remote repository */
-  private MavenManifest manifest;
+	private boolean isNewVersionAvailable() {
+		final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
+		this.logger.debug(this.localisation.getMessage(this, "local-version", current.toString()));
+		final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
+		this.logger.debug(this.localisation.getMessage(this, "remote-version", target.toString()));
+		if (current.compareTo(target) == -1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-  private final Plugin plugin;
-
-  private final URL repositoryURL;
-
-  /* The state that the updater should operate in */
-  private final State state;
-
-  private final String version;
-
-  public PluginUpdater(final Plugin plugin, final State state, final Branch branch) {
-    this.state = state;
-    this.logger = plugin.getCustomLogger();
-    this.version = plugin.getDescription().getVersion();
-    this.artifactId = plugin.getArtifactID();
-    this.groupId = plugin.getGroupID();
-    this.repositoryURL = plugin.getRepositoryURL();
-    this.plugin = plugin;
-    Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this, this.delay);
-  }
-
-  @EventHandler(priority=EventPriority.NORMAL)
-  public void onPlayerJoin(final PlayerJoinEvent event) {
-    final Player player = event.getPlayer();
-    if (this.plugin.getPermissionManager().hasPlayerPermission(player, this.plugin.getPermissionManager().getRootPermission())) {
-      final String message = this.plugin.getLocalisation().getMessage(this, "new-version-available", this.plugin.getName(), this.manifest.getCurrentVersion());
-      player.sendMessage(message);
-    }
-  }
-
-  public void run() {
-    try {
-      this.parseMavenMetaData();
-      if (this.isNewVersionAvailable() && this.state == State.NOTIFY) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
-        this.logger.info(this.plugin.getLocalisation().getMessage(this, "new-version-available", this.plugin.getName(), this.manifest.getCurrentVersion()));
-      }
-    } catch (final IOException e) {
-      this.logger.warning(this.plugin.getLocalisation().getMessage(this, "unable-to-read-metadata", this.artifactId));
-    } catch (final SAXException e) {
-      this.logger.warning(this.plugin.getLocalisation().getMessage(this, "unable-to-read-metadata", this.artifactId));
-    } catch (final ParserConfigurationException e) {
-      this.logger.warning(this.plugin.getLocalisation().getMessage(this, "unable-to-read-metadata", this.artifactId));
-    }
-  }
-
-  private void getMavenMetaData(final File storage) throws IOException {
-    final StringBuilder path = new StringBuilder();
-    path.append(this.repositoryURL);
-    path.append("/");
-    path.append(this.groupId.replace(".", "/"));
-    path.append("/");
-    path.append(this.artifactId);
-    path.append("/maven-metadata.xml");
-    final URL url = new URL(path.toString());
-    // get the file
-    ReadableByteChannel rbc = null;
-    FileOutputStream fos = null;
-    try {
-      this.logger.debug(this.plugin.getLocalisation().getMessage(this, "fetching-resource", url.toString()));
-      rbc = Channels.newChannel(url.openStream());
-      this.logger.debug(this.plugin.getLocalisation().getMessage(this, "saving-resource", url.toString()));
-      fos = new FileOutputStream(storage);
-      fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-    } finally {
-      rbc.close();
-      fos.close();
-    }
-  }
-
-  private boolean isNewVersionAvailable() {
-    final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
-    this.logger.debug(this.plugin.getLocalisation().getMessage(this, "local-version", current.toString()));
-    final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
-    this.logger.debug(this.plugin.getLocalisation().getMessage(this, "remote-version", target.toString()));
-    if (current.compareTo(target) == -1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  private void parseMavenMetaData() throws IOException, SAXException, ParserConfigurationException {
-    final File temp = File.createTempFile(this.artifactId, null);
-    this.getMavenMetaData(temp);
-    this.manifest = new MavenManifest(temp);
-  }
-
+	private void parseMavenMetaData() throws IOException, SAXException, ParserConfigurationException {
+		final File temp = File.createTempFile(this.artifactId, null);
+		this.getMavenMetaData(temp);
+		this.manifest = new MavenManifest(temp);
+	}
 }

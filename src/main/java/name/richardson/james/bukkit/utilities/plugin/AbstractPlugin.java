@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Locale;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import org.bukkit.permissions.Permission;
@@ -30,7 +31,6 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLoader;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
@@ -40,138 +40,114 @@ import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManage
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
+import name.richardson.james.bukkit.utilities.updater.Updatable;
 
-public abstract class AbstractPlugin extends JavaPlugin implements Plugin {
+public abstract class AbstractPlugin extends JavaPlugin implements Updatable, Debuggable {
 
-  /* The configuration file for this plugin */
-  private PluginConfiguration configuration;
+	/* The configuration file for this plugin */
+	private PluginConfiguration configuration;
+	/* The locale of the system the plugin is running on */
+	private final Locale locale = Locale.getDefault();
+	/* The resource bundle being used for localisation */
+	private ResourceBundleLocalisation localisation;
+	/* The custom logger that belongs to this plugin */
+	private final Logger logger = new ConsoleLogger(this.getClass().getName());
+	/* The permission manager currently in use by the plugin */
+	private PermissionManager permissions;
 
-  /* The locale of the system the plugin is running on */
-  private final Locale locale = Locale.getDefault();
+	public String getGroupID() {
+		return "name.richardson.james.bukkit";
+	}
 
-  private ResourceBundleLocalisation localisation;
+	public URL getRepositoryURL() {
+		try {
+			switch (this.configuration.getAutomaticUpdaterBranch()) {
+				case DEVELOPMENT :
+					return new URL("http://repository.james.richardson.name/snapshots");
+				default :
+					return new URL("http://repository.james.richardson.name/releases");
+			}
+		} catch (final MalformedURLException e) {
+			return null;
+		}
+	}
 
-  /* The logger that belongs to this plugin */
-  private Logger logger;
+	@Override
+	public void onDisable() {
+		this.getServer().getScheduler().cancelTasks(this);
+	}
 
-  private PermissionManager permissions;
+	@Override
+	public final void onEnable() {
+		try {
+			this.loadLocalisation();
+			this.setPermissions();
+			this.loadConfiguration();
+			this.establishPersistence();
+			this.registerCommands();
+			this.registerListeners();
+			this.setupMetrics();
+			this.updatePlugin();
+		} catch (final IOException e) {
+			this.logger.severe("panic");
+			e.printStackTrace();
+			this.setEnabled(false);
+		} catch (final SQLException e) {
+			this.logger.severe("panic");
+			e.printStackTrace();
+			this.setEnabled(false);
+		} catch (final Exception e) {
+			e.printStackTrace();
+			this.setEnabled(false);
+		} finally {
+			if (!this.isEnabled()) {
+				return;
+			}
+		}
+	}
 
-  public Logger getCustomLogger() {
-    return this.logger;
-  }
+	protected void establishPersistence() throws SQLException {
+		return;
+	}
 
-  public String getGroupID() {
-    return "name.richardson.james.bukkit";
-  }
+	protected void loadConfiguration() throws IOException {
+		return;
+	}
 
-  public Locale getLocale() {
-    return this.locale;
-  }
+	protected void registerCommands() {
+		return;
+	}
 
-  public Localisation getLocalisation() {
-    return this.localisation;
-  }
+	protected void registerListeners() {
+		return;
+	}
 
-  public PermissionManager getPermissionManager() {
-    return this.permissions;
-  }
+	protected void setPermissions() {
+		this.permissions = new BukkitPermissionManager(this.localisation);
+		// create the root permission, for example `banhammer`
+		final String node = this.getDescription().getName().toLowerCase();
+		final String description = this.localisation.getMessage(AbstractPlugin.class, "permission-description", this
+				.getDescription().getName());
+		final Permission permission = new Permission(node, description, PermissionDefault.OP);
+		this.permissions.addPermission(permission);
+	}
 
-  public URL getRepositoryURL() {
-    try {
-      switch (this.configuration.getAutomaticUpdaterBranch()) {
-      case DEVELOPMENT:
-        return new URL("http://repository.james.richardson.name/snapshots");
-      default:
-        return new URL("http://repository.james.richardson.name/releases");
-      }
-    } catch (final MalformedURLException e) {
-      return null;
-    }
-  }
+	protected void setupMetrics() throws IOException {
+		if (this.configuration.isCollectingStats()) {
+			new MetricsListener(this);
+		}
+	}
 
-  @Override
-  public void onDisable() {
-    this.getServer().getScheduler().cancelTasks(this);
-  }
+	private void loadLocalisation() throws IOException {
+		final ResourceBundle[] bundles = {ResourceBundleLoader.getBundle(this.getClassLoader(), "bukkitutilities"),
+				ResourceBundleLoader.getBundle(this.getClassLoader(), this.getName().toLowerCase(), this.getDataFolder())};
+		this.localisation = new ResourceBundleLocalisation(bundles);
+	}
 
-  @Override
-  public final void onEnable() {
-    try {
-      this.loadLocalisation();
-      this.setLogging();
-      this.setPermissions();
-      this.loadConfiguration();
-      this.establishPersistence();
-      this.registerCommands();
-      this.registerListeners();
-      if (configuration.isCollectingStats()) {
-        this.setupMetrics();
-      }
-      this.updatePlugin();
-    } catch (final IOException e) {
-      this.logger.severe("panic");
-      e.printStackTrace();
-      this.setEnabled(false);
-    } catch (final SQLException e) {
-      this.logger.severe("panic");
-      e.printStackTrace();
-      this.setEnabled(false);
-    } catch (final Exception e) {
-      e.printStackTrace();
-      this.setEnabled(false);
-    } finally {
-      if (!this.isEnabled()) {
-        return;
-      }
-    }
-  }
-
-  protected void establishPersistence() throws SQLException {
-    return;
-  }
-
-  protected void loadConfiguration() throws IOException {
-    this.configuration = new PluginConfiguration(this);
-    this.logger.setDebugging(this.configuration.isDebugging());
-  }
-
-  protected void registerCommands() {
-    return;
-  }
-
-  protected void registerListeners() {
-    return;
-  }
-
-  protected void setLogging() {
-    this.logger = new ConsoleLogger(this.getLogger());
-    this.logger.setPrefix("[" + this.getName() + "] ");
-  }
-
-  protected void setPermissions() {
-    this.permissions = new BukkitPermissionManager(this);
-    final String node = this.getDescription().getName().toLowerCase();
-    final String description = this.localisation.getMessage(AbstractPlugin.class, "permission-description", this.getDescription().getName());
-    final Permission permission = new Permission(node, description, PermissionDefault.OP);
-    this.permissions.setRootPermission(permission);
-  }
-
-  protected void setupMetrics() throws IOException {
-    new MetricsListener(this);
-  }
-
-  private void loadLocalisation() throws IOException {
-    final ResourceBundle[] bundles = { 
-        ResourceBundleLoader.getBundle(this.getClassLoader(), "bukkitutilities"), 
-        ResourceBundleLoader.getBundle(this.getClassLoader(), this.getName().toLowerCase(), this.getDataFolder()) 
-    };
-    this.localisation = new ResourceBundleLocalisation(bundles);
-  }
-
-  private void updatePlugin() {
-    if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
-      new PluginUpdater(this, this.configuration.getAutomaticUpdaterState(), this.configuration.getAutomaticUpdaterBranch());
-    }
-  }
-
+	private void updatePlugin() {
+		if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
+			final PluginUpdater updater = new PluginUpdater(this, this.localisation);
+			this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);
+		}
+	}
 }

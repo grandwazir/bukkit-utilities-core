@@ -22,22 +22,69 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The PermissionManager interface represents the public facing of a PermissionsAPI. 
+ */
 public interface PermissionManager {
 
+  /**
+   * Adds the permission.
+   * 
+   * This method does 
+   *
+   * @param permission the permission
+   */
   public void addPermission(Permission permission);
   
+  /**
+   * Creates the permission.
+   *
+   * @param object the object
+   * @param key the key
+   * @param permissionDefault the permission default
+   * @return the permission
+   */
   public Permission createPermission(Object object, String key, PermissionDefault permissionDefault);
   
+  /**
+   * Creates the permission.
+   *
+   * @param object the object
+   * @param key the key
+   * @param permissionDefault the permission default
+   * @param parent the parent
+   * @param parentDefault the parent default
+   * @return the permission
+   */
   public Permission createPermission(Object object, String key, PermissionDefault permissionDefault, Permission parent, boolean parentDefault);
   
+  /**
+   * Gets the permission.
+   *
+   * @param name the name
+   * @return the permission
+   */
   public Permission getPermission(String name);
 
   public Permission getRootPermission();
 
-  public boolean hasPlayerPermission(Permissible player, Permission permission);
+  /**
+   * Checks for permission.
+   *
+   * @param player the player
+   * @param permission the permission
+   * @return true, if successful
+   */
+  public boolean hasPermission(Permissible player, Permission permission);
 
-  public boolean hasPlayerPermission(Permissible player, String name);
-
-  public void setRootPermission(Permission permission);
+  /**
+   * Checks for permission.
+   *
+   * @param player the player
+   * @param name the name
+   * @return true, if successful
+   */
+  public boolean hasPermission(Permissible player, String name);
   
 }

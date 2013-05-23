@@ -38,12 +38,5 @@ public interface Debuggable {
    * @param value
    */
   public void setDebugging(boolean value);
-  
-  /**
-   * Send a debug message to whatever logger is assigned to this class.
-   * 
-   * @param value
-   */
-  public void debug(String message);
 
 }

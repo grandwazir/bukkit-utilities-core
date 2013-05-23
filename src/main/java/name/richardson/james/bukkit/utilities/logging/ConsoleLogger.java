@@ -21,10 +21,14 @@ package name.richardson.james.bukkit.utilities.logging;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 
-public final class ConsoleLogger extends AbstractLogger {
+public final class ConsoleLogger implements Logger {
 
   /** The logger. */
   private final java.util.logging.Logger logger;
+  
+  /** The prefix placed in front of messages */
+  private String prefix;
+  
 
   /**
    * Instantiates a new console logger.
@@ -41,8 +45,8 @@ public final class ConsoleLogger extends AbstractLogger {
    *
    * @param owner
    */
-  public ConsoleLogger(final Object owner) {
-    this.logger = java.util.logging.Logger.getLogger(owner.getClass().getName());
+  public ConsoleLogger(final String name) {
+    this.logger = java.util.logging.Logger.getLogger(name);
     this.logger.setLevel(Logger.DEFAULT_LEVEL);
   }
 
@@ -144,6 +148,15 @@ public final class ConsoleLogger extends AbstractLogger {
     } else {
       return "<" + object.getClass().getSimpleName() + "> ";
     }
+  }
+
+  public String getPrefix() {
+    return this.prefix;
+  }
+
+  public void setPrefix(String prefix) {
+    // TODO Auto-generated method stub
+    
   }
 
 }

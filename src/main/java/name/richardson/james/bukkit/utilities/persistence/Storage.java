@@ -18,8 +18,27 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.persistence;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface Storage.
+ */
 public interface Storage {
 
+  /**
+   * Load any information  ready to be used.
+   */
+  public void load();
+  
+  /**
+   * Sets the defaults.
+   */
+  public void setDefaults();
+	
+  /**
+   * Save.
+   *
+   * @param objects the objects
+   */
   public void save(Object... objects);
 
 }

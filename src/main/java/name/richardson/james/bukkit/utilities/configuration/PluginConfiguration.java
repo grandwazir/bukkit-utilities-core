@@ -18,70 +18,25 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.configuration;
 
-import java.io.IOException;
-
-import name.richardson.james.bukkit.utilities.persistence.AbstractYAMLStorage;
-import name.richardson.james.bukkit.utilities.plugin.Plugin;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
-public class PluginConfiguration extends AbstractYAMLStorage {
+public interface PluginConfiguration {
 
-  public static String NAME = "config.yml";
+  public Branch getAutomaticUpdaterBranch();
 
-  public PluginConfiguration(final Plugin plugin) throws IOException {
-    super(plugin, "config.yml");
-    this.save();
-  }
+  public State getAutomaticUpdaterState();
 
-  public Branch getAutomaticUpdaterBranch() {
-    try {
-      return Branch.valueOf(this.getConfiguration().getString("automatic-updates.branch", "STABLE"));
-    } catch (final IllegalArgumentException e) {
-      return Branch.STABLE;
-    }
-  }
+  public boolean isCollectingStats();
 
-  public State getAutomaticUpdaterState() {
-    try {
-      if (!this.getConfiguration().getBoolean("automatic-updates.enabled", true)) {
-        return State.OFF;
-      } else {
-        return State.valueOf(this.getConfiguration().getString("automatic-updates.method", "NOTIFY").toUpperCase());
-      }
-    } catch (final IllegalArgumentException e) {
-      return State.NOTIFY;
-    }
-  }
+  public boolean isDebugging();
 
-  public boolean isCollectingStats() {
-    return this.getConfiguration().getBoolean("send-anonymous-statistics", true);
-  }
+  public void setAutomaticUpdaterBranch(final Branch branch);
 
-  public boolean isDebugging() {
-    return this.getConfiguration().getBoolean("debugging");
-  }
+  public void setAutomaticUpdaterState(final State state);
 
-  public void setAutomaticUpdaterBranch(final Branch branch) {
-    this.getConfiguration().set("automatic-updates.branch", branch.toString());
-  }
+  public void setCollectingStats(final boolean value);
 
-  public void setAutomaticUpdaterState(final State state) {
-    switch (state) {
-    case NOTIFY:
-      this.getConfiguration().set("automatic-updates.enabled", true);
-      this.getConfiguration().set("automatic-updates.method", "NOTIFY");
-    case OFF:
-      this.getConfiguration().set("automatic-updates.enabled", false);
-    }
-  }
-
-  public void setCollectingStats(final boolean value) {
-    this.getConfiguration().set("send-anonymous-statistics", value);
-  }
-
-  public void setDebugging(final boolean value) {
-    this.getConfiguration().set("debugging", value);
-  }
+  public void setDebugging(final boolean value);
 
 }
