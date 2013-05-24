@@ -1,5 +1,15 @@
-Changelog for BukkitUtilities (v4.2.2-SNAPSHOT)
+Changelog for BukkitUtilities (v4.2.3-SNAPSHOT)
 
+2013-05-24 00:46:09 +0100    I've forgotton! (James Richardson)
+2013-05-24 00:24:50 +0100    various clean up (James Richardson)
+2013-05-22 22:29:11 +0100    add debug method to debuggable (James Richardson)
+2013-05-22 22:24:33 +0100    update to use latest version of bukkit (James Richardson)
+2013-05-22 22:22:42 +0100    and again... (James Richardson)
+2013-05-22 22:22:21 +0100    fix malformed pom (James Richardson)
+2013-05-22 22:21:39 +0100    add bukkit as a dependency (James Richardson)
+
+v4.2.2
+2013-03-28 12:54:38 +0000    changelog (James Richardson)
 2013-03-28 12:12:13 +0000    allow checking for unregistered permissions (James Richardson)
 
 v4.2.1

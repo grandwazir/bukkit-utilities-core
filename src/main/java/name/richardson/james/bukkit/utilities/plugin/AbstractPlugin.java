@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -78,9 +77,9 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable, De
 	@Override
 	public final void onEnable() {
 		try {
+			this.loadConfiguration();
 			this.loadLocalisation();
 			this.setPermissions();
-			this.loadConfiguration();
 			this.establishPersistence();
 			this.registerCommands();
 			this.registerListeners();

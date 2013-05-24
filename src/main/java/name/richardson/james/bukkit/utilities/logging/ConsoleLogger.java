@@ -29,7 +29,6 @@ public final class ConsoleLogger implements Logger {
   /** The prefix placed in front of messages */
   private String prefix;
   
-
   /**
    * Instantiates a new console logger.
    *
