@@ -18,19 +18,19 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.listener;
 
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
 public class LoggableListener extends AbstractListener {
 
-  private final Logger logger;
+  private final LocalisedLogger logger;
 
   public LoggableListener(final Plugin plugin) {
     super(plugin);
     this.logger = plugin.getCustomLogger();
   }
 
-  public Logger getLogger() {
+  public LocalisedLogger getLogger() {
     return this.logger;
   }
 

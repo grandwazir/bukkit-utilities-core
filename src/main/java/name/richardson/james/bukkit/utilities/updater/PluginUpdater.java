@@ -38,8 +38,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.Permission;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 
 public class PluginUpdater implements Listener, Runnable {
@@ -54,7 +54,7 @@ public class PluginUpdater implements Listener, Runnable {
 	private final String artifactId;
 	private final String groupId;
 	private final Localisation localisation;
-	private final Logger logger = new ConsoleLogger(this.getClass().getName());
+	private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
 	/* A reference to the downloaded Maven manifest from the remote repository */
 	private MavenManifest manifest;
 	private final Permission permission;

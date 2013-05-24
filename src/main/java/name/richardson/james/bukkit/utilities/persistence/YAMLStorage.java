@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -33,7 +33,7 @@ public class YAMLStorage {
 
   private final File file;
 
-  private final Logger logger = new ConsoleLogger(this.getClass().getName());
+  private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
 
   private final YamlConfiguration defaultConfiguration;
 

@@ -18,7 +18,9 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.plugin;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -30,10 +32,10 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
+import name.richardson.james.bukkit.utilities.configuration.SimplePluginConfiguration;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLoader;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
-import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.metrics.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
@@ -48,7 +50,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable, De
 	/* The resource bundle being used for localisation */
 	private ResourceBundleLocalisation localisation;
 	/* The custom logger that belongs to this plugin */
-	private final Logger logger = new ConsoleLogger(this.getClass().getName());
+	private LocalisedLogger logger;
 	/* The permission manager currently in use by the plugin */
 	private PermissionManager permissions;
 
@@ -77,8 +79,9 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable, De
 	@Override
 	public final void onEnable() {
 		try {
-			this.loadConfiguration();
 			this.loadLocalisation();
+			this.initalizeLogger();
+			this.loadConfiguration();
 			this.setPermissions();
 			this.establishPersistence();
 			this.registerCommands();
@@ -103,12 +106,20 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable, De
 		}
 	}
 
+	private void initalizeLogger() {
+		this.logger = new LocalisedLogger
+		
+	}
+
 	protected void establishPersistence() throws SQLException {
 		return;
 	}
 
 	protected void loadConfiguration() throws IOException {
-		return;
+		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml");
+		final InputStream defaults = this.getResource("config.yml");
+		this.configuration = new SimplePluginConfiguration(file, defaults);
+		// set logging levels based on configuration
 	}
 
 	protected void registerCommands() {

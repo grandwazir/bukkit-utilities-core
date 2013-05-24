@@ -30,8 +30,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 public final class CommandManager implements CommandExecutor, TabCompleter {
 
@@ -49,7 +49,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
   private final Localisation localisation;
 
-  private final Logger logger = new ConsoleLogger(this.getClass().getName());
+  private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
 
   /** The localised description of the plugin */
   private final String pluginDescription;

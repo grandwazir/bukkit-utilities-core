@@ -38,8 +38,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
 public class SQLStorage {
@@ -58,7 +58,7 @@ public class SQLStorage {
 
   private final ServerConfig serverConfig;
 
-	private final Logger logger = new ConsoleLogger(this.getClass().getName());
+	private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
 	
 	private final Localisation localisation;
 

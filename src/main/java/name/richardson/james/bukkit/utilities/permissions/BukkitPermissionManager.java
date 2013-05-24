@@ -28,8 +28,8 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.ConsoleLogger;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 public class BukkitPermissionManager implements PermissionManager {
 
@@ -39,7 +39,7 @@ public class BukkitPermissionManager implements PermissionManager {
 
   private Localisation localisation;
 
-  private final Logger logger = new ConsoleLogger(this.getClass().getName());
+  private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
 
   public BukkitPermissionManager() {
     this.pluginManager = Bukkit.getServer().getPluginManager();

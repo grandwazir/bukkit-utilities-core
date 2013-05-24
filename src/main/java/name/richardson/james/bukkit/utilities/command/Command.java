@@ -23,7 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 public interface Command extends CommandExecutor, TabCompleter {
 
@@ -48,7 +48,7 @@ public interface Command extends CommandExecutor, TabCompleter {
 
   public Localisation getLocalisation();
 
-  public Logger getLogger();
+  public LocalisedLogger getLogger();
 
   /**
    * Gets the name of this command.

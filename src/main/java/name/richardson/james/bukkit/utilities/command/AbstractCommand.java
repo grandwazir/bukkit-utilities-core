@@ -30,7 +30,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.plugin.Plugin;
 
@@ -40,7 +40,7 @@ public abstract class AbstractCommand implements Command {
 
   private final Localisation localisation;
 
-  private final Logger logger;
+  private final LocalisedLogger logger;
 
   private final String name;
 
@@ -68,7 +68,7 @@ public abstract class AbstractCommand implements Command {
     return this.localisation;
   }
 
-  public Logger getLogger() {
+  public LocalisedLogger getLogger() {
     return this.logger;
   }
 
