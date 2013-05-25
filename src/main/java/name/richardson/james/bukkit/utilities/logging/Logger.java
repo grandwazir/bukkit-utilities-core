@@ -33,7 +33,7 @@ public final class Logger extends java.util.logging.Logger {
 
 	public Logger(final String name) {
 		super(name, ResourceBundles.MESSAGES.getBundleName());
-		this.prefix = this.getResourceBundle().getString("prefix");
+		this.prefix = this.getResourceBundle().getString("logger.prefix");
 		this.debugPrefix = "<" + this.getName() + "> ";
 		this.setParent(Bukkit.getServer().getLogger());
 		this.getParent().setLevel(Level.ALL);
