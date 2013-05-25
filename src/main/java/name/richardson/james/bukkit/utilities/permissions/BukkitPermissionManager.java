@@ -33,15 +33,19 @@ public class BukkitPermissionManager implements PermissionManager {
 	public Permission createPermission(String node) {
 		final String description = BukkitPermissionManager.localisation.getString(node);
 		final Permission permission = new Permission(node, description);
-		if (this.getParentPermission() != null) permission.addParent(this.getParentPermission(), true);
+		final Permission parent = this.getParentPermission(permission);
+		if (this.getParentPermission(permission) != null) {
+			permission.addParent(parent, true);
+		}
 		return this.addPermission(permission);
 	}
 
 	public Permission createPermission(String node, PermissionDefault defaultPermission) {
 		final String description = BukkitPermissionManager.localisation.getString(node);
 		final Permission permission = new Permission(node, description, defaultPermission);
-		if (this.getParentPermission() != null) {
-			permission.addParent(this.getParentPermission(), true);
+		final Permission parent = this.getParentPermission(permission);
+		if (this.getParentPermission(permission) != null) {
+			permission.addParent(parent, true);
 		}
 		return this.addPermission(permission);
 	}
@@ -71,8 +75,14 @@ public class BukkitPermissionManager implements PermissionManager {
 		return Collections.unmodifiableList(this.permissions);
 	}
 
-	public Permission getParentPermission() {
-		return permissions.get(0);
+	private Permission getParentPermission(Permission permission) {
+		final String[] nodes = permission.getName().split("\\.");
+		if (nodes.length > 1) {
+			final String parentNode = nodes[nodes.length - 1];
+			return Bukkit.getPluginManager().getPermission(parentNode);
+		} else {
+			return null;
+		}
 	}
 
 	public List<Permission> createPermissions(String[] nodes) {

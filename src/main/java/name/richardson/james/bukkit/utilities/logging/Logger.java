@@ -40,7 +40,6 @@ public final class Logger extends java.util.logging.Logger {
 		for (final Handler handler : Bukkit.getLogger().getParent().getHandlers()) {
 			handler.setLevel(Level.ALL);
 		}
-		this.testAll();
 	}
 
 	@Override

@@ -16,7 +16,5 @@ public interface PermissionManager {
 	public List<Permission> createPermissions(String[] nodes);
 	
 	public List<Permission> listPermissions();
-	
-	public Permission getParentPermission();
-	
+		
 }

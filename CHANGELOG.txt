@@ -1,5 +1,7 @@
 Changelog for BukkitUtilities (v5.0.0-SNAPSHOT)
 
+2013-05-25 12:47:11 +0100    namespace logger messages (James Richardson)
+2013-05-25 12:44:02 +0100    almost finished refactoring (James Richardson)
 2013-05-24 02:18:36 +0100    inital testing (James Richardson)
 2013-05-24 01:37:10 +0100    simple PluginConfiguration (James Richardson)
 2013-05-24 00:46:09 +0100    I've forgotton! (James Richardson)
