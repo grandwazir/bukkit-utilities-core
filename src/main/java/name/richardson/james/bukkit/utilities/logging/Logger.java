@@ -41,6 +41,17 @@ public final class Logger extends java.util.logging.Logger {
 			handler.setLevel(Level.ALL);
 		}
 	}
+	
+	public Logger(final String name, ResourceBundles bundle) {
+		super(name, bundle.getBundleName());
+		this.prefix = this.getResourceBundle().getString("logger.prefix");
+		this.debugPrefix = "<" + this.getName() + "> ";
+		this.setParent(Bukkit.getServer().getLogger());
+		this.getParent().setLevel(Level.ALL);
+		for (final Handler handler : Bukkit.getLogger().getParent().getHandlers()) {
+			handler.setLevel(Level.ALL);
+		}
+	}
 
 	@Override
 	public void log(final LogRecord logRecord) {

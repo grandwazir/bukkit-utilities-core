@@ -58,8 +58,8 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 
 	private final String artifactId;
 	private final String groupId;
-	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
-	private static final Logger logger = new Logger(PluginUpdater.class.getName());
+	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
+	private static final Logger logger = new Logger(PluginUpdater.class.getName(), ResourceBundles.UTILITIES);
 	/* A reference to the downloaded Maven manifest from the remote repository */
 	private MavenManifest manifest;
 	private final Permission permission;
@@ -118,9 +118,8 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		ReadableByteChannel rbc = null;
 		FileOutputStream fos = null;
 		try {
-			PluginUpdater.logger.log(Level.FINER, "updater.fetching-resource", url.toString());
+			PluginUpdater.logger.log(Level.FINER, "Getting manifest: {0}", url.toString());
 			rbc = Channels.newChannel(url.openStream());
-			PluginUpdater.logger.log(Level.FINER, "updater.saving-resource", url.toString());
 			fos = new FileOutputStream(storage);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} finally {
@@ -131,19 +130,20 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 
 	private boolean isNewVersionAvailable() {
 		final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
-		PluginUpdater.logger.log(Level.FINE, "local-version", current.toString());
 		final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
-		PluginUpdater.logger.log(Level.FINE, "remote-version", target.toString());
+		Object params[] = {target.toString(), current.toString()};
 		if (current.compareTo(target) == -1) {
+			PluginUpdater.logger.log(Level.FINE, "New version available: {0} > {1}", params);
 			return true;
 		} else {
+			PluginUpdater.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", params);
 			return false;
 		}
 	}
 
 	private void parseMavenMetaData() throws IOException, SAXException, ParserConfigurationException {
 		final File temp = File.createTempFile(this.artifactId, null);
-		PluginUpdater.logger.log(Level.FINER, "updater.creating-temporary-file", temp.getAbsolutePath());
+		PluginUpdater.logger.log(Level.FINER, "Creating temporary manifest: {0}", temp.getAbsolutePath());
 		this.getMavenMetaData(temp);
 		this.manifest = new MavenManifest(temp);
 	}

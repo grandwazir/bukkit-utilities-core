@@ -66,7 +66,7 @@ public class BukkitPermissionManager implements PermissionManager {
 	
 	public Permission addPermission(Permission permission) {
 		final Object[] params = {permission.getName(), permission.getDefault()};
-		BukkitPermissionManager.logger.log(Level.FINE, "Adding permission: %s (default: %s)", params);
+		BukkitPermissionManager.logger.log(Level.FINE, "Adding permission: {0} (default: {1})", params);
 		BukkitPermissionManager.pluginManager.addPermission(permission);
 		return permission;
 	}
