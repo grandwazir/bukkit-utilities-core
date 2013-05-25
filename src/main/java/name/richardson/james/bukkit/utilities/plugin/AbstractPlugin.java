@@ -21,38 +21,33 @@ package name.richardson.james.bukkit.utilities.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.Random;
-import java.util.ResourceBundle;
 
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
+import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.configuration.SimplePluginConfiguration;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLoader;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import name.richardson.james.bukkit.utilities.logging.Logger;
 import name.richardson.james.bukkit.utilities.metrics.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
+import name.richardson.james.bukkit.utilities.persistence.SQLStorage;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
-public abstract class AbstractPlugin extends JavaPlugin implements Updatable, Debuggable {
-
+public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
+	
 	/* The configuration file for this plugin */
 	private PluginConfiguration configuration;
-	/* The resource bundle being used for localisation */
-	private ResourceBundleLocalisation localisation;
 	/* The custom logger that belongs to this plugin */
-	private LocalisedLogger logger;
+	private final Logger logger = new Logger(this.getClass().getName());
 	/* The permission manager currently in use by the plugin */
-	private PermissionManager permissions;
+	private final PermissionManager permissions = new BukkitPermissionManager();
 
 	public String getGroupID() {
 		return "name.richardson.james.bukkit";
@@ -71,73 +66,26 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable, De
 		}
 	}
 
-	@Override
-	public void onDisable() {
-		this.getServer().getScheduler().cancelTasks(this);
+	protected void loadDatabase() throws SecurityException, NoSuchFieldException, IOException, IllegalArgumentException, IllegalAccessException {
+		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "database.yml");
+		final InputStream defaults = this.getResource("database.yml");
+		SimpleDatabaseConfiguration configuration = new SimpleDatabaseConfiguration(file, defaults, this.getName());
+		SQLStorage loader = new SQLStorage(configuration, this.getDatabaseClasses(), this.getName(), this.getClassLoader());
+		Field f = this.getClass().getDeclaredField("database");
+		f.setAccessible(true);
+		f.set(null, loader.getEbeanServer());
 	}
-
-	@Override
-	public final void onEnable() {
-		try {
-			this.loadLocalisation();
-			this.initalizeLogger();
-			this.loadConfiguration();
-			this.setPermissions();
-			this.establishPersistence();
-			this.registerCommands();
-			this.registerListeners();
-			this.setupMetrics();
-			this.updatePlugin();
-		} catch (final IOException e) {
-			this.logger.severe("panic");
-			e.printStackTrace();
-			this.setEnabled(false);
-		} catch (final SQLException e) {
-			this.logger.severe("panic");
-			e.printStackTrace();
-			this.setEnabled(false);
-		} catch (final Exception e) {
-			e.printStackTrace();
-			this.setEnabled(false);
-		} finally {
-			if (!this.isEnabled()) {
-				return;
-			}
-		}
-	}
-
-	private void initalizeLogger() {
-		this.logger = new LocalisedLogger
-		
-	}
-
-	protected void establishPersistence() throws SQLException {
-		return;
-	}
-
+	
 	protected void loadConfiguration() throws IOException {
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml");
 		final InputStream defaults = this.getResource("config.yml");
 		this.configuration = new SimplePluginConfiguration(file, defaults);
-		// set logging levels based on configuration
-	}
-
-	protected void registerCommands() {
-		return;
-	}
-
-	protected void registerListeners() {
-		return;
+		this.logger.setLevel(this.configuration.getLogLevel());
 	}
 
 	protected void setPermissions() {
-		this.permissions = new BukkitPermissionManager(this.localisation);
-		// create the root permission, for example `banhammer`
 		final String node = this.getDescription().getName().toLowerCase();
-		final String description = this.localisation.getMessage(AbstractPlugin.class, "permission-description", this
-				.getDescription().getName());
-		final Permission permission = new Permission(node, description, PermissionDefault.OP);
-		this.permissions.addPermission(permission);
+		this.permissions.createPermission(node);
 	}
 
 	protected void setupMetrics() throws IOException {
@@ -146,15 +94,9 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable, De
 		}
 	}
 
-	private void loadLocalisation() throws IOException {
-		final ResourceBundle[] bundles = {ResourceBundleLoader.getBundle(this.getClassLoader(), "bukkitutilities"),
-				ResourceBundleLoader.getBundle(this.getClassLoader(), this.getName().toLowerCase(), this.getDataFolder())};
-		this.localisation = new ResourceBundleLocalisation(bundles);
-	}
-
-	private void updatePlugin() {
+	protected void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
-			final PluginUpdater updater = new PluginUpdater(this, this.localisation);
+			final PluginUpdater updater = new PluginUpdater(this);
 			this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);
 		}
 	}

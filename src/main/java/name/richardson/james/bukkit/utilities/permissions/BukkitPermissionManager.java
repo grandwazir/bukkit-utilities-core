@@ -1,124 +1,86 @@
-/*******************************************************************************
- * Copyright (c) 2012 James Richardson.
- * 
- * BukkitPermissionManager.java is part of BukkitUtilities.
- * 
- * BukkitUtilities is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * BukkitUtilities is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
 package name.richardson.james.bukkit.utilities.permissions;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
+import java.util.ResourceBundle;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.logging.Logger;
+
 
 public class BukkitPermissionManager implements PermissionManager {
 
-  private final PluginManager pluginManager;
-  
-  private final List<Permission> permissions = new LinkedList<Permission>();
+	private static final PluginManager pluginManager = Bukkit.getPluginManager();
+	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.PERMISSIONS.getBundleName());
+	private static final Logger logger = new Logger(BukkitPermissionManager.class.getName());
+	
+	private final List<Permission> permissions = new ArrayList<Permission>();
 
-  private Localisation localisation;
+	public BukkitPermissionManager(Permission parent) {
+		this.permissions.add(parent);
+	}
+	
+	public BukkitPermissionManager() {
+		return;
+	}
 
-  private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
+	public Permission createPermission(String node) {
+		final String description = BukkitPermissionManager.localisation.getString(node);
+		final Permission permission = new Permission(node, description);
+		if (this.getParentPermission() != null) permission.addParent(this.getParentPermission(), true);
+		return this.addPermission(permission);
+	}
 
-  public BukkitPermissionManager() {
-    this.pluginManager = Bukkit.getServer().getPluginManager();
-  }
-  
-  public BukkitPermissionManager(final Localisation localisation) {
-    this.localisation = localisation;
-    this.pluginManager = Bukkit.getServer().getPluginManager();
-  }
+	public Permission createPermission(String node, PermissionDefault defaultPermission) {
+		final String description = BukkitPermissionManager.localisation.getString(node);
+		final Permission permission = new Permission(node, description, defaultPermission);
+		if (this.getParentPermission() != null) {
+			permission.addParent(this.getParentPermission(), true);
+		}
+		return this.addPermission(permission);
+	}
 
-  public void addPermission(final Permission permission) {
-    this.pluginManager.addPermission(permission);
-    this.permissions.add(permission);
-    String message = String.format("Adding permission: %s (%s)", permission.getName(), permission.getDefault().toString());
-    this.logger.debug(message);
-  }
+	public Permission createPermission(String node, PermissionDefault defaultPermission, Permission parent) {
+		final String description = BukkitPermissionManager.localisation.getString(node);
+		final Permission permission = new Permission(node, description, defaultPermission);
+		permission.addParent(permission, true);
+		return this.addPermission(permission);
+	}
+	
+	public Permission createPermission(String node, PermissionDefault defaultPermission, Permission parent, boolean defaultParent) {
+		final String description = BukkitPermissionManager.localisation.getString(node);
+		final Permission permission = new Permission(node, description, defaultPermission);
+		permission.addParent(permission, defaultParent);
+		return this.addPermission(permission);
+	}
+	
+	public Permission addPermission(Permission permission) {
+		final Object[] params = {permission.getName(), permission.getDefault()};
+		BukkitPermissionManager.logger.log(Level.FINE, "Adding permission: %s (default: %s)", params);
+		BukkitPermissionManager.pluginManager.addPermission(permission);
+		return permission;
+	}
 
-  public Permission getPermission(final String name) {
-    return this.pluginManager.getPermission(name);
-  }
+	public List<Permission> listPermissions() {
+		return Collections.unmodifiableList(this.permissions);
+	}
 
-  public Permission getRootPermission() {
-    return this.permissions.get(0);
-  }
+	public Permission getParentPermission() {
+		return permissions.get(0);
+	}
 
-  public boolean hasPermission(final Permissible permissible, final Permission permission) {
-    boolean result = permissible.hasPermission(permission);
-    String message = String.format("Checking permission: %s has %s? %b", permissible.toString(), permission.getName(), result);
-    this.logger.debug(this, message);
-    return result;
-  }
-
-  public boolean hasPermission(final Permissible permissible, final String name) {
-    boolean result = permissible.hasPermission(name);
-    this.getLogger().debug(this, String.format("Checking permission: %s has %s? %b", permissible.toString(), name, result));
-    return result;
-  }
-  
-  public Permission createPermission(String node, String description, PermissionDefault permissionDefault) {
-    Permission permission = new Permission(node, description, permissionDefault);
-    permission.addParent(this.getRootPermission(), true);
-    this.addPermission(permission);
-    return permission;
-  }
-  
-  public Permission createPermission(Object object, String node, PermissionDefault permissionDefault, Permission parent) {
-    String description = this.localisation.getMessage(object, node + "-description");
-    Permission permission = new Permission(node, description, permissionDefault);
-    permission.addParent(parent, true);
-    this.addPermission(permission);
-    return permission; 
-  }
-  
-  public Permission createLocalisedPermission(Object object, String node) {
-    String description = this.localisation.getMessage(object, node + "-description");
-    Permission permission = new Permission(node, description, PermissionDefault.OP);
-    permission.addParent(this.getRootPermission(), true);
-    this.addPermission(permission);
-    return permission;
-  }
-  
-  public Permission createLocalisedPermission(Object object, String node, PermissionDefault permissionDefault) {
-    String description = this.localisation.getMessage(object, node + "-description");
-    Permission permission = new Permission(node, description, permissionDefault);
-    permission.addParent(this.getRootPermission(), true);
-    this.addPermission(permission);
-    return permission;
-  }
-  
-  public Permission createLocalisedPermission(Object object, String node, PermissionDefault permissionDefault, Permission parent) {
-    String description = this.localisation.getMessage(object, node + "-description");
-    Permission permission = new Permission(node, description, permissionDefault);
-    permission.addParent(parent, true);
-    this.addPermission(permission);
-    return permission; 
-  }
-
-  public String resolveName(String name, Permission parent) {
-    String resolvedName = String.format("%s.%s", parent.getName(), name.replace(parent.getName(), ""));
-    return resolvedName;
-  } 
+	public List<Permission> createPermissions(String[] nodes) {
+		final List<Permission> permissions = new ArrayList<Permission>(); 
+		for (String node : nodes) {
+			permissions.add(this.createPermission(node));
+		}
+		return permissions;
+	}
+	
 }

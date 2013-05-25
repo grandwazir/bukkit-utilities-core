@@ -1,150 +1,104 @@
-/*******************************************************************************
- * Copyright (c) 2012 James Richardson.
- * 
- * AbstractCommand.java is part of BukkitUtilities.
- * 
- * BukkitUtilities is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * BukkitUtilities is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
-import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
-import name.richardson.james.bukkit.utilities.plugin.Plugin;
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
+import name.richardson.james.bukkit.utilities.localisation.Localised;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.matchers.Matcher;
+import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 
-public abstract class AbstractCommand implements Command {
+public abstract class AbstractCommand implements Command, Localised {
+	
+	private final String name;
+	private final String description;
+	private final String usage;
+	private ResourceBundle localisation; 
+	private final List<Matcher> matchers = new ArrayList<Matcher>();
+	private BukkitPermissionManager permissionManager;
+	
+	public AbstractCommand(ResourceBundles resourceBundleName) {
+		final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundleName.getBundleName());
+		final String simpleName = this.getClass().getSimpleName().toLowerCase();
+		this.name = bundle.getString(simpleName + ".name");
+		this.description = bundle.getString(simpleName + ".description");
+		this.usage = bundle.getString(simpleName + ".usage");
+		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) this.setPermissions();
+		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) this.setMatchers();
+	}
+	
+	protected void setMatchers() {
+		final CommandMatchers annotation = this.getClass().getAnnotation(CommandMatchers.class);
+		for (Class<Matcher> matcherClass : annotation.matchers()) {
+			try {
+				matchers.add(matcherClass.getConstructor().newInstance());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	protected List<Matcher> getMatchers() {
+		return this.matchers;
+	}
 
-  private final String description;
+	private void setPermissions() {
+		final CommandPermissions annotation = this.getClass().getAnnotation(CommandPermissions.class);
+		this.permissionManager = new BukkitPermissionManager();
+		this.permissionManager.createPermissions(annotation.required());
+		this.permissionManager.createPermissions(annotation.optional());
+	}
 
-  private final Localisation localisation;
+	public String getName() {
+		return this.name;
+	}
 
-  private final LocalisedLogger logger;
+	public String getDescription() {
+		return this.description;
+	}
 
-  private final String name;
+	public String getUsage() {
+		return this.usage;
+	}
 
-  private final PermissionManager permissionManager;
-  
-  private final List<Permission> permissions = new ArrayList<Permission>();
+	public boolean isAuthorized(Permissible permissible) {
+		if (this.permissionManager == null) return true;
+		for (Permission permission : this.permissionManager.listPermissions()) {
+			if (permissible.hasPermission(permission)) return true;
+		}
+		return false;
+	}
 
-  private final String usage;
+	public List<String> onTabComplete(List<String> arguments, CommandSender sender) {
+		final List<String> results = new ArrayList<String>();
+		final Matcher matcher = matchers.get(arguments.size());
+		if (matcher != null) {
+			results.addAll(matcher.getMatches(arguments.get(arguments.size())));
+		}
+		return results;
+	}
 
-  public AbstractCommand(final Plugin plugin) {
-    this.localisation = plugin.getLocalisation();
-    this.logger = plugin.getCustomLogger();
-    this.permissionManager = plugin.getPermissionManager();
-    this.name = this.localisation.getMessage(this, "name");
-    this.description = this.localisation.getMessage(this, "description");
-    this.usage = this.localisation.getMessage(this, "usage");
-    this.registerInitialPermissions();
-  }
+	public String getMessage(String key) {
+    String message = localisation.getString(key);
+    message = ColourFormatter.replace(message);
+    return message;
+	}
 
-  public String getDescription() {
-    return this.description;
-  }
+	public String getMessage(String key, String... elements) {
+    MessageFormat formatter = new MessageFormat(localisation.getString(key));
+    formatter.setLocale(Locale.getDefault());
+    String message = formatter.format(elements);
+    message = ColourFormatter.replace(message);
+    return message;
+	}
 
-  public Localisation getLocalisation() {
-    return this.localisation;
-  }
-
-  public LocalisedLogger getLogger() {
-    return this.logger;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public void addPermission(Permission permission) {
-    this.permissions.add(permission);
-  }
-  
-  public void removePermission(Permission permission) {
-    this.permissions.remove(permission);
-  }
-  
-  public List<Permission> getPermissions() {
-    return Collections.unmodifiableList(this.permissions);
-  }
-  
-  public PermissionManager getPermissionManager() {
-    return this.permissionManager;
-  }
-
-  public String getUsage() {
-    return this.usage;
-  }
-
-  public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
-    // Do not allow this command to be used from the console unless annotation
-    // is present
-    if (!this.getClass().isAnnotationPresent(ConsoleCommand.class) && (sender instanceof ConsoleCommandSender)) {
-      final String message = this.localisation.getMessage(AbstractCommand.class, "not-allowed-from-console");
-      sender.sendMessage(message);
-      return true;
-    }
-
-    // Check if the sender is allowed to use this command
-    if (!this.testPermission(sender)) {
-      final String message = this.localisation.getMessage(AbstractCommand.class, "not-permitted");
-      sender.sendMessage(message);
-      return true;
-    }
-
-    try {
-      this.parseArguments(args, sender);
-      this.execute(sender);
-    } catch (final CommandArgumentException exception) {
-      sender.sendMessage(exception.getMessage());
-      if (exception.getHelp() != null) {
-        sender.sendMessage(exception.getHelp());
-      }
-    } catch (final CommandPermissionException exception) {
-      final String message = this.localisation.getMessage(AbstractCommand.class, "not-permitted");
-      sender.sendMessage(message);
-      if (exception.getMessage() != null) {
-        sender.sendMessage(exception.getMessage());
-      }
-      if (this.logger.isDebugging()) {
-        sender.sendMessage(this.localisation.getMessage(AbstractCommand.class, "permission-required", exception.getPermission().getName()));
-      }
-    } catch (final CommandUsageException exception) {
-      sender.sendMessage(ChatColor.RED + exception.getMessage());
-    }
-    return true;
-  }
-
-  public boolean testPermission(final CommandSender sender) {
-    for (Permission permission : this.permissions) {
-      if (this.permissionManager.hasPlayerPermission(sender, permission)) return true;
-    }
-    return false;
-  }
-
-  private void registerInitialPermissions() {
-    Permission permission = this.permissionManager.createPermission(this, "use", PermissionDefault.OP, permissionManager.getRootPermission(), true);
-    this.permissions.add(permission);
-  }
-
+	
 }

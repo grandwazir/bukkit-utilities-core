@@ -21,63 +21,59 @@ package name.richardson.james.bukkit.utilities.persistence;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import java.util.logging.Level;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import name.richardson.james.bukkit.utilities.logging.Logger;
 
 public class YAMLStorage {
 
 	private YamlConfiguration configuration;
+	private final YamlConfiguration defaultConfiguration;
+	private final File file;
+	private final Logger logger = new Logger(this.getClass().getName());
 
-  private final File file;
+	public YAMLStorage(final File file, final InputStream defaults) throws IOException {
+		this.file = file;
+		this.defaultConfiguration = YamlConfiguration.loadConfiguration(defaults);
+		defaults.close();
+		this.load();
+		this.setDefaults();
+	}
 
-  private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
+	public YAMLStorage(final String filePath, final InputStream defaults) throws IOException {
+		this.file = new File(filePath);
+		this.defaultConfiguration = YamlConfiguration.loadConfiguration(defaults);
+		defaults.close();
+		this.load();
+		this.setDefaults();
+	}
 
-  private final YamlConfiguration defaultConfiguration;
+	protected YamlConfiguration getConfiguration() {
+		return this.configuration;
+	}
 
-  public YAMLStorage(final File file, final InputStream defaults) throws IOException {
-    this.file = file;
-    this.defaultConfiguration = YamlConfiguration.loadConfiguration(defaults);
-    defaults.close();
-    this.load();
-    this.setDefaults();
-  }
+	protected void save() {
+		try {
+			this.logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
+			this.configuration.save(this.file);
+		} catch (final IOException e) {
+			this.logger.severe("Unable to save configuration!");
+		}
+	}
 
-  public YAMLStorage(final String filePath, final InputStream defaults) throws IOException {
-    this.file = new File(filePath);
-    this.defaultConfiguration = YamlConfiguration.loadConfiguration(defaults);
-    defaults.close();
-    this.load();
-    this.setDefaults();
-  }
+	protected void setDefaults() throws IOException {
+		this.logger.log(Level.CONFIG, "Saving default configuration.");
+		this.configuration.setDefaults(this.defaultConfiguration);
+		this.configuration.options().copyDefaults(true);
+	}
 
-  protected void save() {
-    try {
-      this.logger.debug("Saving configuration: " + this.file.getName());
-      this.configuration.save(this.file);
-    } catch (final IOException e) {
-      this.logger.severe("Unable to save configuration!");
-    }
-  }
-
-  protected void setDefaults() throws IOException {
-    this.logger.config("Saving default configuration.");
-    this.configuration.setDefaults(this.defaultConfiguration);
-    this.configuration.options().copyDefaults(true);
-  }
-
-  private void load() {
-    final String className = this.getClass().getSimpleName();
-    this.logger.config("Loading configuration: " + className);
-    final String path = this.file.getAbsolutePath();
-    this.logger.config("Using path: " + path);
-    this.configuration = YamlConfiguration.loadConfiguration(this.file);
-  }
-  
-  protected YamlConfiguration getConfiguration() {
-  	return this.configuration;
-  }
-
+	private void load() {
+		final String className = this.getClass().getSimpleName();
+		this.logger.log(Level.CONFIG, "Loading configuration: " + className);
+		final String path = this.file.getAbsolutePath();
+		this.logger.log(Level.CONFIG, "Using path: " + path);
+		this.configuration = YamlConfiguration.loadConfiguration(this.file);
+	}
 }

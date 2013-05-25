@@ -24,12 +24,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.xml.sax.SAXException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,12 +42,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.Permission;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
-import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
+import name.richardson.james.bukkit.utilities.localisation.Localised;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.logging.Logger;
 
-public class PluginUpdater implements Listener, Runnable {
+public class PluginUpdater implements Listener, Runnable, Localised {
 
 	public enum Branch {
 		DEVELOPMENT, STABLE
@@ -53,33 +58,31 @@ public class PluginUpdater implements Listener, Runnable {
 
 	private final String artifactId;
 	private final String groupId;
-	private final Localisation localisation;
-	private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
+	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
+	private static final Logger logger = new Logger(PluginUpdater.class.getName());
 	/* A reference to the downloaded Maven manifest from the remote repository */
 	private MavenManifest manifest;
 	private final Permission permission;
-	private final BukkitPermissionManager permissions = new BukkitPermissionManager();
 	private final String pluginName;
 	private final URL repositoryURL;
 	private final String version;
+	private String newVersionNotification;
 
-	public PluginUpdater(final Updatable plugin, final Localisation localisation) {
-		this.permission = this.permissions.getPermission(plugin.getName().toLowerCase());
+	public PluginUpdater(final Updatable plugin) {
+		this.permission = Bukkit.getPluginManager().getPermission(plugin.getName().toLowerCase());
 		this.version = plugin.getVersion();
 		this.artifactId = plugin.getArtifactID();
 		this.groupId = plugin.getGroupID();
 		this.repositoryURL = plugin.getRepositoryURL();
-		this.localisation = localisation;
 		this.pluginName = plugin.getName();
-		this.logger.setPrefix("[" + pluginName + "] ");
+		PluginUpdater.logger.setPrefix("[" + this.pluginName + "] ");
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
-		final boolean permitted = this.permissions.hasPermission(player, this.permission);
-		if (permitted) {
-			final String message = this.localisation.getMessage(this, "new-version-available", this.pluginName,
+		if (player.hasPermission(permission)) {
+			final String message = this.getMessage("updater.new-version-available", this.pluginName,
 					this.manifest.getCurrentVersion());
 			player.sendMessage(message);
 		}
@@ -89,15 +92,16 @@ public class PluginUpdater implements Listener, Runnable {
 		try {
 			this.parseMavenMetaData();
 			if (this.isNewVersionAvailable()) {
-				this.logger.info(this.localisation.getMessage(this, "new-version-available", this.pluginName,
-						this.manifest.getCurrentVersion()));
+				this.newVersionNotification = this.getMessage("updater.new-version-available", this.pluginName,
+						this.manifest.getCurrentVersion());
+				PluginUpdater.logger.log(Level.INFO, this.newVersionNotification);
 			}
 		} catch (final IOException e) {
-			this.logger.warning(this.localisation.getMessage(this, "unable-to-read-metadata", this.artifactId));
+			PluginUpdater.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.artifactId);
 		} catch (final SAXException e) {
-			this.logger.warning(this.localisation.getMessage(this, "unable-to-read-metadata", this.artifactId));
+			PluginUpdater.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.artifactId);
 		} catch (final ParserConfigurationException e) {
-			this.logger.warning(this.localisation.getMessage(this, "unable-to-read-metadata", this.artifactId));
+			PluginUpdater.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.artifactId);
 		}
 	}
 
@@ -114,22 +118,22 @@ public class PluginUpdater implements Listener, Runnable {
 		ReadableByteChannel rbc = null;
 		FileOutputStream fos = null;
 		try {
-			this.logger.debug(this.localisation.getMessage(this, "fetching-resource", url.toString()));
+			PluginUpdater.logger.log(Level.FINER, "updater.fetching-resource", url.toString());
 			rbc = Channels.newChannel(url.openStream());
-			this.logger.debug(this.localisation.getMessage(this, "saving-resource", url.toString()));
+			PluginUpdater.logger.log(Level.FINER, "updater.saving-resource", url.toString());
 			fos = new FileOutputStream(storage);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} finally {
-			rbc.close();
-			fos.close();
+			if (rbc != null) rbc.close();
+			if (fos != null) fos.close();
 		}
 	}
 
 	private boolean isNewVersionAvailable() {
 		final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
-		this.logger.debug(this.localisation.getMessage(this, "local-version", current.toString()));
+		PluginUpdater.logger.log(Level.FINE, "local-version", current.toString());
 		final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
-		this.logger.debug(this.localisation.getMessage(this, "remote-version", target.toString()));
+		PluginUpdater.logger.log(Level.FINE, "remote-version", target.toString());
 		if (current.compareTo(target) == -1) {
 			return true;
 		} else {
@@ -139,7 +143,23 @@ public class PluginUpdater implements Listener, Runnable {
 
 	private void parseMavenMetaData() throws IOException, SAXException, ParserConfigurationException {
 		final File temp = File.createTempFile(this.artifactId, null);
+		PluginUpdater.logger.log(Level.FINER, "updater.creating-temporary-file", temp.getAbsolutePath());
 		this.getMavenMetaData(temp);
 		this.manifest = new MavenManifest(temp);
 	}
+
+	public String getMessage(String key) {
+    String message = localisation.getString(key);
+    message = ColourFormatter.replace(message);
+    return message;
+	}
+
+	public String getMessage(String key, String... elements) {
+    MessageFormat formatter = new MessageFormat(localisation.getString(key));
+    formatter.setLocale(Locale.getDefault());
+    String message = formatter.format(elements);
+    message = ColourFormatter.replace(message);
+    return message;
+	}
+	
 }

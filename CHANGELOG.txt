@@ -1,5 +1,7 @@
-Changelog for BukkitUtilities (v4.2.3-SNAPSHOT)
+Changelog for BukkitUtilities (v5.0.0-SNAPSHOT)
 
+2013-05-24 02:18:36 +0100    inital testing (James Richardson)
+2013-05-24 01:37:10 +0100    simple PluginConfiguration (James Richardson)
 2013-05-24 00:46:09 +0100    I've forgotton! (James Richardson)
 2013-05-24 00:24:50 +0100    various clean up (James Richardson)
 2013-05-22 22:29:11 +0100    add debug method to debuggable (James Richardson)

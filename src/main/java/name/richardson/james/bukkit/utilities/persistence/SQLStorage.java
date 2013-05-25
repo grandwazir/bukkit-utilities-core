@@ -20,10 +20,12 @@ package name.richardson.james.bukkit.utilities.persistence;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import com.avaje.ebean.EbeanServer;
@@ -34,234 +36,228 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.localisation.Localised;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.configuration.DatabaseConfiguration;
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
-import name.richardson.james.bukkit.utilities.plugin.Plugin;
+public class SQLStorage implements Localised {
 
-public class SQLStorage {
-
-  private final List<Class<?>> classes;
-
-  private final ClassLoader classLoader;
-
-  private final DataSourceConfig datasourceConfig;
-
-  private EbeanServer ebeanserver;
-
-  private DdlGenerator generator;
-
-  private boolean rebuild;
-
-  private final ServerConfig serverConfig;
-
-	private final LocalisedLogger logger = new LocalisedLogger(this.getClass().getName());
+	private final List<Class<?>> classes;
+	private final ClassLoader classLoader;
+	private final DataSourceConfig datasourceConfig;
+	private EbeanServer ebeanserver;
+	private DdlGenerator generator;
+	private boolean rebuild;
+	private final ServerConfig serverConfig;
 	
-	private final Localisation localisation;
+	private static final Logger logger = new Logger(SQLStorage.class.getName());
+	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
+	
+	public SQLStorage(final SimpleDatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName,
+			final ClassLoader classLoader) {
+		this.classes = classes;
+		this.serverConfig = configuration.getServerConfig();
+		this.serverConfig.setName(pluginName);
+		this.datasourceConfig = configuration.getDataSourceConfig();
+		this.classLoader = classLoader;
+	}
 
-  public SQLStorage(final DatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName, final ClassLoader classLoader) {
-    this.classes = classes;
-    this.serverConfig = configuration.getServerConfig();
-    this.serverConfig.setName(pluginName);
-    this.datasourceConfig = configuration.getDataSourceConfig();
-    this.classLoader = classLoader;
-  }
+	public List<Class<?>> getClasses() {
+		return this.classes;
+	}
 
-  public List<Class<?>> getClasses() {
-    return this.classes;
-  }
+	public EbeanServer getEbeanServer() {
+		return this.ebeanserver;
+	}
 
-  public EbeanServer getEbeanServer() {
-    return this.ebeanserver;
-  }
+	public void initalise() {
+		if (this.ebeanserver != null) {
+			SQLStorage.logger.log(Level.WARNING, this.getMessage("sqlstorage.already-initalised"));
+		}
+		this.load();
+		if (!this.validate() || this.rebuild) {
+			final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
+			this.generator = server.getDdlGenerator();
+			this.drop();
+			this.create();
+			SQLStorage.logger.log(Level.INFO, this.getMessage("sqlstorage.rebuilt-schema"));
+		}
+	}
 
-  public void initalise() {
-    if (this.ebeanserver != null) {
-      this.logger.warning(this.localisation.getMessage(SQLStorage.class, "already-initalised"));
-    }
-    this.load();
-    if (!this.validate() || this.rebuild) {
-      final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
-      this.generator = server.getDdlGenerator();
-      this.drop();
-      this.create();
-      this.logger.info(this.localisation.getMessage(SQLStorage.class, "rebuilt"));
-    }
-  }
+	public void save(final Object... objects) {
+		// TODO Auto-generated method stub
+	}
 
-  public void save(final Object... objects) {
-    // TODO Auto-generated method stub
+	protected void afterDatabaseCreate() {
+		// TODO Auto-generated method stub
+	}
 
-  }
+	protected void beforeDatabaseCreate() {
+		// TODO Auto-generated method stub
+	}
 
-  protected void afterDatabaseCreate() {
-    // TODO Auto-generated method stub
-  }
+	protected void beforeDatabaseDrop() {
+		// TODO Auto-generated method stub
+	}
 
-  protected void beforeDatabaseCreate() {
-    // TODO Auto-generated method stub
+	protected void create() {
+		SQLStorage.logger.log(Level.INFO, this.getMessage("sqlstorage.creating-database"));
+		this.beforeDatabaseCreate();
+		// reload the database this allows for removing classes
+		String script = this.generator.generateCreateDdl();
+		final Level level = java.util.logging.Logger.getLogger("").getLevel();
+		if (this.datasourceConfig.getDriver().contains("sqlite")) {
+			script = this.fixScript(script);
+		}
+		try {
+			java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+			this.load();
+			this.generator.runScript(false, script);
+		} finally {
+			java.util.logging.Logger.getLogger("").setLevel(level);
+		}
+		this.afterDatabaseCreate();
+	}
 
-  }
+	private void drop() {
+		SQLStorage.logger.log(Level.FINE, "Dropping and destroying database.");
+		this.beforeDatabaseDrop();
+		final Level level = java.util.logging.Logger.getLogger("").getLevel();
+		try {
+			java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+			this.generator.runScript(true, this.generator.generateDropDdl());
+		} finally {
+			java.util.logging.Logger.getLogger("").setLevel(level);
+		}
+	}
 
-  protected void beforeDatabaseDrop() {
-    // TODO Auto-generated method stub
+	private String fixScript(final String script) {
+		SQLStorage.logger.log(Level.FINE, "Fixing DDL script for SQLite databases.");
+		// Create a BufferedReader out of the potentially invalid script
+		final BufferedReader scriptReader = new BufferedReader(new StringReader(script));
+		// Create an array to store all the lines
+		final List<String> scriptLines = new ArrayList<String>();
+		// Create some additional variables for keeping track of tables
+		final HashMap<String, Integer> foundTables = new HashMap<String, Integer>();
+		// The name of the table we are currently reviewing
+		String currentTable = null;
+		int tableOffset = 0;
+		try {
+			// Loop through all lines
+			String currentLine;
+			while ((currentLine = scriptReader.readLine()) != null) {
+				// Trim the current line to remove trailing spaces
+				currentLine = currentLine.trim();
+				// Add the current line to the rest of the lines
+				scriptLines.add(currentLine.trim());
+				// Check if the current line is of any use
+				if (currentLine.startsWith("create table")) {
+					// Found a table, so get its name and remember the line it has been
+					// encountered on
+					currentTable = currentLine.split(" ", 4)[2];
+					foundTables.put(currentLine.split(" ", 3)[2], scriptLines.size() - 1);
+				} else if (currentLine.startsWith(";") && (currentTable != null) && !currentTable.equals("")) {
+					// Found the end of a table definition, so update the entry
+					final int index = scriptLines.size() - 1;
+					foundTables.put(currentTable, index);
+					// Remove the last ")" from the previous line
+					String previousLine = scriptLines.get(index - 1);
+					previousLine = previousLine.substring(0, previousLine.length() - 1);
+					scriptLines.set(index - 1, previousLine);
+					// Change ";" to ");" on the current line
+					scriptLines.set(index, ");");
+					// Reset the table-tracker
+					currentTable = null;
+					// Found a potentially unsupported action
+				} else if (currentLine.startsWith("alter table")) {
+					final String[] alterTableLine = currentLine.split(" ", 4);
+					if (alterTableLine[3].startsWith("add constraint")) {
+						// Found an unsupported action: ALTER TABLE using ADD CONSTRAINT
+						final String[] addConstraintLine = alterTableLine[3].split(" ", 4);
+						// Check if this line can be fixed somehow
+						if (addConstraintLine[3].startsWith("foreign key")) {
+							// Calculate the index of last line of the current table
+							final int tableLastLine = foundTables.get(alterTableLine[2]) + tableOffset;
+							// Add a "," to the previous line
+							scriptLines.set(tableLastLine - 1, scriptLines.get(tableLastLine - 1) + ",");
+							// Add the constraint as a new line - Remove the ";" on the end
+							final String constraintLine = String.format("%s %s %s", addConstraintLine[1], addConstraintLine[2],
+									addConstraintLine[3]);
+							scriptLines.add(tableLastLine, constraintLine.substring(0, constraintLine.length() - 1));
+							// Remove this line and raise the table offset because a line has
+							// been inserted.
+							scriptLines.remove(scriptLines.size() - 1);
+							tableOffset++;
+						} else {
+							// Exception: This line cannot be fixed but is known the be
+							// unsupported by SQLite.
+							throw new RuntimeException("Unsupported action encountered: ALTER TABLE using ADD CONSTRAINT with "
+									+ addConstraintLine[3]);
+						}
+					}
+				}
+			}
+		} catch (final Exception exception) {
+			throw new RuntimeException("Failed to valid the CreateDDL script!");
+		}
+		// Turn all the lines back into a single string
+		String newScript = "";
+		for (final String newLine : scriptLines) {
+			newScript += newLine + "\n";
+		}
+		// Print the new script
+		// System.out.println(newScript);
+		// Return the fixed script
+		return newScript;
+	}
 
-  }
+	private void load() {
+		SQLStorage.logger.log(Level.FINE, "Loading database.");
+		final Level level = java.util.logging.Logger.getLogger("").getLevel();
+		ClassLoader currentClassLoader = null;
+		try {
+			this.serverConfig.setClasses(this.classes);
+			if (SQLStorage.logger.isLoggable(Level.ALL)) {
+				this.serverConfig.setLoggingToJavaLogger(true);
+				this.serverConfig.setLoggingLevel(LogLevel.SQL);
+			}
+			// suppress normal ebean warnings and notifications
+			java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+			currentClassLoader = Thread.currentThread().getContextClassLoader();
+			Thread.currentThread().setContextClassLoader(this.classLoader);
+			this.ebeanserver = EbeanServerFactory.create(this.serverConfig);
+		} finally {
+			java.util.logging.Logger.getLogger("").setLevel(level);
+			if (currentClassLoader != null) {
+				Thread.currentThread().setContextClassLoader(currentClassLoader);
+			}
+		}
+	}
 
-  protected void create() {
-    this.logger.debug(this.localisation.getMessage(SQLStorage.class, "creating-database"));
-    this.beforeDatabaseCreate();
-    // reload the database this allows for removing classes
-    String script = this.generator.generateCreateDdl();
-    final Level level = java.util.logging.Logger.getLogger("").getLevel();
-    if (this.datasourceConfig.getDriver().contains("sqlite")) {
-      script = this.fixScript(script);
-    }
-    try {
-      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
-      this.load();
-      this.generator.runScript(false, script);
-    } finally {
-      java.util.logging.Logger.getLogger("").setLevel(level);
-    }
-    this.afterDatabaseCreate();
-  }
+	private boolean validate() {
+		for (final Class<?> ebean : this.classes) {
+			try {
+				this.ebeanserver.find(ebean).findRowCount();
+			} catch (final Exception exception) {
+				SQLStorage.logger.log(Level.WARNING, this.getMessage("sqlstorage.schema-invalid"));
+				return false;
+			}
+		}
+		SQLStorage.logger.log(Level.FINE, "Database schema is valid.");
+		return true;
+	}
 
-  private void drop() {
-    this.logger.debug(this.localisation.getMessage(SQLStorage.class, "dropping-database"));
-    this.beforeDatabaseDrop();
-    final Level level = java.util.logging.Logger.getLogger("").getLevel();
-    try {
-      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
-      this.generator.runScript(true, this.generator.generateDropDdl());
-    } finally {
-      java.util.logging.Logger.getLogger("").setLevel(level);
-    }
-  }
+	public String getMessage(String key) {
+    String message = localisation.getString(key);
+    return message;
+	}
 
-  private String fixScript(final String script) {
-    this.logger.debug(this.localisation.getMessage(SQLStorage.class, "fixing-script"));
-    // Create a BufferedReader out of the potentially invalid script
-    final BufferedReader scriptReader = new BufferedReader(new StringReader(script));
-    // Create an array to store all the lines
-    final List<String> scriptLines = new ArrayList<String>();
-    // Create some additional variables for keeping track of tables
-    final HashMap<String, Integer> foundTables = new HashMap<String, Integer>();
-    // The name of the table we are currently reviewing
-    String currentTable = null;
-    int tableOffset = 0;
-
-    try {
-      // Loop through all lines
-      String currentLine;
-      while ((currentLine = scriptReader.readLine()) != null) {
-
-        // Trim the current line to remove trailing spaces
-        currentLine = currentLine.trim();
-        // Add the current line to the rest of the lines
-        scriptLines.add(currentLine.trim());
-
-        // Check if the current line is of any use
-        if (currentLine.startsWith("create table")) {
-          // Found a table, so get its name and remember the line it has been
-          // encountered on
-          currentTable = currentLine.split(" ", 4)[2];
-          foundTables.put(currentLine.split(" ", 3)[2], scriptLines.size() - 1);
-        } else if (currentLine.startsWith(";") && (currentTable != null) && !currentTable.equals("")) {
-          // Found the end of a table definition, so update the entry
-          final int index = scriptLines.size() - 1;
-          foundTables.put(currentTable, index);
-          // Remove the last ")" from the previous line
-          String previousLine = scriptLines.get(index - 1);
-          previousLine = previousLine.substring(0, previousLine.length() - 1);
-          scriptLines.set(index - 1, previousLine);
-          // Change ";" to ");" on the current line
-          scriptLines.set(index, ");");
-          // Reset the table-tracker
-          currentTable = null;
-          // Found a potentially unsupported action
-        } else if (currentLine.startsWith("alter table")) {
-          final String[] alterTableLine = currentLine.split(" ", 4);
-
-          if (alterTableLine[3].startsWith("add constraint")) {
-            // Found an unsupported action: ALTER TABLE using ADD CONSTRAINT
-            final String[] addConstraintLine = alterTableLine[3].split(" ", 4);
-
-            // Check if this line can be fixed somehow
-            if (addConstraintLine[3].startsWith("foreign key")) {
-              // Calculate the index of last line of the current table
-              final int tableLastLine = foundTables.get(alterTableLine[2]) + tableOffset;
-              // Add a "," to the previous line
-              scriptLines.set(tableLastLine - 1, scriptLines.get(tableLastLine - 1) + ",");
-              // Add the constraint as a new line - Remove the ";" on the end
-              final String constraintLine = String.format("%s %s %s", addConstraintLine[1], addConstraintLine[2], addConstraintLine[3]);
-              scriptLines.add(tableLastLine, constraintLine.substring(0, constraintLine.length() - 1));
-              // Remove this line and raise the table offset because a line has
-              // been inserted.
-              scriptLines.remove(scriptLines.size() - 1);
-              tableOffset++;
-            } else {
-              // Exception: This line cannot be fixed but is known the be
-              // unsupported by SQLite.
-              throw new RuntimeException("Unsupported action encountered: ALTER TABLE using ADD CONSTRAINT with " + addConstraintLine[3]);
-            }
-          }
-        }
-      }
-    } catch (final Exception exception) {
-      throw new RuntimeException("Failed to valid the CreateDDL script!");
-    }
-
-    // Turn all the lines back into a single string
-    String newScript = "";
-    for (final String newLine : scriptLines) {
-      newScript += newLine + "\n";
-    }
-
-    // Print the new script
-    // System.out.println(newScript);
-
-    // Return the fixed script
-    return newScript;
-  }
-
-  private void load() {
-    this.logger.debug(this.localisation.getMessage(SQLStorage.class, "loading-database"));
-    final Level level = java.util.logging.Logger.getLogger("").getLevel();
-    ClassLoader currentClassLoader = null;
-    try {
-      this.serverConfig.setClasses(this.classes);
-      if (this.logger.isDebugging()) {
-        this.serverConfig.setLoggingToJavaLogger(true);
-        this.serverConfig.setLoggingLevel(LogLevel.SQL);
-      }
-      java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
-      currentClassLoader = Thread.currentThread().getContextClassLoader();
-      Thread.currentThread().setContextClassLoader(this.classLoader);
-      this.ebeanserver = EbeanServerFactory.create(this.serverConfig);
-    } finally {
-      java.util.logging.Logger.getLogger("").setLevel(level);
-      if (currentClassLoader != null) {
-        Thread.currentThread().setContextClassLoader(currentClassLoader);
-      }
-    }
-  }
-
-  private boolean validate() {
-    this.logger.debug(SQLStorage.class, "validating-database");
-    for (final Class<?> ebean : this.classes) {
-      try {
-        this.ebeanserver.find(ebean).findRowCount();
-      } catch (final Exception exception) {
-        this.logger.warning(this.localisation.getMessage(SQLStorage.class, "validation-failed", exception.getLocalizedMessage()));
-        return false;
-      }
-    }
-    this.logger.debug(SQLStorage.class, "validation-passed");
-    return true;
-  }
-
+	public String getMessage(String key, String... elements) {
+    MessageFormat formatter = new MessageFormat(localisation.getString(key));
+    formatter.setLocale(Locale.getDefault());
+    String message = formatter.format(elements);
+    return message;
+	}
+	
 }

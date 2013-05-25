@@ -21,7 +21,7 @@ package name.richardson.james.bukkit.utilities.formatters;
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.FormattedResourceBundle;
 
 public final class ChoiceFormatter {
 
@@ -31,12 +31,12 @@ public final class ChoiceFormatter {
 
   private double[] limits;
 
-  private final Localisation localisation;
-
   private String message = "{0}";
 
-  public ChoiceFormatter(final Localisation localisation) {
-    this.localisation = localisation;
+	private final FormattedResourceBundle localisation;
+
+  public ChoiceFormatter(final String resourceBundleName) {
+    this.localisation = new FormattedResourceBundle(resourceBundleName);
   }
 
   public String getMessage() {
@@ -58,8 +58,8 @@ public final class ChoiceFormatter {
     this.limits = limits;
   }
 
-  public void setMessage(final Object object, final String key) {
-    this.message = this.localisation.getMessage(object, key);
+  public void setMessage(final String key) {
+    this.message = this.localisation.getMessage(key, "");
   }
 
 }
