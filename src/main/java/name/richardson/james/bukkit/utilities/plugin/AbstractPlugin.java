@@ -45,7 +45,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	/* The configuration file for this plugin */
 	private PluginConfiguration configuration;
 	/* The custom logger that belongs to this plugin */
-	private final Logger logger = new Logger(this.getClass().getName());
+	private final Logger logger = new Logger(this);
 	/* The permission manager currently in use by the plugin */
 	private final PermissionManager permissions = new BukkitPermissionManager();
 

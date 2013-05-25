@@ -20,6 +20,7 @@ package name.richardson.james.bukkit.utilities.logging;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 
 import org.bukkit.Bukkit;
@@ -28,55 +29,86 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
 public final class Logger extends java.util.logging.Logger {
 
-	private final String debugPrefix;
-	private String prefix;
+	private final String prefix;
+	private final String debugPrefix = "<" + this.getName() + "> ";
+	private static final ResourceBundles DEFAULT_BUNDLE = ResourceBundles.MESSAGES;
 
-	public Logger(final String name) {
-		super(name, ResourceBundles.MESSAGES.getBundleName());
-		this.prefix = this.getResourceBundle().getString("logger.prefix");
-		this.debugPrefix = "<" + this.getName() + "> ";
-		this.setParent(Bukkit.getServer().getLogger());
-		this.getParent().setLevel(Level.ALL);
-		for (final Handler handler : Bukkit.getLogger().getParent().getHandlers()) {
-			handler.setLevel(Level.ALL);
+	public Logger(Object owner, ResourceBundles bundle) {
+		super(owner.getClass().getPackage().getName(), bundle.getBundleName());
+		LogManager.getLogManager().addLogger(this);
+		if (this.getParent().getName().isEmpty()) {
+			this.setLevel(Level.INFO);
+			this.setUseParentHandlers(false);
+			for (Handler handler : Bukkit.getLogger().getHandlers()) {
+				handler.setLevel(Level.ALL);
+			}
 		}
+		this.prefix = this.getResourceBundle().getString("logger.prefix");
+		this.test();
+		this.testL();
 	}
-	
-	public Logger(final String name, ResourceBundles bundle) {
-		super(name, bundle.getBundleName());
-		this.prefix = this.getResourceBundle().getString("logger.prefix");
-		this.debugPrefix = "<" + this.getName() + "> ";
-		this.setParent(Bukkit.getServer().getLogger());
-		this.getParent().setLevel(Level.ALL);
-		for (final Handler handler : Bukkit.getLogger().getParent().getHandlers()) {
-			handler.setLevel(Level.ALL);
+
+	public Logger(Object owner) {
+		super(owner.getClass().getPackage().getName(), Logger.DEFAULT_BUNDLE.getBundleName());
+		LogManager.getLogManager().addLogger(this);
+		if (this.getParent().getName().isEmpty()) {
+			this.setLevel(Level.INFO);
+			for (Handler handler : Bukkit.getLogger().getHandlers()) {
+				handler.setLevel(Level.ALL);
+			}
 		}
+		this.prefix = this.getResourceBundle().getString("logger.prefix");
+		this.test();
+		this.testL();
 	}
 
 	@Override
-	public void log(final LogRecord logRecord) {
+	public void log(LogRecord record) {
+		// Normally the localisation is handled by the formatter, however due to the
+		// fact that we want to add a prefix to the start of the message we have to
+		// do it here. If we leave it to the formatter to do the localising the
+		// message key will be invalid after adding the prefix. In a ideal world the
+		// formatter itself should add the prefix rather than us doing it here.
+		// Rather than override the formatter for all plugins I settled for this
+		// work around.
+		String message = record.getResourceBundle().getString(record.getMessage());
+		message = String.format(message, record.getParameters());
 		if (this.isLoggable(Level.FINE)) {
-			logRecord.setMessage(this.debugPrefix + logRecord.getMessage());
+			record.setMessage(debugPrefix + message);
 		} else {
-			logRecord.setMessage(this.prefix + logRecord.getMessage());
+			record.setMessage(prefix + message);
 		}
-		super.log(logRecord);
+		super.log(record);
 	}
 
-	public void setPrefix(final String string) {
-		this.prefix = string;
-	}
-
-	// private void test() {
-	// String levels[] = {"ALL", "INFO", "CONFIG", "WARNING", "SEVERE", "FINE",
-	// "FINEST"};
-	// for (String level : levels) {
-	// this.log(Level.parse(level), "Test message");
+	// private void setHandlers() {
+	// if (this.getParent().getName().isEmpty()) {
+	// this.setLevel(Level.INFO);
+	// for (Handler handler : Bukkit.getLogger().getHandlers()) {
+	// this.addHandler(handler);
+	// }
+	// } else {
+	// this.setUseParentHandlers(true);
 	// }
 	// }
-	private void testAll() {
-		for (final String string : this.getResourceBundle().keySet()) {
-			this.info(this.getResourceBundle().getString(string));
+	private void test() {
+		String levels[] = {"ALL", "INFO", "CONFIG", "WARNING", "SEVERE", "FINE", "FINEST"};
+		for (String level : levels) {
+			this.log(Level.parse(level), "Test message");
 		}
 	}
+
+	private void testL() {
+		for (String key : this.getResourceBundle().keySet()) {
+			this.log(Level.FINEST, key);
+			this.log(Level.FINEST, this.getResourceBundle().getString(key));
+		}
+	}
+	// }
+	// private void testAll() {
+	// for (final String string : this.getResourceBundle().keySet()) {
+	// Object[] params = {string, this.getResourceBundle().getString(string)};
+	// this.log(Level.FINEST, "{0}: {1}", params);
+	// }
+	// }
 }

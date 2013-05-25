@@ -32,7 +32,7 @@ public class YAMLStorage {
 	private YamlConfiguration configuration;
 	private final YamlConfiguration defaultConfiguration;
 	private final File file;
-	private final Logger logger = new Logger(this.getClass().getName());
+	private final Logger logger = new Logger(this);
 
 	public YAMLStorage(final File file, final InputStream defaults) throws IOException {
 		this.file = file;
