@@ -29,9 +29,13 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
 public final class Logger extends java.util.logging.Logger {
 
-	private final String prefix;
+	public static String prefix;
 	private final String debugPrefix = "<" + this.getName() + "> ";
 	private static final ResourceBundles DEFAULT_BUNDLE = ResourceBundles.MESSAGES;
+
+	public static void setPrefix(final String prefix) {
+		Logger.prefix = prefix;
+	}
 
 	public Logger(final Class<?> owner) {
 		super(owner.getPackage().getName(), Logger.DEFAULT_BUNDLE.getBundleName());
@@ -42,7 +46,6 @@ public final class Logger extends java.util.logging.Logger {
 				handler.setLevel(Level.ALL);
 			}
 		}
-		this.prefix = this.getResourceBundle().getString("logger.prefix");
 	}
 
 	public Logger(final Class<?> owner, final ResourceBundles bundle) {
@@ -55,7 +58,6 @@ public final class Logger extends java.util.logging.Logger {
 				handler.setLevel(Level.ALL);
 			}
 		}
-		this.prefix = this.getResourceBundle().getString("logger.prefix");
 	}
 
 	public Logger(final Object owner) {
@@ -67,7 +69,6 @@ public final class Logger extends java.util.logging.Logger {
 				handler.setLevel(Level.ALL);
 			}
 		}
-		this.prefix = this.getResourceBundle().getString("logger.prefix");
 	}
 
 	public Logger(final Object owner, final ResourceBundles bundle) {
@@ -80,7 +81,6 @@ public final class Logger extends java.util.logging.Logger {
 				handler.setLevel(Level.ALL);
 			}
 		}
-		this.prefix = this.getResourceBundle().getString("logger.prefix");
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public final class Logger extends java.util.logging.Logger {
 		if (this.isLoggable(Level.FINE)) {
 			record.setMessage(this.debugPrefix + message);
 		} else {
-			record.setMessage(this.prefix + message);
+			record.setMessage(Logger.prefix + message);
 		}
 		super.log(record);
 	}

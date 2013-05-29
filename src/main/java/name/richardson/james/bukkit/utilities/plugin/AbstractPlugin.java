@@ -78,9 +78,11 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	}
 
 	protected void loadConfiguration() throws IOException {
+		Logger.setPrefix("[" + this.getName() + "] ");
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml");
 		final InputStream defaults = this.getResource("config.yml");
 		this.configuration = new SimplePluginConfiguration(file, defaults);
+
 		this.logger.setLevel(this.configuration.getLogLevel());
 	}
 
