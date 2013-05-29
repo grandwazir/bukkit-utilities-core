@@ -73,8 +73,8 @@ public class CommandManager implements TabExecutor, Localised {
 		if (arguments.isEmpty()) {
 			this.helpCommand.execute(arguments, sender);
 		} else
-			if (this.commands.containsKey(arguments.get(0))) {
-				final Command command = this.commands.get(arguments.get(0));
+			if (this.commands.containsKey(arguments.get(0).toLowerCase())) {
+				final Command command = this.commands.get(arguments.get(0).toLowerCase());
 				arguments.remove(0);
 				if (command.isAuthorized(sender)) {
 					command.execute(arguments, sender);

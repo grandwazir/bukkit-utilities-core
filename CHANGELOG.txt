@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v5.0.0-SNAPSHOT)
 
+2013-05-29 22:40:27 +0100    fixes developed while working on BanHammer and Alias (James Richardson)
 2013-05-29 14:54:04 +0100    refactored listening class (James Richardson)
 2013-05-29 14:47:44 +0100    update metrics to revison 6 (James Richardson)
 2013-05-29 14:44:36 +0100    delete unused SQLStorageSchema (James Richardson)
