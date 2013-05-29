@@ -22,10 +22,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-public class SelfRegisteringListener implements Listener {
+public class AbstractListener implements Listener {
 
-	public SelfRegisteringListener(final String pluginName) {
+	public AbstractListener(final Plugin plugin) {
+		this.registerListener(plugin);
+	}
+
+	public AbstractListener(final String pluginName) {
 		final Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
+		this.registerListener(plugin);
+	}
+
+	private void registerListener(final Plugin plugin) {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 
