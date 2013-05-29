@@ -36,6 +36,10 @@ public final class ChoiceFormatter {
 
 	private final ResourceBundle localisation;
 
+	public ChoiceFormatter() {
+		this.localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
+	}
+
 	public ChoiceFormatter(final ResourceBundles bundleName) {
 		this.localisation = ResourceBundle.getBundle(bundleName.getBundleName());
 	}

@@ -33,6 +33,7 @@ import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
+import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 
 public abstract class AbstractCommand implements Command, Localised {
 
@@ -42,6 +43,10 @@ public abstract class AbstractCommand implements Command, Localised {
 	private final ResourceBundle localisation;
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
 	private BukkitPermissionManager permissionManager;
+
+	public AbstractCommand() {
+		this(ResourceBundles.MESSAGES);
+	}
 
 	public AbstractCommand(final ResourceBundles resourceBundleName) {
 		this.localisation = ResourceBundle.getBundle(resourceBundleName.getBundleName());
@@ -84,30 +89,35 @@ public abstract class AbstractCommand implements Command, Localised {
 	}
 
 	public boolean isAuthorized(final Permissible permissible) {
-		if (this.permissionManager == null) {
-			return true;
-		}
+		if (this.permissionManager == null) { return true; }
 		for (final Permission permission : this.permissionManager.listPermissions()) {
-			if (permissible.hasPermission(permission)) {
-				return true;
-			}
+			if (permissible.hasPermission(permission)) { return true; }
 		}
 		return false;
 	}
 
 	public List<String> onTabComplete(final List<String> arguments, final CommandSender sender) {
 		final List<String> results = new ArrayList<String>();
-		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) {
-			if (this.matchers.size() >= (arguments.size() - 1)) {
-				final Matcher matcher = this.matchers.get(arguments.size() - 1);
-				results.addAll(matcher.getMatches(arguments.get(arguments.size() - 1)));
+		if (this.getClass().isAnnotationPresent(CommandMatchers.class) && !arguments.isEmpty()) {
+			if (this.matchers.size() >= (arguments.size())) {
+				final int index = arguments.size() - 1;
+				final Matcher matcher = this.matchers.get(index);
+				results.addAll(matcher.getMatches(arguments.get(index)));
 			}
 		}
 		return results;
 	}
 
+	protected ResourceBundle getLocalisation() {
+		return this.localisation;
+	}
+
 	protected List<Matcher> getMatchers() {
 		return this.matchers;
+	}
+
+	protected PermissionManager getPermissionManager() {
+		return this.permissionManager;
 	}
 
 	protected void setMatchers() {

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2013 James Richardson
  * 
- * OfflinePlayerMatcher.java is part of BukkitUtilities.
+ * CommandPermissions.java is part of BukkitUtilities.
  * 
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,36 +16,11 @@
  * You should have received a copy of the GNU General Public License along with
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.matchers;
+package name.richardson.james.bukkit.utilities.plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.lang.annotation.Retention;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
-
-public class OfflinePlayerMatcher implements Matcher {
-
-	private final Server server;
-
-	public OfflinePlayerMatcher() {
-		this.server = Bukkit.getServer();
-	}
-
-	public List<String> getMatches(String argument) {
-		argument = argument.toLowerCase();
-		final Set<String> set = new TreeSet<String>();
-		final List<String> list = new ArrayList<String>();
-		for (final OfflinePlayer player : this.server.getOfflinePlayers()) {
-			if (player.getName().startsWith(argument)) {
-				set.add(player.getName());
-			}
-		}
-		list.addAll(set);
-		return list;
-	}
-
+@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+public @interface PluginPermissions {
+	String[] permissions();
 }

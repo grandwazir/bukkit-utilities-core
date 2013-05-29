@@ -25,6 +25,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 public interface PermissionManager {
 
+	public Permission addPermission(Permission permission);
+
 	public Permission createPermission(String node);
 
 	public Permission createPermission(String node, PermissionDefault defaultPermission);

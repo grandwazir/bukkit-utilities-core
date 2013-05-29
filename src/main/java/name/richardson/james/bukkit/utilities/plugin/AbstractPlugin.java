@@ -21,12 +21,13 @@ package name.richardson.james.bukkit.utilities.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.avaje.ebean.EbeanServer;
 
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
@@ -46,8 +47,14 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	private PluginConfiguration configuration;
 	/* The custom logger that belongs to this plugin */
 	private final Logger logger = new Logger(this);
-	/* The permission manager currently in use by the plugin */
-	private final PermissionManager permissions = new BukkitPermissionManager();
+	/* The database that belongs to this plugin */
+	private EbeanServer database;
+	private PermissionManager permissionManager;
+
+	@Override
+	public EbeanServer getDatabase() {
+		return this.database;
+	}
 
 	public String getGroupID() {
 		return "name.richardson.james.bukkit";
@@ -77,19 +84,21 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		this.logger.setLevel(this.configuration.getLogLevel());
 	}
 
-	protected void loadDatabase() throws SecurityException, NoSuchFieldException, IOException, IllegalArgumentException, IllegalAccessException {
+	protected void loadDatabase() throws IOException {
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "database.yml");
 		final InputStream defaults = this.getResource("database.yml");
 		final SimpleDatabaseConfiguration configuration = new SimpleDatabaseConfiguration(file, defaults, this.getName());
 		final SQLStorage loader = new SQLStorage(configuration, this.getDatabaseClasses(), this.getName(), this.getClassLoader());
-		final Field f = this.getClass().getDeclaredField("database");
-		f.setAccessible(true);
-		f.set(null, loader.getEbeanServer());
+		loader.initalise();
+		this.database = loader.getEbeanServer();
 	}
 
 	protected void setPermissions() {
-		final String node = this.getDescription().getName().toLowerCase();
-		this.permissions.createPermission(node);
+		if (this.getClass().isAnnotationPresent(PluginPermissions.class)) {
+			final PluginPermissions annotation = this.getClass().getAnnotation(PluginPermissions.class);
+			this.permissionManager = new BukkitPermissionManager();
+			this.permissionManager.createPermissions(annotation.permissions());
+		}
 	}
 
 	protected void setupMetrics() throws IOException {

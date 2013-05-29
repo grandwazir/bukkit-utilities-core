@@ -36,7 +36,8 @@ public class PlayerMatcher implements Matcher {
 		this.server = Bukkit.getServer();
 	}
 
-	public List<String> getMatches(final String argument) {
+	public List<String> getMatches(String argument) {
+		argument = argument.toLowerCase();
 		final Set<String> set = new TreeSet<String>();
 		final List<String> list = new ArrayList<String>();
 		for (final Player player : this.server.getOnlinePlayers()) {

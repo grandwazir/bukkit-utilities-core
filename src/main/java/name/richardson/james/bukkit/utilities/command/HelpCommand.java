@@ -35,7 +35,7 @@ public class HelpCommand extends AbstractCommand {
 	final static private ResourceBundles bundle = ResourceBundles.UTILITIES;
 
 	final static private ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.YELLOW;
-	final static private ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.RED;
+	final static private ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
 
 	final private String label;
 	final private Map<String, Command> commands;
@@ -72,9 +72,9 @@ public class HelpCommand extends AbstractCommand {
 		}
 	}
 
-	private String colouriseUsage(final String usage) {
-		usage.replaceAll("<", HelpCommand.REQUIRED_ARGUMENT_COLOUR + "<");
-		usage.replaceAll("\\[", HelpCommand.OPTIONAL_ARGUMENT_COLOUR + "\\[");
+	private String colouriseUsage(String usage) {
+		usage = usage.replaceAll("<", HelpCommand.REQUIRED_ARGUMENT_COLOUR + "<");
+		usage = usage.replaceAll("\\[", HelpCommand.OPTIONAL_ARGUMENT_COLOUR + "\\[");
 		return usage;
 	}
 

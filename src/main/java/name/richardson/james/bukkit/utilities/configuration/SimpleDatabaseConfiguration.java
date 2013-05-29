@@ -59,8 +59,10 @@ public final class SimpleDatabaseConfiguration extends YAMLStorage implements Da
 		final String url = this.getConfiguration().getString("url");
 		if (url != null) {
 			this.dataSourceConfig.setUrl(this.replaceDatabaseString(url));
+		} else {
+			this.dataSourceConfig.setUrl(this.replaceDatabaseString(this.dataSourceConfig.getUrl()));
 		}
-		final String driver = this.getConfiguration().getString("url");
+		final String driver = this.getConfiguration().getString("driver");
 		if (driver != null) {
 			this.dataSourceConfig.setDriver(driver);
 		}
@@ -79,7 +81,7 @@ public final class SimpleDatabaseConfiguration extends YAMLStorage implements Da
 	}
 
 	private String replaceDatabaseString(String url) {
-		url = url.replaceAll("\\{DIR\\}", this.folder.replaceAll("\\\\", "/") + "/");
+		url = url.replaceAll("\\{DIR\\}", this.folder + File.separatorChar);
 		url = url.replaceAll("\\{NAME\\}", this.PluginName.replaceAll("[^\\w_-]", ""));
 		return url;
 	}
