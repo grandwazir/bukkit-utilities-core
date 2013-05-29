@@ -1,30 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2012 James Richardson.
- * 
- * Metrics.java is part of BukkitUtilities.
- * 
- * BukkitUtilities is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * BukkitUtilities is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
 /*
- * Copyright 2011 Tyler Blair. All rights reserved. Redistribution and use in
- * source and binary forms, with or without modification, are permitted provided
- * that the following conditions are met: 1. Redistributions of source code must
- * retain the above copyright notice, this list of conditions and the following
- * disclaimer. 2. Redistributions in binary form must reproduce the above
- * copyright notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution. THIS
- * SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
+ * Copyright 2011-2013 Tyler Blair. All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -33,12 +20,12 @@
  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. The views and conclusions
- * contained in the software and documentation are those of the authors and
- * contributors and should not be interpreted as representing official policies,
- * either expressed or implied, of anybody else.
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * The views and conclusions contained in the software and documentation are
+ * those of the authors and contributors and should not be interpreted as
+ * representing official policies, either expressed or implied, of anybody else.
  */
-
 package name.richardson.james.bukkit.utilities.metrics;
 
 import java.io.BufferedReader;
@@ -64,6 +51,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * <p>
@@ -75,7 +63,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
  * </p>
  * <code>
  * Graph createGraph(String name); <br/>
- * void addCustomData(Metrics.Plotter plotter); <br/>
+ * void addCustomData(BukkitMetrics.Plotter plotter); <br/>
  * void start(); <br/>
  * </code>
  */
@@ -91,7 +79,6 @@ public class Metrics {
 		 * to the above when submitted, it is rejected
 		 */
 		private final String name;
-
 		/**
 		 * The set of plotters that are contained within this graph
 		 */
@@ -105,6 +92,7 @@ public class Metrics {
 		 * Add a plotter to the graph, which will be used to plot entries
 		 * 
 		 * @param plotter
+		 *          the plotter to add to the graph
 		 */
 		public void addPlotter(final Plotter plotter) {
 			this.plotters.add(plotter);
@@ -123,7 +111,7 @@ public class Metrics {
 		/**
 		 * Gets the graph's name
 		 * 
-		 * @return
+		 * @return the Graph's name
 		 */
 		public String getName() {
 			return this.name;
@@ -132,7 +120,7 @@ public class Metrics {
 		/**
 		 * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
 		 * 
-		 * @return
+		 * @return an unmodifiable {@link java.util.Set} of the plotter objects
 		 */
 		public Set<Plotter> getPlotters() {
 			return Collections.unmodifiableSet(this.plotters);
@@ -147,18 +135,18 @@ public class Metrics {
 		 * Remove a plotter from the graph
 		 * 
 		 * @param plotter
+		 *          the plotter to remove from the graph
 		 */
 		public void removePlotter(final Plotter plotter) {
 			this.plotters.remove(plotter);
 		}
 
 		/**
-		 * Called when the server owner decides to opt-out of Metrics while the
-		 * server is running.
+		 * Called when the server owner decides to opt-out of BukkitMetrics while
+		 * the server is running.
 		 */
 		protected void onOptOut() {
 		}
-
 	}
 
 	/**
@@ -182,6 +170,8 @@ public class Metrics {
 		 * Construct a plotter with a specific plot name
 		 * 
 		 * @param name
+		 *          the name of the plotter to use, which will show up on the
+		 *          website
 		 */
 		public Plotter(final String name) {
 			this.name = name;
@@ -207,9 +197,13 @@ public class Metrics {
 		}
 
 		/**
-		 * Get the current value for the plotted point
+		 * Get the current value for the plotted point. Since this function defers
+		 * to an external function it may or may not return immediately thus cannot
+		 * be guaranteed to be thread friendly or safe. This function can be called
+		 * from any thread so care should be taken when accessing resources that
+		 * need to be synchronized.
 		 * 
-		 * @return
+		 * @return the current value for the point to be plotted.
 		 */
 		public abstract int getValue();
 
@@ -223,40 +217,36 @@ public class Metrics {
 		 */
 		public void reset() {
 		}
-
 	}
 
+	/**
+	 * The current revision number
+	 */
+	private final static int REVISION = 6;
 	/**
 	 * The base url of the metrics domain
 	 */
 	private static final String BASE_URL = "http://mcstats.org";
-
+	/**
+	 * The url used to report a server's status
+	 */
+	private static final String REPORT_URL = "/report/%s";
 	/**
 	 * The separator to use for custom data. This MUST NOT change unless you are
 	 * hosting your own version of metrics and want to change it.
 	 */
 	private static final String CUSTOM_DATA_SEPARATOR = "~~";
-
 	/**
 	 * Interval of time to ping (in minutes)
 	 */
 	private static final int PING_INTERVAL = 10;
 
 	/**
-	 * The url used to report a server's status
-	 */
-	private static final String REPORT_URL = "/report/%s";
-
-	/**
-	 * The current revision number
-	 */
-	private final static int REVISION = 5;
-
-	/**
 	 * Encode text as UTF-8
 	 * 
 	 * @param text
-	 * @return
+	 *          the text to encode
+	 * @return the encoded text, as UTF-8
 	 */
 	private static String encode(final String text) throws UnsupportedEncodingException {
 		return URLEncoder.encode(text, "UTF-8");
@@ -274,34 +264,37 @@ public class Metrics {
 	 * </code>
 	 * 
 	 * @param buffer
+	 *          the stringbuilder to append the data pair onto
 	 * @param key
+	 *          the key value
 	 * @param value
-	 * @return
+	 *          the value
 	 */
 	private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException {
 		buffer.append('&').append(Metrics.encode(key)).append('=').append(Metrics.encode(value));
 	}
 
 	/**
-	 * The plugin configuration file
+	 * The plugin this metrics submits for
 	 */
-	private final YamlConfiguration configuration;
-
+	private final Plugin plugin;
 	/**
-	 * The plugin configuration file
+	 * All of the custom graphs to submit to metrics
 	 */
-	private final File configurationFile;
-
+	private final Set<Graph> graphs = Collections.synchronizedSet(new HashSet<Graph>());
 	/**
 	 * The default graph, used for addCustomData when you don't want a specific
 	 * graph
 	 */
 	private final Graph defaultGraph = new Graph("Default");
-
 	/**
-	 * All of the custom graphs to submit to metrics
+	 * The plugin configuration file
 	 */
-	private final Set<Graph> graphs = Collections.synchronizedSet(new HashSet<Graph>());
+	private final YamlConfiguration configuration;
+	/**
+	 * The plugin configuration file
+	 */
+	private final File configurationFile;
 
 	/**
 	 * Unique server id
@@ -309,19 +302,19 @@ public class Metrics {
 	private final String guid;
 
 	/**
+	 * Debug mode
+	 */
+	private final boolean debug;
+
+	/**
 	 * Lock for synchronization
 	 */
 	private final Object optOutLock = new Object();
 
 	/**
-	 * The plugin this metrics submits for
+	 * The scheduled task
 	 */
-	private final Plugin plugin;
-
-	/**
-	 * Id of the scheduled task
-	 */
-	private volatile int taskId = -1;
+	private volatile BukkitTask task = null;
 
 	public Metrics(final Plugin plugin) throws IOException {
 		if (plugin == null) {
@@ -337,6 +330,7 @@ public class Metrics {
 		// add some defaults
 		this.configuration.addDefault("opt-out", false);
 		this.configuration.addDefault("guid", UUID.randomUUID().toString());
+		this.configuration.addDefault("debug", false);
 
 		// Do we need to create the file?
 		if (this.configuration.get("guid", null) == null) {
@@ -346,12 +340,14 @@ public class Metrics {
 
 		// Load the guid then
 		this.guid = this.configuration.getString("guid");
+		this.debug = this.configuration.getBoolean("debug", false);
 	}
 
 	/**
 	 * Adds a custom data plotter to the default graph
 	 * 
 	 * @param plotter
+	 *          The plotter to use to plot custom data
 	 */
 	public void addCustomData(final Plotter plotter) {
 		if (plotter == null) {
@@ -366,10 +362,11 @@ public class Metrics {
 	}
 
 	/**
-	 * Add a Graph object to Metrics that represents data for the plugin that
-	 * should be sent to the backend
+	 * Add a Graph object to BukkitMetrics that represents data for the plugin
+	 * that should be sent to the backend
 	 * 
 	 * @param graph
+	 *          The name of the graph
 	 */
 	public void addGraph(final Graph graph) {
 		if (graph == null) {
@@ -385,6 +382,7 @@ public class Metrics {
 	 * graph object returned.
 	 * 
 	 * @param name
+	 *          The name of the graph
 	 * @return Graph object created. Will never return NULL under normal
 	 *         circumstances unless bad parameters are given
 	 */
@@ -407,7 +405,7 @@ public class Metrics {
 	 * Disables metrics for the server by setting "opt-out" to true in the config
 	 * file and canceling the metrics task.
 	 * 
-	 * @throws IOException
+	 * @throws java.io.IOException
 	 */
 	public void disable() throws IOException {
 		// This has to be synchronized or it can collide with the check in the task.
@@ -419,9 +417,9 @@ public class Metrics {
 			}
 
 			// Disable Task, if it is running
-			if (this.taskId > 0) {
-				this.plugin.getServer().getScheduler().cancelTask(this.taskId);
-				this.taskId = -1;
+			if (this.task != null) {
+				this.task.cancel();
+				this.task = null;
 			}
 		}
 	}
@@ -430,7 +428,7 @@ public class Metrics {
 	 * Enables metrics for the server by setting "opt-out" to false in the config
 	 * file and starting the metrics task.
 	 * 
-	 * @throws IOException
+	 * @throws java.io.IOException
 	 */
 	public void enable() throws IOException {
 		// This has to be synchronized or it can collide with the check in the task.
@@ -442,7 +440,7 @@ public class Metrics {
 			}
 
 			// Enable Task, if it is not running
-			if (this.taskId < 0) {
+			if (this.task == null) {
 				this.start();
 			}
 		}
@@ -470,7 +468,7 @@ public class Metrics {
 	/**
 	 * Has the server owner denied plugin metrics?
 	 * 
-	 * @return
+	 * @return true if metrics should be opted out of it
 	 */
 	public boolean isOptOut() {
 		synchronized (this.optOutLock) {
@@ -478,10 +476,14 @@ public class Metrics {
 				// Reload the metrics file
 				this.configuration.load(this.getConfigFile());
 			} catch (final IOException ex) {
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				if (this.debug) {
+					Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				}
 				return true;
 			} catch (final InvalidConfigurationException ex) {
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				if (this.debug) {
+					Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				}
 				return true;
 			}
 			return this.configuration.getBoolean("opt-out", false);
@@ -503,12 +505,12 @@ public class Metrics {
 			}
 
 			// Is metrics already running?
-			if (this.taskId >= 0) {
+			if (this.task != null) {
 				return true;
 			}
 
 			// Begin hitting the server with glorious data
-			this.taskId = this.plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(this.plugin, new Runnable() {
+			this.task = this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
 
 				private boolean firstPost = true;
 
@@ -519,9 +521,9 @@ public class Metrics {
 						synchronized (Metrics.this.optOutLock) {
 							// Disable Task, if it is running and the server owner decided to
 							// opt-out
-							if (Metrics.this.isOptOut() && (Metrics.this.taskId > 0)) {
-								Metrics.this.plugin.getServer().getScheduler().cancelTask(Metrics.this.taskId);
-								Metrics.this.taskId = -1;
+							if (Metrics.this.isOptOut() && (Metrics.this.task != null)) {
+								Metrics.this.task.cancel();
+								Metrics.this.task = null;
 								// Tell all plotters to stop gathering information.
 								for (final Graph graph : Metrics.this.graphs) {
 									graph.onOptOut();
@@ -539,7 +541,9 @@ public class Metrics {
 						// Each post thereafter will be a ping
 						this.firstPost = false;
 					} catch (final IOException e) {
-						Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+						if (Metrics.this.debug) {
+							Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+						}
 					}
 				}
 			}, 0, Metrics.PING_INTERVAL * 1200);
@@ -552,7 +556,7 @@ public class Metrics {
 	 * Check if mineshafter is present. If it is, we need to bypass it to send
 	 * POST requests
 	 * 
-	 * @return
+	 * @return true if mineshafter is installed on the server
 	 */
 	private boolean isMineshafterPresent() {
 		try {
@@ -567,17 +571,49 @@ public class Metrics {
 	 * Generic method that posts a plugin to the metrics website
 	 */
 	private void postPlugin(final boolean isPing) throws IOException {
-		// The plugin's description file containg all of the plugin data such as
-		// name, version, author, etc
+		// Server software specific section
 		final PluginDescriptionFile description = this.plugin.getDescription();
+		final String pluginName = description.getName();
+		final boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if
+																																		// online
+																																		// mode is
+																																		// enabled
+		final String pluginVersion = description.getVersion();
+		final String serverVersion = Bukkit.getVersion();
+		final int playersOnline = Bukkit.getServer().getOnlinePlayers().length;
+
+		// END server software specific section -- all code below does not use any
+		// code outside of this class / Java
 
 		// Construct the post data
 		final StringBuilder data = new StringBuilder();
+
+		// The plugin's description file containg all of the plugin data such as
+		// name, version, author, etc
 		data.append(Metrics.encode("guid")).append('=').append(Metrics.encode(this.guid));
-		Metrics.encodeDataPair(data, "version", description.getVersion());
-		Metrics.encodeDataPair(data, "server", Bukkit.getVersion());
-		Metrics.encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
+		Metrics.encodeDataPair(data, "version", pluginVersion);
+		Metrics.encodeDataPair(data, "server", serverVersion);
+		Metrics.encodeDataPair(data, "players", Integer.toString(playersOnline));
 		Metrics.encodeDataPair(data, "revision", String.valueOf(Metrics.REVISION));
+
+		// New data as of R6
+		final String osname = System.getProperty("os.name");
+		String osarch = System.getProperty("os.arch");
+		final String osversion = System.getProperty("os.version");
+		final String java_version = System.getProperty("java.version");
+		final int coreCount = Runtime.getRuntime().availableProcessors();
+
+		// normalize os arch .. amd64 -> x86_64
+		if (osarch.equals("amd64")) {
+			osarch = "x86_64";
+		}
+
+		Metrics.encodeDataPair(data, "osname", osname);
+		Metrics.encodeDataPair(data, "osarch", osarch);
+		Metrics.encodeDataPair(data, "osversion", osversion);
+		Metrics.encodeDataPair(data, "cores", Integer.toString(coreCount));
+		Metrics.encodeDataPair(data, "online-mode", Boolean.toString(onlineMode));
+		Metrics.encodeDataPair(data, "java_version", java_version);
 
 		// If we're pinging, append it
 		if (isPing) {
@@ -613,7 +649,7 @@ public class Metrics {
 		}
 
 		// Create the url
-		final URL url = new URL(Metrics.BASE_URL + String.format(Metrics.REPORT_URL, Metrics.encode(this.plugin.getDescription().getName())));
+		final URL url = new URL(Metrics.BASE_URL + String.format(Metrics.REPORT_URL, Metrics.encode(pluginName)));
 
 		// Connect to the website
 		URLConnection connection;
@@ -660,5 +696,4 @@ public class Metrics {
 			}
 		}
 	}
-
 }
