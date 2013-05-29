@@ -30,8 +30,6 @@ import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
 public class SimplePluginConfiguration extends YAMLStorage implements PluginConfiguration {
 
-	public final static String DEFAULT_FILE_NAME = "config.yml";
-
 	public SimplePluginConfiguration(final File file, final InputStream defaults) throws IOException {
 		super(file, defaults);
 	}
