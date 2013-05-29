@@ -39,6 +39,7 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.logging.Logger;
 
 public class SQLStorage implements Localised {
 
@@ -50,7 +51,7 @@ public class SQLStorage implements Localised {
 	private boolean rebuild;
 	private final ServerConfig serverConfig;
 
-	private static final ClassLogger logger = new ClassLogger(SQLStorage.class.getName());
+	private static final Logger logger = new Logger(SQLStorage.class.getName());
 	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
 
 	public SQLStorage(final SimpleDatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName, final ClassLoader classLoader) {
@@ -74,7 +75,7 @@ public class SQLStorage implements Localised {
 		return message;
 	}
 
-	public String getMessage(String key, Object... elements) {
+	public String getMessage(final String key, final Object... elements) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -98,10 +99,6 @@ public class SQLStorage implements Localised {
 			this.create();
 			SQLStorage.logger.log(Level.INFO, this.getMessage("sqlstorage.rebuilt-schema"));
 		}
-	}
-
-	public void save(final Object... objects) {
-		// TODO Auto-generated method stub
 	}
 
 	protected void afterDatabaseCreate() {
