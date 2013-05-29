@@ -33,50 +33,50 @@ public final class Logger extends java.util.logging.Logger {
 	private final String debugPrefix = "<" + this.getName() + "> ";
 	private static final ResourceBundles DEFAULT_BUNDLE = ResourceBundles.MESSAGES;
 
-	public Logger(Object owner, ResourceBundles bundle) {
-		super(owner.getClass().getPackage().getName(), bundle.getBundleName());
+	public Logger(final Class<?> owner) {
+		super(owner.getPackage().getName(), Logger.DEFAULT_BUNDLE.getBundleName());
 		LogManager.getLogManager().addLogger(this);
-		if (this.getParent() == null || this.getParent().getName().isEmpty()) {
+		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
 			this.setLevel(Level.INFO);
-			this.setUseParentHandlers(false);
-			for (Handler handler : Bukkit.getLogger().getHandlers()) {
+			for (final Handler handler : Bukkit.getLogger().getHandlers()) {
 				handler.setLevel(Level.ALL);
 			}
 		}
 		this.prefix = this.getResourceBundle().getString("logger.prefix");
 	}
 
-	public Logger(Object owner) {
-		super(owner.getClass().getPackage().getName(), Logger.DEFAULT_BUNDLE.getBundleName());
-		LogManager.getLogManager().addLogger(this);
-		if (this.getParent() == null || this.getParent().getName().isEmpty()) {
-			this.setLevel(Level.INFO);
-			for (Handler handler : Bukkit.getLogger().getHandlers()) {
-				handler.setLevel(Level.ALL);
-			}
-		}
-		this.prefix = this.getResourceBundle().getString("logger.prefix");
-	}
-	
-	public Logger(Class<?> owner) {
-		super(owner.getPackage().getName(), Logger.DEFAULT_BUNDLE.getBundleName());
-		LogManager.getLogManager().addLogger(this);
-		if (this.getParent() == null || this.getParent().getName().isEmpty()) {
-			this.setLevel(Level.INFO);
-			for (Handler handler : Bukkit.getLogger().getHandlers()) {
-				handler.setLevel(Level.ALL);
-			}
-		}
-		this.prefix = this.getResourceBundle().getString("logger.prefix");
-	}
-	
-	public Logger(Class<?> owner, ResourceBundles bundle) {
+	public Logger(final Class<?> owner, final ResourceBundles bundle) {
 		super(owner.getPackage().getName(), bundle.getBundleName());
 		LogManager.getLogManager().addLogger(this);
-		if (this.getParent() == null || this.getParent().getName().isEmpty()) {
+		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
 			this.setLevel(Level.INFO);
 			this.setUseParentHandlers(false);
-			for (Handler handler : Bukkit.getLogger().getHandlers()) {
+			for (final Handler handler : Bukkit.getLogger().getHandlers()) {
+				handler.setLevel(Level.ALL);
+			}
+		}
+		this.prefix = this.getResourceBundle().getString("logger.prefix");
+	}
+
+	public Logger(final Object owner) {
+		super(owner.getClass().getPackage().getName(), Logger.DEFAULT_BUNDLE.getBundleName());
+		LogManager.getLogManager().addLogger(this);
+		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
+			this.setLevel(Level.INFO);
+			for (final Handler handler : Bukkit.getLogger().getHandlers()) {
+				handler.setLevel(Level.ALL);
+			}
+		}
+		this.prefix = this.getResourceBundle().getString("logger.prefix");
+	}
+
+	public Logger(final Object owner, final ResourceBundles bundle) {
+		super(owner.getClass().getPackage().getName(), bundle.getBundleName());
+		LogManager.getLogManager().addLogger(this);
+		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
+			this.setLevel(Level.INFO);
+			this.setUseParentHandlers(false);
+			for (final Handler handler : Bukkit.getLogger().getHandlers()) {
 				handler.setLevel(Level.ALL);
 			}
 		}
@@ -84,7 +84,7 @@ public final class Logger extends java.util.logging.Logger {
 	}
 
 	@Override
-	public void log(LogRecord record) {
+	public void log(final LogRecord record) {
 		// Normally the localisation is handled by the formatter, however due to the
 		// fact that we want to add a prefix to the start of the message we have to
 		// do it here. If we leave it to the formatter to do the localising the
@@ -98,25 +98,25 @@ public final class Logger extends java.util.logging.Logger {
 		}
 		message = String.format(message, record.getParameters());
 		if (this.isLoggable(Level.FINE)) {
-			record.setMessage(debugPrefix + message);
+			record.setMessage(this.debugPrefix + message);
 		} else {
-			record.setMessage(prefix + message);
+			record.setMessage(this.prefix + message);
 		}
 		super.log(record);
 	}
 
-//	private void summary() {
-//		System.out.append("Logger name: " + this.getName());
-//		if (this.getParent() != null) {
-//			System.out.append("Logger parent: " + this.getParent().getName());
-//		}
-//		Level level;
-//		if (this.getLevel() == null) {
-//			level = this.getParent().getLevel();
-//		} else {
-//			level = this.getLevel();
-//		}
-//		System.out.append("Logger level: " + level);
-//	}
-	
+	// private void summary() {
+	// System.out.append("Logger name: " + this.getName());
+	// if (this.getParent() != null) {
+	// System.out.append("Logger parent: " + this.getParent().getName());
+	// }
+	// Level level;
+	// if (this.getLevel() == null) {
+	// level = this.getParent().getLevel();
+	// } else {
+	// level = this.getLevel();
+	// }
+	// System.out.append("Logger level: " + level);
+	// }
+
 }

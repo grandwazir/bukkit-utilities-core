@@ -21,45 +21,43 @@ package name.richardson.james.bukkit.utilities.formatters;
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
 
-import name.richardson.james.bukkit.utilities.localisation.FormattedResourceBundle;
-
 public final class ChoiceFormatter {
 
-  private Object[] arguments;
+	private Object[] arguments;
 
-  private String[] formats;
+	private String[] formats;
 
-  private double[] limits;
+	private double[] limits;
 
-  private String message = "{0}";
+	private String message = "{0}";
 
 	private final FormattedResourceBundle localisation;
 
-  public ChoiceFormatter(final String resourceBundleName) {
-    this.localisation = new FormattedResourceBundle(resourceBundleName);
-  }
+	public ChoiceFormatter(final String resourceBundleName) {
+		this.localisation = new FormattedResourceBundle(resourceBundleName);
+	}
 
-  public String getMessage() {
-    final MessageFormat formatter = new MessageFormat(this.message);
-    final ChoiceFormat cFormatter = new ChoiceFormat(this.limits, this.formats);
-    formatter.setFormatByArgumentIndex(0, cFormatter);
-    return formatter.format(this.arguments);
-  }
+	public String getMessage() {
+		final MessageFormat formatter = new MessageFormat(this.message);
+		final ChoiceFormat cFormatter = new ChoiceFormat(this.limits, this.formats);
+		formatter.setFormatByArgumentIndex(0, cFormatter);
+		return formatter.format(this.arguments);
+	}
 
-  public void setArguments(final Object... arguments) {
-    this.arguments = arguments;
-  }
+	public void setArguments(final Object... arguments) {
+		this.arguments = arguments;
+	}
 
-  public void setFormats(final String... formats) {
-    this.formats = formats;
-  }
+	public void setFormats(final String... formats) {
+		this.formats = formats;
+	}
 
-  public void setLimits(final double... limits) {
-    this.limits = limits;
-  }
+	public void setLimits(final double... limits) {
+		this.limits = limits;
+	}
 
-  public void setMessage(final String key) {
-    this.message = this.localisation.getMessage(key, "");
-  }
+	public void setMessage(final String key) {
+		this.message = this.localisation.getMessage(key, "");
+	}
 
 }

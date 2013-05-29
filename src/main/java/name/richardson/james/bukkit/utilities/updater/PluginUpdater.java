@@ -52,6 +52,7 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 	public enum Branch {
 		DEVELOPMENT, STABLE
 	}
+
 	public enum State {
 		NOTIFY, OFF
 	}
@@ -77,12 +78,25 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		this.pluginName = plugin.getName();
 	}
 
+	public String getMessage(final String key) {
+		String message = PluginUpdater.localisation.getString(key);
+		message = ColourFormatter.replace(message);
+		return message;
+	}
+
+	public String getMessage(final String key, final Object... elements) {
+		final MessageFormat formatter = new MessageFormat(PluginUpdater.localisation.getString(key));
+		formatter.setLocale(Locale.getDefault());
+		String message = formatter.format(elements);
+		message = ColourFormatter.replace(message);
+		return message;
+	}
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
-		if (player.hasPermission(permission)) {
-			final String message = this.getMessage("updater.new-version-available", this.pluginName,
-					this.manifest.getCurrentVersion());
+		if (player.hasPermission(this.permission)) {
+			final String message = this.getMessage("updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
 			player.sendMessage(message);
 		}
 	}
@@ -91,16 +105,15 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		try {
 			this.parseMavenMetaData();
 			if (this.isNewVersionAvailable()) {
-				this.newVersionNotification = this.getMessage("updater.new-version-available", this.pluginName,
-						this.manifest.getCurrentVersion());
-				logger.log(Level.INFO, this.newVersionNotification);
+				this.newVersionNotification = this.getMessage("updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
+				this.logger.log(Level.INFO, this.newVersionNotification);
 			}
 		} catch (final IOException e) {
-			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
+			this.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
 		} catch (final SAXException e) {
-			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
+			this.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
 		} catch (final ParserConfigurationException e) {
-			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
+			this.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
 		}
 	}
 
@@ -117,48 +130,38 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		ReadableByteChannel rbc = null;
 		FileOutputStream fos = null;
 		try {
-			logger.log(Level.FINER, "Getting manifest: {0}", url.toString());
+			this.logger.log(Level.FINER, "Getting manifest: {0}", url.toString());
 			rbc = Channels.newChannel(url.openStream());
 			fos = new FileOutputStream(storage);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} finally {
-			if (rbc != null) rbc.close();
-			if (fos != null) fos.close();
+			if (rbc != null) {
+				rbc.close();
+			}
+			if (fos != null) {
+				fos.close();
+			}
 		}
 	}
 
 	private boolean isNewVersionAvailable() {
 		final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
 		final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
-		Object params[] = {target.toString(), current.toString()};
+		final Object params[] = { target.toString(), current.toString() };
 		if (current.compareTo(target) == -1) {
-			logger.log(Level.FINE, "New version available: {0} > {1}", params);
+			this.logger.log(Level.FINE, "New version available: {0} > {1}", params);
 			return true;
 		} else {
-			logger.log(Level.FINE, "New version unavailable: {0} <= {1}", params);
+			this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", params);
 			return false;
 		}
 	}
 
 	private void parseMavenMetaData() throws IOException, SAXException, ParserConfigurationException {
 		final File temp = File.createTempFile(this.artifactId, null);
-		logger.log(Level.FINER, "Creating temporary manifest: {0}", temp.getAbsolutePath());
+		this.logger.log(Level.FINER, "Creating temporary manifest: {0}", temp.getAbsolutePath());
 		this.getMavenMetaData(temp);
 		this.manifest = new MavenManifest(temp);
 	}
 
-	public String getMessage(String key) {
-    String message = localisation.getString(key);
-    message = ColourFormatter.replace(message);
-    return message;
-	}
-
-	public String getMessage(String key, Object... elements) {
-    MessageFormat formatter = new MessageFormat(localisation.getString(key));
-    formatter.setLocale(Locale.getDefault());
-    String message = formatter.format(elements);
-    message = ColourFormatter.replace(message);
-    return message;
-	}
-	
 }

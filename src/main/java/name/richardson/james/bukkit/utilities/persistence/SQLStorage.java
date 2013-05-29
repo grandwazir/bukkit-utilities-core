@@ -39,7 +39,6 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
-import name.richardson.james.bukkit.utilities.logging.ClassLogger;
 
 public class SQLStorage implements Localised {
 
@@ -50,12 +49,11 @@ public class SQLStorage implements Localised {
 	private DdlGenerator generator;
 	private boolean rebuild;
 	private final ServerConfig serverConfig;
-	
+
 	private static final ClassLogger logger = new ClassLogger(SQLStorage.class.getName());
 	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
-	
-	public SQLStorage(final SimpleDatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName,
-			final ClassLoader classLoader) {
+
+	public SQLStorage(final SimpleDatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName, final ClassLoader classLoader) {
 		this.classes = classes;
 		this.serverConfig = configuration.getServerConfig();
 		this.serverConfig.setName(pluginName);
@@ -69,6 +67,23 @@ public class SQLStorage implements Localised {
 
 	public EbeanServer getEbeanServer() {
 		return this.ebeanserver;
+	}
+
+	public String getMessage(final String key) {
+		final String message = SQLStorage.localisation.getString(key);
+		return message;
+	}
+
+	public String getMessage(String key, Object... elements) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getMessage(final String key, final String... elements) {
+		final MessageFormat formatter = new MessageFormat(SQLStorage.localisation.getString(key));
+		formatter.setLocale(Locale.getDefault());
+		final String message = formatter.format(elements);
+		return message;
 	}
 
 	public void initalise() {
@@ -157,46 +172,48 @@ public class SQLStorage implements Localised {
 					// encountered on
 					currentTable = currentLine.split(" ", 4)[2];
 					foundTables.put(currentLine.split(" ", 3)[2], scriptLines.size() - 1);
-				} else if (currentLine.startsWith(";") && (currentTable != null) && !currentTable.equals("")) {
-					// Found the end of a table definition, so update the entry
-					final int index = scriptLines.size() - 1;
-					foundTables.put(currentTable, index);
-					// Remove the last ")" from the previous line
-					String previousLine = scriptLines.get(index - 1);
-					previousLine = previousLine.substring(0, previousLine.length() - 1);
-					scriptLines.set(index - 1, previousLine);
-					// Change ";" to ");" on the current line
-					scriptLines.set(index, ");");
-					// Reset the table-tracker
-					currentTable = null;
-					// Found a potentially unsupported action
-				} else if (currentLine.startsWith("alter table")) {
-					final String[] alterTableLine = currentLine.split(" ", 4);
-					if (alterTableLine[3].startsWith("add constraint")) {
-						// Found an unsupported action: ALTER TABLE using ADD CONSTRAINT
-						final String[] addConstraintLine = alterTableLine[3].split(" ", 4);
-						// Check if this line can be fixed somehow
-						if (addConstraintLine[3].startsWith("foreign key")) {
-							// Calculate the index of last line of the current table
-							final int tableLastLine = foundTables.get(alterTableLine[2]) + tableOffset;
-							// Add a "," to the previous line
-							scriptLines.set(tableLastLine - 1, scriptLines.get(tableLastLine - 1) + ",");
-							// Add the constraint as a new line - Remove the ";" on the end
-							final String constraintLine = String.format("%s %s %s", addConstraintLine[1], addConstraintLine[2],
-									addConstraintLine[3]);
-							scriptLines.add(tableLastLine, constraintLine.substring(0, constraintLine.length() - 1));
-							// Remove this line and raise the table offset because a line has
-							// been inserted.
-							scriptLines.remove(scriptLines.size() - 1);
-							tableOffset++;
-						} else {
-							// Exception: This line cannot be fixed but is known the be
-							// unsupported by SQLite.
-							throw new RuntimeException("Unsupported action encountered: ALTER TABLE using ADD CONSTRAINT with "
-									+ addConstraintLine[3]);
+				} else
+					if (currentLine.startsWith(";") && (currentTable != null) && !currentTable.equals("")) {
+						// Found the end of a table definition, so update the entry
+						final int index = scriptLines.size() - 1;
+						foundTables.put(currentTable, index);
+						// Remove the last ")" from the previous line
+						String previousLine = scriptLines.get(index - 1);
+						previousLine = previousLine.substring(0, previousLine.length() - 1);
+						scriptLines.set(index - 1, previousLine);
+						// Change ";" to ");" on the current line
+						scriptLines.set(index, ");");
+						// Reset the table-tracker
+						currentTable = null;
+						// Found a potentially unsupported action
+					} else
+						if (currentLine.startsWith("alter table")) {
+							final String[] alterTableLine = currentLine.split(" ", 4);
+							if (alterTableLine[3].startsWith("add constraint")) {
+								// Found an unsupported action: ALTER TABLE using ADD CONSTRAINT
+								final String[] addConstraintLine = alterTableLine[3].split(" ", 4);
+								// Check if this line can be fixed somehow
+								if (addConstraintLine[3].startsWith("foreign key")) {
+									// Calculate the index of last line of the current table
+									final int tableLastLine = foundTables.get(alterTableLine[2]) + tableOffset;
+									// Add a "," to the previous line
+									scriptLines.set(tableLastLine - 1, scriptLines.get(tableLastLine - 1) + ",");
+									// Add the constraint as a new line - Remove the ";" on the
+									// end
+									final String constraintLine = String.format("%s %s %s", addConstraintLine[1], addConstraintLine[2], addConstraintLine[3]);
+									scriptLines.add(tableLastLine, constraintLine.substring(0, constraintLine.length() - 1));
+									// Remove this line and raise the table offset because a line
+									// has
+									// been inserted.
+									scriptLines.remove(scriptLines.size() - 1);
+									tableOffset++;
+								} else {
+									// Exception: This line cannot be fixed but is known the be
+									// unsupported by SQLite.
+									throw new RuntimeException("Unsupported action encountered: ALTER TABLE using ADD CONSTRAINT with " + addConstraintLine[3]);
+								}
+							}
 						}
-					}
-				}
 			}
 		} catch (final Exception exception) {
 			throw new RuntimeException("Failed to valid the CreateDDL script!");
@@ -248,16 +265,4 @@ public class SQLStorage implements Localised {
 		return true;
 	}
 
-	public String getMessage(String key) {
-    String message = localisation.getString(key);
-    return message;
-	}
-
-	public String getMessage(String key, String... elements) {
-    MessageFormat formatter = new MessageFormat(localisation.getString(key));
-    formatter.setLocale(Locale.getDefault());
-    String message = formatter.format(elements);
-    return message;
-	}
-	
 }

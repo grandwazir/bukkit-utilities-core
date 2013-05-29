@@ -24,15 +24,15 @@ import org.bukkit.plugin.Plugin;
 
 public class MetricsListener {
 
-  private Metrics metrics;
+	private Metrics metrics;
 
-  public MetricsListener(final Plugin plugin) {
-    try {
-      this.metrics = new Metrics(plugin);
-      this.metrics.start();
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
-  }
+	public MetricsListener(final Plugin plugin) {
+		try {
+			this.metrics = new Metrics(plugin);
+			this.metrics.start();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

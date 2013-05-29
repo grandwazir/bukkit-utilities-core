@@ -21,10 +21,8 @@ package name.richardson.james.bukkit.utilities.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
@@ -37,9 +35,9 @@ public final class SimpleDatabaseConfiguration extends YAMLStorage implements Da
 	private final DataSourceConfig dataSourceConfig;
 	private final ServerConfig serverConfig;
 	private final String folder;
-	private String PluginName;
+	private final String PluginName;
 
-	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, String pluginName) throws IOException {
+	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, final String pluginName) throws IOException {
 		super(file, defaults);
 		this.PluginName = pluginName;
 		this.folder = file.getParentFile().getAbsolutePath();
@@ -71,10 +69,11 @@ public final class SimpleDatabaseConfiguration extends YAMLStorage implements Da
 			this.dataSourceConfig.setIsolationLevel(TransactionIsolation.getLevel(isolation));
 		}
 	}
+
 	public DataSourceConfig getDataSourceConfig() {
 		return this.dataSourceConfig;
 	}
-	
+
 	public ServerConfig getServerConfig() {
 		return this.serverConfig;
 	}

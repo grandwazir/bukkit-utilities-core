@@ -24,9 +24,9 @@ import org.bukkit.plugin.Plugin;
 
 public class SelfRegisteringListener implements Listener {
 
-  public SelfRegisteringListener(String pluginName) {
-  	Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-    Bukkit.getPluginManager().registerEvents(this, plugin);
-  }
+	public SelfRegisteringListener(final String pluginName) {
+		final Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
+		Bukkit.getPluginManager().registerEvents(this, plugin);
+	}
 
 }

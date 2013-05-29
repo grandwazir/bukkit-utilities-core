@@ -25,29 +25,29 @@ import java.net.URL;
  */
 public interface Updatable {
 
-  /**
-   * Gets the artifact id of the Maven project.
-   * 
-   * @return the artifact id
-   */
-  public String getArtifactID();
+	/**
+	 * Gets the artifact id of the Maven project.
+	 * 
+	 * @return the artifact id
+	 */
+	public String getArtifactID();
 
-  /**
-   * Gets the group id of the Maven artifact.
-   * 
-   * @return the group id
-   */
-  public String getGroupID();
+	/**
+	 * Gets the group id of the Maven artifact.
+	 * 
+	 * @return the group id
+	 */
+	public String getGroupID();
 
-  /**
-   * Gets the url of the repository that contains this plugin.
-   * 
-   * @return the repository url
-   */
-  public URL getRepositoryURL();
-  
-  public String getName();
-  
-  public String getVersion();
-  
+	public String getName();
+
+	/**
+	 * Gets the url of the repository that contains this plugin.
+	 * 
+	 * @return the repository url
+	 */
+	public URL getRepositoryURL();
+
+	public String getVersion();
+
 }

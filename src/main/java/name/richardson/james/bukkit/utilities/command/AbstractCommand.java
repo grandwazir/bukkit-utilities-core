@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2013 James Richardson
+ * 
+ * AbstractCommand.java is part of BukkitUtilities.
+ * 
+ * BukkitUtilities is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * BukkitUtilities is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
 import java.text.MessageFormat;
@@ -17,37 +35,90 @@ import name.richardson.james.bukkit.utilities.matchers.Matcher;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 
 public abstract class AbstractCommand implements Command, Localised {
-	
+
 	private final String name;
 	private final String description;
 	private final String usage;
-	private ResourceBundle localisation; 
+	private final ResourceBundle localisation;
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
 	private BukkitPermissionManager permissionManager;
-	
-	public AbstractCommand(ResourceBundles resourceBundleName) {
-		localisation = ResourceBundle.getBundle(resourceBundleName.getBundleName());
+
+	public AbstractCommand(final ResourceBundles resourceBundleName) {
+		this.localisation = ResourceBundle.getBundle(resourceBundleName.getBundleName());
 		final String simpleName = this.getClass().getSimpleName().toLowerCase();
-		this.name = localisation.getString(simpleName + ".name");
-		this.description = localisation.getString(simpleName + ".description");
-		this.usage = localisation.getString(simpleName + ".usage");
-		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) this.setPermissions();
-		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) this.setMatchers();
+		this.name = this.localisation.getString(simpleName + ".name");
+		this.description = this.localisation.getString(simpleName + ".description");
+		this.usage = this.localisation.getString(simpleName + ".usage");
+		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) {
+			this.setPermissions();
+		}
+		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) {
+			this.setMatchers();
+		}
 	}
-	
+
+	public String getDescription() {
+		return this.description;
+	}
+
+	public String getMessage(final String key) {
+		String message = this.localisation.getString(key);
+		message = ColourFormatter.replace(message);
+		return message;
+	}
+
+	public String getMessage(final String key, final Object... elements) {
+		final MessageFormat formatter = new MessageFormat(this.localisation.getString(key));
+		formatter.setLocale(Locale.getDefault());
+		String message = formatter.format(elements);
+		message = ColourFormatter.replace(message);
+		return message;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getUsage() {
+		return this.usage;
+	}
+
+	public boolean isAuthorized(final Permissible permissible) {
+		if (this.permissionManager == null) {
+			return true;
+		}
+		for (final Permission permission : this.permissionManager.listPermissions()) {
+			if (permissible.hasPermission(permission)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public List<String> onTabComplete(final List<String> arguments, final CommandSender sender) {
+		final List<String> results = new ArrayList<String>();
+		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) {
+			if (this.matchers.size() >= (arguments.size() - 1)) {
+				final Matcher matcher = this.matchers.get(arguments.size() - 1);
+				results.addAll(matcher.getMatches(arguments.get(arguments.size() - 1)));
+			}
+		}
+		return results;
+	}
+
+	protected List<Matcher> getMatchers() {
+		return this.matchers;
+	}
+
 	protected void setMatchers() {
 		final CommandMatchers annotation = this.getClass().getAnnotation(CommandMatchers.class);
-		for (Class<? extends Matcher> matcherClass : annotation.matchers()) {
+		for (final Class<? extends Matcher> matcherClass : annotation.matchers()) {
 			try {
-				matchers.add(matcherClass.getConstructor().newInstance());
-			} catch (Exception e) {
+				this.matchers.add(matcherClass.getConstructor().newInstance());
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	protected List<Matcher> getMatchers() {
-		return this.matchers;
 	}
 
 	private void setPermissions() {
@@ -56,50 +127,4 @@ public abstract class AbstractCommand implements Command, Localised {
 		this.permissionManager.createPermissions(annotation.permissions());
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public String getDescription() {
-		return this.description;
-	}
-
-	public String getUsage() {
-		return this.usage;
-	}
-
-	public boolean isAuthorized(Permissible permissible) {
-		if (this.permissionManager == null) return true;
-		for (Permission permission : this.permissionManager.listPermissions()) {
-			if (permissible.hasPermission(permission)) return true;
-		}
-		return false;
-	}
-
-	public List<String> onTabComplete(List<String> arguments, CommandSender sender) {
-		final List<String> results = new ArrayList<String>();
-		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) {
-			if (matchers.size() >= arguments.size() - 1) {
-				final Matcher matcher = matchers.get(arguments.size() - 1);
-				results.addAll(matcher.getMatches(arguments.get(arguments.size() - 1)));
-			}
-		}
-		return results;
-	}
-
-	public String getMessage(String key) {
-    String message = localisation.getString(key);
-    message = ColourFormatter.replace(message);
-    return message;
-	}
-
-	public String getMessage(String key, Object... elements) {
-    MessageFormat formatter = new MessageFormat(localisation.getString(key));
-    formatter.setLocale(Locale.getDefault());
-    String message = formatter.format(elements);
-    message = ColourFormatter.replace(message);
-    return message;
-	}
-
-	
 }

@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2013 James Richardson
+ * 
+ * CommandManager.java is part of BukkitUtilities.
+ * 
+ * BukkitUtilities is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * BukkitUtilities is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
 import java.text.MessageFormat;
@@ -21,42 +39,57 @@ import name.richardson.james.bukkit.utilities.matchers.Matcher;
 
 public class CommandManager implements TabExecutor, Localised {
 
-	final Map<String, Command> commands = new LinkedHashMap<String,Command>();
+	final Map<String, Command> commands = new LinkedHashMap<String, Command>();
 	final Command helpCommand;
 	final Matcher matcher;
 	private final static ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
-	
-	public CommandManager(String commandName) {
+
+	public CommandManager(final String commandName) {
 		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
 		this.helpCommand = new HelpCommand(ResourceBundles.MESSAGES, this.commands, commandName);
-		this.matcher = new CommandMatcher(commands);
+		this.matcher = new CommandMatcher(this.commands);
 	}
-	
-	public void addCommand(Command command) {
+
+	public void addCommand(final Command command) {
 		this.commands.put(command.getName(), command);
 	}
-	
-	public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+
+	public String getMessage(final String key) {
+		String message = CommandManager.localisation.getString(key);
+		message = ColourFormatter.replace(message);
+		return message;
+	}
+
+	public String getMessage(final String key, final Object... elements) {
+		final MessageFormat formatter = new MessageFormat(CommandManager.localisation.getString(key));
+		formatter.setLocale(Locale.getDefault());
+		String message = formatter.format(elements);
+		message = ColourFormatter.replace(message);
+		return message;
+	}
+
+	public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
 		final List<String> arguments = new LinkedList<String>(Arrays.asList(args));
 		if (arguments.isEmpty()) {
 			this.helpCommand.execute(arguments, sender);
-		} else if (commands.containsKey(arguments.get(0))) {
-			final Command command = commands.get(arguments.get(0));
-			arguments.remove(0);
-			if (command.isAuthorized(sender)) {
-				command.execute(arguments, sender);
+		} else
+			if (this.commands.containsKey(arguments.get(0))) {
+				final Command command = this.commands.get(arguments.get(0));
+				arguments.remove(0);
+				if (command.isAuthorized(sender)) {
+					command.execute(arguments, sender);
+				} else {
+					sender.sendMessage(this.getMessage("permission-denied"));
+				}
 			} else {
-				sender.sendMessage(this.getMessage("permission-denied"));
+				this.helpCommand.execute(arguments, sender);
 			}
-		} else {
-			this.helpCommand.execute(arguments, sender);
-		}
 		return true;
 	}
 
-	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
 		final List<String> arguments = new LinkedList<String>(Arrays.asList(args));
-		final Command command = commands.get(arguments.get(0));
+		final Command command = this.commands.get(arguments.get(0));
 		if (command != null) {
 			arguments.remove(0);
 			return command.onTabComplete(arguments, sender);
@@ -65,18 +98,4 @@ public class CommandManager implements TabExecutor, Localised {
 		}
 	}
 
-	public String getMessage(String key) {
-    String message = localisation.getString(key);
-    message = ColourFormatter.replace(message);
-    return message;
-	}
-
-	public String getMessage(String key, Object... elements) {
-    MessageFormat formatter = new MessageFormat(localisation.getString(key));
-    formatter.setLocale(Locale.getDefault());
-    String message = formatter.format(elements);
-    message = ColourFormatter.replace(message);
-    return message;
-	}
-  
 }

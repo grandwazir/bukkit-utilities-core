@@ -41,7 +41,7 @@ import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
 public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
-	
+
 	/* The configuration file for this plugin */
 	private PluginConfiguration configuration;
 	/* The custom logger that belongs to this plugin */
@@ -56,9 +56,9 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	public URL getRepositoryURL() {
 		try {
 			switch (this.configuration.getAutomaticUpdaterBranch()) {
-				case DEVELOPMENT :
+				case DEVELOPMENT:
 					return new URL("http://repository.james.richardson.name/snapshots");
-				default :
+				default:
 					return new URL("http://repository.james.richardson.name/releases");
 			}
 		} catch (final MalformedURLException e) {
@@ -66,21 +66,25 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		}
 	}
 
-	protected void loadDatabase() throws SecurityException, NoSuchFieldException, IOException, IllegalArgumentException, IllegalAccessException {
-		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "database.yml");
-		final InputStream defaults = this.getResource("database.yml");
-		SimpleDatabaseConfiguration configuration = new SimpleDatabaseConfiguration(file, defaults, this.getName());
-		SQLStorage loader = new SQLStorage(configuration, this.getDatabaseClasses(), this.getName(), this.getClassLoader());
-		Field f = this.getClass().getDeclaredField("database");
-		f.setAccessible(true);
-		f.set(null, loader.getEbeanServer());
+	protected Logger getCustomLogger() {
+		return this.logger;
 	}
-	
+
 	protected void loadConfiguration() throws IOException {
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml");
 		final InputStream defaults = this.getResource("config.yml");
 		this.configuration = new SimplePluginConfiguration(file, defaults);
 		this.logger.setLevel(this.configuration.getLogLevel());
+	}
+
+	protected void loadDatabase() throws SecurityException, NoSuchFieldException, IOException, IllegalArgumentException, IllegalAccessException {
+		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "database.yml");
+		final InputStream defaults = this.getResource("database.yml");
+		final SimpleDatabaseConfiguration configuration = new SimpleDatabaseConfiguration(file, defaults, this.getName());
+		final SQLStorage loader = new SQLStorage(configuration, this.getDatabaseClasses(), this.getName(), this.getClassLoader());
+		final Field f = this.getClass().getDeclaredField("database");
+		f.setAccessible(true);
+		f.set(null, loader.getEbeanServer());
 	}
 
 	protected void setPermissions() {
@@ -94,10 +98,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		}
 	}
 
-	protected Logger getCustomLogger() {
-		return this.logger;
-	}
-	
 	protected void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
 			final PluginUpdater updater = new PluginUpdater(this);
