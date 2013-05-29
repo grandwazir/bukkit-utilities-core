@@ -94,6 +94,10 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		}
 	}
 
+	protected Logger getCustomLogger() {
+		return this.logger;
+	}
+	
 	protected void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
 			final PluginUpdater updater = new PluginUpdater(this);

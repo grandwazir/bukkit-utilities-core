@@ -17,7 +17,7 @@ public class BukkitPermissionManager implements PermissionManager {
 
 	private static final PluginManager pluginManager = Bukkit.getPluginManager();
 	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.PERMISSIONS.getBundleName());
-	private final Logger logger = new Logger(this);
+	private static final Logger logger = new Logger(BukkitPermissionManager.class);
 	
 	private final List<Permission> permissions = new ArrayList<Permission>();
 
@@ -65,8 +65,9 @@ public class BukkitPermissionManager implements PermissionManager {
 	
 	public Permission addPermission(Permission permission) {
 		final Object[] params = {permission.getName(), permission.getDefault()};
-		logger.log(Level.FINE, "Adding permission: {0} (default: {1})", params);
+		BukkitPermissionManager.logger.log(Level.FINE, "Adding permission: {0} (default: {1})", params);
 		BukkitPermissionManager.pluginManager.addPermission(permission);
+		permissions.add(permission);
 		return permission;
 	}
 
@@ -87,7 +88,7 @@ public class BukkitPermissionManager implements PermissionManager {
 	public List<Permission> createPermissions(String[] nodes) {
 		final List<Permission> permissions = new ArrayList<Permission>(); 
 		for (String node : nodes) {
-			permissions.add(this.createPermission(node));
+			this.createPermission(node);
 		}
 		return permissions;
 	}

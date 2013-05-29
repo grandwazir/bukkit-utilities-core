@@ -67,6 +67,10 @@ public class YAMLStorage {
 		this.logger.log(Level.CONFIG, "Saving default configuration.");
 		this.configuration.setDefaults(this.defaultConfiguration);
 		this.configuration.options().copyDefaults(true);
+		if (!this.file.exists()) { 
+			this.save();
+			this.load();
+		}
 	}
 
 	private void load() {

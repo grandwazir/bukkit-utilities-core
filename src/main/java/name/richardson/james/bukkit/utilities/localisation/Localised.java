@@ -4,6 +4,6 @@ public interface Localised {
 	
 	public String getMessage(String key);
 	
-	public String getMessage(String key, String...elements);
+	public String getMessage(String key, Object...elements);
 	
 }

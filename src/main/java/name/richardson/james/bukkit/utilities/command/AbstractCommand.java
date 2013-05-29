@@ -26,18 +26,18 @@ public abstract class AbstractCommand implements Command, Localised {
 	private BukkitPermissionManager permissionManager;
 	
 	public AbstractCommand(ResourceBundles resourceBundleName) {
-		final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundleName.getBundleName());
+		localisation = ResourceBundle.getBundle(resourceBundleName.getBundleName());
 		final String simpleName = this.getClass().getSimpleName().toLowerCase();
-		this.name = bundle.getString(simpleName + ".name");
-		this.description = bundle.getString(simpleName + ".description");
-		this.usage = bundle.getString(simpleName + ".usage");
+		this.name = localisation.getString(simpleName + ".name");
+		this.description = localisation.getString(simpleName + ".description");
+		this.usage = localisation.getString(simpleName + ".usage");
 		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) this.setPermissions();
 		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) this.setMatchers();
 	}
 	
 	protected void setMatchers() {
 		final CommandMatchers annotation = this.getClass().getAnnotation(CommandMatchers.class);
-		for (Class<Matcher> matcherClass : annotation.matchers()) {
+		for (Class<? extends Matcher> matcherClass : annotation.matchers()) {
 			try {
 				matchers.add(matcherClass.getConstructor().newInstance());
 			} catch (Exception e) {
@@ -53,8 +53,7 @@ public abstract class AbstractCommand implements Command, Localised {
 	private void setPermissions() {
 		final CommandPermissions annotation = this.getClass().getAnnotation(CommandPermissions.class);
 		this.permissionManager = new BukkitPermissionManager();
-		this.permissionManager.createPermissions(annotation.required());
-		this.permissionManager.createPermissions(annotation.optional());
+		this.permissionManager.createPermissions(annotation.permissions());
 	}
 
 	public String getName() {
@@ -79,9 +78,11 @@ public abstract class AbstractCommand implements Command, Localised {
 
 	public List<String> onTabComplete(List<String> arguments, CommandSender sender) {
 		final List<String> results = new ArrayList<String>();
-		final Matcher matcher = matchers.get(arguments.size());
-		if (matcher != null) {
-			results.addAll(matcher.getMatches(arguments.get(arguments.size())));
+		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) {
+			if (matchers.size() >= arguments.size() - 1) {
+				final Matcher matcher = matchers.get(arguments.size() - 1);
+				results.addAll(matcher.getMatches(arguments.get(arguments.size() - 1)));
+			}
 		}
 		return results;
 	}
@@ -92,7 +93,7 @@ public abstract class AbstractCommand implements Command, Localised {
     return message;
 	}
 
-	public String getMessage(String key, String... elements) {
+	public String getMessage(String key, Object... elements) {
     MessageFormat formatter = new MessageFormat(localisation.getString(key));
     formatter.setLocale(Locale.getDefault());
     String message = formatter.format(elements);

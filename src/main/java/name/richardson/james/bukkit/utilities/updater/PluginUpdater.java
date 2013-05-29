@@ -96,11 +96,11 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 				logger.log(Level.INFO, this.newVersionNotification);
 			}
 		} catch (final IOException e) {
-			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.artifactId);
+			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
 		} catch (final SAXException e) {
-			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.artifactId);
+			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
 		} catch (final ParserConfigurationException e) {
-			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.artifactId);
+			logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
 		}
 	}
 
@@ -153,7 +153,7 @@ public class PluginUpdater implements Listener, Runnable, Localised {
     return message;
 	}
 
-	public String getMessage(String key, String... elements) {
+	public String getMessage(String key, Object... elements) {
     MessageFormat formatter = new MessageFormat(localisation.getString(key));
     formatter.setLocale(Locale.getDefault());
     String message = formatter.format(elements);
