@@ -20,6 +20,9 @@ package name.richardson.james.bukkit.utilities.formatters;
 
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
 public final class ChoiceFormatter {
 
@@ -31,17 +34,17 @@ public final class ChoiceFormatter {
 
 	private String message = "{0}";
 
-	private final FormattedResourceBundle localisation;
+	private final ResourceBundle localisation;
 
-	public ChoiceFormatter(final String resourceBundleName) {
-		this.localisation = new FormattedResourceBundle(resourceBundleName);
+	public ChoiceFormatter(final ResourceBundles bundleName) {
+		this.localisation = ResourceBundle.getBundle(bundleName.getBundleName());
 	}
 
 	public String getMessage() {
 		final MessageFormat formatter = new MessageFormat(this.message);
 		final ChoiceFormat cFormatter = new ChoiceFormat(this.limits, this.formats);
 		formatter.setFormatByArgumentIndex(0, cFormatter);
-		return formatter.format(this.arguments);
+		return ColourFormatter.replace(formatter.format(this.arguments));
 	}
 
 	public void setArguments(final Object... arguments) {
@@ -57,7 +60,7 @@ public final class ChoiceFormatter {
 	}
 
 	public void setMessage(final String key) {
-		this.message = this.localisation.getMessage(key, "");
+		this.message = this.localisation.getString(key);
 	}
 
 }
