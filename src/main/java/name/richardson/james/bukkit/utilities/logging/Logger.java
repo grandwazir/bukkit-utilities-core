@@ -29,50 +29,34 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
 public final class Logger extends java.util.logging.Logger {
 
-	public static String prefix;
-	private final String debugPrefix = "<" + this.getName() + "> ";
 	private static final ResourceBundles DEFAULT_BUNDLE = ResourceBundles.MESSAGES;
+
+	private static String prefix;
 
 	public static void setPrefix(final String prefix) {
 		Logger.prefix = prefix;
 	}
 
+	private final String debugPrefix = "<" + this.getName() + "> ";
+
 	public Logger(final Class<?> owner) {
-		super(owner.getPackage().getName(), Logger.DEFAULT_BUNDLE.getBundleName());
-		LogManager.getLogManager().addLogger(this);
-		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
-			this.setLevel(Level.INFO);
-			for (final Handler handler : Bukkit.getLogger().getHandlers()) {
-				handler.setLevel(Level.ALL);
-			}
-		}
+		this(owner.getPackage().getName(), Logger.DEFAULT_BUNDLE);
 	}
 
 	public Logger(final Class<?> owner, final ResourceBundles bundle) {
-		super(owner.getPackage().getName(), bundle.getBundleName());
-		LogManager.getLogManager().addLogger(this);
-		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
-			this.setLevel(Level.INFO);
-			this.setUseParentHandlers(false);
-			for (final Handler handler : Bukkit.getLogger().getHandlers()) {
-				handler.setLevel(Level.ALL);
-			}
-		}
+		this(owner.getPackage().getName(), bundle);
 	}
 
 	public Logger(final Object owner) {
-		super(owner.getClass().getPackage().getName(), Logger.DEFAULT_BUNDLE.getBundleName());
-		LogManager.getLogManager().addLogger(this);
-		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
-			this.setLevel(Level.INFO);
-			for (final Handler handler : Bukkit.getLogger().getHandlers()) {
-				handler.setLevel(Level.ALL);
-			}
-		}
+		this(owner.getClass().getPackage().getName(), Logger.DEFAULT_BUNDLE);
 	}
 
 	public Logger(final Object owner, final ResourceBundles bundle) {
-		super(owner.getClass().getPackage().getName(), bundle.getBundleName());
+		this(owner.getClass().getPackage().getName(), bundle);
+	}
+
+	private Logger(final String name, final ResourceBundles bundle) {
+		super(name, bundle.getBundleName());
 		LogManager.getLogManager().addLogger(this);
 		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
 			this.setLevel(Level.INFO);
