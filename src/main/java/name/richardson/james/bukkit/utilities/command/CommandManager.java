@@ -79,7 +79,7 @@ public class CommandManager implements TabExecutor, Localised {
 				if (command.isAuthorized(sender)) {
 					command.execute(arguments, sender);
 				} else {
-					sender.sendMessage(this.getMessage("permission-denied"));
+					sender.sendMessage(this.getMessage("misc.warning.permission-denied"));
 				}
 			} else {
 				this.helpCommand.execute(arguments, sender);

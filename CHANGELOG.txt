@@ -1,5 +1,8 @@
-Changelog for BukkitUtilities (v5.0.0-SNAPSHOT)
+Changelog for BukkitUtilities (v5.0.1-SNAPSHOT)
 
+
+v5.0.0
+2013-05-29 23:59:32 +0100    change localisation path to "localisation" (James Richardson)
 2013-05-29 23:23:36 +0100    set Logger prefix statically to avoid having to set it ourselves (James Richardson)
 2013-05-29 22:52:07 +0100    enable support for people typing commands in CAPS (James Richardson)
 2013-05-29 22:40:27 +0100    fixes developed while working on BanHammer and Alias (James Richardson)
