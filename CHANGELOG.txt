@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v5.0.1-SNAPSHOT)
 
+2013-05-30 03:30:27 +0100    change to new style key (James Richardson)
 
 v5.0.0
 2013-05-29 23:59:32 +0100    change localisation path to "localisation" (James Richardson)

@@ -19,6 +19,7 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -91,8 +92,12 @@ public class CommandManager implements TabExecutor, Localised {
 		final List<String> arguments = new LinkedList<String>(Arrays.asList(args));
 		final Command command = this.commands.get(arguments.get(0));
 		if (command != null) {
-			arguments.remove(0);
-			return command.onTabComplete(arguments, sender);
+			if (command.isAuthorized(sender)) {
+				arguments.remove(0);
+				return command.onTabComplete(arguments, sender);
+			} else {
+				return new ArrayList<String>();
+			}
 		} else {
 			return this.matcher.getMatches(arguments.get(0));
 		}
