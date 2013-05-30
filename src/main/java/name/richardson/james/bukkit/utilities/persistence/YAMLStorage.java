@@ -64,10 +64,10 @@ public class YAMLStorage {
 	}
 
 	protected void setDefaults() throws IOException {
-		this.logger.log(Level.CONFIG, "Saving default configuration.");
 		this.configuration.setDefaults(this.defaultConfiguration);
 		this.configuration.options().copyDefaults(true);
 		if (!this.file.exists()) {
+			this.logger.log(Level.CONFIG, "Saving default configuration.");
 			this.save();
 			this.load();
 		}
