@@ -49,7 +49,7 @@ public class BukkitPermissionManager implements PermissionManager {
 	}
 
 	public Permission addPermission(final Permission permission) {
-		BukkitPermissionManager.logger.log(Level.FINE, "Adding permission: {0}", permission.getName());
+		BukkitPermissionManager.logger.log(Level.CONFIG, "Adding permission: {0}", permission.getName());
 		BukkitPermissionManager.pluginManager.addPermission(permission);
 		this.permissions.add(permission);
 		return permission;

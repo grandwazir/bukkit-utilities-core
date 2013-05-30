@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Random;
+import java.util.logging.Level;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -82,6 +84,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		final InputStream defaults = this.getResource("config.yml");
 		this.configuration = new SimplePluginConfiguration(file, defaults);
 		this.logger.setLevel(this.configuration.getLogLevel());
+		this.logger.log(Level.CONFIG, "Localisation locale: {0}", Locale.getDefault());
 	}
 
 	protected void loadDatabase() throws IOException {
