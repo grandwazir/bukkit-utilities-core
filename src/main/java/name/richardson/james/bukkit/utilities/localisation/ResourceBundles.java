@@ -20,7 +20,7 @@ package name.richardson.james.bukkit.utilities.localisation;
 
 public enum ResourceBundles {
 
-	MESSAGES("localisation/messages"), PERMISSIONS("localisation/permissions"), UTILITIES("localisation/utilities");
+	MESSAGES("localisation/messages"), PERMISSIONS("localisation/permissions"), COMMANDS("localisation/commands");
 
 	private String bundleName;
 

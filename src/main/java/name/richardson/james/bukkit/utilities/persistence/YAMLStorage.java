@@ -22,17 +22,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 
 public class YAMLStorage {
 
 	private YamlConfiguration configuration;
 	private final YamlConfiguration defaultConfiguration;
 	private final File file;
-	private final Logger logger = Logger.getLogger(this.getClass());
+	private final Logger logger = PluginLogger.getLogger(this.getClass());
 
 	public YAMLStorage(final File file, final InputStream defaults) throws IOException {
 		this.file = file;

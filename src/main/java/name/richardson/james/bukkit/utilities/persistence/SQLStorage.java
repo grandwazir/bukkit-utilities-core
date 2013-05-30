@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
@@ -39,7 +40,7 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 
 public class SQLStorage implements Localised {
 
@@ -51,8 +52,8 @@ public class SQLStorage implements Localised {
 	private boolean rebuild;
 	private final ServerConfig serverConfig;
 
-	private static final Logger logger = Logger.getLogger(SQLStorage.class);
-	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
+	private static final Logger logger = PluginLogger.getLogger(SQLStorage.class);
+	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
 
 	public SQLStorage(final SimpleDatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName, final ClassLoader classLoader) {
 		this.classes = classes;

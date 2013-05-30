@@ -40,7 +40,7 @@ public class OfflinePlayerMatcher implements Matcher {
 		final Set<String> set = new TreeSet<String>();
 		final List<String> list = new ArrayList<String>();
 		for (final OfflinePlayer player : this.server.getOfflinePlayers()) {
-			if (player.getName().startsWith(argument)) {
+			if (player.getName().toLowerCase().startsWith(argument)) {
 				set.add(player.getName());
 			}
 		}

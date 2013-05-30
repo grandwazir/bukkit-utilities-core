@@ -28,6 +28,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -45,7 +46,7 @@ import org.bukkit.permissions.Permission;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 
 public class PluginUpdater implements Listener, Runnable, Localised {
 
@@ -59,8 +60,8 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 
 	private final String artifactId;
 	private final String groupId;
-	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
-	private final Logger logger = Logger.getLogger(PluginUpdater.class);
+	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
+	private final Logger logger = PluginLogger.getLogger(PluginUpdater.class);
 	/* A reference to the downloaded Maven manifest from the remote repository */
 	private MavenManifest manifest;
 	private final Permission permission;

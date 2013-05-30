@@ -43,11 +43,11 @@ public class CommandManager implements TabExecutor, Localised {
 	final Map<String, Command> commands = new LinkedHashMap<String, Command>();
 	final Command helpCommand;
 	final Matcher matcher;
-	private final static ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
+	private final static ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
 
 	public CommandManager(final String commandName) {
 		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
-		this.helpCommand = new HelpCommand(ResourceBundles.MESSAGES, this.commands, commandName);
+		this.helpCommand = new HelpCommand(this.commands, commandName);
 		this.matcher = new CommandMatcher(this.commands);
 	}
 

@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
@@ -30,13 +31,13 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
-import name.richardson.james.bukkit.utilities.logging.Logger;
+import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 
 public class BukkitPermissionManager implements PermissionManager {
 
 	private static final PluginManager pluginManager = Bukkit.getPluginManager();
 	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.PERMISSIONS.getBundleName());
-	private static final Logger logger = Logger.getLogger(BukkitPermissionManager.class);
+	private static final Logger logger = PluginLogger.getLogger(BukkitPermissionManager.class);
 
 	private final List<Permission> permissions = new ArrayList<Permission>();
 

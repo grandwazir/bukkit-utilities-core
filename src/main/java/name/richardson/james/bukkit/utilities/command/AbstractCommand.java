@@ -50,10 +50,11 @@ public abstract class AbstractCommand implements Command, Localised {
 
 	public AbstractCommand(final ResourceBundles resourceBundleName) {
 		this.localisation = ResourceBundle.getBundle(resourceBundleName.getBundleName());
+		final ResourceBundle commandLocalisation = ResourceBundle.getBundle(ResourceBundles.COMMANDS.toString());
 		final String simpleName = this.getClass().getSimpleName().toLowerCase();
-		this.name = this.localisation.getString(simpleName + ".name");
-		this.description = this.localisation.getString(simpleName + ".description");
-		this.usage = this.localisation.getString(simpleName + ".usage");
+		this.name = commandLocalisation.getString(simpleName + ".name");
+		this.description = commandLocalisation.getString(simpleName + ".description");
+		this.usage = commandLocalisation.getString(simpleName + ".usage");
 		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) {
 			this.setPermissions();
 		}
