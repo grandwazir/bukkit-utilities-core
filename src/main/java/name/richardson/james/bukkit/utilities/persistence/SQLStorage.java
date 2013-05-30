@@ -51,7 +51,7 @@ public class SQLStorage implements Localised {
 	private boolean rebuild;
 	private final ServerConfig serverConfig;
 
-	private static final Logger logger = new Logger(SQLStorage.class.getName());
+	private static final Logger logger = Logger.getLogger(SQLStorage.class);
 	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
 
 	public SQLStorage(final SimpleDatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName, final ClassLoader classLoader) {

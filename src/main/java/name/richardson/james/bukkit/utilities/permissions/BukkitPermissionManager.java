@@ -36,7 +36,7 @@ public class BukkitPermissionManager implements PermissionManager {
 
 	private static final PluginManager pluginManager = Bukkit.getPluginManager();
 	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.PERMISSIONS.getBundleName());
-	private static final Logger logger = new Logger(BukkitPermissionManager.class);
+	private static final Logger logger = Logger.getLogger(BukkitPermissionManager.class);
 
 	private final List<Permission> permissions = new ArrayList<Permission>();
 

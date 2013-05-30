@@ -33,26 +33,32 @@ public final class Logger extends java.util.logging.Logger {
 
 	private static String prefix;
 
+	public static Logger getLogger(final Class<?> owner) {
+		return Logger.getLogger(owner, DEFAULT_BUNDLE);
+	}
+
+	public static Logger getLogger(final Class<?> owner, final ResourceBundles bundle) {
+		final String name = owner.getPackage().getName();
+		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
+		if (logger == null) {
+			return new Logger(name, bundle);
+		} else {
+			return (Logger) logger;
+		}
+	}
+
 	public static void setPrefix(final String prefix) {
 		Logger.prefix = prefix;
 	}
 
 	private final String debugPrefix = "<" + this.getName() + "> ";
 
-	public Logger(final Class<?> owner) {
+	private Logger(final Class<?> owner) {
 		this(owner.getPackage().getName(), Logger.DEFAULT_BUNDLE);
 	}
 
-	public Logger(final Class<?> owner, final ResourceBundles bundle) {
+	private Logger(final Class<?> owner, final ResourceBundles bundle) {
 		this(owner.getPackage().getName(), bundle);
-	}
-
-	public Logger(final Object owner) {
-		this(owner.getClass().getPackage().getName(), Logger.DEFAULT_BUNDLE);
-	}
-
-	public Logger(final Object owner, final ResourceBundles bundle) {
-		this(owner.getClass().getPackage().getName(), bundle);
 	}
 
 	private Logger(final String name, final ResourceBundles bundle) {
@@ -60,12 +66,24 @@ public final class Logger extends java.util.logging.Logger {
 		LogManager.getLogManager().addLogger(this);
 		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
 			this.setLevel(Level.INFO);
-			this.setUseParentHandlers(false);
+			this.setUseParentHandlers(true);
 			for (final Handler handler : Bukkit.getLogger().getHandlers()) {
 				handler.setLevel(Level.ALL);
 			}
 		}
 	}
+
+	// private java.util.logging.Logger identifyParent() {
+	// List<String> packages = new
+	// LinkedList<String>(Arrays.asList(this.getName().split(".")));
+	// java.util.logging.Logger logger;
+	// while (logger == null || !packages.isEmpty()) {
+	// packages.remove(packages.size() - 1);
+	// final String name = StringFormatter.combineString(packages, ".");
+	// logger = LogManager.getLogManager().getLogger(name);
+	// }
+	// return logger;
+	// }
 
 	@Override
 	public void log(final LogRecord record) {
@@ -97,10 +115,11 @@ public final class Logger extends java.util.logging.Logger {
 	// Level level;
 	// if (this.getLevel() == null) {
 	// level = this.getParent().getLevel();
+	// System.out.append("Parent logger level: " + level);
 	// } else {
 	// level = this.getLevel();
-	// }
 	// System.out.append("Logger level: " + level);
+	// }
 	// }
 
 }

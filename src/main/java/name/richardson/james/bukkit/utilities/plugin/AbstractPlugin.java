@@ -43,13 +43,12 @@ import name.richardson.james.bukkit.utilities.updater.Updatable;
 
 public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 
+	/* The custom logger that belongs to this plugin */
+	private final Logger logger = Logger.getLogger(this.getClass());
 	/* The configuration file for this plugin */
 	private PluginConfiguration configuration;
-	/* The custom logger that belongs to this plugin */
-	private final Logger logger = new Logger(this);
 	/* The database that belongs to this plugin */
 	private EbeanServer database;
-	private PermissionManager permissionManager;
 
 	@Override
 	public EbeanServer getDatabase() {
@@ -82,7 +81,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml");
 		final InputStream defaults = this.getResource("config.yml");
 		this.configuration = new SimplePluginConfiguration(file, defaults);
-
 		this.logger.setLevel(this.configuration.getLogLevel());
 	}
 
@@ -98,8 +96,8 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	protected void setPermissions() {
 		if (this.getClass().isAnnotationPresent(PluginPermissions.class)) {
 			final PluginPermissions annotation = this.getClass().getAnnotation(PluginPermissions.class);
-			this.permissionManager = new BukkitPermissionManager();
-			this.permissionManager.createPermissions(annotation.permissions());
+			final PermissionManager permissionManager = new BukkitPermissionManager();
+			permissionManager.createPermissions(annotation.permissions());
 		}
 	}
 

@@ -60,7 +60,7 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 	private final String artifactId;
 	private final String groupId;
 	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.UTILITIES.getBundleName());
-	private final Logger logger = new Logger(this, ResourceBundles.UTILITIES);
+	private final Logger logger = Logger.getLogger(PluginUpdater.class);
 	/* A reference to the downloaded Maven manifest from the remote repository */
 	private MavenManifest manifest;
 	private final Permission permission;
