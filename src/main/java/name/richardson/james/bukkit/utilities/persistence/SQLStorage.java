@@ -90,7 +90,7 @@ public class SQLStorage implements Localised {
 
 	public void initalise() {
 		if (this.ebeanserver != null) {
-			SQLStorage.logger.log(Level.WARNING, this.getMessage("sqlstorage.already-initalised"));
+			SQLStorage.logger.log(Level.WARNING, this.getMessage("warning.sqlstorage.already-initalised"));
 		}
 		this.load();
 		if (!this.validate() || this.rebuild) {
@@ -98,7 +98,7 @@ public class SQLStorage implements Localised {
 			this.generator = server.getDdlGenerator();
 			this.drop();
 			this.create();
-			SQLStorage.logger.log(Level.INFO, this.getMessage("sqlstorage.rebuilt-schema"));
+			SQLStorage.logger.log(Level.INFO, this.getMessage("notice.sqlstorage.rebuilt-schema"));
 		}
 	}
 
@@ -115,7 +115,7 @@ public class SQLStorage implements Localised {
 	}
 
 	protected void create() {
-		SQLStorage.logger.log(Level.INFO, this.getMessage("sqlstorage.creating-database"));
+		SQLStorage.logger.log(Level.INFO, this.getMessage("notice.sqlstorage.creating-database"));
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
 		String script = this.generator.generateCreateDdl();
@@ -255,7 +255,7 @@ public class SQLStorage implements Localised {
 			try {
 				this.ebeanserver.find(ebean).findRowCount();
 			} catch (final Exception exception) {
-				SQLStorage.logger.log(Level.WARNING, this.getMessage("sqlstorage.schema-invalid"));
+				SQLStorage.logger.log(Level.WARNING, this.getMessage("warning.sqlstorage.schema-invalid"));
 				return false;
 			}
 		}

@@ -39,9 +39,13 @@ public class OfflinePlayerMatcher implements Matcher {
 		argument = argument.toLowerCase();
 		final Set<String> set = new TreeSet<String>();
 		final List<String> list = new ArrayList<String>();
-		for (final OfflinePlayer player : this.server.getOfflinePlayers()) {
-			if (player.getName().toLowerCase().startsWith(argument)) {
-				set.add(player.getName());
+		// this is here to prevent large sets disconnecting clients
+		// up to around 1000 names appears to be ok at once.
+		if (argument.length() != 0) {
+			for (final OfflinePlayer player : this.server.getOfflinePlayers()) {
+				if (player.getName().toLowerCase().startsWith(argument)) {
+					set.add(player.getName());
+				}
 			}
 		}
 		list.addAll(set);

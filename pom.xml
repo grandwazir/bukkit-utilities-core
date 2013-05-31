@@ -52,6 +52,13 @@
                       <include>org.apache.maven:maven-artifact</include>
                     </includes>
                   </artifactSet>
+                  <relocations>
+                    <relocation>
+                      <pattern>org.apache.maven.artifact</pattern>
+                      <shadedPattern>name.richardson.james.bukkit.utilities.artifact</shadedPattern>
+                    </relocation>
+                  </relocations>
+                  <minimizeJar>true</minimizeJar>
                 </configuration>
               </execution>
             </executions>
