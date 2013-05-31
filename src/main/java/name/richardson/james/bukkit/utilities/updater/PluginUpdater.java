@@ -97,7 +97,7 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
 		if (player.hasPermission(this.permission)) {
-			final String message = this.getMessage("updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
+			final String message = this.getMessage("notice.updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
 			player.sendMessage(message);
 		}
 	}
@@ -106,15 +106,15 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		try {
 			this.parseMavenMetaData();
 			if (this.isNewVersionAvailable()) {
-				this.newVersionNotification = this.getMessage("updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
+				this.newVersionNotification = this.getMessage("notice.updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
 				this.logger.log(Level.INFO, this.newVersionNotification);
 			}
 		} catch (final IOException e) {
-			this.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
+			this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
 		} catch (final SAXException e) {
-			this.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
+			this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
 		} catch (final ParserConfigurationException e) {
-			this.logger.log(Level.WARNING, "updater.unable-to-read-metadata", this.repositoryURL.toString());
+			this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
 		}
 	}
 
