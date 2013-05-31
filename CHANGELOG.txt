@@ -1,5 +1,8 @@
-Changelog for BukkitUtilities (v5.0.1-SNAPSHOT)
+Changelog for BukkitUtilities (v5.0.2-SNAPSHOT)
 
+
+v5.0.1
+2013-05-31 04:01:29 +0100    misc issues (James Richardson)
 2013-05-30 18:31:00 +0100    logger works correctly once more (James Richardson)
 2013-05-30 17:20:39 +0100    change debug message stating defaults were being saved where they were not (James Richardson)
 2013-05-30 17:18:27 +0100    add locale debugging message (James Richardson)
