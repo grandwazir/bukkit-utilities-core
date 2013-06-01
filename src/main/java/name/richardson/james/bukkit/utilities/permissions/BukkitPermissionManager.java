@@ -19,7 +19,9 @@
 package name.richardson.james.bukkit.utilities.permissions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -30,6 +32,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
+import name.richardson.james.bukkit.utilities.formatters.StringFormatter;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 
@@ -103,13 +106,14 @@ public class BukkitPermissionManager implements PermissionManager {
 	}
 
 	private Permission getParentPermission(final Permission permission) {
-		final String[] nodes = permission.getName().split("\\.");
-		if (nodes.length > 1) {
-			final String parentNode = nodes[nodes.length - 1];
+		final List<String> nodes = new LinkedList<String>(Arrays.asList(permission.getName().split("\\.")));
+		if (nodes.size() > 1) {
+			nodes.remove(nodes.size() - 1);
+			final String parentNode = StringFormatter.combineString(nodes, ".");
+			BukkitPermissionManager.logger.log(Level.FINE, "Resolving parent permission: {0}", parentNode);
 			return Bukkit.getPluginManager().getPermission(parentNode);
 		} else {
 			return null;
 		}
 	}
-
 }

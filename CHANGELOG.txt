@@ -1,7 +1,12 @@
-Changelog for BukkitUtilities (v5.0.2-SNAPSHOT)
+Changelog for BukkitUtilities (v5.0.3-SNAPSHOT)
 
+
+v5.0.2
+2013-05-31 17:47:16 +0100    mismatch in localisation keys (James Richardson)
 
 v5.0.1
+2013-05-31 04:07:53 +0100    added missing logger file to git (James Richardson)
+2013-05-31 04:07:32 +0100    prepare to release (James Richardson)
 2013-05-31 04:01:29 +0100    misc issues (James Richardson)
 2013-05-30 18:31:00 +0100    logger works correctly once more (James Richardson)
 2013-05-30 17:20:39 +0100    change debug message stating defaults were being saved where they were not (James Richardson)
