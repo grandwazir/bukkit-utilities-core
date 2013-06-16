@@ -32,38 +32,27 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.plugin.Plugin;
+
 import name.richardson.james.bukkit.utilities.logging.PluginLogger;
+import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
 
-public class MavenPluginUpdater implements PluginUpdater {
-
-	public enum Branch {
-		DEVELOPMENT, STABLE
-	}
-
-	public enum State {
-		NOTIFY, OFF
-	}
+public class MavenPluginUpdater extends AbstractPluginUpdater {
 
 	private final String artifactId;
 	private final String groupId;
 	private final Logger logger = PluginLogger.getLogger(MavenPluginUpdater.class);
 	private final String pluginName;
 	private final URL repositoryURL;
-	private final String version;
 	/* A reference to the downloaded Maven manifest from the remote repository */
 	private MavenManifest manifest;
 
-	public MavenPluginUpdater(final Updatable plugin) {
-		this.version = plugin.getVersion();
+	public MavenPluginUpdater(final AbstractPlugin plugin, final State state) {
+		super(plugin, state);
 		this.artifactId = plugin.getArtifactID();
 		this.groupId = plugin.getGroupID();
 		this.repositoryURL = plugin.getRepositoryURL();
 		this.pluginName = plugin.getName();
-	}
-
-	@Override
-	public String getLocalVersion() {
-		return this.version;
 	}
 
 	@Override
@@ -90,22 +79,26 @@ public class MavenPluginUpdater implements PluginUpdater {
 
 	@Override
 	public void run() {
-		try {
-			this.parseMavenMetaData();
-			if (this.isNewVersionAvailable()) {
-				Object[] arguments = {this.pluginName, this.getRemoteVersion()};
-				this.logger.log(Level.INFO, "notice.updater.new-version-available", arguments);
-				new PlayerNotifier(this.pluginName, this.version);
-			} else {
-				Object[] arguments = {this.pluginName, this.getRemoteVersion()};
-				this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", arguments);
+		if (this.getState() == State.UPDATE) {
+			this.logger.log(Level.WARNING, "warning.updater.policy-restriction");
+		} else {
+			try {
+				this.parseMavenMetaData();
+				if (this.isNewVersionAvailable()) {
+					Object[] arguments = {this.pluginName, this.getRemoteVersion()};
+					this.logger.log(Level.INFO, "notice.updater.new-version-available", arguments);
+					new PlayerNotifier(this.pluginName, this.version);
+				} else {
+					Object[] arguments = {this.pluginName, this.getRemoteVersion()};
+					this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", arguments);
+				}
+			} catch (final IOException e) {
+				this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
+			} catch (final SAXException e) {
+				this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
+			} catch (final ParserConfigurationException e) {
+				this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
 			}
-		} catch (final IOException e) {
-			this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
-		} catch (final SAXException e) {
-			this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
-		} catch (final ParserConfigurationException e) {
-			this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
 		}
 	}
 

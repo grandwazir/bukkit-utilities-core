@@ -13,6 +13,8 @@ public interface PluginUpdater extends Runnable {
 
 	String getRemoteVersion();
 
+	AbstractPluginUpdater.State getState();
+
 	boolean isNewVersionAvailable();
 
 	void run();
