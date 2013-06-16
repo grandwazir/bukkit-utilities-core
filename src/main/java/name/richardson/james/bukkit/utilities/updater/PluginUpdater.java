@@ -1,23 +1,28 @@
 /*******************************************************************************
  * Copyright (c) 2012 James Richardson.
- * 
+ *
  * PluginUpdater.java is part of BukkitUtilities.
- * 
+ *
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * BukkitUtilities is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
 package name.richardson.james.bukkit.utilities.updater;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,18 +35,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.xml.sax.SAXException;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.permissions.Permission;
 
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
@@ -49,6 +43,8 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 
 public class PluginUpdater implements Listener, Runnable, Localised {
+
+	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
 
 	public enum Branch {
 		DEVELOPMENT, STABLE
@@ -60,18 +56,14 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 
 	private final String artifactId;
 	private final String groupId;
-	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
 	private final Logger logger = PluginLogger.getLogger(PluginUpdater.class);
-	/* A reference to the downloaded Maven manifest from the remote repository */
-	private MavenManifest manifest;
-	private final Permission permission;
 	private final String pluginName;
 	private final URL repositoryURL;
 	private final String version;
-	private String newVersionNotification;
+	/* A reference to the downloaded Maven manifest from the remote repository */
+	private MavenManifest manifest;
 
 	public PluginUpdater(final Updatable plugin) {
-		this.permission = Bukkit.getPluginManager().getPermission(plugin.getName().toLowerCase());
 		this.version = plugin.getVersion();
 		this.artifactId = plugin.getArtifactID();
 		this.groupId = plugin.getGroupID();
@@ -93,21 +85,12 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		return message;
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerJoin(final PlayerJoinEvent event) {
-		final Player player = event.getPlayer();
-		if (player.hasPermission(this.permission)) {
-			final String message = this.getMessage("notice.updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
-			player.sendMessage(message);
-		}
-	}
-
 	public void run() {
 		try {
 			this.parseMavenMetaData();
 			if (this.isNewVersionAvailable()) {
-				this.newVersionNotification = this.getMessage("notice.updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
-				this.logger.log(Level.INFO, this.newVersionNotification);
+				String newVersionNotification = this.getMessage("notice.updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
+				this.logger.log(Level.INFO, newVersionNotification);
 			}
 		} catch (final IOException e) {
 			this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
@@ -118,7 +101,8 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		}
 	}
 
-	private void getMavenMetaData(final File storage) throws IOException {
+	private void getMavenMetaData(final File storage)
+	throws IOException {
 		final StringBuilder path = new StringBuilder();
 		path.append(this.repositoryURL);
 		path.append("/");
@@ -148,7 +132,7 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 	private boolean isNewVersionAvailable() {
 		final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
 		final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
-		final Object params[] = { target.toString(), current.toString() };
+		final Object params[] = {target.toString(), current.toString()};
 		if (current.compareTo(target) == -1) {
 			this.logger.log(Level.FINE, "New version available: {0} > {1}", params);
 			return true;
@@ -158,7 +142,8 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		}
 	}
 
-	private void parseMavenMetaData() throws IOException, SAXException, ParserConfigurationException {
+	private void parseMavenMetaData()
+	throws IOException, SAXException, ParserConfigurationException {
 		final File temp = File.createTempFile(this.artifactId, null);
 		this.logger.log(Level.FINER, "Creating temporary manifest: {0}", temp.getAbsolutePath());
 		this.getMavenMetaData(temp);
