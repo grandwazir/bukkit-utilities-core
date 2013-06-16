@@ -42,14 +42,16 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.persistence.SQLStorage;
 import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
+import name.richardson.james.bukkit.utilities.updater.AbstractPluginUpdater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
 
 public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 
 	/* The name of the configuration file as saved on the disk */
+	@SuppressWarnings("HardCodedStringLiteral")
 	public static final String CONFIG_NAME = "config.yml";
 	/* THe name of the database configuration file as saved on the disk */
+	@SuppressWarnings("HardCodedStringLiteral")
 	public static final String DATABASE_CONFIG_NAME = "database.yml";
 
 	/* The custom logger that belongs to this plugin */
@@ -65,6 +67,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		return this.database;
 	}
 
+	@SuppressWarnings("HardCodedStringLiteral")
 	public String getGroupID() {
 		return "name.richardson.james.bukkit";
 	}
@@ -86,20 +89,22 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		return this.logger;
 	}
 
+	@SuppressWarnings("HardCodedStringLiteral")
 	protected void loadConfiguration()
 	throws IOException {
 		PluginLogger.setPrefix("[" + this.getName() + "] ");
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.CONFIG_NAME);
-		final InputStream defaults = this.getResource("config.yml");
+		final InputStream defaults = this.getResource(CONFIG_NAME);
 		this.configuration = new SimplePluginConfiguration(file, defaults);
 		this.logger.setLevel(this.configuration.getLogLevel());
 		this.logger.log(Level.CONFIG, "Localisation locale: {0}", Locale.getDefault());
 	}
 
+	@SuppressWarnings("HardCodedStringLiteral")
 	protected void loadDatabase()
 	throws IOException {
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.DATABASE_CONFIG_NAME);
-		final InputStream defaults = this.getResource("database.yml");
+		final InputStream defaults = this.getResource(DATABASE_CONFIG_NAME);
 		final SimpleDatabaseConfiguration configuration = new SimpleDatabaseConfiguration(file, defaults, this.getName());
 		final SQLStorage loader = new SQLStorage(configuration, this.getDatabaseClasses(), this.getName(), this.getClassLoader());
 		loader.initalise();
@@ -123,7 +128,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 
 	protected void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
-			final PluginUpdater updater = new MavenPluginUpdater(this);
+			final PluginUpdater updater = new MavenPluginUpdater(this, this.configuration.getAutomaticUpdaterState());
 			this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);
 		}
 	}

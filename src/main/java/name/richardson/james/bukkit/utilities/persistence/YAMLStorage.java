@@ -60,7 +60,7 @@ public class YAMLStorage {
 			this.logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
 			this.configuration.save(this.file);
 		} catch (final IOException e) {
-			this.logger.severe("Unable to save configuration!");
+			this.logger.log(Level.SEVERE, "yamlstorage.unable-to-save");
 		}
 	}
 

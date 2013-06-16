@@ -35,6 +35,7 @@ import name.richardson.james.bukkit.utilities.matchers.Matcher;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public abstract class AbstractCommand implements Command, Localised {
 
 	private final String name;

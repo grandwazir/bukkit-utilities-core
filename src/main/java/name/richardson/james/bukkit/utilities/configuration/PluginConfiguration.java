@@ -20,8 +20,8 @@ package name.richardson.james.bukkit.utilities.configuration;
 
 import java.util.logging.Level;
 
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
+import name.richardson.james.bukkit.utilities.updater.AbstractPluginUpdater.Branch;
+import name.richardson.james.bukkit.utilities.updater.AbstractPluginUpdater.State;
 
 public interface PluginConfiguration {
 
