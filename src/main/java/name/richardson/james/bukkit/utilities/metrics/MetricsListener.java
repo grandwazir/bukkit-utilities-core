@@ -22,6 +22,9 @@ import java.io.IOException;
 
 import org.bukkit.plugin.Plugin;
 
+/**
+ * A default implementation of Metrics. The listener self registers and sends basic versioning infomation to mcstats.
+ */
 public class MetricsListener {
 
 	private Metrics metrics;
