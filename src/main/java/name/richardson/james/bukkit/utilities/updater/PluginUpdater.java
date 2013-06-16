@@ -29,22 +29,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.text.MessageFormat;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.event.Listener;
-
-import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
-import name.richardson.james.bukkit.utilities.localisation.Localised;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 
-public class PluginUpdater implements Listener, Runnable, Localised {
-
-	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
+public class PluginUpdater implements Runnable {
 
 	public enum Branch {
 		DEVELOPMENT, STABLE
@@ -71,26 +61,24 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 		this.pluginName = plugin.getName();
 	}
 
-	public String getMessage(final String key) {
-		String message = PluginUpdater.localisation.getString(key);
-		message = ColourFormatter.replace(message);
-		return message;
+	private String getLocalVersion() {
+		return this.version;
 	}
 
-	public String getMessage(final String key, final Object... elements) {
-		final MessageFormat formatter = new MessageFormat(PluginUpdater.localisation.getString(key));
-		formatter.setLocale(Locale.getDefault());
-		String message = formatter.format(elements);
-		message = ColourFormatter.replace(message);
-		return message;
+	private String getRemoteVersion() {
+		return this.manifest.getCurrentVersion();
 	}
 
 	public void run() {
 		try {
 			this.parseMavenMetaData();
 			if (this.isNewVersionAvailable()) {
-				String newVersionNotification = this.getMessage("notice.updater.new-version-available", this.pluginName, this.manifest.getCurrentVersion());
-				this.logger.log(Level.INFO, newVersionNotification);
+				Object[] arguments =  {this.pluginName, this.getRemoteVersion()};
+				this.logger.log(Level.INFO, "notice.updater.new-version-available", arguments);
+				new PlayerNotifier(this.pluginName, this.version);
+			} else {
+				Object[] arguments =  {this.pluginName, this.getRemoteVersion()};
+				this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", arguments);
 			}
 		} catch (final IOException e) {
 			this.logger.log(Level.WARNING, "warning.updater.unable-to-read-metadata", this.repositoryURL.toString());
@@ -130,14 +118,17 @@ public class PluginUpdater implements Listener, Runnable, Localised {
 	}
 
 	private boolean isNewVersionAvailable() {
-		final DefaultArtifactVersion current = new DefaultArtifactVersion(this.version);
-		final DefaultArtifactVersion target = new DefaultArtifactVersion(this.manifest.getCurrentVersion());
-		final Object params[] = {target.toString(), current.toString()};
-		if (current.compareTo(target) == -1) {
-			this.logger.log(Level.FINE, "New version available: {0} > {1}", params);
-			return true;
+		if (this.manifest != null) {
+			final DefaultArtifactVersion current = new DefaultArtifactVersion(this.getLocalVersion());
+			final DefaultArtifactVersion target = new DefaultArtifactVersion(this.getRemoteVersion());
+			final Object params[] = {target.toString(), current.toString()};
+			if (current.compareTo(target) == -1) {
+				this.logger.log(Level.FINE, "New version available: {0} > {1}", params);
+				return true;
+			} else {
+				return false;
+			}
 		} else {
-			this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", params);
 			return false;
 		}
 	}
