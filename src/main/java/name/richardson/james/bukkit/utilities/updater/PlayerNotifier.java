@@ -20,7 +20,6 @@ package name.richardson.james.bukkit.utilities.updater;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.Plugin;
 
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
@@ -32,9 +31,9 @@ public class PlayerNotifier extends AbstractListener {
 	private final String pluginName;
 	private final String version;
 
-	public PlayerNotifier(Plugin plugin, String version) {
-		super(plugin);
-		this.pluginName = plugin.getName();
+	public PlayerNotifier(String pluginName, String version) {
+		super(pluginName);
+		this.pluginName = pluginName;
 		this.permission = pluginName.toLowerCase();
 		this.version = version;
 	}
