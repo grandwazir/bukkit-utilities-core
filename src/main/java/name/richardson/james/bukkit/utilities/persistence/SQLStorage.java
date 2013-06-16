@@ -20,11 +20,9 @@ package name.richardson.james.bukkit.utilities.persistence;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,11 +36,10 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
-import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 
-public class SQLStorage implements Localised {
+public class SQLStorage {
 
 	private final List<Class<?>> classes;
 	private final ClassLoader classLoader;
@@ -71,26 +68,9 @@ public class SQLStorage implements Localised {
 		return this.ebeanserver;
 	}
 
-	public String getMessage(final String key) {
-		final String message = SQLStorage.localisation.getString(key);
-		return message;
-	}
-
-	public String getMessage(final String key, final Object... elements) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getMessage(final String key, final String... elements) {
-		final MessageFormat formatter = new MessageFormat(SQLStorage.localisation.getString(key));
-		formatter.setLocale(Locale.getDefault());
-		final String message = formatter.format(elements);
-		return message;
-	}
-
 	public void initalise() {
 		if (this.ebeanserver != null) {
-			SQLStorage.logger.log(Level.WARNING, this.getMessage("sqlstorage.already-initalised"));
+			SQLStorage.logger.log(Level.WARNING, "sqlstorage.already-initalised");
 		}
 		this.load();
 		if (!this.validate() || this.rebuild) {
@@ -98,7 +78,7 @@ public class SQLStorage implements Localised {
 			this.generator = server.getDdlGenerator();
 			this.drop();
 			this.create();
-			SQLStorage.logger.log(Level.INFO, this.getMessage("sqlstorage.rebuilt-schema"));
+			SQLStorage.logger.log(Level.INFO, "sqlstorage.rebuilt-schema");
 		}
 	}
 
@@ -115,7 +95,7 @@ public class SQLStorage implements Localised {
 	}
 
 	protected void create() {
-		SQLStorage.logger.log(Level.INFO, this.getMessage("sqlstorage.creating-database"));
+		SQLStorage.logger.log(Level.INFO, "sqlstorage.creating-database");
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
 		String script = this.generator.generateCreateDdl();
@@ -255,7 +235,7 @@ public class SQLStorage implements Localised {
 			try {
 				this.ebeanserver.find(ebean).findRowCount();
 			} catch (final Exception exception) {
-				SQLStorage.logger.log(Level.WARNING, this.getMessage("sqlstorage.schema-invalid"));
+				SQLStorage.logger.log(Level.WARNING, "sqlstorage.schema-invalid");
 				return false;
 			}
 		}
