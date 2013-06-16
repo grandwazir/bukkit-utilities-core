@@ -1,3 +1,20 @@
+/*******************************************************************************
+ Copyright (c) 2013 James Richardson.
+
+ PlayerNotifier.java is part of BukkitUtilities.
+
+ BukkitUtilities is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the Free
+ Software Foundation, either version 3 of the License, or (at your option) any
+ later version.
+
+ BukkitUtilities is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.updater;
 
 import org.bukkit.event.EventHandler;
@@ -9,13 +26,6 @@ import name.richardson.james.bukkit.utilities.listener.AbstractListener;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
-/**
- * Created with IntelliJ IDEA.
- * User: james
- * Date: 16/06/13
- * Time: 17:02
- * To change this template use File | Settings | File Templates.
- */
 public class PlayerNotifier extends AbstractListener {
 
 	private final String permission;
@@ -25,13 +35,6 @@ public class PlayerNotifier extends AbstractListener {
 	public PlayerNotifier(Plugin plugin, String version) {
 		super(plugin);
 		this.pluginName = plugin.getName();
-		this.permission = plugin.getName().toLowerCase();
-		this.version = version;
-	}
-
-	public PlayerNotifier(String pluginName, String version) {
-		super(pluginName);
-		this.pluginName = pluginName;
 		this.permission = pluginName.toLowerCase();
 		this.version = version;
 	}
@@ -40,8 +43,7 @@ public class PlayerNotifier extends AbstractListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify) {
-			LocalisedCommandSender localisedPlayer = new LocalisedCommandSender(event.getPlayer(),
-				ResourceBundles.UTILITIES);
+			LocalisedCommandSender localisedPlayer = new LocalisedCommandSender(event.getPlayer(), ResourceBundles.UTILITIES);
 			localisedPlayer.send("notice.new-version-available", this.pluginName, this.version);
 		}
 	}
