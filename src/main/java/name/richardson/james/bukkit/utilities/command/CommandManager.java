@@ -18,13 +18,11 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -32,18 +30,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
-import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
-import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
 
-public class CommandManager implements TabExecutor, Localised {
+public class CommandManager implements TabExecutor {
 
-	final Map<String, Command> commands = new LinkedHashMap<String, Command>();
-	final Command helpCommand;
-	final Matcher matcher;
-	private final static ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
+	private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
+	private final Command helpCommand;
+	private final Matcher matcher;
+	private final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
 
 	public CommandManager(final String commandName) {
 		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
@@ -53,20 +49,6 @@ public class CommandManager implements TabExecutor, Localised {
 
 	public void addCommand(final Command command) {
 		this.commands.put(command.getName(), command);
-	}
-
-	public String getMessage(final String key) {
-		String message = CommandManager.localisation.getString(key);
-		message = ColourFormatter.replace(message);
-		return message;
-	}
-
-	public String getMessage(final String key, final Object... elements) {
-		final MessageFormat formatter = new MessageFormat(CommandManager.localisation.getString(key));
-		formatter.setLocale(Locale.getDefault());
-		String message = formatter.format(elements);
-		message = ColourFormatter.replace(message);
-		return message;
 	}
 
 	public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
@@ -80,7 +62,8 @@ public class CommandManager implements TabExecutor, Localised {
 				if (command.isAuthorized(sender)) {
 					command.execute(arguments, sender);
 				} else {
-					sender.sendMessage(this.getMessage("error.permission-denied"));
+					LocalisedSender lsender = new LocalisedSender(sender, this.localisation);
+					lsender.sendMessage("misc.permission-denied");
 				}
 			} else {
 				this.helpCommand.execute(arguments, sender);

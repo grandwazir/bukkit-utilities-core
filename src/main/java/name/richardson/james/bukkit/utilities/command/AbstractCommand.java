@@ -29,20 +29,20 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
-import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 
 @SuppressWarnings("HardCodedStringLiteral")
-public abstract class AbstractCommand implements Command, Localised {
+public abstract class AbstractCommand implements Command {
 
-	private final String name;
 	private final String description;
-	private final String usage;
 	private final ResourceBundle localisation;
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
+	private final String name;
+	private final String usage;
+
 	private BukkitPermissionManager permissionManager;
 
 	public AbstractCommand() {
