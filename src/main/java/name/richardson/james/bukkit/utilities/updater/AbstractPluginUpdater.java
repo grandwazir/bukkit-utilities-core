@@ -28,7 +28,7 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 
 	@Override
 	public State getState() {
-		return this.state
+		return this.state;
 	}
 
 }

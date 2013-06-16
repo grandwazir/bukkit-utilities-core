@@ -87,7 +87,7 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 				if (this.isNewVersionAvailable()) {
 					Object[] arguments = {this.pluginName, this.getRemoteVersion()};
 					this.logger.log(Level.INFO, "notice.updater.new-version-available", arguments);
-					new PlayerNotifier(this.pluginName, this.version);
+					new PlayerNotifier(this.pluginName, this.getRemoteVersion());
 				} else {
 					Object[] arguments = {this.pluginName, this.getRemoteVersion()};
 					this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", arguments);
