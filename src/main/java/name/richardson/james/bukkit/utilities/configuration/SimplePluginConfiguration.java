@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.util.logging.Level;
 
 import name.richardson.james.bukkit.utilities.persistence.YAMLStorage;
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
+import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
@@ -40,9 +40,9 @@ public class SimplePluginConfiguration extends YAMLStorage implements PluginConf
 
 	public Branch getAutomaticUpdaterBranch() {
 		final String key = "automatic-updates.branch";
-		final PluginUpdater.Branch defaultBranch = PluginUpdater.Branch.STABLE;
+		final MavenPluginUpdater.Branch defaultBranch = MavenPluginUpdater.Branch.STABLE;
 		try {
-			return PluginUpdater.Branch.valueOf(this.getConfiguration().getString(key));
+			return MavenPluginUpdater.Branch.valueOf(this.getConfiguration().getString(key));
 		} catch (final IllegalArgumentException e) {
 			this.getConfiguration().set(key, defaultBranch.name());
 			this.save();
@@ -52,9 +52,9 @@ public class SimplePluginConfiguration extends YAMLStorage implements PluginConf
 
 	public State getAutomaticUpdaterState() {
 		final String key = "automatic-updates.method";
-		final PluginUpdater.State defaultState = PluginUpdater.State.NOTIFY;
+		final MavenPluginUpdater.State defaultState = MavenPluginUpdater.State.NOTIFY;
 		try {
-			return PluginUpdater.State.valueOf(this.getConfiguration().getString(key));
+			return MavenPluginUpdater.State.valueOf(this.getConfiguration().getString(key));
 		} catch (final IllegalArgumentException e) {
 			this.getConfiguration().set(key, defaultState.name());
 			this.save();

@@ -40,6 +40,7 @@ import name.richardson.james.bukkit.utilities.metrics.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.persistence.SQLStorage;
+import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 import name.richardson.james.bukkit.utilities.updater.Updatable;
@@ -122,7 +123,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 
 	protected void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != State.OFF) {
-			final PluginUpdater updater = new PluginUpdater(this);
+			final PluginUpdater updater = new MavenPluginUpdater(this);
 			this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);
 		}
 	}
