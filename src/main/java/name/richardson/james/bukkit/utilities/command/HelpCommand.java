@@ -20,11 +20,14 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
 
@@ -33,35 +36,36 @@ public class HelpCommand extends AbstractCommand {
 	final static private ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.YELLOW;
 	final static private ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
 
-	final private String label;
-	final private Map<String, Command> commands;
+	private final String label;
+	private final Map<String, Command> commands;
 
 	private final String pluginDescription;
-
 	private final String pluginName;
 
 	public HelpCommand(final Map<String, Command> commands, final String label) {
 		super();
 		this.label = label;
-		this.commands = commands;
 		this.pluginName = Bukkit.getPluginCommand(label).getPlugin().getDescription().getFullName();
-		this.pluginDescription = this.getMessage("plugin.description");
+		final ResourceBundle bundle = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
+		this.pluginDescription = bundle.getString("plugin.description");
+		this.commands = commands;
 		final Matcher matcher = new CommandMatcher(commands);
 		this.getMatchers().add(matcher);
 	}
 
 	public void execute(final List<String> arguments, final CommandSender sender) {
+		LocalisedCommandSender lsender = new LocalisedCommandSender(sender, ResourceBundles.UTILITIES);
 		if (!arguments.isEmpty() && this.commands.containsKey(arguments.get(0))) {
 			final Command command = this.commands.get(0);
-			sender.sendMessage(command.getDescription());
-			sender.sendMessage(this.getMessage("notice.helpcommand.entry", this.label, command.getName(), command.getUsage()));
+			lsender.send(command.getDescription());
+			lsender.send("helpcommand.entry", this.label, command.getName(), command.getUsage());
 		} else {
-			sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
-			sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
-			sender.sendMessage(this.getMessage("notice.helpcommand.hint", this.label, this.getName()));
+			lsender.send("helpcommand.plugin-name", this.pluginName);
+			lsender.send("helpcommand.plugin-description", this.pluginDescription);
+			lsender.send("helpcommand.hint", this.label, this.getName());
 			for (final Command command : this.commands.values()) {
 				if (command.isAuthorized(sender)) {
-					sender.sendMessage(this.getMessage("notice.helpcommand.entry", this.label, command.getName(), this.colouriseUsage(command.getUsage())));
+					lsender.send("helpcommand.entry", this.label, command.getName(), this.colouriseUsage(command.getUsage()));
 				}
 			}
 		}

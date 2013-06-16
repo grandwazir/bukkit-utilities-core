@@ -30,6 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
+import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
@@ -39,7 +40,6 @@ public class CommandManager implements TabExecutor {
 	private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
 	private final Command helpCommand;
 	private final Matcher matcher;
-	private final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
 
 	public CommandManager(final String commandName) {
 		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
@@ -62,8 +62,8 @@ public class CommandManager implements TabExecutor {
 				if (command.isAuthorized(sender)) {
 					command.execute(arguments, sender);
 				} else {
-					LocalisedSender lsender = new LocalisedSender(sender, this.localisation);
-					lsender.sendMessage("misc.permission-denied");
+					LocalisedCommandSender lsender = new LocalisedCommandSender(sender, ResourceBundles.MESSAGES);
+					lsender.send("misc.permission-denied");
 				}
 			} else {
 				this.helpCommand.execute(arguments, sender);

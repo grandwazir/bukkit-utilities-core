@@ -38,7 +38,6 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 public abstract class AbstractCommand implements Command {
 
 	private final String description;
-	private final ResourceBundle localisation;
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
 	private final String name;
 	private final String usage;
@@ -50,7 +49,6 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	public AbstractCommand(final ResourceBundles resourceBundleName) {
-		this.localisation = ResourceBundle.getBundle(resourceBundleName.getBundleName());
 		final ResourceBundle commandLocalisation = ResourceBundle.getBundle(ResourceBundles.COMMANDS.toString());
 		final String simpleName = this.getClass().getSimpleName().toLowerCase();
 		this.name = commandLocalisation.getString(simpleName + ".name");
@@ -66,20 +64,6 @@ public abstract class AbstractCommand implements Command {
 
 	public String getDescription() {
 		return this.description;
-	}
-
-	public String getMessage(final String key) {
-		String message = this.localisation.getString(key);
-		message = ColourFormatter.replace(message);
-		return message;
-	}
-
-	public String getMessage(final String key, final Object... elements) {
-		final MessageFormat formatter = new MessageFormat(this.localisation.getString(key));
-		formatter.setLocale(Locale.getDefault());
-		String message = formatter.format(elements);
-		message = ColourFormatter.replace(message);
-		return message;
 	}
 
 	public String getName() {
@@ -108,10 +92,6 @@ public abstract class AbstractCommand implements Command {
 			}
 		}
 		return results;
-	}
-
-	protected ResourceBundle getLocalisation() {
-		return this.localisation;
 	}
 
 	protected List<Matcher> getMatchers() {
