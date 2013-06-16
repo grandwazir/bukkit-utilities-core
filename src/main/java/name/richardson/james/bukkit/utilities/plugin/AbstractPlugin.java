@@ -1,20 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2012 James Richardson.
- *
- * AbstractPlugin.java is part of BukkitUtilities.
- *
- * BukkitUtilities is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * BukkitUtilities is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ Copyright (c) 2013 James Richardson.
+
+ AbstractPlugin.java is part of BukkitUtilities.
+
+ BukkitUtilities is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the Free
+ Software Foundation, either version 3 of the License, or (at your option) any
+ later version.
+
+ BukkitUtilities is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.plugin;
 
@@ -84,11 +83,21 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		}
 	}
 
-	protected Logger getCustomLogger() {
+	/**
+	 * Provides access to an implementation of {@link Logger} that is localised.
+	 *
+	 * See {@link PluginLogger} for details on why this is necessary.
+	 *
+	 * @return {@link Logger}
+	 */
+	protected Logger getLocalisedLogger() {
 		return this.logger;
 	}
 
 	@SuppressWarnings("HardCodedStringLiteral")
+	/**
+	 * Attempt to load a {@link SimplePluginConfiguration} from disk in this plugin's data folder.
+	 */
 	protected void loadConfiguration()
 	throws IOException {
 		PluginLogger.setPrefix("[" + this.getName() + "] ");
@@ -100,6 +109,10 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	}
 
 	@SuppressWarnings("HardCodedStringLiteral")
+	/**
+	 * Attempt to load a {@link SQLStorage} using the information from {@link DatabaseConfiguration},
+	 * failing that using the settings in bukkit.yml and initalise it.
+	 */
 	protected void loadDatabase()
 	throws IOException {
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.DATABASE_CONFIG_NAME);
@@ -110,6 +123,9 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		this.database = loader.getEbeanServer();
 	}
 
+	/**
+	 * Set any plugin permissions as annotated by {@link PluginPermissions}.
+	 */
 	protected void setPermissions() {
 		if (this.getClass().isAnnotationPresent(PluginPermissions.class)) {
 			final PluginPermissions annotation = this.getClass().getAnnotation(PluginPermissions.class);
@@ -118,6 +134,14 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		}
 	}
 
+	/**
+	 * Will establish the default metric listener for the plugin.
+	 *
+	 * This returns basic version and server information. It also checks to see if we are allowed to collect statistics
+	 * for this plugin.
+	 *
+	 * @throws IOException
+	 */
 	protected void setupMetrics()
 	throws IOException {
 		if (this.configuration.isCollectingStats()) {
@@ -125,6 +149,12 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		}
 	}
 
+	/**
+	 * Attempt to check for an update for this plugin using the settings from the {@link PluginConfiguration}.
+	 *
+	 * Will attempt an update check once within the next 20 seconds. The time is randomised to avoid multiple plugins
+	 * all making a check at the same time.
+	 */
 	protected void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != PluginUpdater.State.OFF) {
 			final PluginUpdater updater = new MavenPluginUpdater(this, this.configuration.getAutomaticUpdaterState());
