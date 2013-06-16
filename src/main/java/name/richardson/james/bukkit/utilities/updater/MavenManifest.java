@@ -32,6 +32,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * This class is responsible for parsing a maven manifest XML file and evaluating if the versions that are available.
+ */
 public class MavenManifest {
 
 	private final List<String> versionList = new LinkedList<String>();

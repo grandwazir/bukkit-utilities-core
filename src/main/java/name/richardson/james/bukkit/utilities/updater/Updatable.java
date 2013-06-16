@@ -21,7 +21,7 @@ package name.richardson.james.bukkit.utilities.updater;
 import java.net.URL;
 
 /**
- * A interface representing a class which can be updated.
+ * This interface represents a class that can be updated with the help of a {@link PluginUpdater}.
  */
 public interface Updatable {
 

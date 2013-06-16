@@ -19,20 +19,16 @@ package name.richardson.james.bukkit.utilities.updater;
 
 import org.bukkit.plugin.Plugin;
 
+/**
+ * This abstract class provides a default implementation for common methods of {@link PluginUpdater}. In addition it
+ * defines a list of branches and states that may be supported by Updaters.
+ */
 public abstract class AbstractPluginUpdater implements PluginUpdater {
 
-	public enum Branch {
-		DEVELOPMENT, STABLE
-	}
-
-	public enum State {
-		UPDATE, NOTIFY, OFF
-	}
-
 	private final String version;
-	private final State state;
+	private final PluginUpdater.State state;
 
-	public AbstractPluginUpdater(Plugin plugin, State state) {
+	public AbstractPluginUpdater(Plugin plugin, PluginUpdater.State state) {
 		this.version = plugin.getName();
 		this.state = state;
 	}
@@ -44,7 +40,7 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 
 
 	@Override
-	public State getState() {
+	public PluginUpdater.State getState() {
 		return this.state;
 	}
 

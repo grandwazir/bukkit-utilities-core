@@ -18,20 +18,51 @@
 package name.richardson.james.bukkit.utilities.updater;
 
 /**
- * Created with IntelliJ IDEA.
- * User: james
- * Date: 16/06/13
- * Time: 17:39
- * To change this template use File | Settings | File Templates.
+ * The PluginUpdater interface defines how updaters should interact with other parts of BukkitUtilities.
  */
 public interface PluginUpdater extends Runnable {
 
+	public static enum Branch {
+		DEVELOPMENT,
+		STABLE
+	}
+
+	public static enum State {
+		NOTIFY,
+		OFF,
+		UPDATE
+	}
+
+	/**
+	 * Gets the local version of the plugin.
+	 *
+	 * Should be in a Maven style format.
+	 *
+	 * @return The current version of the local plugin
+	 */
 	String getLocalVersion();
 
+	/**
+	 * Get the current remote version of the plugin.
+	 *
+	 * This should be the latest released and available version matching the branch requested.
+	 *
+	 * @return The current remote version of the plugin.
+	 */
 	String getRemoteVersion();
 
-	AbstractPluginUpdater.State getState();
+	/**
+	 * Get the current state of the updater.
+	 *
+	 * @return The current remote version of the plugin.
+	 */
+	PluginUpdater.State getState();
 
+	/**
+	 * Check to see if a new version of the plugin is available.
+	 *
+	 * @return return true if there is a version available, false otherwise.
+	 */
 	boolean isNewVersionAvailable();
 
 	void run();

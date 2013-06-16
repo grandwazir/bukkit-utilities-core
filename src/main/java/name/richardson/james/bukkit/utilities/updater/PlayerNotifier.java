@@ -25,6 +25,11 @@ import name.richardson.james.bukkit.utilities.listener.AbstractListener;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
+/**
+ * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update
+ * available for the plugin. The players will be notified when they join the server. The permission required for players
+ * to receive the notice is the name of the plugin in lowercase.
+ */
 public class PlayerNotifier extends AbstractListener {
 
 	private final String permission;
@@ -38,6 +43,11 @@ public class PlayerNotifier extends AbstractListener {
 		this.version = version;
 	}
 
+	/**
+	 * Notify the player logging of the available update if they have the required permission.
+	 *
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);

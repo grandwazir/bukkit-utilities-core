@@ -33,7 +33,13 @@ import java.util.logging.Logger;
 
 import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 
+/**
+ * The MavenPluginUpdater implementation of {@link PluginUpdater} checks the maven repository attached to a plugin to
+ * see if there is an update available. It is responsible for retrieving the manifest,
+ * deciding if a new version exists and if it does sets up a {@link PlayerNotifier} to tell players about it.
+ */
 public class MavenPluginUpdater extends AbstractPluginUpdater {
 
 	private final String artifactId;
@@ -44,7 +50,7 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 	/* A reference to the downloaded Maven manifest from the remote repository */
 	private MavenManifest manifest;
 
-	public MavenPluginUpdater(final AbstractPlugin plugin, final State state) {
+	public MavenPluginUpdater(final AbstractPlugin plugin, final PluginUpdater.State state) {
 		super(plugin, state);
 		this.artifactId = plugin.getArtifactID();
 		this.groupId = plugin.getGroupID();
@@ -99,6 +105,12 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 		}
 	}
 
+	/**
+	 * Builds a URL to the manifest file and then attempts to download it to the File supplied,
+	 *
+	 * @param storage The location to save the manifest to
+	 * @throws IOException
+	 */
 	private void getMavenMetaData(final File storage)
 	throws IOException {
 		final StringBuilder path = new StringBuilder();
@@ -127,6 +139,13 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 		}
 	}
 
+	/**
+	 * Parse the downloaded file into a MavenManifest.
+	 *
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 */
 	private void parseMavenMetaData()
 	throws IOException, SAXException, ParserConfigurationException {
 		final File temp = File.createTempFile(this.artifactId, null);

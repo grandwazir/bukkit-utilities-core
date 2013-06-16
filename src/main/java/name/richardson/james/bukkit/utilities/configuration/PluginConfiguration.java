@@ -20,24 +20,24 @@ package name.richardson.james.bukkit.utilities.configuration;
 
 import java.util.logging.Level;
 
-import name.richardson.james.bukkit.utilities.updater.AbstractPluginUpdater.Branch;
-import name.richardson.james.bukkit.utilities.updater.AbstractPluginUpdater.State;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 
 public interface PluginConfiguration {
 
-	public Branch getAutomaticUpdaterBranch();
+	public PluginUpdater.Branch getAutomaticUpdaterBranch();
 
-	public State getAutomaticUpdaterState();
+	public PluginUpdater.State getAutomaticUpdaterState();
 
 	public Level getLogLevel();
 
 	public boolean isCollectingStats();
 
-	public void setAutomaticUpdaterBranch(final Branch branch);
+	public void setAutomaticUpdaterBranch(final PluginUpdater.Branch branch);
 
-	public void setAutomaticUpdaterState(final State state);
+	public void setAutomaticUpdaterState(final PluginUpdater.State state);
 
 	public void setCollectingStats(final boolean value);
 
 	public void setLogLevel(Level level);
+
 }
