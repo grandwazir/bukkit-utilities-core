@@ -54,7 +54,7 @@ public class HelpCommand extends AbstractCommand {
 	}
 
 	public void execute(final List<String> arguments, final CommandSender sender) {
-		LocalisedCommandSender lsender = new LocalisedCommandSender(sender, ResourceBundles.UTILITIES);
+		LocalisedCommandSender lsender = new LocalisedCommandSender(sender, this.localisation);
 		if (!arguments.isEmpty() && this.commands.containsKey(arguments.get(0))) {
 			final Command command = this.commands.get(0);
 			lsender.send(command.getDescription());

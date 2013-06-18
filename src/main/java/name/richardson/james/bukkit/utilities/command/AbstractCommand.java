@@ -29,6 +29,7 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
+import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
@@ -36,6 +37,8 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 
 @SuppressWarnings("HardCodedStringLiteral")
 public abstract class AbstractCommand implements Command {
+
+	protected final ResourceBundle localisation = PluginResourceBundle.getBundle(this.getClass());
 
 	private final String description;
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
@@ -45,15 +48,9 @@ public abstract class AbstractCommand implements Command {
 	private BukkitPermissionManager permissionManager;
 
 	public AbstractCommand() {
-		this(ResourceBundles.MESSAGES);
-	}
-
-	public AbstractCommand(final ResourceBundles resourceBundleName) {
-		final ResourceBundle commandLocalisation = ResourceBundle.getBundle(ResourceBundles.COMMANDS.toString());
-		final String simpleName = this.getClass().getSimpleName().toLowerCase();
-		this.name = commandLocalisation.getString(simpleName + ".name");
-		this.description = commandLocalisation.getString(simpleName + ".description");
-		this.usage = commandLocalisation.getString(simpleName + ".usage");
+		this.name = localisation.getString("name");
+		this.description = localisation.getString("description");
+		this.usage = localisation.getString("usage");
 		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) {
 			this.setPermissions();
 		}

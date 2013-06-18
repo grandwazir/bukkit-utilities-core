@@ -31,9 +31,8 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.logging.PluginLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 
 /**
  * The MavenPluginUpdater implementation of {@link PluginUpdater} checks the maven repository attached to a plugin to
@@ -44,7 +43,7 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 
 	private final String artifactId;
 	private final String groupId;
-	private final Logger logger = PluginLogger.getLogger(MavenPluginUpdater.class);
+	private final Logger logger = LocalisedLogger.getLogger(MavenPluginUpdater.class);
 	private final String pluginName;
 	private final URL repositoryURL;
 	/* A reference to the downloaded Maven manifest from the remote repository */
@@ -83,24 +82,24 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 	@Override
 	public void run() {
 		if (this.getState() == State.UPDATE) {
-			this.logger.log(Level.WARNING, "maven-updater.policy-restriction");
+			this.logger.log(Level.WARNING, "policy-restriction");
 		} else {
 			try {
 				this.parseMavenMetaData();
 				if (this.isNewVersionAvailable()) {
 					Object[] arguments = {this.pluginName, this.getRemoteVersion()};
-					this.logger.log(Level.INFO, "notice.updater.new-version-available", arguments);
+					this.logger.log(Level.INFO, "new-version-available", arguments);
 					new PlayerNotifier(this.pluginName, this.getRemoteVersion());
 				} else {
 					Object[] arguments = {this.pluginName, this.getRemoteVersion()};
 					this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", arguments);
 				}
 			} catch (final IOException e) {
-				this.logger.log(Level.WARNING, "maven-updater.unable-to-read-metadata", this.repositoryURL.toString());
+				this.logger.log(Level.WARNING, "unable-to-read-metadata", this.repositoryURL.toString());
 			} catch (final SAXException e) {
-				this.logger.log(Level.WARNING, "maven-updater.unable-to-read-metadata", this.repositoryURL.toString());
+				this.logger.log(Level.WARNING, "unable-to-read-metadata", this.repositoryURL.toString());
 			} catch (final ParserConfigurationException e) {
-				this.logger.log(Level.WARNING, "maven-updater.unable-to-read-metadata", this.repositoryURL.toString());
+				this.logger.log(Level.WARNING, "unable-to-read-metadata", this.repositoryURL.toString());
 			}
 		}
 	}

@@ -22,6 +22,7 @@ import java.text.ChoiceFormat;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
 public final class ChoiceFormatter {
@@ -36,12 +37,8 @@ public final class ChoiceFormatter {
 
 	private final ResourceBundle localisation;
 
-	public ChoiceFormatter() {
-		this.localisation = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
-	}
-
-	public ChoiceFormatter(final ResourceBundles bundleName) {
-		this.localisation = ResourceBundle.getBundle(bundleName.getBundleName());
+	public ChoiceFormatter(Class<?> owner) {
+		this.localisation = PluginResourceBundle.getBundle(owner);
 	}
 
 	public String getMessage() {

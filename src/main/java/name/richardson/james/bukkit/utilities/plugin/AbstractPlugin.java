@@ -34,7 +34,7 @@ import com.avaje.ebean.EbeanServer;
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.configuration.SimplePluginConfiguration;
-import name.richardson.james.bukkit.utilities.logging.PluginLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.metrics.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
@@ -53,7 +53,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	public static final String DATABASE_CONFIG_NAME = "database.yml";
 
 	/* The custom logger that belongs to this plugin */
-	private final Logger logger = PluginLogger.getLogger(this.getClass());
+	private final Logger logger = LocalisedLogger.getLogger(this.getClass());
 
 	/* The configuration file for this plugin */
 	private PluginConfiguration configuration;
@@ -86,7 +86,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	/**
 	 * Provides access to an implementation of {@link Logger} that is localised.
 	 *
-	 * See {@link PluginLogger} for details on why this is necessary.
+	 * See {@link name.richardson.james.bukkit.utilities.logging.LocalisedLogger} for details on why this is necessary.
 	 *
 	 * @return {@link Logger}
 	 */
@@ -100,7 +100,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	 */
 	protected void loadConfiguration()
 	throws IOException {
-		PluginLogger.setPrefix("[" + this.getName() + "] ");
+		LocalisedLogger.setPrefix("[" + this.getName() + "] ");
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.CONFIG_NAME);
 		final InputStream defaults = this.getResource(CONFIG_NAME);
 		this.configuration = new SimplePluginConfiguration(file, defaults);

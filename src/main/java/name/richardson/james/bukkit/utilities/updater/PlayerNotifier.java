@@ -17,12 +17,15 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.updater;
 
+import java.util.ResourceBundle;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
+import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
 /**
@@ -31,6 +34,8 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
  * to receive the notice is the name of the plugin in lowercase.
  */
 public class PlayerNotifier extends AbstractListener {
+
+	private static final ResourceBundle LOCALISATION = PluginResourceBundle.getBundle(PlayerNotifier.class);
 
 	private final String permission;
 	private final String pluginName;
@@ -52,8 +57,8 @@ public class PlayerNotifier extends AbstractListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify) {
-			LocalisedCommandSender localisedPlayer = new LocalisedCommandSender(event.getPlayer(), ResourceBundles.UTILITIES);
-			localisedPlayer.send("updater.new-version-available", this.pluginName, this.version);
+			LocalisedCommandSender localisedPlayer = new LocalisedCommandSender(event.getPlayer(), LOCALISATION);
+			localisedPlayer.send("new-version-available", this.pluginName, this.version);
 		}
 	}
 

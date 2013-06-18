@@ -30,7 +30,7 @@ import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.formatters.StringFormatter;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
-import name.richardson.james.bukkit.utilities.logging.PluginLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 /**
  * An implementation of {@link PermissionManager} using the Bukkit SuperPerms system.
@@ -38,8 +38,8 @@ import name.richardson.james.bukkit.utilities.logging.PluginLogger;
 public class BukkitPermissionManager implements PermissionManager {
 
 	private static final PluginManager pluginManager = Bukkit.getPluginManager();
-	private static final ResourceBundle localisation = ResourceBundle.getBundle(ResourceBundles.PERMISSIONS.getBundleName());
-	private static final Logger logger = PluginLogger.getLogger(BukkitPermissionManager.class);
+	private static final ResourceBundle localisation = ResourceBundle.getBundle("localisation/permissions.properties");
+	private static final Logger logger = LocalisedLogger.getLogger(BukkitPermissionManager.class);
 
 	private final List<Permission> permissions = new ArrayList<Permission>();
 

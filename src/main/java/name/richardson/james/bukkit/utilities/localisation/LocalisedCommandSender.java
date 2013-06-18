@@ -11,13 +11,8 @@ public class LocalisedCommandSender {
 	private final CommandSender sender;
 	private final ResourceBundle bundle;
 
-	public LocalisedCommandSender(final CommandSender sender) {
-		this.bundle = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
-		this.sender = sender;
-	}
-
-	public LocalisedCommandSender(final CommandSender sender, final ResourceBundles bundleName) {
-		this.bundle = ResourceBundle.getBundle(bundleName.getBundleName());
+	public LocalisedCommandSender(final CommandSender sender, final ResourceBundle bundle) {
+		this.bundle = bundle;
 		this.sender = sender;
 	}
 

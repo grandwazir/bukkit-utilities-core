@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import name.richardson.james.bukkit.utilities.logging.PluginLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 /**
  * YAMLStorage is responsible for creating YAML configuration files, setting defaults from a provided {@link
@@ -34,7 +34,7 @@ import name.richardson.james.bukkit.utilities.logging.PluginLogger;
  */
 public class YAMLStorage {
 
-	private static final Logger logger = PluginLogger.getLogger(YAMLStorage.class);
+	private static final Logger logger = LocalisedLogger.getLogger(YAMLStorage.class);
 
 	private final YamlConfiguration defaultConfiguration;
 	private final File file;
@@ -68,7 +68,7 @@ public class YAMLStorage {
 			logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
 			this.configuration.save(this.file);
 		} catch (final IOException e) {
-			logger.log(Level.SEVERE, "yamlstorage.unable-to-save");
+			logger.log(Level.SEVERE, "unable-to-save");
 		}
 	}
 

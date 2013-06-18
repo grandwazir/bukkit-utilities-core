@@ -35,7 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
-import name.richardson.james.bukkit.utilities.logging.PluginLogger;
+import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 /**
  * SQLStorage is responsible for initialising and creating a {@link EbeanServer} for the plugin to use.
@@ -45,7 +45,7 @@ import name.richardson.james.bukkit.utilities.logging.PluginLogger;
  */
 public class SQLStorage {
 
-	private static final Logger logger = PluginLogger.getLogger(SQLStorage.class);
+	private static final Logger logger = LocalisedLogger.getLogger(SQLStorage.class);
 
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
@@ -64,17 +64,13 @@ public class SQLStorage {
 		this.classLoader = classLoader;
 	}
 
-	public List<Class<?>> getClasses() {
-		return this.classes;
-	}
-
 	public EbeanServer getEbeanServer() {
 		return this.ebeanserver;
 	}
 
 	public void initalise() {
 		if (this.ebeanserver != null) {
-			SQLStorage.logger.log(Level.WARNING, "sqlstorage.already-initalised");
+			SQLStorage.logger.log(Level.WARNING, "already-initalised");
 		}
 		this.load();
 		if (!this.validate() || this.rebuild) {
@@ -82,7 +78,7 @@ public class SQLStorage {
 			this.generator = server.getDdlGenerator();
 			this.drop();
 			this.create();
-			SQLStorage.logger.log(Level.INFO, "sqlstorage.rebuilt-schema");
+			SQLStorage.logger.log(Level.INFO, "rebuilt-schema");
 		}
 	}
 
@@ -99,7 +95,7 @@ public class SQLStorage {
 	}
 
 	protected void create() {
-		SQLStorage.logger.log(Level.INFO, "sqlstorage.creating-database");
+		SQLStorage.logger.log(Level.INFO, "creating-database");
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
 		String script = this.generator.generateCreateDdl();
@@ -237,7 +233,7 @@ public class SQLStorage {
 			try {
 				this.ebeanserver.find(ebean).findRowCount();
 			} catch (final Exception exception) {
-				SQLStorage.logger.log(Level.WARNING, "sqlstorage.schema-invalid");
+				SQLStorage.logger.log(Level.WARNING, "schema-invalid");
 				return false;
 			}
 		}
