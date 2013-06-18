@@ -66,7 +66,7 @@ public class CommandManager implements TabExecutor {
 					command.execute(arguments, sender);
 				} else {
 					LocalisedCommandSender lsender = new LocalisedCommandSender(sender, localisation);
-					lsender.send("not-allowed-to-use-command");
+					lsender.error("not-allowed-to-use-command");
 				}
 			} else {
 				this.helpCommand.execute(arguments, sender);

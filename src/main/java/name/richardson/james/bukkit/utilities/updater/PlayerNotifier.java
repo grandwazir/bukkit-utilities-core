@@ -58,7 +58,7 @@ public class PlayerNotifier extends AbstractListener {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify) {
 			LocalisedCommandSender localisedPlayer = new LocalisedCommandSender(event.getPlayer(), LOCALISATION);
-			localisedPlayer.send("new-version-available", this.pluginName, this.version);
+			localisedPlayer.header("new-version-available", this.pluginName, this.version);
 		}
 	}
 
