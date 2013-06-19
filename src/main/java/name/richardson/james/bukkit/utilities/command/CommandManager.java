@@ -47,7 +47,6 @@ public class CommandManager implements TabExecutor {
 	public CommandManager(final String commandName, PluginDescriptionFile pluginDescriptionFile) {
 		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
 		this.helpCommand = new HelpCommand(this.commands, commandName, pluginDescriptionFile);
-		this.addCommand(this.helpCommand);
 		this.matcher = new CommandMatcher(this.commands);
 	}
 
@@ -59,7 +58,7 @@ public class CommandManager implements TabExecutor {
 		final List<String> arguments = new LinkedList<String>(Arrays.asList(args));
 		if (arguments.isEmpty()) {
 			this.helpCommand.execute(arguments, sender);
-		} else
+		} else {
 			if (this.commands.containsKey(arguments.get(0).toLowerCase())) {
 				final Command command = this.commands.get(arguments.get(0).toLowerCase());
 				arguments.remove(0);
@@ -69,9 +68,13 @@ public class CommandManager implements TabExecutor {
 					LocalisedCommandSender lsender = new LocalisedCommandSender(sender, localisation);
 					lsender.error("not-allowed-to-use-command");
 				}
+			} else if (arguments.get(0).contentEquals(this.helpCommand.getName())) {
+				arguments.remove(0);
+				this.helpCommand.execute(arguments, sender);
 			} else {
 				this.helpCommand.execute(arguments, sender);
 			}
+		}
 		return true;
 	}
 
