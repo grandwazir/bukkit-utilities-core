@@ -1,5 +1,7 @@
 Changelog for BukkitUtilities (v5.1.0-SNAPSHOT)
 
+2013-06-19 21:44:50 +0100    update copyright notices (James Richardson)
+2013-06-19 21:44:22 +0100    fix help command not outputting correctly (James Richardson)
 2013-06-19 21:28:14 +0100    fixed misc deployment bugs (James Richardson)
 2013-06-19 18:13:41 +0100    add pluginDescriptionFile to constructor (James Richardson)
 2013-06-19 18:02:54 +0100    delete old ResourceBundles (James Richardson)
