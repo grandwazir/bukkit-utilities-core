@@ -26,7 +26,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
 /**
  * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update

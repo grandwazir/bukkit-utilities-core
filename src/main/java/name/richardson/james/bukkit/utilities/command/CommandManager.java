@@ -32,7 +32,6 @@ import org.bukkit.command.TabExecutor;
 
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
 

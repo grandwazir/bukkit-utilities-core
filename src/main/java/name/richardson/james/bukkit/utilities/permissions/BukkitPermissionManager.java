@@ -29,7 +29,6 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.formatters.StringFormatter;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 /**

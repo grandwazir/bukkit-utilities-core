@@ -23,7 +23,6 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 
 public final class ChoiceFormatter {
 

@@ -18,19 +18,15 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 
-import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;

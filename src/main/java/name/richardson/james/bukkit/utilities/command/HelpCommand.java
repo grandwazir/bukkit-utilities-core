@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
 
@@ -42,12 +42,13 @@ public class HelpCommand extends AbstractCommand {
 	private final String pluginDescription;
 	private final String pluginName;
 
-	public HelpCommand(final Map<String, Command> commands, final String label) {
+	public HelpCommand(final Map<String, Command> commands, final String label,
+	                   final PluginDescriptionFile description) {
 		super();
 		this.label = label;
-		this.pluginName = Bukkit.getPluginCommand(label).getPlugin().getDescription().getFullName();
-		final ResourceBundle bundle = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
-		this.pluginDescription = bundle.getString("plugin.description");
+		this.pluginName = description.getFullName();
+		this.pluginDescription = description.getDescription();
+		final ResourceBundle bundle = PluginResourceBundle.getBundle(this.getClass());
 		this.commands = commands;
 		final Matcher matcher = new CommandMatcher(commands);
 		this.getMatchers().add(matcher);
@@ -60,9 +61,9 @@ public class HelpCommand extends AbstractCommand {
 			lsender.send(command.getDescription());
 			lsender.send("helpcommand.entry", this.label, command.getName(), command.getUsage());
 		} else {
-			lsender.send("helpcommand.plugin-name", this.pluginName);
-			lsender.send("helpcommand.plugin-description", this.pluginDescription);
-			lsender.send("helpcommand.hint", this.label, this.getName());
+			lsender.send(ChatColor.LIGHT_PURPLE + this.pluginName);
+			lsender.send(ChatColor.AQUA + this.pluginDescription);
+			lsender.header("helpcommand.hint", this.label, this.getName());
 			for (final Command command : this.commands.values()) {
 				if (command.isAuthorized(sender)) {
 					lsender.send("helpcommand.entry", this.label, command.getName(), this.colouriseUsage(command.getUsage()));
