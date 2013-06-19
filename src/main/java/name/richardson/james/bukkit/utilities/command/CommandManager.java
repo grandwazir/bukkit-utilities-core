@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
@@ -43,9 +44,9 @@ public class CommandManager implements TabExecutor {
 	private final Command helpCommand;
 	private final Matcher matcher;
 
-	public CommandManager(final String commandName) {
+	public CommandManager(final String commandName, PluginDescriptionFile pluginDescriptionFile) {
 		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
-		this.helpCommand = new HelpCommand(this.commands, commandName);
+		this.helpCommand = new HelpCommand(this.commands, commandName, pluginDescriptionFile);
 		this.matcher = new CommandMatcher(this.commands);
 	}
 
