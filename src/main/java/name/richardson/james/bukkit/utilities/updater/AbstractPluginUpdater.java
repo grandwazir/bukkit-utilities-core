@@ -29,7 +29,7 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 	private final PluginUpdater.State state;
 
 	public AbstractPluginUpdater(Plugin plugin, PluginUpdater.State state) {
-		this.version = plugin.getName();
+		this.version = plugin.getDescription().getVersion();
 		this.state = state;
 	}
 

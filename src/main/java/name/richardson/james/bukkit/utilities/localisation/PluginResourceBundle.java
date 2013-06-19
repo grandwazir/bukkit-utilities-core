@@ -29,7 +29,7 @@ public class PluginResourceBundle {
 	}
 
 	public static String getBundleName(Class<?> owner) {
-		String name = owner.getPackage().getName().replace(PACKAGE_PREFIX, "");
+		String name = owner.getPackage().getName().replace(PACKAGE_PREFIX, "") + "." + owner.getSimpleName();
 		if (name.contains("utilities")) {
 			return RESOURCE_PREFIX + name.replaceFirst("\\w+.", "");
 		} else {

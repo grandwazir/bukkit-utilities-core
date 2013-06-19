@@ -47,6 +47,7 @@ public class CommandManager implements TabExecutor {
 	public CommandManager(final String commandName, PluginDescriptionFile pluginDescriptionFile) {
 		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
 		this.helpCommand = new HelpCommand(this.commands, commandName, pluginDescriptionFile);
+		this.addCommand(this.helpCommand);
 		this.matcher = new CommandMatcher(this.commands);
 	}
 

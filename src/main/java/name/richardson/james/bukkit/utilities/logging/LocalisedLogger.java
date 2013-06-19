@@ -42,6 +42,16 @@ public final class LocalisedLogger extends java.util.logging.Logger {
 		}
 	}
 
+	public static java.util.logging.Logger getLogger(final Class<?> owner, final String bundleName) {
+		final String name = owner.getPackage().getName();
+		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
+		if (logger == null) {
+			return new LocalisedLogger(name, bundleName);
+		} else {
+			return logger;
+		}
+	}
+
 	public static void setPrefix(final String prefix) {
 		LocalisedLogger.prefix = prefix;
 	}

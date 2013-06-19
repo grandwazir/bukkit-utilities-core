@@ -57,16 +57,16 @@ public class HelpCommand extends AbstractCommand {
 	public void execute(final List<String> arguments, final CommandSender sender) {
 		LocalisedCommandSender lsender = new LocalisedCommandSender(sender, this.localisation);
 		if (!arguments.isEmpty() && this.commands.containsKey(arguments.get(0))) {
-			final Command command = this.commands.get(0);
-			lsender.send(command.getDescription());
-			lsender.send("helpcommand.entry", this.label, command.getName(), command.getUsage());
+			final Command command = this.commands.get(arguments.get(0));
+			sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
+			lsender.send("command-list-item", this.label, command.getName(), this.colouriseUsage(command.getUsage()));
 		} else {
-			lsender.send(ChatColor.LIGHT_PURPLE + this.pluginName);
-			lsender.send(ChatColor.AQUA + this.pluginDescription);
-			lsender.header("helpcommand.hint", this.label, this.getName());
+			sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
+			sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
+			lsender.send("usage-hint", this.label, this.getName());
 			for (final Command command : this.commands.values()) {
 				if (command.isAuthorized(sender)) {
-					lsender.send("helpcommand.entry", this.label, command.getName(), this.colouriseUsage(command.getUsage()));
+					lsender.send("command-list-item", this.label, command.getName(), this.colouriseUsage(command.getUsage()));
 				}
 			}
 		}

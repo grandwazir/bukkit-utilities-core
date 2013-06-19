@@ -37,8 +37,8 @@ import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 public class BukkitPermissionManager implements PermissionManager {
 
 	private static final PluginManager pluginManager = Bukkit.getPluginManager();
-	private static final ResourceBundle localisation = ResourceBundle.getBundle("localisation/permissions.properties");
-	private static final Logger logger = LocalisedLogger.getLogger(BukkitPermissionManager.class);
+	private static final ResourceBundle localisation = ResourceBundle.getBundle("localisation.permissions");
+	private static final Logger logger = LocalisedLogger.getLogger(BukkitPermissionManager.class, null);
 
 	private final List<Permission> permissions = new ArrayList<Permission>();
 
@@ -58,7 +58,7 @@ public class BukkitPermissionManager implements PermissionManager {
 	}
 
 	public Permission createPermission(final String node) {
-		final String description = BukkitPermissionManager.localisation.getString(node);
+		final String description = localisation.getString(node);
 		final Permission permission = new Permission(node, description);
 		final Permission parent = this.getParentPermission(permission);
 		if (this.getParentPermission(permission) != null) {
@@ -68,7 +68,7 @@ public class BukkitPermissionManager implements PermissionManager {
 	}
 
 	public Permission createPermission(final String node, final PermissionDefault defaultPermission) {
-		final String description = BukkitPermissionManager.localisation.getString(node);
+		final String description = localisation.getString(node);
 		final Permission permission = new Permission(node, description, defaultPermission);
 		final Permission parent = this.getParentPermission(permission);
 		if (this.getParentPermission(permission) != null) {
@@ -78,14 +78,14 @@ public class BukkitPermissionManager implements PermissionManager {
 	}
 
 	public Permission createPermission(final String node, final PermissionDefault defaultPermission, final Permission parent) {
-		final String description = BukkitPermissionManager.localisation.getString(node);
+		final String description = localisation.getString(node);
 		final Permission permission = new Permission(node, description, defaultPermission);
 		permission.addParent(permission, true);
 		return this.addPermission(permission);
 	}
 
 	public Permission createPermission(final String node, final PermissionDefault defaultPermission, final Permission parent, final boolean defaultParent) {
-		final String description = BukkitPermissionManager.localisation.getString(node);
+		final String description = localisation.getString(node);
 		final Permission permission = new Permission(node, description, defaultPermission);
 		permission.addParent(permission, defaultParent);
 		return this.addPermission(permission);

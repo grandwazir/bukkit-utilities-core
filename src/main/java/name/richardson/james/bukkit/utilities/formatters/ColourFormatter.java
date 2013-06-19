@@ -49,19 +49,19 @@ public class ColourFormatter {
 	}
 
 	public static String warning(final String message) {
-		return WARNING + message.replaceAll("{", WARNING_HIGHLIGHT + "{").replaceAll("}", "}" + WARNING);
+		return WARNING + message.replaceAll("\\{", WARNING_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + WARNING);
 	}
 
 	public static String info(final String message) {
-		return INFO + message.replaceAll("{", INFO_HIGHLIGHT + "{").replaceAll("}", "}" + INFO);
+		return INFO + message.replaceAll("\\{", INFO_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + INFO);
 	}
 
 	public static String error(final String message) {
-		return ERROR + message.replaceAll("{", ERROR_HIGHLIGHT + "{").replaceAll("}", "}" + ERROR);
+		return ERROR + message.replaceAll("\\{", ERROR_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + ERROR);
 	}
 
 	public static String header(final String message) {
-		return HEADER + message.replaceAll("{", HEADER_HIGHLIGHT + "{").replaceAll("}", "}" + HEADER);
+		return HEADER + message.replaceAll("\\{", HEADER_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + HEADER);
 	}
 
 
