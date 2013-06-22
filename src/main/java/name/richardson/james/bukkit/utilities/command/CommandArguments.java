@@ -1,7 +1,7 @@
 package name.richardson.james.bukkit.utilities.command;
 
 
-import name.richardson.james.bukkit.utilities.argument.Argument;
+import name.richardson.james.bukkit.utilities.command.argument.Argument;
 
 import java.lang.annotation.Retention;
 

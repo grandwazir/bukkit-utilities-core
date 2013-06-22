@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import name.richardson.james.bukkit.utilities.argument.Argument;
-import name.richardson.james.bukkit.utilities.argument.CommandArgument;
+import name.richardson.james.bukkit.utilities.command.argument.Argument;
+import name.richardson.james.bukkit.utilities.command.argument.CommandArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;

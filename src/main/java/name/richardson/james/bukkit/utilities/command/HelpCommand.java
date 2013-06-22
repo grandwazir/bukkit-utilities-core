@@ -17,8 +17,8 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-import name.richardson.james.bukkit.utilities.argument.CommandArgument;
-import name.richardson.james.bukkit.utilities.argument.InvalidArgumentException;
+import name.richardson.james.bukkit.utilities.command.argument.CommandArgument;
+import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.colours.CoreColourScheme;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCoreColourScheme;

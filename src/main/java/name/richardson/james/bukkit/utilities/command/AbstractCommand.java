@@ -19,8 +19,8 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.*;
 
-import name.richardson.james.bukkit.utilities.argument.Argument;
-import name.richardson.james.bukkit.utilities.argument.InvalidArgumentException;
+import name.richardson.james.bukkit.utilities.command.argument.Argument;
+import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;

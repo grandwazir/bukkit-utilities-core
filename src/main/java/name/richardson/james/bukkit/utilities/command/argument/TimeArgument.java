@@ -1,4 +1,4 @@
-package name.richardson.james.bukkit.utilities.argument;
+package name.richardson.james.bukkit.utilities.command.argument;
 
 import name.richardson.james.bukkit.utilities.formatters.TimeFormatter;
 
