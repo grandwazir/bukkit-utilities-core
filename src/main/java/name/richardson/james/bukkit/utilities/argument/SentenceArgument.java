@@ -1,7 +1,9 @@
 package name.richardson.james.bukkit.utilities.argument;
 
 
+import java.util.Collections;
 import java.util.Locale;
+import java.util.Set;
 
 public class SentenceArgument extends StringArgument {
 
@@ -18,5 +20,10 @@ public class SentenceArgument extends StringArgument {
         return builder.toString();
     }
 
+
+    @Override
+    public Set<String> getMatches(String argument) {
+        return Collections.emptySet();
+    }
 
 }

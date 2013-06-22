@@ -1,5 +1,6 @@
 package name.richardson.james.bukkit.utilities.argument;
 
+import com.avaje.ebean.validation.AssertTrue;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.bukkit.Server;
@@ -15,26 +16,14 @@ import java.util.ArrayList;
 @RunWith(value=BlockJUnit4ClassRunner.class)
 public class OnlinePlayerArgumentTest extends TestCase {
 
-    private static final String[] PLAYER_NAMES = {"grandwazir", "Sergeant_Subtle"};
+    private Server server;
 
     private OnlinePlayerArgument argument;
-    private Server server;
 
     @Before
     public void setUp() throws Exception {
-        server = EasyMock.createNiceMock(Server.class);
-        ArrayList<Player> players = new ArrayList<Player>();
-        for (String name : PLAYER_NAMES) {
-            Player player = EasyMock.createNiceMock(Player.class);
-            EasyMock.expect(player.getName()).andReturn(name).times(2);
-            EasyMock.replay(player);
-            players.add(player);
-        }
-        EasyMock.expect(server.getPlayer((String) EasyMock.anyObject())).andReturn(players.get(0));
-        EasyMock.expect(server.getPlayer((String) EasyMock.anyObject())).andReturn(players.get(1));
-        EasyMock.expect(server.getPlayer((String) EasyMock.anyObject())).andReturn(null).times(2);
-        EasyMock.replay(server);
-        this.argument = new OnlinePlayerArgument();
+        server = ServerFixture.getServer();
+        argument = new OnlinePlayerArgument();
     }
 
     @Test
@@ -69,5 +58,13 @@ public class OnlinePlayerArgumentTest extends TestCase {
     @Test
     public void testSetRequired() throws Exception {
         argument.setRequired(true);
+    }
+
+    @Test
+    public void testMatches() throws Exception {
+        this.testSetServer();
+        Assert.assertTrue("List does not contain grandwazir!", argument.getMatches("gra").contains("grandwazir"));
+        Assert.assertTrue("List does not contain Sergeant_Subtle!", argument.getMatches("sergeant_S").contains("Sergeant_Subtle"));
+        Assert.assertTrue("List is not complete!", argument.getMatches("").size() == 2);
     }
 }

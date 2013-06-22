@@ -1,6 +1,8 @@
 package name.richardson.james.bukkit.utilities.argument;
 
+import java.util.Collections;
 import java.util.Locale;
+import java.util.Set;
 
 public class StringArgument implements Argument {
 
@@ -10,7 +12,7 @@ public class StringArgument implements Argument {
 
     @Override
     public String getValue() throws InvalidArgumentException {
-        if (this.isRequired()) throw new InvalidArgumentException(null, null);
+        if (this.string == null && this.isRequired()) throw new InvalidArgumentException(null, null);
         return string;
     }
 
@@ -37,4 +39,8 @@ public class StringArgument implements Argument {
         this.required = value;
     }
 
+    @Override
+    public Set<String> getMatches(String argument) {
+        return Collections.emptySet();
+    }
 }
