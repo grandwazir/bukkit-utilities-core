@@ -24,7 +24,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
-import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 
 /**
@@ -56,8 +55,8 @@ public class PlayerNotifier extends AbstractListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify) {
-			LocalisedCommandSender localisedPlayer = new LocalisedCommandSender(event.getPlayer(), LOCALISATION);
-			localisedPlayer.header("new-version-available", this.pluginName, this.version);
+			//LocalisedCommandSender localisedPlayer = new LocalisedCommandSender(event.getPlayer(), LOCALISATION);
+			//localisedPlayer.header("new-version-available", this.pluginName, this.version);
 		}
 	}
 

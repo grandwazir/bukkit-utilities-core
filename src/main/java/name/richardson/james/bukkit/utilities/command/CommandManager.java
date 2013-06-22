@@ -30,7 +30,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import name.richardson.james.bukkit.utilities.matchers.Matcher;
@@ -64,8 +63,8 @@ public class CommandManager implements TabExecutor {
 				if (command.isAuthorized(sender)) {
 					command.execute(arguments, sender);
 				} else {
-					LocalisedCommandSender lsender = new LocalisedCommandSender(sender, localisation);
-					lsender.error("not-allowed-to-use-command");
+					// LocalisedCommandSender lsender = new LocalisedCommandSender(sender, localisation);
+					// lsender.error("not-allowed-to-use-command");
 				}
 			} else if (arguments.get(0).contentEquals(this.helpCommand.getName())) {
 				arguments.remove(0);

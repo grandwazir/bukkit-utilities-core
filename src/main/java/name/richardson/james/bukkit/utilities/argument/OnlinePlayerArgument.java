@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 
 public class OnlinePlayerArgument extends PlayerArgument {
 
-    private static final ResourceBundle bundle = PluginResourceBundle.getBundle(StringArgument.class);
+    private static final ResourceBundle bundle = PluginResourceBundle.getBundle(OnlinePlayerArgument.class);
 
     private WeakReference<Player> player;
 

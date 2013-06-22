@@ -5,8 +5,6 @@ import java.util.Locale;
 
 public class SentenceArgument extends StringArgument {
 
-    private boolean formatting;
-
     public SentenceArgument() {
         this.setCaseInsensitive(false);
     }
@@ -17,7 +15,7 @@ public class SentenceArgument extends StringArgument {
         builder.append(message.substring(0,1).toUpperCase(Locale.getDefault()));
         builder.append(message.substring(1));
         if (!builder.substring(builder.length() - 1).contentEquals(".")) builder.append(".");
-        return message;
+        return builder.toString();
     }
 
 

@@ -28,6 +28,7 @@ public class CommandMatcherTest extends TestCase {
             EasyMock.replay(command);
             this.commands.put(name, command);
         }
+        CommandMatcher.setCommands(commands);
     }
 
     @Test
@@ -64,6 +65,7 @@ public class CommandMatcherTest extends TestCase {
 
     @Test(expected=IllegalArgumentException.class)
     public void testCommandsMustNotBeNull() throws Exception {
+        CommandMatcher.setCommands(null);
         new CommandMatcher(null);
     }
 }

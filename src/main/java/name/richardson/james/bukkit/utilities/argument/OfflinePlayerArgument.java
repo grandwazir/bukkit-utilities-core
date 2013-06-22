@@ -1,7 +1,6 @@
 package name.richardson.james.bukkit.utilities.argument;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 public class OfflinePlayerArgument extends PlayerArgument {
@@ -15,7 +14,7 @@ public class OfflinePlayerArgument extends PlayerArgument {
     public void parseValue(Object argument) throws InvalidArgumentException {
         this.getStringArgument().parseValue(argument);
         String playerName = this.getStringArgument().getValue();
-        this.player = Bukkit.getOfflinePlayer(playerName);
+        this.player = getServer().getOfflinePlayer(playerName);
     }
 
 }

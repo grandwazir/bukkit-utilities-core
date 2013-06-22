@@ -15,7 +15,7 @@ public abstract class PlayerArgument implements Argument {
     }
 
 
-    public StringArgument getStringArgument() {
+    protected StringArgument getStringArgument() {
         return stringArgument;
     }
 
@@ -29,7 +29,7 @@ public abstract class PlayerArgument implements Argument {
     }
 
     public boolean isRequired() {
-        return this.isRequired();
+        return required;
     }
 
     public void setRequired(boolean value) {
