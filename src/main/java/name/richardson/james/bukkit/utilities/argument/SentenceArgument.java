@@ -11,7 +11,7 @@ public class SentenceArgument extends StringArgument {
         this.setCaseInsensitive(false);
     }
 
-    public String getValue() {
+    public String getValue() throws InvalidArgumentException {
         String message = super.getValue();
         StringBuilder builder = new StringBuilder();
         builder.append(message.substring(0,1).toUpperCase(Locale.getDefault()));

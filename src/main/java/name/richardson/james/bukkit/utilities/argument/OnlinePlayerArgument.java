@@ -12,7 +12,8 @@ public class OnlinePlayerArgument extends PlayerArgument {
 
     private WeakReference<Player> player;
 
-    public Player getValue() {
+    public Player getValue() throws InvalidArgumentException {
+        if (player.get() == null && isRequired()) throw new InvalidArgumentException(bundle.getString("no-longer-online"), null);
         return player.get();
     }
 
@@ -20,7 +21,7 @@ public class OnlinePlayerArgument extends PlayerArgument {
         this.getStringArgument().parseValue(argument);
         String playerName = this.getStringArgument().getValue();
         player = new WeakReference<Player>(getServer().getPlayer(playerName));
-        if (player.get() == null && isRequired()) throw new InvalidArgumentException(bundle.getString("invalid"), (String) argument);
+        if (player.get() == null && isRequired()) throw new InvalidArgumentException(bundle.getString("not-online"), (String) argument);
     }
 
 }

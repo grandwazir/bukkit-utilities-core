@@ -1,7 +1,7 @@
 package name.richardson.james.bukkit.utilities.colours;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+import name.richardson.james.bukkit.utilities.localisation.LocalisedCoreColourScheme;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 import org.junit.Before;
 import org.junit.Test;

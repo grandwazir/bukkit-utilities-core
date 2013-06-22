@@ -20,7 +20,7 @@ package name.richardson.james.bukkit.utilities.command;
 import name.richardson.james.bukkit.utilities.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.colours.CoreColourScheme;
-import name.richardson.james.bukkit.utilities.colours.LocalisedCoreColourScheme;
+import name.richardson.james.bukkit.utilities.localisation.LocalisedCoreColourScheme;
 import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

@@ -1,4 +1,6 @@
-package name.richardson.james.bukkit.utilities.colours;
+package name.richardson.james.bukkit.utilities.localisation;
+
+import name.richardson.james.bukkit.utilities.colours.CoreColourScheme;
 
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
