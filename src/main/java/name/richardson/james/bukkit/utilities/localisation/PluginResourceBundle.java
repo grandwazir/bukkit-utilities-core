@@ -17,6 +17,9 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.localisation;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 public class PluginResourceBundle {
@@ -36,5 +39,19 @@ public class PluginResourceBundle {
 			return RESOURCE_PREFIX  + name;
 		}
 	}
+
+    public static boolean exists(Object object) {
+        return exists(object.getClass());
+    }
+
+    public static boolean exists(Class<?> owner) {
+        String bundleName = getBundleName(owner).replace(".", "/") + ".properties";
+        if (owner.getClassLoader().getResource(bundleName) == null) {
+            // System.out.append("ResourceBundle not found! " + bundleName);
+        } else {
+            // System.out.append("ResourceBundle found!"  + bundleName);
+        }
+        return owner.getClassLoader().getResource(bundleName) != null;
+    }
 
 }
