@@ -17,10 +17,7 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.matchers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -32,26 +29,41 @@ import org.bukkit.Server;
  */
 public class OfflinePlayerMatcher implements Matcher {
 
-	private final Server server;
+    private static Server server;
 
-	public OfflinePlayerMatcher() {
-		this.server = Bukkit.getServer();
-	}
+    private final TreeSet<String> sorted = new TreeSet<String>();
+
+    public OfflinePlayerMatcher() {
+        OfflinePlayerMatcher.getServer();
+    }
+
+    public static void setServer(Server server) {
+        OfflinePlayerMatcher.server = server;
+    }
+
+    public static Server getServer() {
+        if (OfflinePlayerMatcher.server == null) {
+            throw new IllegalStateException("OfflinePlayerMatcher.server has not been set!");
+        } else {
+            return OfflinePlayerMatcher.server;
+        }
+    }
 
 	public List<String> getMatches(String argument) {
-		argument = argument.toLowerCase();
-		final Set<String> set = new TreeSet<String>();
+		argument = argument.toLowerCase(Locale.ENGLISH);
+        sorted.clear();
 		final List<String> list = new ArrayList<String>();
 		// this is here to prevent large sets disconnecting clients
 		// up to around 1000 names appears to be ok at once.
 		if (argument.length() != 0) {
-			for (final OfflinePlayer player : this.server.getOfflinePlayers()) {
-				if (player.getName().toLowerCase().startsWith(argument)) {
-					set.add(player.getName());
+			for (final OfflinePlayer player : getServer().getOfflinePlayers()) {
+                String playerName = player.getName().toLowerCase(Locale.ENGLISH);
+				if (playerName.startsWith(argument)) {
+					sorted.add(player.getName());
 				}
 			}
 		}
-		list.addAll(set);
+		list.addAll(sorted);
 		return list;
 	}
 

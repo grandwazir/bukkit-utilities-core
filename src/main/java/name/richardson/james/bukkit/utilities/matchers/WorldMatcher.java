@@ -32,21 +32,37 @@ import org.bukkit.World;
  */
 public class WorldMatcher implements Matcher {
 
-	private final Server server;
+    private static Server server;
 
-	public WorldMatcher() {
-		this.server = Bukkit.getServer();
-	}
+    private final TreeSet<String> sorted = new TreeSet<String>();
 
-	public List<String> getMatches(final String argument) {
-		final Set<String> set = new TreeSet<String>();
+    public WorldMatcher() {
+        WorldMatcher.getServer();
+    }
+
+    public static void setServer(Server server) {
+        WorldMatcher.server = server;
+    }
+
+    public static Server getServer() {
+        if (WorldMatcher.server == null) {
+            throw new IllegalStateException("WorldMatcher.server has not been set!");
+        } else {
+            return WorldMatcher.server;
+        }
+    }
+
+
+    public List<String> getMatches(final String argument) {
+        this.sorted.clear();
 		final List<String> list = new ArrayList<String>();
-		for (final World world : this.server.getWorlds()) {
-			if (world.getName().startsWith(argument)) {
-				set.add(world.getName());
+		for (final World world : WorldMatcher.getServer().getWorlds()) {
+            String worldName = world.getName();
+            if (worldName.startsWith(argument)) {
+				this.sorted.add(worldName);
 			}
 		}
-		list.addAll(set);
+		list.addAll(this.sorted);
 		return list;
 	}
 

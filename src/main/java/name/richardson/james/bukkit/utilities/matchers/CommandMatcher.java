@@ -17,11 +17,7 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.matchers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import name.richardson.james.bukkit.utilities.command.Command;
 
@@ -33,19 +29,23 @@ public class CommandMatcher implements Matcher {
 
 	private final Map<String, Command> commands;
 
+    private final TreeSet<String> sorted = new TreeSet<String>();
+
 	public CommandMatcher(final Map<String, Command> commands) {
-		this.commands = commands;
+		if (commands == null) throw new IllegalArgumentException("Commands can not be null!");
+        this.commands = commands;
 	}
 
-	public List<String> getMatches(final String argument) {
-		final Set<String> set = new TreeSet<String>();
-		final List<String> list = new ArrayList<String>();
+	public List<String> getMatches(String argument) {
+        argument = argument.toLowerCase(Locale.ENGLISH);
+        sorted.clear();
+        final List<String> list = new ArrayList<String>();
 		for (final String commandName : this.commands.keySet()) {
 			if (commandName.startsWith(argument)) {
-				set.add(commandName);
+                sorted.add(commandName);
 			}
 		}
-		list.addAll(set);
+		list.addAll(sorted);
 		return list;
 	}
 

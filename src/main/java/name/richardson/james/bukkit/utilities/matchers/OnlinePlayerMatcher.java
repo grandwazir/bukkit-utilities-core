@@ -17,10 +17,7 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.matchers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -32,23 +29,38 @@ import org.bukkit.entity.Player;
  */
 public class OnlinePlayerMatcher implements Matcher {
 
-	private final Server server;
+    private static Server server;
 
-	public OnlinePlayerMatcher() {
-		this.server = Bukkit.getServer();
-	}
+    private final TreeSet<String> sorted = new TreeSet<String>();
+
+    public OnlinePlayerMatcher() {
+        OnlinePlayerMatcher.getServer();
+    }
+
+    public static void setServer(Server server) {
+        OnlinePlayerMatcher.server = server;
+    }
+
+    public static Server getServer() {
+        if (OnlinePlayerMatcher.server == null) {
+            throw new IllegalStateException("OnlinePlayerMatcher.server has not been set!");
+        } else {
+            return OnlinePlayerMatcher.server;
+        }
+    }
 
 	public List<String> getMatches(String argument) {
+        sorted.clear();
 		argument = argument.toLowerCase();
-		final Set<String> set = new TreeSet<String>();
-		final List<String> list = new ArrayList<String>();
-		for (final Player player : this.server.getOnlinePlayers()) {
-			if (player.getName().startsWith(argument)) {
-				set.add(player.getName());
+        final List<String> list = new ArrayList<String>();
+		for (final Player player : getServer().getOnlinePlayers()) {
+			String playerName = player.getName().toLowerCase(Locale.ENGLISH);
+            if (playerName.startsWith(argument)) {
+                sorted.add(player.getName());
 			}
 		}
-		list.addAll(set);
-		return list;
+		list.addAll(sorted);
+        return list;
 	}
 
 }
