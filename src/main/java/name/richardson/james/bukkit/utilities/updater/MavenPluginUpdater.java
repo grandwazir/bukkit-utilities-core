@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.updater;
 
+import com.avaje.ebeaninternal.server.lib.sql.Prefix;
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.xml.sax.SAXException;
 
@@ -31,7 +33,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
 
 /**
@@ -43,7 +44,7 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 
 	private final String artifactId;
 	private final String groupId;
-	private final Logger logger = LocalisedLogger.getLogger(MavenPluginUpdater.class);
+	private static final Logger logger = PrefixedLogger.getLogger(MavenPluginUpdater.class);
 	private final String pluginName;
 	private final URL repositoryURL;
 	/* A reference to the downloaded Maven manifest from the remote repository */

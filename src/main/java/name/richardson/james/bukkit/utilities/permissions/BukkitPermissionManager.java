@@ -22,13 +22,13 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.formatters.StringFormatter;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 /**
  * An implementation of {@link PermissionManager} using the Bukkit SuperPerms system.
@@ -37,7 +37,7 @@ public class BukkitPermissionManager implements PermissionManager {
 
 	private static final PluginManager pluginManager = Bukkit.getPluginManager();
 	private static final ResourceBundle localisation = ResourceBundle.getBundle("localisation.permissions");
-	private static final Logger logger = LocalisedLogger.getLogger(BukkitPermissionManager.class, null);
+	private static final Logger logger = PrefixedLogger.getLogger(BukkitPermissionManager.class);
 
 	private final List<Permission> permissions = new ArrayList<Permission>();
 

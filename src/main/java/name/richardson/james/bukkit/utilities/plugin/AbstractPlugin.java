@@ -27,6 +27,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
@@ -34,7 +35,6 @@ import com.avaje.ebean.EbeanServer;
 import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.configuration.SimplePluginConfiguration;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 import name.richardson.james.bukkit.utilities.metrics.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
@@ -53,7 +53,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	public static final String DATABASE_CONFIG_NAME = "database.yml";
 
 	/* The custom logger that belongs to this plugin */
-	private final Logger logger = LocalisedLogger.getLogger(this.getClass());
+	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
 
 	/* The configuration file for this plugin */
 	private PluginConfiguration configuration;
@@ -100,7 +100,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	 */
 	protected void loadConfiguration()
 	throws IOException {
-		LocalisedLogger.setPrefix("[" + this.getName() + "] ");
+		PrefixedLogger.setPrefix("[" + this.getName() + "] ");
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.CONFIG_NAME);
 		final InputStream defaults = this.getResource(CONFIG_NAME);
 		this.configuration = new SimplePluginConfiguration(file, defaults);

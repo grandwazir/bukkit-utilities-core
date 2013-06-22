@@ -24,9 +24,9 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
 
 /**
  * YAMLStorage is responsible for creating YAML configuration files, setting defaults from a provided {@link
@@ -34,7 +34,7 @@ import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
  */
 public class YAMLStorage {
 
-	private static final Logger logger = LocalisedLogger.getLogger(YAMLStorage.class);
+	private static final Logger logger = PrefixedLogger.getLogger(YAMLStorage.class);
 
 	private final YamlConfiguration defaultConfiguration;
 	private final File file;

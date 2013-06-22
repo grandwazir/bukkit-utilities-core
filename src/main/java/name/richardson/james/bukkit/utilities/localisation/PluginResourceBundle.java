@@ -17,28 +17,33 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.localisation;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 public class PluginResourceBundle {
 
-	public static final String PACKAGE_PREFIX = "name.richardson.james.bukkit.";
- 	public static final String RESOURCE_PREFIX = "localisation.";
+    public static final String PACKAGE_PREFIX = "name.richardson.james.bukkit.";
+    public static final String RESOURCE_PREFIX = "localisation.";
 
-	public static ResourceBundle getBundle(Class<?> owner) {
-		return ResourceBundle.getBundle(getBundleName(owner));
-	}
+    public static ResourceBundle getBundle(Class<?> owner) {
+        return ResourceBundle.getBundle(getBundleName(owner));
+    }
 
-	public static String getBundleName(Class<?> owner) {
-		String name = owner.getPackage().getName().replace(PACKAGE_PREFIX, "") + "." + owner.getSimpleName();
-		if (name.contains("utilities")) {
-			return RESOURCE_PREFIX + name.replaceFirst("\\w+.", "");
-		} else {
-			return RESOURCE_PREFIX  + name;
-		}
-	}
+    public static String getBundleName(Object object) {
+        return getBundleName(object.getClass());
+    }
+
+    public static ResourceBundle getBundle(Object object) {
+        return getBundle(object.getClass());
+    }
+
+    public static String getBundleName(Class<?> owner) {
+        String name = owner.getPackage().getName().replace(PACKAGE_PREFIX, "") + "." + owner.getSimpleName();
+        if (name.contains("utilities")) {
+            return RESOURCE_PREFIX + name.replaceFirst("\\w+.", "");
+        } else {
+            return RESOURCE_PREFIX + name;
+        }
+    }
 
     public static boolean exists(Object object) {
         return exists(object.getClass());
@@ -46,11 +51,6 @@ public class PluginResourceBundle {
 
     public static boolean exists(Class<?> owner) {
         String bundleName = getBundleName(owner).replace(".", "/") + ".properties";
-        if (owner.getClassLoader().getResource(bundleName) == null) {
-            // System.out.append("ResourceBundle not found! " + bundleName);
-        } else {
-            // System.out.append("ResourceBundle found!"  + bundleName);
-        }
         return owner.getClassLoader().getResource(bundleName) != null;
     }
 

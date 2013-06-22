@@ -35,7 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
-import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 /**
  * SQLStorage is responsible for initialising and creating a {@link EbeanServer} for the plugin to use.
@@ -45,7 +45,7 @@ import name.richardson.james.bukkit.utilities.logging.LocalisedLogger;
  */
 public class SQLStorage {
 
-	private static final Logger logger = LocalisedLogger.getLogger(SQLStorage.class);
+	private static final Logger logger = PrefixedLogger.getLogger(SQLStorage.class);
 
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
