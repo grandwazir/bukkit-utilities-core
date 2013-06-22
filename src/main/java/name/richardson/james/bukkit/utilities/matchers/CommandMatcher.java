@@ -27,13 +27,16 @@ import name.richardson.james.bukkit.utilities.command.Command;
  */
 public class CommandMatcher implements Matcher {
 
-	private final Map<String, Command> commands;
+    private static Map<String,Command> commands;
 
     private final TreeSet<String> sorted = new TreeSet<String>();
 
+    public static void setCommands(Map<String, Command> commands) {
+        CommandMatcher.commands = commands;
+    }
+
 	public CommandMatcher(final Map<String, Command> commands) {
-		if (commands == null) throw new IllegalArgumentException("Commands can not be null!");
-        this.commands = commands;
+		if (CommandMatcher.commands == null) throw new IllegalArgumentException("Commands can not be null!");
 	}
 
 	public List<String> getMatches(String argument) {

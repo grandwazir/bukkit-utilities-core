@@ -17,10 +17,10 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import name.richardson.james.bukkit.utilities.argument.Argument;
+import name.richardson.james.bukkit.utilities.argument.InvalidArgumentException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
@@ -33,24 +33,28 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 @SuppressWarnings("HardCodedStringLiteral")
 public abstract class AbstractCommand implements Command {
 
-	private final ResourceBundle localisation = PluginResourceBundle.getBundle(this.getClass());
+	private final ResourceBundle resourceBundle = PluginResourceBundle.getBundle(this.getClass());
 	private final String description;
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
+    private final List<Argument> arguments = new ArrayList<Argument>();
 	private final String name;
 	private final String usage;
 
 	private BukkitPermissionManager permissionManager;
 
 	public AbstractCommand() {
-		this.name = localisation.getString("name");
-		this.description = localisation.getString("description");
-		this.usage = localisation.getString("usage");
+		this.name = resourceBundle.getString("name");
+		this.description = resourceBundle.getString("description");
+		this.usage = resourceBundle.getString("usage");
 		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) {
 			this.setPermissions();
 		}
 		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) {
 			this.setMatchers();
 		}
+        if (this.getClass().isAnnotationPresent(CommandArguments.class)) {
+            this.setArguments();
+        }
 	}
 
 	public String getDescription() {
@@ -86,13 +90,17 @@ public abstract class AbstractCommand implements Command {
 		return results;
 	}
 
-    protected ResourceBundle getLocalisation() {
-        return this.localisation;
+    protected ResourceBundle getResourceBundle() {
+        return this.resourceBundle;
     }
 
 	protected List<Matcher> getMatchers() {
-		return this.matchers;
+		return Collections.unmodifiableList(this.matchers);
 	}
+
+    protected List<Argument> getArguments() {
+        return Collections.unmodifiableList(this.arguments);
+    }
 
 	protected PermissionManager getPermissionManager() {
 		return this.permissionManager;
@@ -109,10 +117,31 @@ public abstract class AbstractCommand implements Command {
 		}
 	}
 
+    protected void setArguments() {
+        final CommandArguments annotation = this.getClass().getAnnotation(CommandArguments.class);
+        for (final Class<? extends Argument> argumentClass : annotation.arguments()) {
+            try {
+                this.arguments.add(argumentClass.getConstructor().newInstance());
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 	private void setPermissions() {
 		final CommandPermissions annotation = this.getClass().getAnnotation(CommandPermissions.class);
 		this.permissionManager = new BukkitPermissionManager();
 		this.permissionManager.createPermissions(annotation.permissions());
 	}
+
+    protected void parseArguments(List<String> arguments) throws InvalidArgumentException {
+        if (this.getClass().isAnnotationPresent(CommandMatchers.class) && !arguments.isEmpty()) {
+            if (this.arguments.size() >= (arguments.size())) {
+                final int index = arguments.size() - 1;
+                final Argument argument = this.arguments.get(index);
+                argument.parseValue(arguments.get(index));
+            }
+        }
+    }
 
 }

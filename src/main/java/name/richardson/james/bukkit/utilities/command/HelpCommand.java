@@ -17,19 +17,20 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-
+import name.richardson.james.bukkit.utilities.argument.InvalidArgumentException;
+import name.richardson.james.bukkit.utilities.colours.ColourScheme;
+import name.richardson.james.bukkit.utilities.colours.CoreColourScheme;
+import name.richardson.james.bukkit.utilities.colours.LocalisedCoreColourScheme;
+import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import name.richardson.james.bukkit.utilities.localisation.LocalisedCommandSender;
-import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
-import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
-import name.richardson.james.bukkit.utilities.matchers.Matcher;
+import java.lang.ref.WeakReference;
+import java.util.List;
+import java.util.Map;
 
+@CommandMatchers(matchers = {CommandMatcher.class})
 public class HelpCommand extends AbstractCommand {
 
 	final static private ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.YELLOW;
@@ -37,44 +38,74 @@ public class HelpCommand extends AbstractCommand {
 
 	private final String label;
 	private final Map<String, Command> commands;
-
 	private final String pluginDescription;
 	private final String pluginName;
+    private final ColourScheme localisedScheme;
+    private final ColourScheme scheme;
 
-	public HelpCommand(final Map<String, Command> commands, final String label,
-	                   final PluginDescriptionFile description) {
-		super();
+    private String commandName;
+    private WeakReference<CommandSender> sender;
+
+    public HelpCommand(final Map<String, Command> commands, final String label, final PluginDescriptionFile description) {
 		this.label = label;
 		this.pluginName = description.getFullName();
 		this.pluginDescription = description.getDescription();
-		final ResourceBundle bundle = PluginResourceBundle.getBundle(this.getClass());
 		this.commands = commands;
-		final Matcher matcher = new CommandMatcher(commands);
-		this.getMatchers().add(matcher);
+        this.scheme = new CoreColourScheme();
+        this.localisedScheme = new LocalisedCoreColourScheme(this.getResourceBundle());
 	}
 
-	public void execute(final List<String> arguments, final CommandSender sender) {
-		LocalisedCommandSender lsender = new LocalisedCommandSender(sender, this.getLocalisation());
-		if (!arguments.isEmpty() && this.commands.containsKey(arguments.get(0))) {
-			final Command command = this.commands.get(arguments.get(0));
-			sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());
-			lsender.send("command-list-item", this.label, command.getName(), this.colouriseUsage(command.getUsage()));
-		} else {
-			sender.sendMessage(ChatColor.LIGHT_PURPLE + this.pluginName);
-			sender.sendMessage(ChatColor.AQUA + this.pluginDescription);
-			lsender.send("usage-hint", this.label, this.getName());
-			for (final Command command : this.commands.values()) {
-				if (command.isAuthorized(sender)) {
-					lsender.send("command-list-item", this.label, command.getName(), this.colouriseUsage(command.getUsage()));
-				}
-			}
-		}
-	}
+    public void execute(final List<String> arguments, final CommandSender sender) {
+        this.sender = new WeakReference<CommandSender>(sender);
+        this.parseArguments(arguments);
+        if (commands.containsKey(commandName) && commands.get(commandName).isAuthorized(sender)) {
+            Command command = commands.get(commandName);
+            String message = this.scheme.format(ColourScheme.Style.HEADER, command.getDescription());
+            this.sender.get().sendMessage(message);
+            message = this.localisedScheme.format(ColourScheme.Style.ERROR, "list-item", this.label, command.getName(), this.colouriseUsage(this.getUsage()));
+            this.sender.get().sendMessage(message);
+        } else {
+            String message = this.scheme.format(ColourScheme.Style.HEADER, this.pluginName);
+            this.sender.get().sendMessage(message);
+            this.sender.get().sendMessage(ChatColor.AQUA + this.pluginDescription);
+            message = this.localisedScheme.format(ColourScheme.Style.WARNING, "usage-hint", this.label, this.getName());
+            this.sender.get().sendMessage(message);
+            for (final Command command : this.commands.values()) {
+                if (!command.isAuthorized(sender)) continue;
+                message = this.localisedScheme.format(ColourScheme.Style.ERROR, "list-item", this.label, command.getName(), this.colouriseUsage(this.getUsage()));
+                this.sender.get().sendMessage(message);
+            }
+        }
+    }
 
-	private String colouriseUsage(String usage) {
+    protected void parseArguments(List<String> arguments) {
+        try {
+            super.parseArguments(arguments);
+            setCommandName(this.getArguments().get(0).getValue());
+        } catch (InvalidArgumentException e) {
+            String message = this.scheme.format(ColourScheme.Style.ERROR, e.getMessage());
+            this.sender.get().sendMessage(message);
+        }
+    }
+
+    protected void setArguments() {
+        super.setArguments();
+        this.getArguments().get(0).setRequired(false);
+    }
+
+    @Override
+    protected void setMatchers() {
+        CommandMatcher.setCommands(this.commands);
+        super.setMatchers();
+    }
+
+    private String colouriseUsage(String usage) {
 		usage = usage.replaceAll("<", HelpCommand.REQUIRED_ARGUMENT_COLOUR + "<");
 		usage = usage.replaceAll("\\[", HelpCommand.OPTIONAL_ARGUMENT_COLOUR + "\\[");
 		return usage;
 	}
 
+    public void setCommandName(Object command) {
+        this.commandName = (String) command;
+    }
 }
