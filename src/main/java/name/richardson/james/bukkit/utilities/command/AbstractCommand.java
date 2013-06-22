@@ -33,8 +33,7 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 @SuppressWarnings("HardCodedStringLiteral")
 public abstract class AbstractCommand implements Command {
 
-	protected final ResourceBundle localisation = PluginResourceBundle.getBundle(this.getClass());
-
+	private final ResourceBundle localisation = PluginResourceBundle.getBundle(this.getClass());
 	private final String description;
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
 	private final String name;
@@ -74,6 +73,7 @@ public abstract class AbstractCommand implements Command {
 		return false;
 	}
 
+
 	public List<String> onTabComplete(final List<String> arguments, final CommandSender sender) {
 		final List<String> results = new ArrayList<String>();
 		if (this.getClass().isAnnotationPresent(CommandMatchers.class) && !arguments.isEmpty()) {
@@ -85,6 +85,10 @@ public abstract class AbstractCommand implements Command {
 		}
 		return results;
 	}
+
+    protected ResourceBundle getLocalisation() {
+        return this.localisation;
+    }
 
 	protected List<Matcher> getMatchers() {
 		return this.matchers;

@@ -54,7 +54,7 @@ public class HelpCommand extends AbstractCommand {
 	}
 
 	public void execute(final List<String> arguments, final CommandSender sender) {
-		LocalisedCommandSender lsender = new LocalisedCommandSender(sender, this.localisation);
+		LocalisedCommandSender lsender = new LocalisedCommandSender(sender, this.getLocalisation());
 		if (!arguments.isEmpty() && this.commands.containsKey(arguments.get(0))) {
 			final Command command = this.commands.get(arguments.get(0));
 			sender.sendMessage(ChatColor.LIGHT_PURPLE + command.getDescription());

@@ -19,6 +19,8 @@ package name.richardson.james.bukkit.utilities.formatters;
 
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
@@ -50,8 +52,12 @@ public final class ChoiceFormatter {
 		this.arguments = arguments;
 	}
 
-	public void setFormats(final String... formats) {
-		this.formats = formats;
+	public void setFormats(final String... args) {
+        List<String> formats = new LinkedList<String>();
+        for (String key : args) {
+            formats.add(this.localisation.getString(key));
+        }
+		this.formats = formats.toArray(new String[formats.size()]);
 	}
 
 	public void setLimits(final double... limits) {
@@ -61,5 +67,9 @@ public final class ChoiceFormatter {
 	public void setMessage(final String key) {
 		this.message = this.localisation.getString(key);
 	}
+
+    public void setLocalisedMessage(final String message) {
+        this.message = message;
+    }
 
 }

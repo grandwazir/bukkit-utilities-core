@@ -53,8 +53,6 @@ public class LocalisedCommandSender {
 		String message = bundle.getString(key);
 		message = ColourFormatter.header(message);
 		message = MessageFormat.format(message, arguments);
-		System.err.append(arguments.toString());
-		System.err.append(message);
 		sender.sendMessage(message);
 	}
 
