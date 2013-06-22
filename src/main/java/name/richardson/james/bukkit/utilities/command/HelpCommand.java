@@ -17,11 +17,11 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
+import name.richardson.james.bukkit.utilities.argument.CommandArgument;
 import name.richardson.james.bukkit.utilities.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.colours.CoreColourScheme;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedCoreColourScheme;
-import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -30,7 +30,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Map;
 
-@CommandMatchers(matchers = {CommandMatcher.class})
+@CommandArguments(arguments = {CommandArgument.class})
 public class HelpCommand extends AbstractCommand {
 
 	final static private ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.YELLOW;
@@ -89,14 +89,9 @@ public class HelpCommand extends AbstractCommand {
     }
 
     protected void setArguments() {
+        CommandArgument.setCommands(this.commands.keySet());
         super.setArguments();
         this.getArguments().get(0).setRequired(false);
-    }
-
-    @Override
-    protected void setMatchers() {
-        CommandMatcher.setCommands(this.commands);
-        super.setMatchers();
     }
 
     private String colouriseUsage(String usage) {

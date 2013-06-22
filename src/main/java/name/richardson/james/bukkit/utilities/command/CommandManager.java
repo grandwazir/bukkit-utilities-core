@@ -25,14 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import name.richardson.james.bukkit.utilities.argument.Argument;
+import name.richardson.james.bukkit.utilities.argument.CommandArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
-import name.richardson.james.bukkit.utilities.matchers.CommandMatcher;
-import name.richardson.james.bukkit.utilities.matchers.Matcher;
 
 public class CommandManager implements TabExecutor {
 
@@ -40,12 +40,13 @@ public class CommandManager implements TabExecutor {
 
 	private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
 	private final Command helpCommand;
-	private final Matcher matcher;
+	private final Argument argument;
 
 	public CommandManager(final String commandName, PluginDescriptionFile pluginDescriptionFile) {
 		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
 		this.helpCommand = new HelpCommand(this.commands, commandName, pluginDescriptionFile);
-		this.matcher = new CommandMatcher(this.commands);
+        CommandArgument.setCommands(this.commands.keySet());
+		this.argument = new CommandArgument();
 	}
 
 	public void addCommand(final Command command) {
@@ -77,7 +78,7 @@ public class CommandManager implements TabExecutor {
 	}
 
 	public List<String> onTabComplete(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
-		final List<String> arguments = new LinkedList<String>(Arrays.asList(args));
+		final List<String> arguments = new ArrayList<String>(Arrays.asList(args));
 		final Command command = this.commands.get(arguments.get(0));
 		if (command != null) {
 			if (command.isAuthorized(sender)) {
@@ -87,7 +88,7 @@ public class CommandManager implements TabExecutor {
 				return new ArrayList<String>();
 			}
 		} else {
-			return this.matcher.getMatches(arguments.get(0));
+			return new ArrayList<String>(this.argument.getMatches(arguments.get(0)));
 		}
 	}
 

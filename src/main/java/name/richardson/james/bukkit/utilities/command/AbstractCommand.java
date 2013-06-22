@@ -26,7 +26,6 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
-import name.richardson.james.bukkit.utilities.matchers.Matcher;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 
@@ -35,7 +34,6 @@ public abstract class AbstractCommand implements Command {
 
 	private final ResourceBundle resourceBundle = PluginResourceBundle.getBundle(this.getClass());
 	private final String description;
-	private final List<Matcher> matchers = new ArrayList<Matcher>();
     private final List<Argument> arguments = new ArrayList<Argument>();
 	private final String name;
 	private final String usage;
@@ -48,9 +46,6 @@ public abstract class AbstractCommand implements Command {
 		this.usage = resourceBundle.getString("usage");
 		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) {
 			this.setPermissions();
-		}
-		if (this.getClass().isAnnotationPresent(CommandMatchers.class)) {
-			this.setMatchers();
 		}
         if (this.getClass().isAnnotationPresent(CommandArguments.class)) {
             this.setArguments();
@@ -80,11 +75,11 @@ public abstract class AbstractCommand implements Command {
 
 	public List<String> onTabComplete(final List<String> arguments, final CommandSender sender) {
 		final List<String> results = new ArrayList<String>();
-		if (this.getClass().isAnnotationPresent(CommandMatchers.class) && !arguments.isEmpty()) {
-			if (this.matchers.size() >= (arguments.size())) {
+		if (this.getClass().isAnnotationPresent(CommandArguments.class) && !arguments.isEmpty()) {
+			if (this.arguments.size() >= (arguments.size())) {
 				final int index = arguments.size() - 1;
-				final Matcher matcher = this.matchers.get(index);
-				results.addAll(matcher.getMatches(arguments.get(index)));
+				final Argument argument = this.arguments.get(index);
+				results.addAll(argument.getMatches(arguments.get(index)));
 			}
 		}
 		return results;
@@ -94,9 +89,6 @@ public abstract class AbstractCommand implements Command {
         return this.resourceBundle;
     }
 
-	protected List<Matcher> getMatchers() {
-		return Collections.unmodifiableList(this.matchers);
-	}
 
     protected List<Argument> getArguments() {
         return Collections.unmodifiableList(this.arguments);
@@ -104,17 +96,6 @@ public abstract class AbstractCommand implements Command {
 
 	protected PermissionManager getPermissionManager() {
 		return this.permissionManager;
-	}
-
-	protected void setMatchers() {
-		final CommandMatchers annotation = this.getClass().getAnnotation(CommandMatchers.class);
-		for (final Class<? extends Matcher> matcherClass : annotation.matchers()) {
-			try {
-				this.matchers.add(matcherClass.getConstructor().newInstance());
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
     protected void setArguments() {
@@ -135,7 +116,7 @@ public abstract class AbstractCommand implements Command {
 	}
 
     protected void parseArguments(List<String> arguments) throws InvalidArgumentException {
-        if (this.getClass().isAnnotationPresent(CommandMatchers.class) && !arguments.isEmpty()) {
+        if (this.getClass().isAnnotationPresent(CommandArguments.class) && !arguments.isEmpty()) {
             if (this.arguments.size() >= (arguments.size())) {
                 final int index = arguments.size() - 1;
                 final Argument argument = this.arguments.get(index);
