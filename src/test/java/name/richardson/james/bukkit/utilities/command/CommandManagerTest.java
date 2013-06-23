@@ -25,7 +25,6 @@ public class CommandManagerTest extends TestCase {
 	public void testOnTabComplete()
 	throws Exception {
 		List<String> matches = new ArrayList<String>(Arrays.asList("1", "2", "3"));
-		EasyMock.expect(helpCommand.onTabComplete((List<String>) EasyMock.anyObject(), (CommandSender) EasyMock.anyObject())).andReturn(matches).atLeastOnce();
 		EasyMock.expect(helpCommand.getName()).andReturn("help").atLeastOnce();
 		EasyMock.replay(helpCommand);
 		String[] args = {""};

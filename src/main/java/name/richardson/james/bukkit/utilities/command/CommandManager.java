@@ -36,8 +36,6 @@ public class CommandManager implements TabExecutor {
 	private final HelpCommand helpCommand;
 	private final ResourceBundle resourceBundle = PluginResourceBundle.getBundle(CommandManager.class);
 
-	private final LocalisedCoreColourScheme localisedColourScheme = new LocalisedCoreColourScheme(resourceBundle);
-
 	public CommandManager(HelpCommand helpCommand) {
 		this.argument = new CommandArgument();
 		this.helpCommand = helpCommand;
@@ -52,21 +50,17 @@ public class CommandManager implements TabExecutor {
 	public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
 		final List<String> arguments = new LinkedList<String>(Arrays.asList(args));
 		if (arguments.isEmpty()) {
-			this.helpCommand.execute(arguments, sender);
+			this.helpCommand.onCommand(arguments, sender);
 		} else {
 			if (this.commands.containsKey(arguments.get(0).toLowerCase())) {
 				final Command command = this.commands.get(arguments.get(0).toLowerCase());
 				arguments.remove(0);
-				if (command.isAuthorized(sender)) {
-					command.execute(arguments, sender);
-				} else {
-					sender.sendMessage(this.localisedColourScheme.format(ColourScheme.Style.ERROR, "not-allowed"));
-				}
+				command.onCommand(arguments, sender);
 			} else if (arguments.get(0).contentEquals(this.helpCommand.getName())) {
 				arguments.remove(0);
-				this.helpCommand.execute(arguments, sender);
+				this.helpCommand.onCommand(arguments, sender);
 			} else {
-				this.helpCommand.execute(arguments, sender);
+				this.helpCommand.onCommand(arguments, sender);
 			}
 		}
 		return true;
@@ -78,7 +72,7 @@ public class CommandManager implements TabExecutor {
 		if (command != null) {
 			if (command.isAuthorized(sender)) {
 				arguments.remove(0);
-				return command.onTabComplete(arguments, sender);
+				return command.onTabComplete(arguments);
 			} else {
 				return new ArrayList<String>();
 			}

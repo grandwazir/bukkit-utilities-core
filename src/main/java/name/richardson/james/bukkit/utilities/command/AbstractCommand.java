@@ -17,18 +17,18 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.lang.ref.WeakReference;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 
+import name.richardson.james.bukkit.utilities.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.command.argument.Argument;
 import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
+import name.richardson.james.bukkit.utilities.localisation.LocalisedCoreColourScheme;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
@@ -36,26 +36,48 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 @SuppressWarnings("HardCodedStringLiteral")
 public abstract class AbstractCommand implements Command {
 
-	private final List<Argument> arguments = new ArrayList<Argument>();
+	private final List<Argument> argumentValidators = new ArrayList<Argument>();
 	private final String description;
 	private final String name;
 	private final ResourceBundle resourceBundle = PluginResourceBundle.getBundle(this.getClass());
 	private final String usage;
+	private List<String> arguments;
 
-	private BukkitPermissionManager permissionManager;
+	private ColourScheme colourScheme;
+
+	private WeakReference<CommandSender> commandSender;
+
+	private PermissionManager permissionManager;
 
 	public AbstractCommand() {
 		this.name = resourceBundle.getString("name");
 		this.description = resourceBundle.getString("description");
 		this.usage = resourceBundle.getString("usage");
-		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) {
-			this.setPermissions();
-		}
-		if (this.getClass().isAnnotationPresent(CommandArguments.class)) {
-			this.setArguments();
-		}
+		this.colourScheme = new LocalisedCoreColourScheme(resourceBundle);
+		if (this.getClass().isAnnotationPresent(CommandPermissions.class)) this.setPermissions();
+		if (this.getClass().isAnnotationPresent(CommandArguments.class)) this.setArgumentValidators();
 	}
 
+	public List<String> getArguments() {
+		return Collections.unmodifiableList(arguments);
+	}
+
+	protected ColourScheme getColourScheme() {
+		return colourScheme;
+	}
+
+	protected void setColourScheme(ColourScheme colourScheme) {
+		this.colourScheme = colourScheme;
+	}
+
+	protected CommandSender getCommandSender() {
+		return this.commandSender.get();	
+	}
+
+	private void setCommandSender(CommandSender sender) {
+		this.commandSender = new WeakReference<CommandSender>(sender);
+	}
+	
 	public String getDescription() {
 		return this.description;
 	}
@@ -77,23 +99,53 @@ public abstract class AbstractCommand implements Command {
 				return true;
 			}
 		}
+		colourScheme.format(ColourScheme.Style.ERROR, "access-denied");
 		return false;
 	}
 
-	public List<String> onTabComplete(final List<String> arguments, final CommandSender sender) {
+	protected void execute() {
+		return;
+	}
+
+	@Override
+	public final boolean onCommand(List<String> arguments, CommandSender commandSender) {
+		this.arguments = arguments;
+		this.setCommandSender(commandSender);
+		try {
+			if (!isAuthorized(commandSender)) return true;
+			if (!parseArguments()) return true;
+			this.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			return true;
+		}
+	}
+
+	@Override
+	public final boolean onCommand(CommandSender commandSender, org.bukkit.command.Command command, String s, String[] strings) {
+		return this.onCommand(new LinkedList<String>(Arrays.asList(strings)), commandSender);
+	}
+
+	@Override
+	public final List<String> onTabComplete(CommandSender commandSender, org.bukkit.command.Command command, String s, String[] strings) {
+		return this.onTabComplete(Arrays.asList(strings));
+	}
+
+	public final List<String> onTabComplete(final List<String> arguments) {
 		final List<String> results = new ArrayList<String>();
 		if (this.getClass().isAnnotationPresent(CommandArguments.class) && !arguments.isEmpty()) {
-			if (this.arguments.size() >= (arguments.size())) {
+			if (this.argumentValidators.size() >= (arguments.size())) {
 				final int index = arguments.size() - 1;
-				final Argument argument = this.arguments.get(index);
+				final Argument argument = this.argumentValidators.get(index);
 				results.addAll(argument.getMatches(arguments.get(index)));
 			}
 		}
 		return results;
 	}
 
-	protected List<Argument> getArguments() {
-		return Collections.unmodifiableList(this.arguments);
+	protected List<Argument> getArgumentValidators() {
+		return Collections.unmodifiableList(this.argumentValidators);
 	}
 
 	protected PermissionManager getPermissionManager() {
@@ -104,22 +156,15 @@ public abstract class AbstractCommand implements Command {
 		return this.resourceBundle;
 	}
 
-	protected void parseArguments(List<String> arguments)
-	throws InvalidArgumentException {
-		if (this.getClass().isAnnotationPresent(CommandArguments.class) && !arguments.isEmpty()) {
-			if (this.arguments.size() >= (arguments.size())) {
-				final int index = arguments.size() - 1;
-				final Argument argument = this.arguments.get(index);
-				argument.parseValue(arguments.get(index));
-			}
-		}
+	protected boolean parseArguments() {
+		return true;
 	}
 
-	protected void setArguments() {
+	protected void setArgumentValidators() {
 		final CommandArguments annotation = this.getClass().getAnnotation(CommandArguments.class);
 		for (final Class<? extends Argument> argumentClass : annotation.arguments()) {
 			try {
-				this.arguments.add(argumentClass.getConstructor().newInstance());
+				this.argumentValidators.add(argumentClass.getConstructor().newInstance());
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}

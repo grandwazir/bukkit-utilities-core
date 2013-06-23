@@ -17,62 +17,54 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import name.richardson.james.bukkit.utilities.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.colours.CoreColourScheme;
 import name.richardson.james.bukkit.utilities.command.argument.CommandArgument;
 import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
-import name.richardson.james.bukkit.utilities.localisation.LocalisedCoreColourScheme;
 
 @CommandArguments(arguments = {CommandArgument.class})
 public class HelpCommand extends AbstractCommand {
 
 	final static private ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.YELLOW;
 	final static private ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
+
 	private final String label;
-	private final ColourScheme localisedScheme;
 	private final String pluginDescription;
 	private final String pluginName;
 	private final ColourScheme scheme;
+
+	private Map<String, Command> commands;
 	private String commandName;
-	private Map<String, Command> commands = new HashMap<String, Command>();
-	private WeakReference<CommandSender> sender;
 
 	public HelpCommand(final String label, final PluginDescriptionFile description) {
 		this.label = label;
 		this.pluginName = description.getFullName();
 		this.pluginDescription = description.getDescription();
 		this.scheme = new CoreColourScheme();
-		this.localisedScheme = new LocalisedCoreColourScheme(this.getResourceBundle());
 	}
 
-	public void execute(final List<String> arguments, final CommandSender sender) {
-		this.sender = new WeakReference<CommandSender>(sender);
-		this.parseArguments(arguments);
-		if (commands.containsKey(commandName) && commands.get(commandName).isAuthorized(sender)) {
+	public void execute() {
+		if (commands.containsKey(commandName) && commands.get(commandName).isAuthorized(this.getCommandSender())) {
 			Command command = commands.get(commandName);
 			String message = this.scheme.format(ColourScheme.Style.HEADER, command.getDescription());
-			this.sender.get().sendMessage(message);
-			message = this.localisedScheme.format(ColourScheme.Style.ERROR, "list-item", this.label, command.getName(), this.colouriseUsage(this.getUsage()));
-			this.sender.get().sendMessage(message);
+			getCommandSender().sendMessage(message);
+			message = getColourScheme().format(ColourScheme.Style.ERROR, "list-item", this.label, command.getName(), this.colouriseUsage(this.getUsage()));
+			getCommandSender().sendMessage(message);
 		} else {
 			String message = this.scheme.format(ColourScheme.Style.HEADER, this.pluginName);
-			this.sender.get().sendMessage(message);
-			this.sender.get().sendMessage(ChatColor.AQUA + this.pluginDescription);
-			message = this.localisedScheme.format(ColourScheme.Style.WARNING, "usage-hint", ChatColor.RED + "/" + this.label, this.getName());
-			this.sender.get().sendMessage(message);
+			getCommandSender().sendMessage(message);
+			getCommandSender().sendMessage(ChatColor.AQUA + this.pluginDescription);
+			message = getColourScheme().format(ColourScheme.Style.WARNING, "usage-hint", ChatColor.RED + "/" + this.label, this.getName());
+			getCommandSender().sendMessage(message);
 			for (final Command command : this.commands.values()) {
-				if (!command.isAuthorized(sender)) continue;
-				message = this.localisedScheme.format(ColourScheme.Style.ERROR, "list-item",  ChatColor.RED + "/" + this.label, command.getName(), this.colouriseUsage(command.getUsage()));
-				this.sender.get().sendMessage(message);
+				if (!command.isAuthorized(getCommandSender())) continue;
+				message = getColourScheme().format(ColourScheme.Style.ERROR, "list-item", ChatColor.RED + "/" + this.label, command.getName(), this.colouriseUsage(command.getUsage()));
+				getCommandSender().sendMessage(message);
 			}
 		}
 	}
@@ -81,19 +73,23 @@ public class HelpCommand extends AbstractCommand {
 		this.commands = commands;
 	}
 
-	protected void parseArguments(List<String> arguments) {
+	@Override
+	protected boolean parseArguments() {
 		try {
-			super.parseArguments(arguments);
-			this.commandName = (String) this.getArguments().get(0).getValue();
+			super.parseArguments();
+			commandName = (String) this.getArgumentValidators().get(0).getValue();
+			return true;
 		} catch (InvalidArgumentException e) {
 			String message = this.scheme.format(ColourScheme.Style.ERROR, e.getMessage());
-			this.sender.get().sendMessage(message);
+			this.getCommandSender().sendMessage(message);
+			return false;
 		}
 	}
 
-	protected void setArguments() {
-		super.setArguments();
-		this.getArguments().get(0).setRequired(false);
+	@Override
+	protected void setArgumentValidators() {
+		super.setArgumentValidators();
+		this.getArgumentValidators().get(0).setRequired(false);
 	}
 
 	private String colouriseUsage(String usage) {

@@ -40,7 +40,7 @@ public class PlayerNotifier extends AbstractListener {
 	private final String version;
 
 	public PlayerNotifier(String pluginName, String version) {
-		super(pluginName);
+		super(null, null);
 		this.pluginName = pluginName;
 		this.permission = pluginName.toLowerCase();
 		this.version = version;

@@ -61,14 +61,11 @@ public class AbstractCommandTest extends TestCase {
 	@Test
 	public void testOnTabComplete()
 	throws Exception {
-		Assert.assertEquals(command.onTabComplete(Collections.EMPTY_LIST, sender), Collections.emptyList());
+		Assert.assertEquals(command.onTabComplete(Collections.EMPTY_LIST), Collections.emptyList());
 	}
 
 	public class TestCommand extends AbstractCommand {
 
-		public void execute(List<String> arguments, CommandSender sender) {
-			return;
-		}
 
 	}
 

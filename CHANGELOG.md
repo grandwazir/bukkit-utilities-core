@@ -1,5 +1,8 @@
 # Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-06-23 15:28:37 +0100    make abstractlistener test friendly (James Richardson)  
+2013-06-23 14:42:37 +0100    add markdown readme (James Richardson)  
+2013-06-23 14:38:18 +0100    final attempt at fixing for travis (James Richardson)  
 2013-06-23 14:28:02 +0100    attempt to fix travis build problems (James Richardson)  
 2013-06-23 14:12:21 +0100    update to latest gitlog-plugin (James Richardson)  
 2013-06-23 13:52:16 +0100    remove dependency on parent pom I think I was using it in a way for which it was not designed (James Richardson)  

@@ -20,11 +20,10 @@ package name.richardson.james.bukkit.utilities.command;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.permissions.Permissible;
 
-public interface Command {
-
-	public void execute(List<String> arguments, CommandSender sender);
+public interface Command extends TabExecutor {
 
 	public String getDescription();
 
@@ -34,6 +33,8 @@ public interface Command {
 
 	public boolean isAuthorized(Permissible permissible);
 
-	public List<String> onTabComplete(List<String> arguments, CommandSender sender);
+	public boolean onCommand(List<String> arguments, CommandSender commandSender);
+
+	public List<String> onTabComplete(List<String> arguments);
 
 }
