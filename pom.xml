@@ -185,7 +185,7 @@
             <id>normal</id>
             <activation>
                 <property>
-                    <name>!environment</name>
+                    <name>!env.TRAVIS</name>
                 </property>
             </activation>
             <build>
@@ -216,15 +216,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-            <id>travis</id>
-            <activation>
-                <property>
-                    <name>environment</name>
-                    <value>travis</value>
-                </property>
-            </activation>
         </profile>
     </profiles>
 
