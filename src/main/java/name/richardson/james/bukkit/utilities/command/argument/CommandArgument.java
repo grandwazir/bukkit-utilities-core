@@ -24,10 +24,11 @@ import java.util.TreeSet;
 
 public class CommandArgument extends StringArgument {
 
-	private static Set<String> commands;
+	private static Set<String> commands = new TreeSet<String>();
 
 	public static void setCommands(Set<String> commands) {
-		CommandArgument.commands = commands;
+		CommandArgument.commands.clear();
+		CommandArgument.commands.addAll(commands);
 	}
 
 	@Override

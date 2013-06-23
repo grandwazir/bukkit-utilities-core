@@ -129,7 +129,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	protected void setPermissions() {
 		if (this.getClass().isAnnotationPresent(PluginPermissions.class)) {
 			final PluginPermissions annotation = this.getClass().getAnnotation(PluginPermissions.class);
-			final PermissionManager permissionManager = new BukkitPermissionManager();
+			final PermissionManager permissionManager = new BukkitPermissionManager(this.getServer().getPluginManager());
 			permissionManager.createPermissions(annotation.permissions());
 		}
 	}

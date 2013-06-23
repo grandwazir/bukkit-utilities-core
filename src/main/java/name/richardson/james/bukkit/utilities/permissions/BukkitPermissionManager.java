@@ -22,35 +22,32 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.formatters.StringFormatter;
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 /**
  * An implementation of {@link PermissionManager} using the Bukkit SuperPerms system.
  */
 public class BukkitPermissionManager implements PermissionManager {
 
-	private static final PluginManager pluginManager = Bukkit.getPluginManager();
 	private static final ResourceBundle localisation = ResourceBundle.getBundle("localisation.permissions");
-	private static final Logger logger = PrefixedLogger.getLogger(BukkitPermissionManager.class);
 
+	private static PluginManager pluginManager;
+
+	private final Logger logger = PrefixedLogger.getLogger(this);
 	private final List<Permission> permissions = new ArrayList<Permission>();
 
-	public BukkitPermissionManager() {
-		return;
-	}
-
-	public BukkitPermissionManager(final Permission parent) {
-		this.permissions.add(parent);
+	public BukkitPermissionManager(PluginManager pluginManager) {
+		BukkitPermissionManager.pluginManager = pluginManager;
 	}
 
 	public Permission addPermission(final Permission permission) {
-		BukkitPermissionManager.logger.log(Level.CONFIG, "Adding permission: {0}", permission.getName());
+		logger.log(Level.CONFIG, "Adding permission: {0}", permission.getName());
 		BukkitPermissionManager.pluginManager.addPermission(permission);
 		this.permissions.add(permission);
 		return permission;
@@ -107,7 +104,7 @@ public class BukkitPermissionManager implements PermissionManager {
 		if (nodes.size() > 1) {
 			nodes.remove(nodes.size() - 1);
 			final String parentNode = StringFormatter.combineString(nodes, ".");
-			BukkitPermissionManager.logger.log(Level.FINE, "Resolving parent permission: {0}", parentNode);
+			logger.log(Level.FINE, "Resolving parent permission: {0}", parentNode);
 			return Bukkit.getPluginManager().getPermission(parentNode);
 		} else {
 			return null;

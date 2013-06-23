@@ -17,40 +17,35 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
-import name.richardson.james.bukkit.utilities.command.argument.Argument;
-import name.richardson.james.bukkit.utilities.command.argument.CommandArgument;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import name.richardson.james.bukkit.utilities.colours.ColourScheme;
+import name.richardson.james.bukkit.utilities.command.argument.Argument;
+import name.richardson.james.bukkit.utilities.command.argument.CommandArgument;
+import name.richardson.james.bukkit.utilities.localisation.LocalisedCoreColourScheme;
 import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
 
 public class CommandManager implements TabExecutor {
 
-	private final ResourceBundle localisation = PluginResourceBundle.getBundle(CommandManager.class);
-
+	private final Argument argument;
 	private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
 	private final Command helpCommand;
-	private final Argument argument;
+	private final ResourceBundle resourceBundle = PluginResourceBundle.getBundle(CommandManager.class);
 
-	public CommandManager(final String commandName, PluginDescriptionFile pluginDescriptionFile) {
-		Bukkit.getServer().getPluginCommand(commandName).setExecutor(this);
-		this.helpCommand = new HelpCommand(this.commands, commandName, pluginDescriptionFile);
-        CommandArgument.setCommands(this.commands.keySet());
+	private final LocalisedCoreColourScheme localisedColourScheme = new LocalisedCoreColourScheme(resourceBundle);
+
+	public CommandManager(HelpCommand helpCommand) {
 		this.argument = new CommandArgument();
+		this.helpCommand = helpCommand;
 	}
 
 	public void addCommand(final Command command) {
 		this.commands.put(command.getName(), command);
+		CommandArgument.setCommands(this.commands.keySet());
 	}
 
 	public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
@@ -64,8 +59,7 @@ public class CommandManager implements TabExecutor {
 				if (command.isAuthorized(sender)) {
 					command.execute(arguments, sender);
 				} else {
-					// LocalisedCommandSender lsender = new LocalisedCommandSender(sender, localisation);
-					// lsender.error("not-allowed-to-use-command");
+					sender.sendMessage(this.localisedColourScheme.format(ColourScheme.Style.ERROR, "not-allowed"));
 				}
 			} else if (arguments.get(0).contentEquals(this.helpCommand.getName())) {
 				arguments.remove(0);

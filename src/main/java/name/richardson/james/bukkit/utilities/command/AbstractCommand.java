@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
@@ -127,7 +128,7 @@ public abstract class AbstractCommand implements Command {
 
 	private void setPermissions() {
 		final CommandPermissions annotation = this.getClass().getAnnotation(CommandPermissions.class);
-		this.permissionManager = new BukkitPermissionManager();
+		this.permissionManager = new BukkitPermissionManager(Bukkit.getPluginManager());
 		this.permissionManager.createPermissions(annotation.permissions());
 	}
 

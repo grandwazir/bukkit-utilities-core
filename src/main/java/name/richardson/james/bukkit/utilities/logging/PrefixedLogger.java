@@ -32,7 +32,6 @@ public class PrefixedLogger extends Logger {
         }
     }
 
-
     protected PrefixedLogger(String name, String resourceBundleName) {
         super(name, resourceBundleName);
         if (this.getResourceBundle() == null) {
