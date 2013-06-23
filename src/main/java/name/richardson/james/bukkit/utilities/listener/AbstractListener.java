@@ -17,23 +17,34 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.listener;
 
-import org.bukkit.Bukkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 public class AbstractListener implements Listener {
 
-	public AbstractListener(final Plugin plugin) {
-		this.registerListener(plugin);
+	private static final Logger logger = PrefixedLogger.getLogger(AbstractListener.class);
+
+	private final Plugin plugin;
+	private final PluginManager pluginManager;
+
+	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
+		this.pluginManager = pluginManager;
+		this.plugin = plugin;
 	}
 
-	public AbstractListener(final String pluginName) {
-		final Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-		this.registerListener(plugin);
+	public static Logger getLogger() {
+		return logger;
 	}
 
 	private void registerListener(final Plugin plugin) {
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		logger.log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events,");
+		pluginManager.registerEvents(this, plugin);
 	}
 
 }
