@@ -122,10 +122,10 @@
                 <groupId>com.github.danielflower.mavenplugins</groupId>
                 <!-- Generate a changelog based on github commits -->
                 <artifactId>maven-gitlog-plugin</artifactId>
-                <version>1.4.11</version>
+                <version>1.5.0</version>
                 <configuration>
                     <reportTitle>Changelog for ${project.name} (v${project.version})</reportTitle>
-                    <verbose>true</verbose>
+                    <verbose>false</verbose>
                     <outputDirectory>${basedir}</outputDirectory>
                     <generatePlainTextChangeLog>true</generatePlainTextChangeLog>
                     <plainTextChangeLogFilename>CHANGELOG.txt</plainTextChangeLogFilename>

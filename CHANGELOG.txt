@@ -1,5 +1,6 @@
 Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-06-23 13:52:16 +0100    remove dependency on parent pom I think I was using it in a way for which it was not designed (James Richardson)
 2013-06-23 13:38:56 +0100    add travis project info (James Richardson)
 2013-06-23 13:36:12 +0100    fix remaining problems with help command (James Richardson)
 2013-06-23 13:31:18 +0100    register commands with HelpCommand (James Richardson)
