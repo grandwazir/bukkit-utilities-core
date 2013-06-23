@@ -1,5 +1,7 @@
 Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-06-23 13:38:56 +0100    add travis project info (James Richardson)
+2013-06-23 13:36:12 +0100    fix remaining problems with help command (James Richardson)
 2013-06-23 13:31:18 +0100    register commands with HelpCommand (James Richardson)
 2013-06-23 13:28:24 +0100    formatting fix (James Richardson)
 2013-06-23 13:26:45 +0100    fix HelpCommand (James Richardson)
