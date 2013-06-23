@@ -67,11 +67,11 @@ public class HelpCommand extends AbstractCommand {
 			String message = this.scheme.format(ColourScheme.Style.HEADER, this.pluginName);
 			this.sender.get().sendMessage(message);
 			this.sender.get().sendMessage(ChatColor.AQUA + this.pluginDescription);
-			message = this.localisedScheme.format(ColourScheme.Style.WARNING, "usage-hint", "/" + this.label, this.getName());
+			message = this.localisedScheme.format(ColourScheme.Style.WARNING, "usage-hint", ChatColor.RED + "/" + this.label, this.getName());
 			this.sender.get().sendMessage(message);
 			for (final Command command : this.commands.values()) {
 				if (!command.isAuthorized(sender)) continue;
-				message = this.localisedScheme.format(ColourScheme.Style.ERROR, "list-item",  "/" + this.label, command.getName(), this.colouriseUsage(this.getUsage()));
+				message = this.localisedScheme.format(ColourScheme.Style.ERROR, "list-item",  ChatColor.RED + "/" + this.label, command.getName(), this.colouriseUsage(command.getUsage()));
 				this.sender.get().sendMessage(message);
 			}
 		}
