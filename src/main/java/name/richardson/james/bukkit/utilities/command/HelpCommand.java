@@ -71,7 +71,7 @@ public class HelpCommand extends AbstractCommand {
 			this.sender.get().sendMessage(message);
 			for (final Command command : this.commands.values()) {
 				if (!command.isAuthorized(sender)) continue;
-				message = this.localisedScheme.format(ColourScheme.Style.ERROR, "list-item", this.label, command.getName(), this.colouriseUsage(this.getUsage()));
+				message = this.localisedScheme.format(ColourScheme.Style.ERROR, "list-item",  "/" + this.label, command.getName(), this.colouriseUsage(this.getUsage()));
 				this.sender.get().sendMessage(message);
 			}
 		}
