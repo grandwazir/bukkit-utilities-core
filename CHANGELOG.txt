@@ -1,5 +1,7 @@
 Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-06-23 13:28:24 +0100    formatting fix (James Richardson)
+2013-06-23 13:26:45 +0100    fix HelpCommand (James Richardson)
 2013-06-23 01:29:03 +0100    delete old tests (James Richardson)
 2013-06-23 00:04:04 +0100    applying new formatting style (James Richardson)
 2013-06-22 23:57:45 +0100    add copyright and reformat tests (James Richardson)

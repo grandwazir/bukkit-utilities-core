@@ -33,7 +33,7 @@ public class CommandManager implements TabExecutor {
 
 	private final Argument argument;
 	private final Map<String, Command> commands = new LinkedHashMap<String, Command>();
-	private final Command helpCommand;
+	private final HelpCommand helpCommand;
 	private final ResourceBundle resourceBundle = PluginResourceBundle.getBundle(CommandManager.class);
 
 	private final LocalisedCoreColourScheme localisedColourScheme = new LocalisedCoreColourScheme(resourceBundle);
@@ -46,6 +46,7 @@ public class CommandManager implements TabExecutor {
 	public void addCommand(final Command command) {
 		this.commands.put(command.getName(), command);
 		CommandArgument.setCommands(this.commands.keySet());
+		this.helpCommand.setCommands(this.commands);
 	}
 
 	public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command cmd, final String label, final String[] args) {
