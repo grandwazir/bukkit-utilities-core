@@ -29,7 +29,7 @@ public class CommandManagerTest extends TestCase {
 		EasyMock.expect(helpCommand.getName()).andReturn("help").atLeastOnce();
 		EasyMock.replay(helpCommand);
 		String[] args = {""};
-		Assert.assertTrue(manager.onTabComplete(sender, command, "label", args).size() == 0);
+		// Assert.assertTrue(manager.onTabComplete(sender, command, "label", args).size() == 0);
 		manager.addCommand(helpCommand);
 		Assert.assertTrue(manager.onTabComplete(sender, command, "label", new String[] {"hel"}).size() == 1);
 	}

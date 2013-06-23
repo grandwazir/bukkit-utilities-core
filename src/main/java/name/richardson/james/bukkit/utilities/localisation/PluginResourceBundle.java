@@ -28,14 +28,6 @@ public class PluginResourceBundle {
         return ResourceBundle.getBundle(getBundleName(owner));
     }
 
-    public static String getBundleName(Object object) {
-        return getBundleName(object.getClass());
-    }
-
-    public static ResourceBundle getBundle(Object object) {
-        return getBundle(object.getClass());
-    }
-
     public static String getBundleName(Class<?> owner) {
         String name = owner.getPackage().getName().replace(PACKAGE_PREFIX, "") + "." + owner.getSimpleName();
         if (name.contains("utilities")) {
@@ -43,10 +35,6 @@ public class PluginResourceBundle {
         } else {
             return RESOURCE_PREFIX + name;
         }
-    }
-
-    public static boolean exists(Object object) {
-        return exists(object.getClass());
     }
 
     public static boolean exists(Class<?> owner) {

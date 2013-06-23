@@ -36,7 +36,7 @@ public class LocalisedCoreColourSchemeTest extends CoreColourSchemeTest {
 	@Before
 	public void setUp()
 	throws Exception {
-		ResourceBundle bundle = PluginResourceBundle.getBundle(this);
+		ResourceBundle bundle = PluginResourceBundle.getBundle(this.getClass());
 		this.colourScheme = new LocalisedCoreColourScheme(bundle);
 	}
 

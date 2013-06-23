@@ -6,6 +6,8 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.logging.*;
 
+import org.bukkit.Bukkit;
+
 public class PrefixedLogger extends Logger {
 
     private static String PREFIX;
@@ -18,12 +20,12 @@ public class PrefixedLogger extends Logger {
         return PREFIX;
     }
 
-    public static Logger getLogger(Object object) {
-        final String name = object.getClass().getPackage().getName();
+    public static Logger getLogger(Class<?> object) {
+        final String name = object.getPackage().getName();
         final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
         if (logger == null) {
             if (PluginResourceBundle.exists(object)) {
-                return new PrefixedLogger(name, PluginResourceBundle.getBundleName(object.getClass()));
+                return new PrefixedLogger(name, PluginResourceBundle.getBundleName(object));
             } else {
                 return new PrefixedLogger(name, null);
             }
@@ -34,16 +36,22 @@ public class PrefixedLogger extends Logger {
 
     protected PrefixedLogger(String name, String resourceBundleName) {
         super(name, resourceBundleName);
-        if (this.getResourceBundle() == null) {
-            System.out.append("Resourcebundle not set!");
-        }
         LogManager.getLogManager().addLogger(this);
         if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
             this.setLevel(Level.INFO);
-            for (final Handler handler : Logger.getLogger("Minecraft").getHandlers()) {
+						// work around bukkit static methods, bit of a hack
+						Logger parent;
+						try {
+							parent = Bukkit.getLogger();
+						} catch (NullPointerException e) {
+							parent = getLogger("");
+						}
+            for (final Handler handler : parent.getHandlers()) {
                 handler.setLevel(Level.ALL);
             }
-        }
+						this.setUseParentHandlers(true);
+						this.setParent(parent);
+				}
     }
 
     @Override

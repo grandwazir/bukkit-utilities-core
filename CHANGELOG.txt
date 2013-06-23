@@ -1,5 +1,20 @@
 Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-06-23 01:29:03 +0100    delete old tests (James Richardson)
+2013-06-23 00:04:04 +0100    applying new formatting style (James Richardson)
+2013-06-22 23:57:45 +0100    add copyright and reformat tests (James Richardson)
+2013-06-22 23:56:51 +0100    update copyright (James Richardson)
+2013-06-22 23:44:38 +0100    move Argument within the command package (James Richardson)
+2013-06-22 23:42:01 +0100    remove remenants of Matcher class (James Richardson)
+2013-06-22 23:33:08 +0100    merge functionality of Matcher and Argument together (James Richardson)
+2013-06-22 22:12:11 +0100    added tests for arguments (James Richardson)
+2013-06-22 20:08:48 +0100    fixed a couple of bugs (James Richardson)
+2013-06-22 20:05:32 +0100    implemented Argument validators (James Richardson)
+2013-06-22 18:11:35 +0100    implemented new colourscheme classes (James Richardson)
+2013-06-22 16:36:06 +0100    add tests for PluginResourceBundle (James Richardson)
+2013-06-22 16:20:20 +0100    tests for Logging class (James Richardson)
+2013-06-22 14:20:22 +0100    added tests Fixed numerous issues relating to case sensitivity when matching arguments (James Richardson)
+2013-06-22 01:49:53 +0100    misc bug fixes (James Richardson)
 
 v5.1.0
 2013-06-19 22:17:45 +0100    prepare to release (James Richardson)

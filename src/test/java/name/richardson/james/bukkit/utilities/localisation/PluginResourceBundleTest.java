@@ -29,14 +29,14 @@ public class PluginResourceBundleTest extends TestCase {
 	@Test
 	public void testGetBundle()
 	throws Exception {
-		ResourceBundle bundle = PluginResourceBundle.getBundle(this);
+		ResourceBundle bundle = PluginResourceBundle.getBundle(this.getClass());
 		Assert.assertNotNull(bundle);
 	}
 
 	@Test
 	public void testGetBundleName()
 	throws Exception {
-		String bundleName = PluginResourceBundle.getBundleName(this);
+		String bundleName = PluginResourceBundle.getBundleName(this.getClass());
 		Assert.assertTrue("ResourceBundle name is inconsistent: " + bundleName, bundleName.contentEquals("localisation.localisation.PluginResourceBundleTest"));
 	}
 

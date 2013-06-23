@@ -18,6 +18,7 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,22 +37,19 @@ public class HelpCommand extends AbstractCommand {
 
 	final static private ChatColor REQUIRED_ARGUMENT_COLOUR = ChatColor.YELLOW;
 	final static private ChatColor OPTIONAL_ARGUMENT_COLOUR = ChatColor.GREEN;
-
-	private final Map<String, Command> commands;
 	private final String label;
 	private final ColourScheme localisedScheme;
 	private final String pluginDescription;
 	private final String pluginName;
 	private final ColourScheme scheme;
-
 	private String commandName;
+	private Map<String, Command> commands = new HashMap<String, Command>();
 	private WeakReference<CommandSender> sender;
 
-	public HelpCommand(final Map<String, Command> commands, final String label, final PluginDescriptionFile description) {
+	public HelpCommand(final String label, final PluginDescriptionFile description) {
 		this.label = label;
 		this.pluginName = description.getFullName();
 		this.pluginDescription = description.getDescription();
-		this.commands = commands;
 		this.scheme = new CoreColourScheme();
 		this.localisedScheme = new LocalisedCoreColourScheme(this.getResourceBundle());
 	}
@@ -79,6 +77,10 @@ public class HelpCommand extends AbstractCommand {
 		}
 	}
 
+	public void setCommands(Map<String, Command> commands) {
+		this.commands = commands;
+	}
+
 	protected void parseArguments(List<String> arguments) {
 		try {
 			super.parseArguments(arguments);
@@ -90,7 +92,6 @@ public class HelpCommand extends AbstractCommand {
 	}
 
 	protected void setArguments() {
-		CommandArgument.setCommands(this.commands.keySet());
 		super.setArguments();
 		this.getArguments().get(0).setRequired(false);
 	}

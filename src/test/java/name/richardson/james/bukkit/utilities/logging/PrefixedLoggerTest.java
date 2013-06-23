@@ -44,14 +44,14 @@ public class PrefixedLoggerTest extends TestCase {
 	public void testLoggerPackageName()
 	throws Exception {
 		final String name = this.getClass().getPackage().getName();
-		Logger logger = PrefixedLogger.getLogger(this);
+		Logger logger = PrefixedLogger.getLogger(this.getClass());
 		Assert.assertTrue("Logger name does not equal '" + name + "'", logger.getName().contentEquals(name));
 	}
 
 	@Test
 	public void testPrefixIsAdded()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger(this);
+		Logger logger = PrefixedLogger.getLogger(this.getClass());
 		this.testSetAndGetPrefix();
 		LogRecord record = new LogRecord(Level.INFO, "This is a test message");
 		Handler handler = EasyMock.createNiceMock(Handler.class);
@@ -67,7 +67,7 @@ public class PrefixedLoggerTest extends TestCase {
 	@Test
 	public void testDebugPrefixIsAdded()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger(this);
+		Logger logger = PrefixedLogger.getLogger(this.getClass());
 		this.testSetAndGetPrefix();
 		LogRecord record = new LogRecord(Level.INFO, "This is a test message");
 		Handler handler = EasyMock.createNiceMock(Handler.class);
@@ -84,7 +84,7 @@ public class PrefixedLoggerTest extends TestCase {
 	@Test
 	public void testLoggerWithResourceBundle()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger(this);
+		Logger logger = PrefixedLogger.getLogger(this.getClass());
 		LogRecord record = new LogRecord(Level.INFO, "test-message");
 		Handler handler = EasyMock.createNiceMock(Handler.class);
 		Capture<LogRecord> captured = new Capture<LogRecord>();
@@ -99,7 +99,7 @@ public class PrefixedLoggerTest extends TestCase {
 	@Test
 	public void testLoggingWithArguments()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger(this);
+		Logger logger = PrefixedLogger.getLogger(this.getClass());
 		Handler handler = EasyMock.createNiceMock(Handler.class);
 		Capture<LogRecord> captured = new Capture<LogRecord>();
 		handler.publish(EasyMock.capture(captured));

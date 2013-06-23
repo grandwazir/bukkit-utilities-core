@@ -36,10 +36,10 @@ import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 public class BukkitPermissionManager implements PermissionManager {
 
 	private static final ResourceBundle localisation = ResourceBundle.getBundle("localisation.permissions");
+	private static final Logger logger = PrefixedLogger.getLogger(BukkitPermissionManager.class);
 
 	private static PluginManager pluginManager;
 
-	private final Logger logger = PrefixedLogger.getLogger(this);
 	private final List<Permission> permissions = new ArrayList<Permission>();
 
 	public BukkitPermissionManager(PluginManager pluginManager) {
