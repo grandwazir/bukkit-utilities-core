@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
+import name.richardson.james.bukkit.utilities.formatters.localisation.PluginResourceBundle;
 
 public final class ChoiceFormatter {
 

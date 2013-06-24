@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- CoreColourSchemeTest.java is part of bukkit-utilities.
+ LocalisedCoreColourSchemeTest.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,41 +16,57 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.colours;
+package name.richardson.james.bukkit.utilities.formatters.colours;
 
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CoreColourSchemeTest extends TestCase {
+import name.richardson.james.bukkit.utilities.formatters.localisation.LocalisedCoreColourScheme;
+import name.richardson.james.bukkit.utilities.formatters.localisation.PluginResourceBundle;
 
-	private CoreColourScheme colourScheme;
+public class LocalisedCoreColourSchemeTest extends CoreColourSchemeTest {
+
+	private LocalisedCoreColourScheme colourScheme;
 
 	@Before
 	public void setUp()
 	throws Exception {
-		this.colourScheme = new CoreColourScheme();
+		ResourceBundle bundle = PluginResourceBundle.getBundle(this.getClass());
+		this.colourScheme = new LocalisedCoreColourScheme(bundle);
 	}
 
 	@Test
 	public void testFormat()
 	throws Exception {
 		for (ColourScheme.Style style : ColourScheme.Style.values()) {
-			String message = this.colourScheme.format(style, "Hello!");
+			String message = this.colourScheme.format(style, "test-without-arguments");
 			Assert.assertTrue("String does not contain a colour", message.contains("§"));
+			Assert.assertTrue("String not translated:" + message, message.replaceAll("§.{1}", "").contentEquals("Hello!"));
 		}
 		Pattern p = Pattern.compile("(§.{1}).*(§.{1}).*(§.{1})");
 		for (ColourScheme.Style style : ColourScheme.Style.values()) {
-			String message = this.colourScheme.format(style, "Hello {0}!", "grandwazir");
+			String message = this.colourScheme.format(style, "test-with-arguments", "grandwazir");
 			Matcher matcher = p.matcher(message);
 			matcher.find();
 			Assert.assertTrue("String does not contain three colour types: " + message, matcher.groupCount() == 3);
 			Assert.assertFalse("Arguments are not being coloured", matcher.group(2).contentEquals(matcher.group(1)));
+			Assert.assertTrue("String not translated:" + message, message.replaceAll("§.{1}", "").contentEquals("Hello grandwazir!"));
 		}
 	}
 
+	@Test
+	public void testGetResourceBundle()
+	throws Exception {
+		Assert.assertNotNull(this.colourScheme.getResourceBundle());
+	}
+
+	@Test
+	public void testGetMessage() {
+		Assert.assertEquals(this.colourScheme.getMessage("test-without-arguments"), "Hello!");
+	}
 }

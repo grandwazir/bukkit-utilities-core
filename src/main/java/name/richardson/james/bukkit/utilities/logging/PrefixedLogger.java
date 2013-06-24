@@ -1,6 +1,6 @@
 package name.richardson.james.bukkit.utilities.logging;
 
-import name.richardson.james.bukkit.utilities.localisation.PluginResourceBundle;
+import name.richardson.james.bukkit.utilities.formatters.localisation.PluginResourceBundle;
 
 import java.text.MessageFormat;
 import java.util.ResourceBundle;

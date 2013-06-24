@@ -1,4 +1,4 @@
-package name.richardson.james.bukkit.utilities.localisation;
+package name.richardson.james.bukkit.utilities.formatters.localisation;
 
 import java.util.ResourceBundle;
 
