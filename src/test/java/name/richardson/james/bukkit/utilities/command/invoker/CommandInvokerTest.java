@@ -18,65 +18,56 @@
 
 package name.richardson.james.bukkit.utilities.command.invoker;
 
-import java.util.Collections;
-
-import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import name.richardson.james.bukkit.utilities.command.Command;
 import name.richardson.james.bukkit.utilities.command.context.Context;
 
-/**
- * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 18:40 To change this template use File | Settings | File Templates.
- */
+import static org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
 public class CommandInvokerTest extends TestCase {
 
+	@Mock
+	private Command command;
 	private CommandInvoker invoker;
 
 	@Test
 	public void testOnTabComplete()
 	throws Exception {
-		Command command = EasyMock.createMock(Command.class);
-		EasyMock.expect(command.getName()).andReturn("test").atLeastOnce();
-		EasyMock.expect(command.getArgumentMatches((Context) EasyMock.anyObject())).andReturn(Collections.<String>emptySet()).times(1);
-		EasyMock.replay(command);
 		invoker.addCommand(command);
 		invoker.onTabComplete(null, null, null, new String[]{""});
 		invoker.onTabComplete(null, null, null, new String[]{"test"});
-		EasyMock.verify(command);
+		verify(command).getArgumentMatches(Matchers.<Context>anyObject());
 	}
 
 	@Test
 	public void testOnCommand()
 	throws Exception {
-		Command command = EasyMock.createMock(Command.class);
-		EasyMock.expect(command.getName()).andReturn("test").atLeastOnce();
-		command.execute((Context) EasyMock.anyObject());
-		EasyMock.expectLastCall();
-		EasyMock.replay(command);
 		invoker.addCommand(command);
 		invoker.onCommand(null, null, null, new String[]{});
 		invoker.onCommand(null, null, null, new String[]{"test"});
-		EasyMock.verify(command);
+		verify(command).execute(Matchers.<Context>anyObject());
 	}
 
 	@Test
 	public void testAddCommand()
 	throws Exception {
-		Command command = EasyMock.createMock(Command.class);
-		EasyMock.expect(command.getName()).andReturn("test").atLeastOnce();
-		EasyMock.replay(command);
 		invoker.addCommand(command);
-		EasyMock.verify(command);
-		Assert.assertSame(invoker.getCommands().get("test"), command);
+		assertSame("Command has not been added to the invoker!", invoker.getCommands().get("test"), command);
 	}
 
 	@Before
 	public void setUp()
 	throws Exception {
+		when(command.getName()).thenReturn("test");
 		invoker = new CommandInvoker();
 	}
+
 }

@@ -1,5 +1,9 @@
 Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-06-29 13:37:37 +0100    forgot to add Reloadable (James Richardson)
+2013-06-29 13:34:27 +0100    added reloadcommand (James Richardson)
+2013-06-29 13:03:23 +0100    ready to start testing (James Richardson)
+2013-06-29 12:56:38 +0100    refactored PermissionsManager (James Richardson)
 2013-06-29 11:37:05 +0100    add tests for TimeFormatter (James Richardson)
 2013-06-29 01:23:15 +0100    put Coveralls token into environment variable to keep it hidden (James Richardson)
 2013-06-29 01:18:03 +0100    update pom to automatically submit testing data to Coveralls (James Richardson)
