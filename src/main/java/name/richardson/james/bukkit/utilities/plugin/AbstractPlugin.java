@@ -47,10 +47,8 @@ import name.richardson.james.bukkit.utilities.updater.Updatable;
 public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 
 	/* The name of the configuration file as saved on the disk */
-	@SuppressWarnings("HardCodedStringLiteral")
 	public static final String CONFIG_NAME = "config.yml";
 	/* THe name of the database configuration file as saved on the disk */
-	@SuppressWarnings("HardCodedStringLiteral")
 	public static final String DATABASE_CONFIG_NAME = "database.yml";
 
 	/* The custom logger that belongs to this plugin */
@@ -95,7 +93,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		return this.logger;
 	}
 
-	@SuppressWarnings("HardCodedStringLiteral")
 	/**
 	 * Attempt to load a {@link SimplePluginConfiguration} from disk in this plugin's data folder.
 	 */
@@ -109,7 +106,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		this.logger.log(Level.CONFIG, "Localisation locale: {0}", Locale.getDefault());
 	}
 
-	@SuppressWarnings("HardCodedStringLiteral")
 	/**
 	 * Attempt to load a {@link SQLStorage} using the information from {@link DatabaseConfiguration},
 	 * failing that using the settings in bukkit.yml and initalise it.

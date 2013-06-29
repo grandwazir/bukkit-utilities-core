@@ -4,8 +4,6 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.logging.*;
 
-import org.bukkit.Bukkit;
-
 import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
 
 public class PrefixedLogger extends Logger {
