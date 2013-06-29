@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- StringFormatter.java is part of BukkitUtilities.
+ DatabaseConfiguration.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,28 +15,15 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.formatters;
+package name.richardson.james.bukkit.utilities.persistence.configuration;
 
-import java.util.List;
+import com.avaje.ebean.config.DataSourceConfig;
+import com.avaje.ebean.config.ServerConfig;
 
-public class StringFormatter {
+public interface DatabaseConfiguration {
 
-	public static String combineString(final List<String> arguments, final String seperator) {
-		return StringFormatter.combineString(arguments.toArray(new String[arguments.size()]), seperator);
-	}
+	public DataSourceConfig getDataSourceConfig();
 
-	public static String combineString(final String[] arguments, final String seperator) {
-		if (arguments.length == 0) {
-			return null;
-		}
-		final StringBuilder message = new StringBuilder();
-		for (final String argument : arguments) {
-			message.append(argument);
-			message.append(seperator);
-		}
-		// remove trailing seperator.
-		message.deleteCharAt(message.length() - seperator.length());
-		return message.toString();
-	}
+	public ServerConfig getServerConfig();
 
 }

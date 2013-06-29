@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- AbstractListener.java is part of BukkitUtilities.
+ AbstractListenerTest.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,24 +15,37 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.listener;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package name.richardson.james.bukkit.utilities.listener;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import junit.framework.TestCase;
+import org.easymock.EasyMock;
+import org.junit.Test;
 
-public class AbstractListener implements Listener {
+/**
+ * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 23:21 To change this template use File | Settings | File Templates.
+ */
+public class AbstractListenerTest extends TestCase {
 
-	private static final Logger logger = PrefixedLogger.getLogger(AbstractListener.class);
+	public class AbstractListenerTestClass extends AbstractListener {
 
-	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
-		logger.log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events,");
-		pluginManager.registerEvents(this, plugin);
+		public AbstractListenerTestClass(Plugin plugin, PluginManager pluginManager) {
+			super(plugin, pluginManager);
+		}
+	}
+
+	@Test
+	public void testCreation() {
+		PluginManager pluginManager = EasyMock.createNiceMock(PluginManager.class);
+		pluginManager.registerEvents((Listener) EasyMock.anyObject(), (Plugin) EasyMock.anyObject());
+		EasyMock.expectLastCall();
+		EasyMock.replay(pluginManager);
+		new AbstractListener(null, pluginManager);
+		EasyMock.verify(pluginManager);
 	}
 
 }

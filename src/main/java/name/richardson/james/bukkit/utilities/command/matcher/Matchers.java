@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- DatabaseConfiguration.java is part of BukkitUtilities.
+ Matchers.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,15 +15,12 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.configuration;
 
-import com.avaje.ebean.config.DataSourceConfig;
-import com.avaje.ebean.config.ServerConfig;
+package name.richardson.james.bukkit.utilities.command.matcher;
 
-public interface DatabaseConfiguration {
+import java.lang.annotation.Retention;
 
-	public DataSourceConfig getDataSourceConfig();
-
-	public ServerConfig getServerConfig();
-
+@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+public @interface Matchers {
+	Class<? extends Matcher>[] classes();
 }

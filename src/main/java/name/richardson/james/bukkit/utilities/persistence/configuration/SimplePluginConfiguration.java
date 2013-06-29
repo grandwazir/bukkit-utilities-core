@@ -15,7 +15,7 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.configuration;
+package name.richardson.james.bukkit.utilities.persistence.configuration;
 
 import java.io.File;
 import java.io.IOException;

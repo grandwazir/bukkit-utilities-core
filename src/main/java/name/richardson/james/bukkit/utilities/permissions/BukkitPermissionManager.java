@@ -27,7 +27,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
-import name.richardson.james.bukkit.utilities.formatters.StringFormatter;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 /**
@@ -103,7 +102,7 @@ public class BukkitPermissionManager implements PermissionManager {
 		final List<String> nodes = new LinkedList<String>(Arrays.asList(permission.getName().split("\\.")));
 		if (nodes.size() > 1) {
 			nodes.remove(nodes.size() - 1);
-			final String parentNode = StringFormatter.combineString(nodes, ".");
+			final String parentNode = "";
 			logger.log(Level.FINE, "Resolving parent permission: {0}", parentNode);
 			return Bukkit.getPluginManager().getPermission(parentNode);
 		} else {

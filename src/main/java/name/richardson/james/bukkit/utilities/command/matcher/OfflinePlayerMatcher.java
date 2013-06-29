@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- AbstractListener.java is part of BukkitUtilities.
+ OfflinePlayerMatcher.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,24 +15,31 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.listener;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package name.richardson.james.bukkit.utilities.command.matcher;
 
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 
-public class AbstractListener implements Listener {
+public class OfflinePlayerMatcher implements Matcher {
 
-	private static final Logger logger = PrefixedLogger.getLogger(AbstractListener.class);
+	private static final Server SERVER = Bukkit.getServer();
 
-	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
-		logger.log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events,");
-		pluginManager.registerEvents(this, plugin);
+	@Override
+	public Set<String> matches(String argument) {
+		TreeSet<String> results = new TreeSet<String>();
+		argument = argument.toLowerCase(Locale.ENGLISH);
+		for (OfflinePlayer player : SERVER.getOfflinePlayers()) {
+			if (results.size() == Matcher.MAX_MATCHES) break;
+			if (!player.getName().startsWith(argument)) continue;
+			results.add(player.getName());
+		}
+		return results;
 	}
 
 }

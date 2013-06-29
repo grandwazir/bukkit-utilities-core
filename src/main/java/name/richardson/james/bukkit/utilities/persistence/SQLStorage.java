@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 /**

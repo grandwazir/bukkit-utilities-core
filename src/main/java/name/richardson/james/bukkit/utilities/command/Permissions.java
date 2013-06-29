@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- AbstractListener.java is part of BukkitUtilities.
+ Permissions.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,24 +15,12 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.listener;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package name.richardson.james.bukkit.utilities.command;
 
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
+import java.lang.annotation.Retention;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
-
-public class AbstractListener implements Listener {
-
-	private static final Logger logger = PrefixedLogger.getLogger(AbstractListener.class);
-
-	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
-		logger.log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events,");
-		pluginManager.registerEvents(this, plugin);
-	}
-
+@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+public @interface Permissions {
+	String[] permissions();
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- AbstractListener.java is part of BukkitUtilities.
+ ResourceBundleNames.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,24 +15,32 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.listener;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package name.richardson.james.bukkit.utilities.formatters.localisation;
 
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
+/**
+ * Created with IntelliJ IDEA. User: james Date: 29/06/13 Time: 00:21 To change this template use File | Settings | File Templates.
+ */
+public enum ResourceBundles {
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+	MESSAGES("Messages"),
+	COMMANDS("Commands"),
+	PERMISSIONS("Permissions");
 
-public class AbstractListener implements Listener {
+	private String bundleName;
 
-	private static final Logger logger = PrefixedLogger.getLogger(AbstractListener.class);
+	ResourceBundles(String bundleName) {
+		this.bundleName = bundleName;
+	}
 
-	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
-		logger.log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events,");
-		pluginManager.registerEvents(this, plugin);
+	public String getBundleName() {
+		return bundleName;
+	}
+
+	@Override
+	public String toString() {
+		return bundleName;
 	}
 
 }
+

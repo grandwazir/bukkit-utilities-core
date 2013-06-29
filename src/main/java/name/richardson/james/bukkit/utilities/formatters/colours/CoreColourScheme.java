@@ -20,7 +20,7 @@ public class CoreColourScheme implements ColourScheme {
 		return MessageFormat.format(this.format(style, message), arguments);
 	}
 
-	public String format(Style style, String message) {
+	private String format(Style style, String message) {
 		switch (style) {
 			case ERROR:
 				return ERROR + message.replaceAll("\\{", ERROR_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + ERROR);

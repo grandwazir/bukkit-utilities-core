@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- PluginResourceBundle.java is part of BukkitUtilities.
+ LocalisedException.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,31 +15,40 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+
 package name.richardson.james.bukkit.utilities.formatters.localisation;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
-public class PluginResourceBundle {
+public abstract class LocalisedException extends Exception implements Localised {
 
-    public static final String PACKAGE_PREFIX = "name.richardson.james.bukkit.";
-    public static final String RESOURCE_PREFIX = "localisation.";
+	private static final String RESOURCE_BUNDLE_NAME = ResourceBundles.MESSAGES.getBundleName();
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
 
-    public static ResourceBundle getBundle(Class<?> owner) {
-        return ResourceBundle.getBundle(getBundleName(owner));
-    }
+	private final String message;
 
-    public static String getBundleName(Class<?> owner) {
-        String name = owner.getPackage().getName().replace(PACKAGE_PREFIX, "") + "." + owner.getSimpleName();
-        if (name.contains("utilities")) {
-            return RESOURCE_PREFIX + name.replaceFirst("\\w+.", "");
-        } else {
-            return RESOURCE_PREFIX + name;
-        }
-    }
+	public LocalisedException(String key, Object... arguments) {
+		this.message = getMessage(key, arguments);
+	}
 
-    public static boolean exists(Class<?> owner) {
-        String bundleName = getBundleName(owner).replace(".", "/") + ".properties";
-        return owner.getClassLoader().getResource(bundleName) != null;
-    }
+	public ResourceBundle getResourceBundle() {
+		return LocalisedException.RESOURCE_BUNDLE;
+	}
+
+	public String getMessage(String key, Object... arguments) {
+		return MessageFormat.format(LocalisedException.RESOURCE_BUNDLE.getString(key), arguments);
+	}
+
+	@Override
+	public String getMessage() {
+		return getLocalizedMessage();
+	}
+
+	@Override
+	public String getLocalizedMessage() {
+		return message;
+	}
+
 
 }

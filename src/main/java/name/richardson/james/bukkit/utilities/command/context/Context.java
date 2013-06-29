@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- AbstractListener.java is part of BukkitUtilities.
+ Context.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,24 +15,35 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.listener;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package name.richardson.james.bukkit.utilities.command.context;
 
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+/**
+ * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 18:09 To change this template use File | Settings | File Templates.
+ */
+public interface Context {
 
-public class AbstractListener implements Listener {
+	CommandSender getCommandSender();
 
-	private static final Logger logger = PrefixedLogger.getLogger(AbstractListener.class);
+	String getFlag(String label);
 
-	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
-		logger.log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events,");
-		pluginManager.registerEvents(this, plugin);
-	}
+	String getJoinedArguments(int initialIndex);
 
+	OfflinePlayer getOfflinePlayer(int index);
+
+	Player getPlayer(int index);
+
+	String getString(int index);
+
+	boolean has(int index);
+
+	boolean hasFlag(String label);
+
+	boolean isConsoleCommandSender();
+
+	int size();
 }

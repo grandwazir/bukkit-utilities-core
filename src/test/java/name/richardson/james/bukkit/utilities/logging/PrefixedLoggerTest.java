@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.logging;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -28,7 +30,10 @@ import junit.framework.TestCase;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+@RunWith(JUnit4.class)
 public class PrefixedLoggerTest extends TestCase {
 
 	private static final String PREFIX = "[Test] ";

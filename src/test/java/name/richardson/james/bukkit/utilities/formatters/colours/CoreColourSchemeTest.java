@@ -28,7 +28,7 @@ import org.junit.Test;
 
 public class CoreColourSchemeTest extends TestCase {
 
-	private CoreColourScheme colourScheme;
+	private ColourScheme colourScheme;
 
 	@Before
 	public void setUp()
@@ -41,15 +41,17 @@ public class CoreColourSchemeTest extends TestCase {
 	throws Exception {
 		for (ColourScheme.Style style : ColourScheme.Style.values()) {
 			String message = this.colourScheme.format(style, "Hello!");
-			Assert.assertTrue("String does not contain a colour", message.contains("§"));
+			if (style == ColourScheme.Style.COMMAND_USAGE) continue;
+			Assert.assertTrue("String does not contain a colour: " + message, message.contains("§"));
 		}
 		Pattern p = Pattern.compile("(§.{1}).*(§.{1}).*(§.{1})");
 		for (ColourScheme.Style style : ColourScheme.Style.values()) {
+			if (style == ColourScheme.Style.COMMAND_USAGE) continue;
 			String message = this.colourScheme.format(style, "Hello {0}!", "grandwazir");
 			Matcher matcher = p.matcher(message);
 			matcher.find();
 			Assert.assertTrue("String does not contain three colour types: " + message, matcher.groupCount() == 3);
-			Assert.assertFalse("Arguments are not being coloured", matcher.group(2).contentEquals(matcher.group(1)));
+			Assert.assertFalse("ArgumentParser are not being coloured", matcher.group(2).contentEquals(matcher.group(1)));
 		}
 	}
 

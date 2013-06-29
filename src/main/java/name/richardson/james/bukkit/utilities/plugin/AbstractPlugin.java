@@ -32,9 +32,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
 
-import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
-import name.richardson.james.bukkit.utilities.configuration.SimpleDatabaseConfiguration;
-import name.richardson.james.bukkit.utilities.configuration.SimplePluginConfiguration;
+import name.richardson.james.bukkit.utilities.persistence.configuration.PluginConfiguration;
+import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.persistence.configuration.SimplePluginConfiguration;
 import name.richardson.james.bukkit.utilities.metrics.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;

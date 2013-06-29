@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- PluginResourceBundleTest.java is part of bukkit-utilities.
+ LocalisedChoiceFormatterTest.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -18,37 +18,46 @@
 
 package name.richardson.james.bukkit.utilities.formatters.localisation;
 
-import java.util.ResourceBundle;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.junit.Before;
 import org.junit.Test;
 
-public class PluginResourceBundleTest extends TestCase {
+import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
+
+/**
+ * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 23:57 To change this template use File | Settings | File Templates.
+ */
+public class LocalisedChoiceFormatterTest extends TestCase {
+
+	private LocalisedChoiceFormatter formatter;
 
 	@Test
-	public void testGetBundle()
+	public void testGetResourceBundle()
 	throws Exception {
-		ResourceBundle bundle = PluginResourceBundle.getBundle(this.getClass());
-		Assert.assertNotNull(bundle);
+		Assert.assertNotNull(formatter.getResourceBundle());
 	}
 
 	@Test
-	public void testGetBundleName()
+	public void testGetMessage()
 	throws Exception {
-		String bundleName = PluginResourceBundle.getBundleName(this.getClass());
-		Assert.assertTrue("ResourceBundle name is inconsistent: " + bundleName, bundleName.contentEquals("localisation.localisation.PluginResourceBundleTest"));
+		formatter.setLimits(0, 1, 2);
+		formatter.setFormats("no-gremlins", "one-gremlin", "many-gremlins");
+		formatter.setArguments(1);
+		formatter.setMessage("gremlin-message");
+		Assert.assertTrue(formatter.getMessage(), formatter.getMessage().contains("There is one gremlin in the database"));
 	}
 
 	@Test
-	public void testExists()
+	public void testGetColouredMessage()
 	throws Exception {
-		Assert.assertTrue(PluginResourceBundleTest.class.getName() + " should exist!", PluginResourceBundle.exists(PluginResourceBundleTest.class));
+	 	testGetMessage();
+		Assert.assertTrue(formatter.getColouredMessage(ColourScheme.Style.ERROR).contains("§"));
 	}
 
-	@Test
-	public void testDoesNotExists()
+	@Before
+	public void setUp()
 	throws Exception {
-		Assert.assertFalse(PluginResourceBundle.class.getName() + " should not exist!", PluginResourceBundle.exists(PluginResourceBundle.class));
+		formatter = new LocalisedChoiceFormatter();
 	}
 }
