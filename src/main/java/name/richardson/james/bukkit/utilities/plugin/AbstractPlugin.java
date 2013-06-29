@@ -32,11 +32,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
 
-import name.richardson.james.bukkit.utilities.permissions.Permission;
+import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.persistence.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimplePluginConfiguration;
-import name.richardson.james.bukkit.utilities.metrics.MetricsListener;
+import name.richardson.james.bukkit.utilities.listener.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.persistence.SQLStorage;
@@ -125,12 +125,12 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	}
 
 	/**
-	 * Set any plugin permissions as annotated by {@link name.richardson.james.bukkit.utilities.permissions.Permission}.
+	 * Set any plugin permissions as annotated by {@link name.richardson.james.bukkit.utilities.permissions.Permissions}.
 	 */
 	protected void setPermissions() {
-		if (this.getClass().isAnnotationPresent(Permission.class)) {
-			final Permission annotation = this.getClass().getAnnotation(Permission.class);
-			final PermissionManager permissionManager = new BukkitPermissionManager(this.getServer().getPluginManager());
+		if (this.getClass().isAnnotationPresent(Permissions.class)) {
+			final Permissions annotation = this.getClass().getAnnotation(Permissions.class);
+			final PermissionManager permissionManager = new BukkitPermissionManager();
 			permissionManager.createPermissions(annotation.permissions());
 		}
 	}
@@ -146,7 +146,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	protected void setupMetrics()
 	throws IOException {
 		if (this.configuration.isCollectingStats()) {
-			new MetricsListener(this);
+			new MetricsListener(this, this.getServer().getPluginManager());
 		}
 	}
 

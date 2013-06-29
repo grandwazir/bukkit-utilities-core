@@ -63,6 +63,10 @@
             <id>my-repo</id>
             <url>http://repository.james.richardson.name/releases</url>
         </repository>
+        <repository>
+            <id>mcstats</id>
+            <url>http://repo.mcstats.org/content/repositories/releases</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
@@ -89,12 +93,17 @@
             <artifactId>maven-artifact</artifactId>
             <version>3.0.5</version>
         </dependency>
-        <!-- Set dependency on Bukkit -->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.5.2-R0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.mcstats.bukkit</groupId>
+            <artifactId>metrics</artifactId>
+            <version>R6</version>
+        </dependency>
+        <!-- Testing dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

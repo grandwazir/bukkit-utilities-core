@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- MetricsListener.java is part of BukkitUtilities.
+ Permissions.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,26 +15,14 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.metrics;
+package name.richardson.james.bukkit.utilities.permissions;
 
-import java.io.IOException;
-
-import org.bukkit.plugin.Plugin;
+import java.lang.annotation.Retention;
 
 /**
- * A default implementation of Metrics. The listener self registers and sends basic versioning infomation to mcstats.
+ * Annotate that this class is a plugin and has associated permissions which must be registered.
  */
-public class MetricsListener {
-
-	private Metrics metrics;
-
-	public MetricsListener(final Plugin plugin) {
-		try {
-			this.metrics = new Metrics(plugin);
-			this.metrics.start();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+public @interface Permissions {
+	String[] permissions();
 }

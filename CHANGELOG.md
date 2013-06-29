@@ -1,5 +1,11 @@
 # Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-06-29 11:37:05 +0100    add tests for TimeFormatter (James Richardson)  
+2013-06-29 01:23:15 +0100    put Coveralls token into environment variable to keep it hidden (James Richardson)  
+2013-06-29 01:18:03 +0100    update pom to automatically submit testing data to Coveralls (James Richardson)  
+2013-06-29 01:06:37 +0100    massive refactoring (James Richardson)  
+2013-06-25 00:13:02 +0100    refactoring commands (James Richardson)  
+2013-06-23 20:53:24 +0100    current staging work (James Richardson)  
 2013-06-23 15:28:37 +0100    make abstractlistener test friendly (James Richardson)  
 2013-06-23 14:42:37 +0100    add markdown readme (James Richardson)  
 2013-06-23 14:38:18 +0100    final attempt at fixing for travis (James Richardson)  
