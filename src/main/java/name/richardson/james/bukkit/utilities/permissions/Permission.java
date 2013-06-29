@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- PluginPermissions.java is part of BukkitUtilities.
+ Permission.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,7 +15,7 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.plugin;
+package name.richardson.james.bukkit.utilities.permissions;
 
 import java.lang.annotation.Retention;
 
@@ -23,6 +23,6 @@ import java.lang.annotation.Retention;
  * Annotate that this class is a plugin and has associated permissions which must be registered.
  */
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-public @interface PluginPermissions {
+public @interface Permission {
 	String[] permissions();
 }

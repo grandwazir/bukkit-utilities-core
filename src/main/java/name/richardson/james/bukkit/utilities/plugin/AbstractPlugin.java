@@ -32,6 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
 
+import name.richardson.james.bukkit.utilities.permissions.Permission;
 import name.richardson.james.bukkit.utilities.persistence.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimplePluginConfiguration;
@@ -124,11 +125,11 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	}
 
 	/**
-	 * Set any plugin permissions as annotated by {@link PluginPermissions}.
+	 * Set any plugin permissions as annotated by {@link name.richardson.james.bukkit.utilities.permissions.Permission}.
 	 */
 	protected void setPermissions() {
-		if (this.getClass().isAnnotationPresent(PluginPermissions.class)) {
-			final PluginPermissions annotation = this.getClass().getAnnotation(PluginPermissions.class);
+		if (this.getClass().isAnnotationPresent(Permission.class)) {
+			final Permission annotation = this.getClass().getAnnotation(Permission.class);
 			final PermissionManager permissionManager = new BukkitPermissionManager(this.getServer().getPluginManager());
 			permissionManager.createPermissions(annotation.permissions());
 		}
