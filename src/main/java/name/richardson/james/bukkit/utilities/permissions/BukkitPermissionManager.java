@@ -40,13 +40,21 @@ public class BukkitPermissionManager implements PermissionManager {
 	private static final String RESOURCE_BUNDLE_NAME = ResourceBundles.PERMISSIONS.getBundleName();
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
 	private static final Logger LOGGER = PrefixedLogger.getLogger(BukkitPermissionManager.class);
-	private static final PluginManager PLUGIN_MANAGER = Bukkit.getPluginManager();
 
+	private final PluginManager pluginManager;
 	private final List<Permission> permissions = new ArrayList<Permission>();
+
+	public BukkitPermissionManager() {
+		this(Bukkit.getServer().getPluginManager());
+	}
+
+	protected BukkitPermissionManager(PluginManager pluginManager) {
+		this.pluginManager = pluginManager;
+	}
 
 	public Permission addPermission(final Permission permission) {
 		LOGGER.log(Level.CONFIG, "Adding permission: {0}", permission.getName());
-		BukkitPermissionManager.PLUGIN_MANAGER.addPermission(permission);
+		pluginManager.addPermission(permission);
 		this.permissions.add(permission);
 		return permission;
 	}
@@ -63,6 +71,7 @@ public class BukkitPermissionManager implements PermissionManager {
 		return createPermission(node, defaultPermission, parent, true);
 	}
 
+	@Override
 	public Permission createPermission(final String node, final PermissionDefault defaultPermission, final Permission parent, final boolean defaultParent) {
 		final String description = RESOURCE_BUNDLE.getString(node);
 		final Permission permission = new Permission(node, description, defaultPermission);
@@ -93,7 +102,4 @@ public class BukkitPermissionManager implements PermissionManager {
 		}
 	}
 
-	private Permission getParentPermission(final Permission permission) {
-		return getParentPermission(permission.getName());
-	}
 }

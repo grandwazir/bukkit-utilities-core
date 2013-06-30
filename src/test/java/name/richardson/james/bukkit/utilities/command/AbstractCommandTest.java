@@ -31,6 +31,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.OnlinePlayerMatcher;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
+import name.richardson.james.bukkit.utilities.permissions.Permissions;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

@@ -81,6 +81,8 @@ public interface PermissionManager {
 	 */
 	public Permission createPermission(String node, PermissionDefault defaultPermission, Permission parent);
 
+	public Permission createPermission(String node, PermissionDefault defaultPermission, Permission parent, boolean defaultParent);
+
 	/**
 	 * Create permissions
 	 *
