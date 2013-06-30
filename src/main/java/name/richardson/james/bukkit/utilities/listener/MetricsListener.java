@@ -17,8 +17,6 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.listener;
 
-import java.io.IOException;
-
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.mcstats.Metrics;
@@ -30,16 +28,10 @@ public class MetricsListener extends AbstractListener {
 
 	private Metrics metrics;
 
-	public MetricsListener(final Plugin plugin, PluginManager pluginManager) {
+	public MetricsListener(final Plugin plugin, PluginManager pluginManager, Metrics metrics) {
 		super(plugin, pluginManager);
-		try {
-			this.metrics = new Metrics(plugin);
-			this.metrics.start();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+		this.metrics = metrics;
+		metrics.start();
 	}
-
-
 
 }

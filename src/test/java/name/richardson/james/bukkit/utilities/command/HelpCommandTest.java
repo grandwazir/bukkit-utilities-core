@@ -29,8 +29,6 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-
 /**
  * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 20:39 To change this template use File | Settings | File Templates.
  */

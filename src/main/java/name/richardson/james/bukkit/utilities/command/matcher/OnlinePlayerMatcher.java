@@ -32,19 +32,21 @@ import org.bukkit.entity.Player;
  */
 public class OnlinePlayerMatcher implements Matcher {
 
-	private static final Server SERVER = Bukkit.getServer();
+	private final Server server;
+
+	public OnlinePlayerMatcher(Server server) {
+		this.server = server;
+	}
 
 	@Override
 	public Set<String> matches(String argument) {
 		TreeSet<String> results = new TreeSet<String>();
 		argument = argument.toLowerCase(Locale.ENGLISH);
-		for (Player player : SERVER.getOnlinePlayers()) {
+		for (Player player : server.getOnlinePlayers()) {
 			if (results.size() == Matcher.MAX_MATCHES) break;
-			if (!player.getName().startsWith(argument)) continue;
+			if (!player.getName().toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
 			results.add(player.getName());
 		}
 		return results;
 	}
-
-
 }

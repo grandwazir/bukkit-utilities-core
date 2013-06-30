@@ -18,32 +18,33 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.easymock.EasyMock;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import name.richardson.james.bukkit.utilities.BukkitTestFixture;
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.context.Context;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CommandContextTest extends TestCase {
 
 	private static final String[] ARGUMENTS = {"grandwazir", "this", "is", "t:1234", "a", "reason"};
 
-	private CommandSender sender;
+	@Mock
+	private Player sender;
+
 	private Context context;
+	@Mock
 	private Server server;
+	@Mock
+	private Player player;
 
 	@Test
 	public void testSize()
@@ -89,37 +90,17 @@ public class CommandContextTest extends TestCase {
 	@Test
 	public void testGetPlayer()
 	throws Exception {
-		Player player = EasyMock.createMock(Player.class);
-		EasyMock.expect(server.getPlayer("grandwazir")).andReturn(player).times(1);
-		EasyMock.expect(server.getPlayer("this")).andReturn(null).atLeastOnce();
-		EasyMock.replay(server);
-		Field field = context.getClass().getDeclaredField("SERVER");
-		field.setAccessible(true);
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		field.set(null, server);
+		when(server.getPlayer("grandwazir")).thenReturn(player);
 		context.getPlayer(0);
-		context.getPlayer(1);
-		EasyMock.verify(server);
+		verify(server).getPlayer("grandwazir");
 	}
 
 	@Test
 	public void testGetOfflinePlayer()
 	throws Exception {
-		OfflinePlayer player = EasyMock.createMock(OfflinePlayer.class);
-		EasyMock.expect(server.getOfflinePlayer("grandwazir")).andReturn(player).times(1);
-		EasyMock.expect(server.getOfflinePlayer("this")).andReturn(null).atLeastOnce();
-		EasyMock.replay(server);
-		Field field = context.getClass().getDeclaredField("SERVER");
-		field.setAccessible(true);
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		field.set(null, server);
+		when(server.getOfflinePlayer("grandwazir")).thenReturn(player);
 		context.getOfflinePlayer(0);
-		context.getOfflinePlayer(1);
-		EasyMock.verify(server);
+		verify(server).getOfflinePlayer("grandwazir");
 	}
 
 	@Test
@@ -137,16 +118,7 @@ public class CommandContextTest extends TestCase {
 	@Before
 	public void setUp()
 	throws Exception {
-		server = BukkitTestFixture.getServer();
-		BukkitTestFixture.setServer(server);
-		sender = EasyMock.createMock(Player.class);
-		context = new CommandContext(ARGUMENTS, sender);
-	}
-
-	@After
-	public void tearDown()
-	throws NoSuchFieldException, IllegalAccessException {
-		BukkitTestFixture.setServer(null);
+		context = new CommandContext(ARGUMENTS, sender, server);
 	}
 
 }

@@ -18,54 +18,34 @@
 
 package name.richardson.james.bukkit.utilities;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import org.easymock.EasyMock;
+import org.apache.commons.lang.RandomStringUtils;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class BukkitTestFixture {
 
 	public static Server getServer() {
-		Server server = EasyMock.createMock(Server.class);
-		EasyMock.expect(server.getLogger()).andReturn(Logger.getLogger("")).anyTimes();
-		EasyMock.expect(server.getName()).andReturn("BukkitTestFixture").anyTimes();
-		EasyMock.expect(server.getVersion()).andReturn("v1").anyTimes();
-		EasyMock.expect(server.getBukkitVersion()).andReturn("v1").anyTimes();
-		return server;
+		return null;
 	}
 
-	public static void setServer(Server server)
-	throws NoSuchFieldException, IllegalAccessException {
-		Field field = Bukkit.class.getDeclaredField("server");
-		field.setAccessible(true);
-		field.set(null, server);
-	}
-
-	private static String generateRandomWord(int wordLength) {
-		Random r = new Random(); // Intialize a Random Number Generator with SysTime as the seed
-		StringBuilder sb = new StringBuilder(wordLength);
-		for(int i = 0; i < wordLength; i++) { // For each letter in the word
-			char tmp = (char) ('a' + r.nextInt('z' - 'a')); // Generate a letter between a and z
-			sb.append(tmp); // Add it to the String
-		}
-		return sb.toString();
+	public static void setServer(Server server) {
+		return;
 	}
 
 	public static Player[] getOnlinePlayers(int number) {
 		int count;
 		List<Player> players = new ArrayList<Player>();
 		for (count = 0; count < number; count++) {
-			Player player = EasyMock.createNiceMock(Player.class);
-			EasyMock.expect(player.getName()).andReturn(generateRandomWord(8)).atLeastOnce();
-			EasyMock.replay(player);
+			Player player = mock(Player.class);
+			when(player.getName()).thenReturn(RandomStringUtils.randomAlphanumeric(8));
 			players.add(player);
 		}
 		return players.toArray(new Player[players.size()]);
@@ -75,9 +55,8 @@ public class BukkitTestFixture {
 		int count;
 		List<OfflinePlayer> players = new ArrayList<OfflinePlayer>();
 		for (count = 0; count < number; count++) {
-			OfflinePlayer player = EasyMock.createNiceMock(OfflinePlayer.class);
-			EasyMock.expect(player.getName()).andReturn(generateRandomWord(8)).atLeastOnce();
-			EasyMock.replay(player);
+			OfflinePlayer player = mock(OfflinePlayer.class);
+			when(player.getName()).thenReturn(RandomStringUtils.randomAlphanumeric(8));
 			players.add(player);
 		}
 		return players.toArray(new OfflinePlayer[players.size()]);

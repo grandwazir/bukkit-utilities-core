@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- Invoker.java is part of bukkit-utilities.
+ Context.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,18 +16,34 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.invoker;
+package name.richardson.james.bukkit.utilities.command;
 
-import java.util.Map;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import org.bukkit.command.TabExecutor;
+/**
+ * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 18:09 To change this template use File | Settings | File Templates.
+ */
+public interface Context {
 
-import name.richardson.james.bukkit.utilities.command.Command;
+	CommandSender getCommandSender();
 
-public interface Invoker extends TabExecutor {
+	String getFlag(String label);
 
-	public void addCommand(Command command);
+	String getJoinedArguments(int initialIndex);
 
-	public Map<String, Command> getCommands();
+	OfflinePlayer getOfflinePlayer(int index);
 
+	Player getPlayer(int index);
+
+	String getString(int index);
+
+	boolean has(int index);
+
+	boolean hasFlag(String label);
+
+	boolean isConsoleCommandSender();
+
+	int size();
 }

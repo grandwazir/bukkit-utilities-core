@@ -16,7 +16,7 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.context;
+package name.richardson.james.bukkit.utilities.command;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,17 +37,23 @@ public class CommandContext implements Context {
 
 	private static final Matcher ARGUMENT_MATCHER = Pattern.compile("(\\w+)").matcher("");
 	private static final Matcher FLAG_MATCHER = Pattern.compile("(\\w{1}):(\\w+)").matcher("");
-	private static final Server SERVER = Bukkit.getServer();
 
 	private final List<String> arguments = new ArrayList<String>();
 	private final CommandSender commandSender;
 	private final Map<String, String> flags = new HashMap<String, String>();
+	private final Server server;
 
-	public CommandContext(String[] arguments, CommandSender commandSender) {
-		this(StringUtils.join(arguments, " "), commandSender);
+	public CommandContext(String[] arguments, CommandSender commandSender, Server server) {
+		this(StringUtils.join(arguments, " "), commandSender, server);
 	}
 
-	private CommandContext(String arguments, CommandSender commandSender) {
+
+	public CommandContext(String[] arguments, CommandSender commandSender) {
+		this(StringUtils.join(arguments, " "), commandSender, Bukkit.getServer());
+	}
+
+	private CommandContext(String arguments, CommandSender commandSender, Server server) {
+		this.server = server;
 		this.commandSender = commandSender;
 		FLAG_MATCHER.reset(arguments);
 		while (FLAG_MATCHER.find()) {
@@ -77,12 +83,12 @@ public class CommandContext implements Context {
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(int index) {
-		return SERVER.getOfflinePlayer(this.arguments.get(index));
+		return server.getOfflinePlayer(this.arguments.get(index));
 	}
 
 	@Override
 	public Player getPlayer(int index) {
-		return SERVER.getPlayer(arguments.get(index));
+		return server.getPlayer(arguments.get(index));
 	}
 
 	@Override

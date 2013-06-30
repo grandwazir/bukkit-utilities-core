@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- NestedCommandContext.java is part of bukkit-utilities.
+ Invoker.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,19 +16,18 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.context;
+package name.richardson.james.bukkit.utilities.command;
 
-import org.bukkit.command.CommandSender;
+import java.util.Map;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.command.TabExecutor;
 
-/**
- * Created with IntelliJ IDEA. User: james Date: 25/06/13 Time: 19:34 To change this template use File | Settings | File Templates.
- */
-public class NestedCommandContext extends CommandContext {
+import name.richardson.james.bukkit.utilities.command.Command;
 
-	public NestedCommandContext(String[] arguments, CommandSender commandSender) {
-		super((String[]) ArrayUtils.remove(arguments, 0), commandSender);
-	}
+public interface Invoker extends TabExecutor {
+
+	public void addCommand(Command command);
+
+	public Map<String, Command> getCommands();
 
 }

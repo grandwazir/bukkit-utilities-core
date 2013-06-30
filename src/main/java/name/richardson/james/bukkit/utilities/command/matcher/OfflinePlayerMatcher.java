@@ -28,15 +28,19 @@ import org.bukkit.Server;
 
 public class OfflinePlayerMatcher implements Matcher {
 
-	private static final Server SERVER = Bukkit.getServer();
+	private final Server server;
+
+	public OfflinePlayerMatcher(Server server) {
+		this.server = server;
+	}
 
 	@Override
 	public Set<String> matches(String argument) {
 		TreeSet<String> results = new TreeSet<String>();
 		argument = argument.toLowerCase(Locale.ENGLISH);
-		for (OfflinePlayer player : SERVER.getOfflinePlayers()) {
+		for (OfflinePlayer player : server.getOfflinePlayers()) {
 			if (results.size() == Matcher.MAX_MATCHES) break;
-			if (!player.getName().startsWith(argument)) continue;
+			if (!player.getName().toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
 			results.add(player.getName());
 		}
 		return results;

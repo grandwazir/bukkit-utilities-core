@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- Matchers.java is part of bukkit-utilities.
+ NestedCommandContext.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,11 +16,22 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.matcher;
+package name.richardson.james.bukkit.utilities.command;
 
-import java.lang.annotation.Retention;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 
-@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-public @interface Matchers {
-	Class<? extends Matcher>[] classes();
+import org.apache.commons.lang.ArrayUtils;
+
+public class NestedCommandContext extends CommandContext {
+
+	public NestedCommandContext(String[] arguments, CommandSender commandSender, Server server) {
+		super((String[]) ArrayUtils.remove(arguments, 0), commandSender, server);
+	}
+
+	public NestedCommandContext(String[] arguments, CommandSender commandSender) {
+		this(arguments, commandSender, Bukkit.getServer());
+	}
+
 }

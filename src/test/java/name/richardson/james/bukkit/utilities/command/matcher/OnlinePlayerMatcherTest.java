@@ -18,50 +18,40 @@
 
 package name.richardson.james.bukkit.utilities.command.matcher;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.Set;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.easymock.EasyMock;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import name.richardson.james.bukkit.utilities.BukkitTestFixture;
 
-/**
- * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 19:11 To change this template use File | Settings | File Templates.
- */
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class OnlinePlayerMatcherTest extends TestCase {
 
 	private OnlinePlayerMatcher matcher;
+	@Mock
 	private Server server;
 
 	@Test
 	public void testMatches()
 	throws Exception {
-		Field field = matcher.getClass().getDeclaredField("SERVER");
-		field.setAccessible(true);
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		server = BukkitTestFixture.getServer();
+		matcher = new OnlinePlayerMatcher(server);
 		Player[] players = BukkitTestFixture.getOnlinePlayers(52);
-		EasyMock.expect(server.getOnlinePlayers()).andReturn(players).atLeastOnce();
-		EasyMock.replay(server);
-		field.set(server, server);
-		Assert.assertTrue("Expected list size of 50, got " + matcher.matches(""), matcher.matches("").size() == 50);
+		when(server.getOnlinePlayers()).thenReturn(players);
+		Set<String> matches = matcher.matches("");
+		Assert.assertTrue("Expected list size of 50, got " + matches.size(), matches.size() == 50);
 		String expectedName = players[0].getName();
 		String searchName = players[0].getName().substring(0, 4);
 		Assert.assertTrue("List does not contain expected name! " + expectedName, matcher.matches(searchName).contains(expectedName));
 	}
 
-	@Before
-	public void setUp()
-	throws Exception {
-		matcher = new OnlinePlayerMatcher();
-	}
 }

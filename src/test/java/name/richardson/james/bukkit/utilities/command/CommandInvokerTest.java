@@ -16,7 +16,7 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.invoker;
+package name.richardson.james.bukkit.utilities.command;
 
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -25,9 +25,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import name.richardson.james.bukkit.utilities.command.Command;
-import name.richardson.james.bukkit.utilities.command.context.Context;
 
 import static org.mockito.Mockito.*;
 

@@ -23,7 +23,6 @@ import java.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import name.richardson.james.bukkit.utilities.command.context.Context;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
 
 public class HelpCommand extends AbstractCommand {

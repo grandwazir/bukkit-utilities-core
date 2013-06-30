@@ -22,14 +22,12 @@ import java.util.Set;
 
 import org.bukkit.permissions.Permissible;
 
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.context.Context;
 import name.richardson.james.bukkit.utilities.formatters.localisation.Localised;
 
 public interface Command extends Localised {
 
 	/**
-	 * Attempt to execute this command using the arguments contained within the {@link name.richardson.james.bukkit.utilities.command.context.CommandContext}. Any feedback regarding success or failure will be handled
+	 * Attempt to execute this command using the arguments contained within the {@link CommandContext}. Any feedback regarding success or failure will be handled
 	 * within this command.
 	 *
 	 * @param context

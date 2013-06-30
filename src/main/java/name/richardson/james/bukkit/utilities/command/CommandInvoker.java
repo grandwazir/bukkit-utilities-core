@@ -16,17 +16,11 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.invoker;
+package name.richardson.james.bukkit.utilities.command;
 
 import java.util.*;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
-
-import name.richardson.james.bukkit.utilities.command.Command;
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.context.Context;
-import name.richardson.james.bukkit.utilities.command.context.NestedCommandContext;
 
 public class CommandInvoker implements Invoker {
 

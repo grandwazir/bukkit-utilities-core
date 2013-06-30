@@ -18,34 +18,33 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.List;
-
 import org.bukkit.permissions.Permissible;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
-import name.richardson.james.bukkit.utilities.command.matcher.Matchers;
 import name.richardson.james.bukkit.utilities.command.matcher.OnlinePlayerMatcher;
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.context.Context;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class AbstractCommandTest extends TestCase {
 
-	private static final String[] ARGUMENTS = {};
-
 	private AbstractCommandTestClass command;
-	private Context context;
+
+	@Mock
+	private Permissible permissible;
 
 	@Permissions(permissions = {"test.permission"})
-	@Matchers(classes = {OnlinePlayerMatcher.class})
 	public class AbstractCommandTestClass extends AbstractCommand {
 
 		@Override
@@ -56,15 +55,18 @@ public class AbstractCommandTest extends TestCase {
 	}
 
 	@Test
-	public void testIsAuthorised()
+	public void testIsAuthorisedTrue()
 	throws Exception {
-		Permissible permissible = EasyMock.createMock(Permissible.class);
-		EasyMock.expect(permissible.hasPermission("test.permission")).andReturn(true).times(1);
-		EasyMock.expect(permissible.hasPermission("test.permission")).andReturn(false).times(1);
-		EasyMock.replay(permissible);
+		when(permissible.hasPermission(org.mockito.Matchers.<String>anyObject())).thenReturn(true);
 		Assert.assertTrue(command.isAuthorised(permissible));
+	}
+
+	@Test
+	public void testIsAuthorisedFalse()
+	throws Exception {
+		if (permissible == null) System.out.print("is null!");
+		when(permissible.hasPermission(org.mockito.Matchers.<String>anyObject())).thenReturn(false);
 		Assert.assertFalse(command.isAuthorised(permissible));
-		EasyMock.verify(permissible);
 	}
 
 	@Test
@@ -112,24 +114,18 @@ public class AbstractCommandTest extends TestCase {
 	@Test
 	public void testGetArgumentMatches()
 	throws Exception {
-		Field field = command.getClass().getSuperclass().getDeclaredField("matchers");
-		field.setAccessible(true);
-		List<Matcher> matchers = (List<Matcher>) field.get(command);
-		Matcher matcher = EasyMock.createMock(Matcher.class);
-		EasyMock.expect(matcher.matches("test")).andReturn(Collections.<String>emptySet()).times(1);
-		matchers.set(0, matcher);
-		EasyMock.replay(matcher);
-		Assert.assertSame(Collections.emptySet(), command.getArgumentMatches(context));
-		context = new CommandContext(new String[]{"test"}, null);
-		Assert.assertSame(Collections.emptySet(), command.getArgumentMatches(context));
-		EasyMock.verify(matcher);
-
+		Matcher matcher = mock(OnlinePlayerMatcher.class);
+		command.addMatcher(matcher);
+		CommandContext context = new CommandContext(new String[]{"test"}, null);
+		Assert.assertTrue(command.getArgumentMatches(context).isEmpty());
+		context = new CommandContext(new String[]{"test", "test"}, null);
+		Assert.assertTrue(command.getArgumentMatches(context).isEmpty());
+		verify(matcher).matches("test");
 	}
 
 	@Before
 	public void setUp()
 	throws Exception {
 		command = new AbstractCommandTestClass();
-		context = new CommandContext(ARGUMENTS, null);
 	}
 }

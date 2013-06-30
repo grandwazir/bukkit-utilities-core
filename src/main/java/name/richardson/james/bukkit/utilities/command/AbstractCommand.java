@@ -24,11 +24,10 @@ import java.util.*;
 import org.bukkit.permissions.Permissible;
 
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
-import name.richardson.james.bukkit.utilities.command.matcher.Matchers;
-import name.richardson.james.bukkit.utilities.command.context.Context;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.formatters.colours.CoreColourScheme;
 import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.permissions.Permissions;
 
 public abstract class AbstractCommand implements Command {
 
@@ -49,7 +48,6 @@ public abstract class AbstractCommand implements Command {
 		description = resourceBundle.getString(keyPrefix + "description");
 		usage = resourceBundle.getString(keyPrefix + "usage");
 		colourScheme = new CoreColourScheme();
-		if (this.getClass().isAnnotationPresent(Matchers.class)) this.setMatchers();
 	}
 
 	@Override
@@ -112,16 +110,8 @@ public abstract class AbstractCommand implements Command {
 		return false;
 	}
 
-	private void setMatchers() {
-		if (this.getClass().isAnnotationPresent(Matchers.class)) {
-			for (final Class<? extends Matcher> matcherClass : this.getClass().getAnnotation(Matchers.class).classes()) {
-				try {
-					this.matchers.add(matcherClass.getConstructor().newInstance());
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+	protected void addMatcher(Matcher matcher) {
+		matchers.add(matcher);
 	}
 
 }

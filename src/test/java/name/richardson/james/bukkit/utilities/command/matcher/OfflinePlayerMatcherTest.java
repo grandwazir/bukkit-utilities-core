@@ -20,44 +20,45 @@ package name.richardson.james.bukkit.utilities.command.matcher;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Set;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import name.richardson.james.bukkit.utilities.BukkitTestFixture;
 
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class OfflinePlayerMatcherTest extends TestCase {
 
 	private OfflinePlayerMatcher matcher;
 
+	@Mock
+	private Server server;
+
 	@Test
 	public void testMatches()
 	throws Exception {
-		Field field = matcher.getClass().getDeclaredField("SERVER");
-		field.setAccessible(true);
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		Server server = BukkitTestFixture.getServer();
 		OfflinePlayer[] players = BukkitTestFixture.getOfflinePlayers(52);
-		EasyMock.expect(server.getOfflinePlayers()).andReturn(players).atLeastOnce();
-		EasyMock.replay(server);
-		field.set(server, server);
-		Assert.assertTrue("Expected list size of 50, got " + matcher.matches(""), matcher.matches("").size() == 50);
+		when(server.getOfflinePlayers()).thenReturn(players);
+		matcher = new OfflinePlayerMatcher(server);
+		Set<String> matches = matcher.matches("");
+		Assert.assertTrue("Expected list size of 50, got " + matches.size(), matches.size() == 50);
 		String expectedName = players[0].getName();
 		String searchName = players[0].getName().substring(0, 4);
-		Assert.assertTrue("List does not contain expected name! " + expectedName, matcher.matches(searchName).contains(expectedName));
+		matches = matcher.matches(searchName);
+		Assert.assertTrue("List does not contain expected name! " + expectedName, matches.contains(expectedName));
 	}
 
-	@Before
-	public void setUp()
-	throws Exception {
-		matcher = new OfflinePlayerMatcher();
-	}
 }
