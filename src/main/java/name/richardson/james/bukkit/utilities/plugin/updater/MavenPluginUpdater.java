@@ -16,9 +16,8 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.updater;
+package name.richardson.james.bukkit.utilities.plugin.updater;
 
-import com.avaje.ebeaninternal.server.lib.sql.Prefix;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.xml.sax.SAXException;

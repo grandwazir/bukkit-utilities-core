@@ -96,7 +96,7 @@ public class BukkitPermissionManager implements PermissionManager {
 			nodes.remove(nodes.size() - 1);
 			final String parentNode = StringUtils.join(nodes, ".");
 			LOGGER.log(Level.FINEST, "Resolving parent permission as `{1}`", parentNode);
-			return Bukkit.getPluginManager().getPermission(parentNode);
+			return pluginManager.getPermission(parentNode);
 		} else {
 			return null;
 		}

@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import org.bukkit.plugin.PluginManager;
+
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.plugin.Reloadable;
 

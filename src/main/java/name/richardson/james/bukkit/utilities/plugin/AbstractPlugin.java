@@ -41,9 +41,9 @@ import name.richardson.james.bukkit.utilities.listener.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.persistence.SQLStorage;
-import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
-import name.richardson.james.bukkit.utilities.updater.Updatable;
+import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
+import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater;
+import name.richardson.james.bukkit.utilities.plugin.updater.Updatable;
 
 public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 

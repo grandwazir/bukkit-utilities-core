@@ -16,7 +16,7 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.updater;
+package name.richardson.james.bukkit.utilities.plugin.updater;
 
 import java.net.URL;
 

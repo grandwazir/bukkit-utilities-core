@@ -23,9 +23,9 @@ import java.io.InputStream;
 import java.util.logging.Level;
 
 import name.richardson.james.bukkit.utilities.persistence.YAMLStorage;
-import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
+import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
+import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater.Branch;
+import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater.State;
 
 public class SimplePluginConfiguration extends YAMLStorage implements PluginConfiguration {
 
