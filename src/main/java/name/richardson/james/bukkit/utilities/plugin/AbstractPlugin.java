@@ -28,6 +28,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.richardson.james.bukkit.utilities.command.DefaultCommandInvoker;
+import name.richardson.james.bukkit.utilities.command.HelpCommand;
 import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
@@ -41,7 +43,6 @@ import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.persistence.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimplePluginConfiguration;
-import name.richardson.james.bukkit.utilities.listener.MetricsListener;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.persistence.SQLStorage;
@@ -51,27 +52,24 @@ import name.richardson.james.bukkit.utilities.plugin.updater.Updatable;
 
 public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 
-	/* The name of the configuration file as saved on the disk */
 	public static final String CONFIG_NAME = "config.yml";
-	/* THe name of the database configuration file as saved on the disk */
 	public static final String DATABASE_CONFIG_NAME = "database.yml";
 
-	/* The custom logger that belongs to this plugin */
 	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
 
-	/* The configuration file for this plugin */
 	private PluginConfiguration configuration;
-	/* The database that belongs to this plugin */
-	private EbeanServer database;
+	private PermissionManager permissionsManager;
 
-	@Override
-	public EbeanServer getDatabase() {
-		return this.database;
-	}
-
-	@SuppressWarnings("HardCodedStringLiteral")
 	public String getGroupID() {
 		return "name.richardson.james.bukkit";
+	}
+
+	public Logger getLocalisedLogger() {
+		return this.logger;
+	}
+
+	public PermissionManager getPermissionsManager() {
+		return permissionsManager;
 	}
 
 	public URL getRepositoryURL() {
@@ -87,21 +85,20 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		}
 	}
 
-	/**
-	 * Provides access to an implementation of {@link Logger} that is localised.
-	 *
-	 * See {@link name.richardson.james.bukkit.utilities.logging.LocalisedLogger} for details on why this is necessary.
-	 *
-	 * @return {@link Logger}
-	 */
-	protected Logger getLocalisedLogger() {
-		return this.logger;
+	public void onEnable() {
+		try {
+			this.setPermissionsManager();
+			this.loadConfiguration();
+			this.updatePlugin();
+		} catch (IOException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 	}
 
 	/**
 	 * Attempt to load a {@link SimplePluginConfiguration} from disk in this plugin's data folder.
 	 */
-	protected void loadConfiguration()
+	private void loadConfiguration()
 	throws IOException {
 		PrefixedLogger.setPrefix("[" + this.getName() + "] ");
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.CONFIG_NAME);
@@ -111,52 +108,8 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		this.logger.log(Level.CONFIG, "Localisation locale: {0}", Locale.getDefault());
 	}
 
-	/**
-	 * Attempt to load a {@link SQLStorage} using the information from {@link DatabaseConfiguration},
-	 * failing that using the settings in bukkit.yml and initalise it.
-	 */
-	protected void loadDatabase()
-	throws IOException {
-		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.DATABASE_CONFIG_NAME);
-		final InputStream defaults = this.getResource(DATABASE_CONFIG_NAME);
-		final SimpleDatabaseConfiguration configuration = new SimpleDatabaseConfiguration(file, defaults, this.getName());
-		final SQLStorage loader = new SQLStorage(configuration, this.getDatabaseClasses(), this.getName(), this.getClassLoader());
-		loader.initalise();
-		this.database = loader.getEbeanServer();
-	}
-
-	/**
-	 * Set any plugin permissions as annotated by {@link name.richardson.james.bukkit.utilities.permissions.Permissions}.
-	 */
-	protected void setPermissions() {
-		if (this.getClass().isAnnotationPresent(Permissions.class)) {
-			final Permissions annotation = this.getClass().getAnnotation(Permissions.class);
-			final PermissionManager permissionManager = new BukkitPermissionManager();
-			permissionManager.createPermissions(annotation.permissions());
-		}
-	}
-
-	/**
-	 * Will establish the default metric listener for the plugin.
-	 *
-	 * This returns basic version and server information. It also checks to see if we are allowed to collect statistics
-	 * for this plugin.
-	 *
-	 * @throws IOException
-	 */
-	protected void setupMetrics()
-	throws IOException {
-		if (this.configuration.isCollectingStats()) {
-			new MetricsListener(this, this.getServer().getPluginManager(), new Metrics(this));
-		}
-	}
-
-	protected void localisePermissions() {
-		final ResourceBundle bundle = ResourceBundle.getBundle(ResourceBundles.PERMISSIONS.getBundleName());
-		for(Permission permission : this.getServer().getPluginManager().getPermissions()) {
-			if (!permission.getName().startsWith(this.getName().toLowerCase())) continue;
-			permission.setDescription(bundle.getString(permission.getName()));
-		}
+	private void setPermissionsManager() {
+		this.permissionsManager = new BukkitPermissionManager(this.getServer().getPluginManager());
 	}
 
 	/**
@@ -165,7 +118,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	 * Will attempt an update check once within the next 20 seconds. The time is randomised to avoid multiple plugins
 	 * all making a check at the same time.
 	 */
-	protected void updatePlugin() {
+	private void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != PluginUpdater.State.OFF) {
 			final PluginUpdater updater = new MavenPluginUpdater(this, this.configuration.getAutomaticUpdaterState());
 			this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);

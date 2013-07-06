@@ -1,5 +1,7 @@
-Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
+Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
 
+2013-07-06 17:55:14 +0100    add ability to localise permissions (James Richardson)
+2013-07-06 17:51:38 +0100    refactoring (James Richardson)
 2013-07-06 17:00:13 +0100    add restricted command class (James Richardson)
 2013-07-06 15:42:26 +0100    fix bug where wrong usage was being used in CommandInvoker (James Richardson)
 2013-06-30 13:01:35 +0100    added tests for PermissionManager (James Richardson)

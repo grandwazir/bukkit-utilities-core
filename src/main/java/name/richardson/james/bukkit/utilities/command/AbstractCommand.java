@@ -27,27 +27,27 @@ import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.formatters.colours.CoreColourScheme;
 import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.Permissions;
 
 public abstract class AbstractCommand implements Command {
 
-	private static final String MESSAGES_RESOURCE_BUNDLE = ResourceBundles.MESSAGES.getBundleName();
-	private static final String COMMANDS_RESOURCE_BUNDLE = ResourceBundles.COMMANDS.getBundleName();
+	private static final ResourceBundle MESSAGES_RESOURCE_BUNDLE = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
+	private static final ResourceBundle COMMANDS_RESOURCE_BUNDLE = ResourceBundle.getBundle(ResourceBundles.COMMANDS.getBundleName());
 
-	private final CoreColourScheme colourScheme;
+	private final CoreColourScheme colourScheme = new CoreColourScheme();
 	private final String description;
-	private final String keyPrefix = this.getClass().getSimpleName().toLowerCase() + ".";
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
 	private final String name;
-	private final ResourceBundle resourceBundle = ResourceBundle.getBundle(MESSAGES_RESOURCE_BUNDLE);
+	private final PermissionManager permissionManager;
 	private final String usage;
 
-	public AbstractCommand() {
-		ResourceBundle resourceBundle = ResourceBundle.getBundle(COMMANDS_RESOURCE_BUNDLE);
-		name = resourceBundle.getString(keyPrefix + "name");
-		description = resourceBundle.getString(keyPrefix + "description");
-		usage = resourceBundle.getString(keyPrefix + "usage");
-		colourScheme = new CoreColourScheme();
+	public AbstractCommand(PermissionManager permissionManager) {
+		this.permissionManager = permissionManager;
+		String keyPrefix = this.getClass().getSimpleName().toLowerCase() + ".";
+		name = COMMANDS_RESOURCE_BUNDLE.getString(keyPrefix + "name");
+		description = COMMANDS_RESOURCE_BUNDLE.getString(keyPrefix + "description");
+		usage = COMMANDS_RESOURCE_BUNDLE.getString(keyPrefix + "usage");
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	public String getColouredMessage(ColourScheme.Style style, String key, Object... arguments) {
-		String message = resourceBundle.getString(key);
+		String message = MESSAGES_RESOURCE_BUNDLE.getString(key);
 		return colourScheme.format(style, message, arguments);
 	}
 
@@ -76,7 +76,7 @@ public abstract class AbstractCommand implements Command {
 
 	@Override
 	public String getMessage(String key, Object... arguments) {
-		return MessageFormat.format(resourceBundle.getString(key), arguments);
+		return MessageFormat.format(MESSAGES_RESOURCE_BUNDLE.getString(key), arguments);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public abstract class AbstractCommand implements Command {
 
 	@Override
 	public ResourceBundle getResourceBundle() {
-		return resourceBundle;
+		return MESSAGES_RESOURCE_BUNDLE;
 	}
 
 	@Override
