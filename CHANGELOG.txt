@@ -1,5 +1,8 @@
 Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-06-30 13:01:35 +0100    added tests for PermissionManager (James Richardson)
+2013-06-30 12:25:54 +0100    refactor command (James Richardson)
+2013-06-29 17:14:53 +0100    swap to Mockito from EasyMock for more readable tests (James Richardson)
 2013-06-29 13:37:37 +0100    forgot to add Reloadable (James Richardson)
 2013-06-29 13:34:27 +0100    added reloadcommand (James Richardson)
 2013-06-29 13:03:23 +0100    ready to start testing (James Richardson)

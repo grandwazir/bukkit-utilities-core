@@ -60,7 +60,7 @@ public class HelpCommand extends AbstractCommand {
 			context.getCommandSender().sendMessage(message);
 			for (Command command : commands.values()) {
 				if (!command.isAuthorised(context.getCommandSender())) continue;
-				usage = getColourScheme().format(ColourScheme.Style.COMMAND_USAGE, getUsage());
+				usage = getColourScheme().format(ColourScheme.Style.COMMAND_USAGE, command.getUsage());
 				message = ChatColor.RED + "/" + label + " " + ChatColor.YELLOW + command.getName() + " " + usage;
 				context.getCommandSender().sendMessage(message);
 			}

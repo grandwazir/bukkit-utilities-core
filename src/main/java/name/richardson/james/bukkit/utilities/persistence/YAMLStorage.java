@@ -65,10 +65,10 @@ public class YAMLStorage {
 
 	protected void save() {
 		try {
-			logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
+			YAMLStorage.logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
 			this.configuration.save(this.file);
 		} catch (final IOException e) {
-			logger.log(Level.SEVERE, "unable-to-save");
+			YAMLStorage.logger.log(Level.SEVERE, "unable-to-save");
 		}
 	}
 
@@ -76,7 +76,7 @@ public class YAMLStorage {
 		this.configuration.setDefaults(this.defaultConfiguration);
 		this.configuration.options().copyDefaults(true);
 		if (!this.file.exists()) {
-			logger.log(Level.CONFIG, "Saving default configuration.");
+			YAMLStorage.logger.log(Level.CONFIG, "Saving default configuration.");
 			this.save();
 			this.load();
 		}
@@ -84,9 +84,9 @@ public class YAMLStorage {
 
 	private void load() {
 		final String className = this.getClass().getSimpleName();
-		logger.log(Level.CONFIG, "Loading configuration: " + className);
+		YAMLStorage.logger.log(Level.CONFIG, "Loading configuration: " + className);
 		final String path = this.file.getAbsolutePath();
-		logger.log(Level.CONFIG, "Using path: " + path);
+		YAMLStorage.logger.log(Level.CONFIG, "Using path: " + path);
 		this.configuration = YamlConfiguration.loadConfiguration(this.file);
 	}
 }

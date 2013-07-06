@@ -31,6 +31,7 @@ import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
+import org.mcstats.Metrics;
 
 import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.persistence.configuration.PluginConfiguration;
@@ -142,7 +143,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	protected void setupMetrics()
 	throws IOException {
 		if (this.configuration.isCollectingStats()) {
-			new MetricsListener(this, this.getServer().getPluginManager());
+			new MetricsListener(this, this.getServer().getPluginManager(), new Metrics(this));
 		}
 	}
 

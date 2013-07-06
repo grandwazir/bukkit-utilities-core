@@ -4,25 +4,30 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.logging.*;
 
+import org.bukkit.Bukkit;
+
 import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
 
 public class PrefixedLogger extends Logger {
 
-	private static final Logger BUKKIT_LOGGER = Logger.getLogger("Minecraft");
 	private static final String RESOURCE_BUNDLE_NAME = ResourceBundles.MESSAGES.getBundleName();
 
 	private static String PREFIX;
 
+	public static Logger getRootLogger() {
+		if (Bukkit.getServer() == null) return Logger.getLogger("");
+		return Bukkit.getLogger();
+	}
+
 	protected PrefixedLogger(String name, String resourceBundleName) {
 		super(name, resourceBundleName);
-		LogManager.getLogManager().addLogger(this);
 		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
 			this.setLevel(Level.INFO);
-			for (final Handler handler : BUKKIT_LOGGER.getHandlers()) {
+			for (final Handler handler : getRootLogger().getHandlers()) {
 				handler.setLevel(Level.ALL);
 			}
 			this.setUseParentHandlers(true);
-			this.setParent(BUKKIT_LOGGER);
+			this.setParent(getRootLogger());
 		}
 	}
 
