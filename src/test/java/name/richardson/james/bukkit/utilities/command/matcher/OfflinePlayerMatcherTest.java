@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.formatters.localisation;
 
+import java.util.ResourceBundle;
+
 /**
  * Created with IntelliJ IDEA. User: james Date: 29/06/13 Time: 00:21 To change this template use File | Settings | File Templates.
  */
@@ -35,6 +37,10 @@ public enum ResourceBundles {
 
 	public String getBundleName() {
 		return bundleName;
+	}
+
+	public ResourceBundle getBundle() {
+		return ResourceBundle.getBundle(bundleName);
 	}
 
 	@Override

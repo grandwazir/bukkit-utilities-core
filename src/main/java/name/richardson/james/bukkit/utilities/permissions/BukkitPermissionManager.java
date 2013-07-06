@@ -37,8 +37,7 @@ import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
  */
 public class BukkitPermissionManager implements PermissionManager {
 
-	private static final String RESOURCE_BUNDLE_NAME = ResourceBundles.PERMISSIONS.getBundleName();
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundles.PERMISSIONS.getBundle();
 	private static final Logger LOGGER = PrefixedLogger.getLogger(BukkitPermissionManager.class);
 
 	private final PluginManager pluginManager;
@@ -75,7 +74,7 @@ public class BukkitPermissionManager implements PermissionManager {
 	public Permission createPermission(final String node, final PermissionDefault defaultPermission, final Permission parent, final boolean defaultParent) {
 		final String description = RESOURCE_BUNDLE.getString(node);
 		final Permission permission = new Permission(node, description, defaultPermission);
-		if (parent != null) permission.addParent(permission, defaultParent);
+		if (parent != null) permission.addParent(parent, defaultParent);
 		return this.addPermission(permission);
 	}
 
@@ -95,7 +94,7 @@ public class BukkitPermissionManager implements PermissionManager {
 		if (nodes.size() > 1) {
 			nodes.remove(nodes.size() - 1);
 			final String parentNode = StringUtils.join(nodes, ".");
-			LOGGER.log(Level.FINEST, "Resolving parent permission as `{1}`", parentNode);
+			LOGGER.log(Level.FINEST, "Resolving parent permission as " +  parentNode);
 			return pluginManager.getPermission(parentNode);
 		} else {
 			return null;

@@ -1,5 +1,8 @@
 # Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
 
+2013-07-06 19:10:33 +0100    delete old tests (James Richardson)  
+2013-07-06 19:09:23 +0100    add PermissionManager to command constructor (James Richardson)  
+2013-07-06 19:03:10 +0100    split plugin into two (James Richardson)  
 2013-07-06 17:55:14 +0100    add ability to localise permissions (James Richardson)  
 2013-07-06 17:51:38 +0100    refactoring (James Richardson)  
 2013-07-06 17:00:13 +0100    add restricted command class (James Richardson)  
