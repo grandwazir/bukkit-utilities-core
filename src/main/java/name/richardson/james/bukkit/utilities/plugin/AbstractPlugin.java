@@ -58,7 +58,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
 
 	private PluginConfiguration configuration;
-	private PermissionManager permissionsManager;
+	private PermissionManager permissionManager;
 
 	public String getGroupID() {
 		return "name.richardson.james.bukkit";
@@ -68,8 +68,8 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		return this.logger;
 	}
 
-	public PermissionManager getPermissionsManager() {
-		return permissionsManager;
+	public PermissionManager getPermissionManager() {
+		return permissionManager;
 	}
 
 	public URL getRepositoryURL() {
@@ -87,8 +87,8 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 
 	public void onEnable() {
 		try {
-			this.setPermissionsManager();
 			this.loadConfiguration();
+			this.setPermissions();
 			this.updatePlugin();
 		} catch (IOException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -108,10 +108,6 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		this.logger.log(Level.CONFIG, "Localisation locale: {0}", Locale.getDefault());
 	}
 
-	private void setPermissionsManager() {
-		this.permissionsManager = new BukkitPermissionManager(this.getServer().getPluginManager());
-	}
-
 	/**
 	 * Attempt to check for an update for this plugin using the settings from the {@link PluginConfiguration}.
 	 *
@@ -124,4 +120,13 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 			this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);
 		}
 	}
+
+	private void setPermissions() {
+		if (this.getClass().isAnnotationPresent(Permissions.class)) {
+			final Permissions annotation = this.getClass().getAnnotation(Permissions.class);
+			this.permissionManager = new BukkitPermissionManager();
+			this.permissionManager.createPermissions(annotation.permissions());
+		}
+	}
+
 }

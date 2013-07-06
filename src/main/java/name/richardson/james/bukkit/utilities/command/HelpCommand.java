@@ -22,8 +22,10 @@ import java.util.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
+import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 
 public class HelpCommand extends AbstractCommand {
 
@@ -34,7 +36,8 @@ public class HelpCommand extends AbstractCommand {
 	private Command command;
 	private String label;
 
-	public HelpCommand(String label, PluginDescriptionFile descriptionFile) {
+	public HelpCommand(PermissionManager permissionManager, String label, PluginDescriptionFile descriptionFile) {
+		super(permissionManager);
 		this.descriptionFile = descriptionFile;
 		this.label = label;
 	}

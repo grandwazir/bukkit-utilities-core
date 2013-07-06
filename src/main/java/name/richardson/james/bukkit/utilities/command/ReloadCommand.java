@@ -21,13 +21,15 @@ package name.richardson.james.bukkit.utilities.command;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
+import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.plugin.Reloadable;
 
 public class ReloadCommand extends AbstractCommand {
 
 	private final Reloadable reloadable;
 
-	public ReloadCommand(Reloadable reloadable) {
+	public ReloadCommand(PermissionManager permissionManager, Reloadable reloadable) {
+		super(permissionManager);
 		this.reloadable = reloadable;
 	}
 

@@ -48,6 +48,14 @@ public abstract class AbstractCommand implements Command {
 		name = COMMANDS_RESOURCE_BUNDLE.getString(keyPrefix + "name");
 		description = COMMANDS_RESOURCE_BUNDLE.getString(keyPrefix + "description");
 		usage = COMMANDS_RESOURCE_BUNDLE.getString(keyPrefix + "usage");
+		this.setPermissions();
+	}
+
+	private void setPermissions() {
+		if (this.getClass().isAnnotationPresent(Permissions.class)) {
+			final Permissions annotation = this.getClass().getAnnotation(Permissions.class);
+			this.permissionManager.createPermissions(annotation.permissions());
+		}
 	}
 
 	@Override
