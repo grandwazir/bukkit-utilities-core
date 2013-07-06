@@ -24,10 +24,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
@@ -144,6 +148,14 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	throws IOException {
 		if (this.configuration.isCollectingStats()) {
 			new MetricsListener(this, this.getServer().getPluginManager(), new Metrics(this));
+		}
+	}
+
+	protected void localisePermissions() {
+		final ResourceBundle bundle = ResourceBundle.getBundle(ResourceBundles.PERMISSIONS.getBundleName());
+		for(Permission permission : this.getServer().getPluginManager().getPermissions()) {
+			if (!permission.getName().startsWith(this.getName().toLowerCase())) continue;
+			permission.setDescription(bundle.getString(permission.getName()));
 		}
 	}
 
