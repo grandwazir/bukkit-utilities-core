@@ -48,7 +48,7 @@ public class BukkitPermissionManager implements PermissionManager {
 		this(Bukkit.getServer().getPluginManager());
 	}
 
-	protected BukkitPermissionManager(PluginManager pluginManager) {
+	public BukkitPermissionManager(PluginManager pluginManager) {
 		this.pluginManager = pluginManager;
 	}
 

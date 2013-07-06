@@ -21,13 +21,13 @@ public class PrefixedLogger extends Logger {
 
 	protected PrefixedLogger(String name, String resourceBundleName) {
 		super(name, resourceBundleName);
+		LogManager.getLogManager().addLogger(this);
 		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
 			this.setLevel(Level.INFO);
+			this.setUseParentHandlers(true);
 			for (final Handler handler : getRootLogger().getHandlers()) {
 				handler.setLevel(Level.ALL);
 			}
-			this.setUseParentHandlers(true);
-			this.setParent(getRootLogger());
 		}
 	}
 

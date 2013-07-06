@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v5.1.1-SNAPSHOT)
 
+2013-07-06 15:42:26 +0100    fix bug where wrong usage was being used in CommandInvoker (James Richardson)  
 2013-06-30 13:01:35 +0100    added tests for PermissionManager (James Richardson)  
 2013-06-30 12:25:54 +0100    refactor command (James Richardson)  
 2013-06-29 17:14:53 +0100    swap to Mockito from EasyMock for more readable tests (James Richardson)  

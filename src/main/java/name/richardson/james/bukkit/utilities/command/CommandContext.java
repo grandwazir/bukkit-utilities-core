@@ -98,7 +98,7 @@ public class CommandContext implements Context {
 
 	@Override
 	public boolean has(int index) {
-		return (arguments.size() < index || arguments.isEmpty() ) ? false : true;
+		return (arguments.size() < index + 1 || arguments.isEmpty() ) ? false : true;
 	}
 
 	@Override

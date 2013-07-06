@@ -71,17 +71,17 @@ public class HelpCommand extends AbstractCommand {
 	@Override
 	public Set<String> getArgumentMatches(Context context) {
 		Set<String> matches = new HashSet<String>();
-		if (context.has(0)) {
+		if (context.has(1)) {
 			for (Command command : commands.values()) {
-				if (command.getName().startsWith(context.getString(0).toLowerCase())) matches.add(command.getName());
+				if (command.getName().startsWith(context.getString(1).toLowerCase())) matches.add(command.getName());
 			}
 		}
 		return matches;
 	}
 
 	private void setCommand() {
-		if (context.has(0)) {
-			command = commands.get(context.getString(0));
+		if (context.has(1)) {
+			command = commands.get(context.getString(1));
 		} else {
 			command = null;
 		}

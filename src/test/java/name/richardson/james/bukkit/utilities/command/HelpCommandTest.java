@@ -42,11 +42,12 @@ public class HelpCommandTest extends TestCase {
 		CommandSender sender = EasyMock.createMock(CommandSender.class);
 		Command nestedCommand = EasyMock.createMock(Command.class);
 		EasyMock.expect(nestedCommand.getName()).andReturn("test").atLeastOnce();
+		EasyMock.expect(nestedCommand.getUsage()).andReturn("[name]").atLeastOnce();
 		EasyMock.expect(nestedCommand.isAuthorised(sender)).andReturn(true).atLeastOnce();
 		EasyMock.replay(nestedCommand);
 		command.addCommand(nestedCommand);
 		command.execute(new CommandContext(new String[]{""}, sender));
-		Set<String> matches = command.getArgumentMatches(new CommandContext(new String[]{"tes"}, sender));
+		Set<String> matches = command.getArgumentMatches(new CommandContext(new String[]{"help", "tes"}, sender));
 		Assert.assertTrue(matches.contains("test"));
 	}
 
@@ -87,7 +88,7 @@ public class HelpCommandTest extends TestCase {
 		EasyMock.replay(nestedCommand);
 		EasyMock.replay(sender);
 		command.addCommand(nestedCommand);
-		command.execute(new CommandContext(new String[]{"test"}, sender));
+		command.execute(new CommandContext(new String[]{"help", "test"}, sender));
 		EasyMock.verify(sender);
 	}
 
