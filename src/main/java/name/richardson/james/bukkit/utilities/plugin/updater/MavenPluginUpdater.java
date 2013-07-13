@@ -20,17 +20,30 @@ package name.richardson.james.bukkit.utilities.plugin.updater;
 
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.bukkit.plugin.PluginDescriptionFile;
 
 import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
 
@@ -41,20 +54,26 @@ import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
  */
 public class MavenPluginUpdater extends AbstractPluginUpdater {
 
+	private static final Logger logger = PrefixedLogger.getLogger(MavenPluginUpdater.class);
 	private final String artifactId;
 	private final String groupId;
-	private static final Logger logger = PrefixedLogger.getLogger(MavenPluginUpdater.class);
-	private final String pluginName;
-	private final URL repositoryURL;
-	/* A reference to the downloaded Maven manifest from the remote repository */
 	private MavenManifest manifest;
+	private URL repositoryURL;
 
-	public MavenPluginUpdater(final AbstractPlugin plugin, final PluginUpdater.State state) {
-		super(plugin, state);
-		this.artifactId = plugin.getArtifactID();
-		this.groupId = plugin.getGroupID();
-		this.repositoryURL = plugin.getRepositoryURL();
-		this.pluginName = plugin.getName();
+	public MavenPluginUpdater(String artifactId, String groupId, PluginDescriptionFile pluginDescriptionFile, final PluginUpdater.Branch branch, final PluginUpdater.State state) {
+		super(pluginDescriptionFile, branch, state);
+		this.artifactId = artifactId;
+		this.groupId = groupId;
+		try {
+			switch (getBranch()) {
+				case DEVELOPMENT:
+					this.repositoryURL = new URL("http://repository.james.richardson.name/snapshots");
+				default:
+					this.repositoryURL = new URL("http://repository.james.richardson.name/releases");
+			}
+		} catch (final MalformedURLException e) {
+			throw new IllegalStateException("Repository URL could not be set!");
+		}
 	}
 
 	@Override
@@ -65,8 +84,8 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 	@Override
 	public boolean isNewVersionAvailable() {
 		if (this.manifest != null) {
-			final DefaultArtifactVersion current = new DefaultArtifactVersion(this.getLocalVersion());
-			final DefaultArtifactVersion target = new DefaultArtifactVersion(this.getRemoteVersion());
+			final DefaultArtifactVersion current = new DefaultArtifactVersion(getLocalVersion());
+			final DefaultArtifactVersion target = new DefaultArtifactVersion(getRemoteVersion());
 			final Object params[] = {target.toString(), current.toString()};
 			if (current.compareTo(target) == -1) {
 				this.logger.log(Level.FINE, "New version available: {0} > {1}", params);
@@ -87,9 +106,8 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 			try {
 				this.parseMavenMetaData();
 				if (this.isNewVersionAvailable()) {
-					Object[] arguments = {this.pluginName, this.getRemoteVersion()};
+					Object[] arguments = {getName(), this.getRemoteVersion()};
 					this.logger.log(Level.INFO, "new-version-available", arguments);
-					new PlayerNotifier(this.pluginName, this.getRemoteVersion());
 				} else {
 					Object[] arguments = {this.getLocalVersion(), this.getRemoteVersion()};
 					this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", arguments);
@@ -151,6 +169,54 @@ public class MavenPluginUpdater extends AbstractPluginUpdater {
 		this.logger.log(Level.FINER, "Creating temporary manifest: {0}", temp.getAbsolutePath());
 		this.getMavenMetaData(temp);
 		this.manifest = new MavenManifest(temp);
+	}
+
+	private class MavenManifest {
+
+		private final List<String> versionList = new LinkedList<String>();
+
+		public MavenManifest(final File file) throws SAXException, IOException, ParserConfigurationException {
+			final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+			final Document doc = docBuilder.parse(file);
+			// normalize text representation
+			doc.getDocumentElement().normalize();
+			final NodeList root = doc.getChildNodes();
+			// navigate down to get the versioning node
+			final Node meta = this.getNode("metadata", root);
+			final Node versioning = this.getNode("versioning", meta.getChildNodes());
+			final Node versions = this.getNode("versions", versioning.getChildNodes());
+			// get a list of versions
+			final NodeList nodes = versions.getChildNodes();
+			this.setVersionList(nodes);
+			file.deleteOnExit();
+		}
+
+		public String getCurrentVersion() {
+			return this.versionList.get(0);
+		}
+
+		private void setVersionList(final NodeList nodes) {
+			this.versionList.clear();
+			int i = 0;
+			while (i <= (nodes.getLength() - 1)) {
+				final Node node = nodes.item(i);
+				if (node.getNodeName().equalsIgnoreCase("version")) {
+					this.versionList.add(0, node.getChildNodes().item(0).getNodeValue());
+				}
+				i++;
+			}
+		}
+
+		private Node getNode(final String tagName, final NodeList nodes) {
+			for (int x = 0; x < nodes.getLength(); x++) {
+				final Node node = nodes.item(x);
+				if (node.getNodeName().equalsIgnoreCase(tagName)) {
+					return node;
+				}
+			}
+			return null;
+		}
 	}
 
 }

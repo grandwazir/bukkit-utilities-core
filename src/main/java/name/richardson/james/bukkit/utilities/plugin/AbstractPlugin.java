@@ -38,9 +38,8 @@ import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManage
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater;
-import name.richardson.james.bukkit.utilities.plugin.updater.Updatable;
 
-public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
+public abstract class AbstractPlugin extends JavaPlugin {
 
 	public static final String CONFIG_NAME = "config.yml";
 	public static final String DATABASE_CONFIG_NAME = "database.yml";
@@ -62,18 +61,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 		return permissionManager;
 	}
 
-	public URL getRepositoryURL() {
-		try {
-			switch (this.configuration.getAutomaticUpdaterBranch()) {
-				case DEVELOPMENT:
-					return new URL("http://repository.james.richardson.name/snapshots");
-				default:
-					return new URL("http://repository.james.richardson.name/releases");
-			}
-		} catch (final MalformedURLException e) {
-			return null;
-		}
-	}
+
 
 	public void onEnable() {
 		try {
@@ -106,8 +94,8 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	 */
 	private void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != PluginUpdater.State.OFF) {
-			final PluginUpdater updater = new MavenPluginUpdater(this, this.configuration.getAutomaticUpdaterState());
-			this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);
+			// final PluginUpdater updater = new MavenPluginUpdater(this, this.configuration.getAutomaticUpdaterState());
+			// this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);
 		}
 	}
 

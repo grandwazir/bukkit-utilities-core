@@ -18,6 +18,7 @@
 package name.richardson.james.bukkit.utilities.plugin.updater;
 
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
  * This abstract class provides a default implementation for common methods of {@link PluginUpdater}. In addition it
@@ -25,23 +26,33 @@ import org.bukkit.plugin.Plugin;
  */
 public abstract class AbstractPluginUpdater implements PluginUpdater {
 
-	private final String version;
+	private final Branch branch;
+	private final String name;
 	private final PluginUpdater.State state;
+	private final String version;
 
-	public AbstractPluginUpdater(Plugin plugin, PluginUpdater.State state) {
-		this.version = plugin.getDescription().getVersion();
+	public AbstractPluginUpdater(PluginDescriptionFile pluginDescriptionFile, PluginUpdater.Branch branch, PluginUpdater.State state) {
+		this.name = pluginDescriptionFile.getName();
+		this.version = pluginDescriptionFile.getVersion();
+		this.branch = branch;
 		this.state = state;
 	}
 
-	@Override
-	public String getLocalVersion() {
-		return this.version;
+	public final Branch getBranch() {
+		return branch;
 	}
 
+	public final String getName() {
+		return name;
+	}
 
 	@Override
-	public PluginUpdater.State getState() {
+	public final PluginUpdater.State getState() {
 		return this.state;
+	}
+
+	public final String getLocalVersion() {
+		return version;
 	}
 
 }

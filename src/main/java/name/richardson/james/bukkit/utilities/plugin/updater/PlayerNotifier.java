@@ -17,12 +17,18 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.plugin.updater;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
+import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
+import name.richardson.james.bukkit.utilities.formatters.colours.CoreColourScheme;
+import name.richardson.james.bukkit.utilities.formatters.localisation.Localised;
 import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
 
@@ -31,20 +37,34 @@ import name.richardson.james.bukkit.utilities.listener.AbstractListener;
  * available for the plugin. The players will be notified when they join the server. The permission required for players
  * to receive the notice is the name of the plugin in lowercase.
  */
-public class PlayerNotifier extends AbstractListener {
+public class PlayerNotifier extends AbstractListener implements Localised {
 
-	private static final String RESOURCE_BUNDLE_NAME = ResourceBundles.MESSAGES.getBundleName();
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
-
+	private final ResourceBundle RESOURCE_BUNDLE = ResourceBundles.MESSAGES.getBundle();
 	private final String permission;
 	private final String pluginName;
-	private final String version;
+	private final ColourScheme colourScheme = new CoreColourScheme();
+	private final PluginUpdater updater;
 
-	public PlayerNotifier(String pluginName, String version) {
-		super(null, null);
-		this.pluginName = pluginName;
+	public PlayerNotifier(Plugin plugin, PluginManager pluginManager, PluginUpdater updater) {
+		super(plugin, pluginManager);
+		this.pluginName = plugin.getName();
 		this.permission = pluginName.toLowerCase();
-		this.version = version;
+		this.updater = updater;
+	}
+
+	@Override
+	public ResourceBundle getResourceBundle() {
+		return RESOURCE_BUNDLE;
+	}
+
+	@Override
+	public String getMessage(String key, Object... arguments) {
+		return MessageFormat.format(RESOURCE_BUNDLE.getString(key), arguments);
+	}
+
+	private final String getColouredMessage(ColourScheme.Style style, String key, Object... arguments) {
+		String message = getResourceBundle().getString(key);
+		return colourScheme.format(style, message, arguments);
 	}
 
 	/**
@@ -55,9 +75,9 @@ public class PlayerNotifier extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
-		if (notify) {
-			//LocalisedCommandSender localisedPlayer = new LocalisedCommandSender(event.getPlayer(), LOCALISATION);
-			//localisedPlayer.header("new-version-available", this.pluginName, this.version);
+		if (notify && updater.isNewVersionAvailable()) {
+			String message = colourScheme.format(ColourScheme.Style.INFO, "new-version-available", updater.getRemoteVersion());
+			event.getPlayer().sendMessage(message);
 		}
 	}
 
