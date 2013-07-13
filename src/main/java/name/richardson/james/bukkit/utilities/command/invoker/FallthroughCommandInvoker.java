@@ -47,8 +47,8 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 	@Override
 	public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command bukkitCommand, String commandLabel, String[] arguments) {
 		String commandName = (arguments.length == 0) ? null : arguments[0];
-		Command command = getCommands().get(commandName);
-		if (command != null) {
+		if (commandName != null &&  getCommands().containsKey(commandName)) {
+			Command command = getCommands().get(commandName);
 			CommandContext commandContext = new NestedCommandContext(arguments, commandSender);
 			command.execute(commandContext);
 			return true;
@@ -62,8 +62,8 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, org.bukkit.command.Command bukkitCommand, String commandLabel, String[] arguments) {
 		String commandName = (arguments.length == 0) ? null : arguments[0];
-		Command command = getCommands().get(commandName);
-		if (command != null) {
+		if (commandName != null && getCommands().containsKey(commandName)) {
+			Command command = getCommands().get(commandName);
 			CommandContext commandContext = new NestedCommandContext(arguments, commandSender);
 			List<String> results = new ArrayList<String>(command.getArgumentMatches(commandContext));
 			return results;

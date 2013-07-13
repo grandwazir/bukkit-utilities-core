@@ -139,7 +139,7 @@ public class AbstractCommandContext implements CommandContext {
 	@Override
 	public boolean has(int index) {
 		Validate.notNull(index);
-		return index > 0 && index <= size();
+		return size() > 0 && index <= size();
 	}
 
 	/**

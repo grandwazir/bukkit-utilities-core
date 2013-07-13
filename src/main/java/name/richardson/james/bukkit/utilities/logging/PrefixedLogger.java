@@ -17,7 +17,6 @@ public class PrefixedLogger extends Logger {
 	protected PrefixedLogger(String name, String resourceBundleName) {
 		super(name, resourceBundleName);
 		LogManager.getLogManager().addLogger(this);
-		this.setLevel(Level.INFO);
 		for (final Handler handler : getParent().getHandlers()) {
 			handler.setLevel(Level.ALL);
 		}

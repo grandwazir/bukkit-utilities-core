@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
 
+2013-07-13 17:20:26 +0100    remove usage of test only package in runtime (James Richardson)  
 2013-07-13 16:34:53 +0100    finished added tests (James Richardson)  
 2013-07-13 16:13:39 +0100    refactored updaters and added tests (James Richardson)  
 2013-07-13 15:09:25 +0100    attempt to fix test failure when building on oracle7 (James Richardson)  
