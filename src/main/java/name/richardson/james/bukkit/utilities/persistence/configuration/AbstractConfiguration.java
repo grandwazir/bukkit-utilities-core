@@ -68,7 +68,7 @@ public abstract class AbstractConfiguration {
 	throws IOException {
 		AbstractConfiguration.logger.log(Level.CONFIG, "Loading configuration: " + this.getClass().getSimpleName());
 		AbstractConfiguration.logger.log(Level.CONFIG, "Using path: " + this.file.getAbsolutePath());
-		if (!this.file.exists() || FileUtils.fileRead(this.file).isEmpty()) {
+		if (!this.file.exists() || this.file.length() == 0) {
 			this.defaults.options().copyHeader(true);
 			this.defaults.options().copyDefaults(true);
 			AbstractConfiguration.logger.log(Level.WARNING, "saving-default-configuration", this.file.getName());

@@ -1,5 +1,12 @@
 # Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
 
+2013-07-13 16:34:53 +0100    finished added tests (James Richardson)  
+2013-07-13 16:13:39 +0100    refactored updaters and added tests (James Richardson)  
+2013-07-13 15:09:25 +0100    attempt to fix test failure when building on oracle7 (James Richardson)  
+2013-07-13 15:04:49 +0100    apparently the test database already exists when building with travis (James Richardson)  
+2013-07-13 15:02:18 +0100    parent pom is now resolvable (James Richardson)  
+2013-07-13 14:59:51 +0100    added tests for database classes (James Richardson)  
+2013-07-13 08:59:16 +0100    major refactoring (James Richardson)  
 2013-07-06 20:10:31 +0100    fix infinite loop in PermissionManager (James Richardson)  
 2013-07-06 19:10:33 +0100    delete old tests (James Richardson)  
 2013-07-06 19:09:23 +0100    add PermissionManager to command constructor (James Richardson)  
