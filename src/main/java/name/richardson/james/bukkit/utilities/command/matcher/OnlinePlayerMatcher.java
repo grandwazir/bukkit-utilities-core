@@ -40,7 +40,7 @@ public class OnlinePlayerMatcher implements Matcher {
 
 	@Override
 	public Set<String> matches(String argument) {
-		TreeSet<String> results = new TreeSet<String>();
+		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		argument = argument.toLowerCase(Locale.ENGLISH);
 		for (Player player : server.getOnlinePlayers()) {
 			if (results.size() == Matcher.MAX_MATCHES) break;

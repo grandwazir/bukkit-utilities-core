@@ -23,6 +23,9 @@ import java.util.*;
 
 import org.bukkit.permissions.Permissible;
 
+import org.apache.commons.lang.Validate;
+
+import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.formatters.colours.CoreColourScheme;
@@ -32,8 +35,8 @@ import name.richardson.james.bukkit.utilities.permissions.Permissions;
 
 public abstract class AbstractCommand implements Command {
 
-	private static final ResourceBundle MESSAGES_RESOURCE_BUNDLE = ResourceBundle.getBundle(ResourceBundles.MESSAGES.getBundleName());
-	private static final ResourceBundle COMMANDS_RESOURCE_BUNDLE = ResourceBundle.getBundle(ResourceBundles.COMMANDS.getBundleName());
+	private final ResourceBundle MESSAGES_RESOURCE_BUNDLE = ResourceBundles.MESSAGES.getBundle();
+	private final ResourceBundle COMMANDS_RESOURCE_BUNDLE = ResourceBundles.COMMANDS.getBundle();
 
 	private final CoreColourScheme colourScheme = new CoreColourScheme();
 	private final String description;
@@ -43,6 +46,7 @@ public abstract class AbstractCommand implements Command {
 	private final String usage;
 
 	public AbstractCommand(PermissionManager permissionManager) {
+		Validate.notNull(permissionManager, "Permission Manager can not be null!");
 		this.permissionManager = permissionManager;
 		String keyPrefix = this.getClass().getSimpleName().toLowerCase() + ".";
 		name = COMMANDS_RESOURCE_BUNDLE.getString(keyPrefix + "name");
@@ -59,10 +63,10 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public Set<String> getArgumentMatches(Context context) {
-		if ((matchers.size() != 0 && context.size() != 0) && matchers.size() >= context.size()) {
-			final String argument = context.getString(context.size() - 1);
-			return matchers.get(context.size() - 1).matches(argument);
+	public final Set<String> getArgumentMatches(CommandContext commandContext) {
+		if ((matchers.size() != 0 && commandContext.size() != 0) && matchers.size() >= commandContext.size()) {
+			final String argument = commandContext.getString(commandContext.size() - 1);
+			return matchers.get(commandContext.size() - 1).matches(argument);
 		} else {
 			return Collections.emptySet();
 		}
@@ -72,33 +76,33 @@ public abstract class AbstractCommand implements Command {
 		return colourScheme;
 	}
 
-	public String getColouredMessage(ColourScheme.Style style, String key, Object... arguments) {
-		String message = MESSAGES_RESOURCE_BUNDLE.getString(key);
-		return colourScheme.format(style, message, arguments);
+	public final String getColouredMessage(ColourScheme.Style style, String key, Object... arguments) {
+		String message = getResourceBundle().getString(key);
+		return getColourScheme().format(style, message, arguments);
 	}
 
 	@Override
-	public String getDescription() {
+	public final String getDescription() {
 		return description;
 	}
 
 	@Override
-	public String getMessage(String key, Object... arguments) {
+	public final String getMessage(String key, Object... arguments) {
 		return MessageFormat.format(MESSAGES_RESOURCE_BUNDLE.getString(key), arguments);
 	}
 
 	@Override
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
 	@Override
-	public ResourceBundle getResourceBundle() {
+	public final ResourceBundle getResourceBundle() {
 		return MESSAGES_RESOURCE_BUNDLE;
 	}
 
 	@Override
-	public String getUsage() {
+	public final String getUsage() {
 		return usage;
 	}
 
@@ -109,7 +113,7 @@ public abstract class AbstractCommand implements Command {
 	 * @return true if the Permissible has any of the permissions registered to this Command, otherwise false.
 	 */
 	@Override
-	public boolean isAuthorised(Permissible permissible) {
+	public final boolean isAuthorised(Permissible permissible) {
 		if (this.getClass().isAnnotationPresent(Permissions.class)) {
 			for (String permissionName : this.getClass().getAnnotation(Permissions.class).permissions()) {
 				if (permissible.hasPermission(permissionName)) return true;

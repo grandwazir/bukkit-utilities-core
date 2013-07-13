@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- Invoker.java is part of bukkit-utilities.
+ ResourceBundlesTest.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,18 +16,23 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command;
+package name.richardson.james.bukkit.utilities.formatters.localisation;
 
-import java.util.Map;
+import junit.framework.Assert;
+import junit.framework.TestCase;
+import org.junit.Test;
 
-import org.bukkit.command.TabExecutor;
+public class ResourceBundlesTest extends TestCase {
 
-import name.richardson.james.bukkit.utilities.command.Command;
+	@Test
+	public void testToString()
+	throws Exception {
+		Assert.assertTrue(ResourceBundles.MESSAGES.toString().contentEquals("Messages"));
+	}
 
-public interface Invoker extends TabExecutor {
-
-	public void addCommand(Command command);
-
-	public Map<String, Command> getCommands();
-
+	@Test
+	public void testGetBundleName()
+	throws Exception {
+		Assert.assertTrue(ResourceBundles.MESSAGES.getBundleName().contentEquals("Messages"));
+	}
 }

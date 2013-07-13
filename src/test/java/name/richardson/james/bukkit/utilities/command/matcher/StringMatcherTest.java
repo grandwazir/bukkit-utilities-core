@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- NestedCommandContextTest.java is part of bukkit-utilities.
+ StringMatcherTest.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,46 +16,39 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command;
+package name.richardson.james.bukkit.utilities.command.matcher;
 
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class NestedCommandContextTest extends TestCase {
+public class StringMatcherTest extends TestCase {
 
-	private static final String[] ARGUMENTS = {"ban", "this", "is", "t:1234", "a", "reason"};
-
-	private Context context;
-
-	@Mock
-	private Player sender;
-	@Mock
-	private Server server;
+	private final String[] commandNames = {"ban", "kick", "remove", "kicked"};
+	private StringMatcher matcher;
 
 	@Test
-	public void testHas()
-	throws Exception {
-		Assert.assertFalse(context.size() == 6);
+	public void testInvalidMatch() {
+		Set<String> results = matcher.matches("fr");
+		assertTrue("A match should not have been returned!", results.size() == 0);
 	}
 
 	@Test
-	public void testGetString()
-	throws Exception {
-		Assert.assertTrue("Expected `this` got " + context.getString(0), context.getString(0).contentEquals("this"));
+	public void testValidMatch() {
+		Set<String> results = matcher.matches("kiC");
+		assertTrue("A match should have been returned!", results.contains("kick"));
+		assertTrue("Two matches should have been returned!", results.size() == 2);
 	}
 
 	@Before
 	public void setUp()
 	throws Exception {
-		context = new NestedCommandContext(ARGUMENTS, sender, server);
+		List<String> commandNames = Arrays.asList(this.commandNames);
+		this.matcher = new StringMatcher(commandNames);
 	}
+
 }

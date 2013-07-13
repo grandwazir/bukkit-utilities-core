@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- Context.java is part of bukkit-utilities.
+ PassthroughCommandContext.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,34 +16,23 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command;
+package name.richardson.james.bukkit.utilities.command.context;
 
-import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 18:09 To change this template use File | Settings | File Templates.
+ * This implementation of CommandContext is simply an unmodified extension of AbstractCommandContext.
  */
-public interface Context {
+public class PassthroughCommandContext extends AbstractCommandContext {
 
-	CommandSender getCommandSender();
+	public PassthroughCommandContext(String[] arguments, CommandSender sender) {
+		super(arguments, sender);
+	}
 
-	String getFlag(String label);
+	public PassthroughCommandContext(String[] arguments, CommandSender sender, Server server) {
+		super(arguments, sender, server);
+	}
 
-	String getJoinedArguments(int initialIndex);
-
-	OfflinePlayer getOfflinePlayer(int index);
-
-	Player getPlayer(int index);
-
-	String getString(int index);
-
-	boolean has(int index);
-
-	boolean hasFlag(String label);
-
-	boolean isConsoleCommandSender();
-
-	int size();
 }

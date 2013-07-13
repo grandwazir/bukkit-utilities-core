@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- NestedCommandContext.java is part of bukkit-utilities.
+ StringMatcher.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,22 +16,33 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command;
+package name.richardson.james.bukkit.utilities.command.matcher;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.OfflinePlayer;
 
-public class NestedCommandContext extends CommandContext {
+public class StringMatcher implements Matcher {
 
-	public NestedCommandContext(String[] arguments, CommandSender commandSender, Server server) {
-		super((String[]) ArrayUtils.remove(arguments, 0), commandSender, server);
+	private final Collection<String> strings;
+
+	public StringMatcher(Collection<String> strings) {
+		this.strings = strings;
 	}
 
-	public NestedCommandContext(String[] arguments, CommandSender commandSender) {
-		this(arguments, commandSender, Bukkit.getServer());
+	@Override
+	public Set<String> matches(String argument) {
+		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+		argument = argument.toLowerCase(Locale.ENGLISH);
+		for (String string : strings) {
+			if (results.size() == Matcher.MAX_MATCHES) break;
+			if (!string.toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
+			results.add(string);
+		}
+		return results;
 	}
 
 }

@@ -31,8 +31,8 @@ public class CoreColourScheme implements ColourScheme {
 			case HEADER:
 				return HEADER + message.replaceAll("\\{", HEADER_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + HEADER);
 			case COMMAND_USAGE:
-				message = message.replaceAll("\\<", WARNING + "\\<").replaceAll("\\>", "\\>" + WARNING);
-				message = message.replaceAll("\\[", INFO + "\\[").replaceAll("\\]", "\\]" + WARNING);
+				message = message.replaceAll("\\<", WARNING + "\\<");
+				message = message.replaceAll("\\[", INFO + "\\[");
 				return message;
 			default:
 				return message;

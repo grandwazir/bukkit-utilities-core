@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
 
+2013-07-06 20:10:31 +0100    fix infinite loop in PermissionManager (James Richardson)  
 2013-07-06 19:10:33 +0100    delete old tests (James Richardson)  
 2013-07-06 19:09:23 +0100    add PermissionManager to command constructor (James Richardson)  
 2013-07-06 19:03:10 +0100    split plugin into two (James Richardson)  

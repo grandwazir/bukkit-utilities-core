@@ -24,28 +24,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Random;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.command.DefaultCommandInvoker;
-import name.richardson.james.bukkit.utilities.command.HelpCommand;
-import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.avaje.ebean.EbeanServer;
-import org.mcstats.Metrics;
 
 import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.persistence.configuration.PluginConfiguration;
-import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimplePluginConfiguration;
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
-import name.richardson.james.bukkit.utilities.persistence.SQLStorage;
 import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.plugin.updater.Updatable;
@@ -101,7 +91,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	private void loadConfiguration()
 	throws IOException {
 		PrefixedLogger.setPrefix("[" + this.getName() + "] ");
-		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.CONFIG_NAME);
+		final File file = new File(this.getDataFolder().getPath(), AbstractPlugin.CONFIG_NAME);
 		final InputStream defaults = this.getResource(CONFIG_NAME);
 		this.configuration = new SimplePluginConfiguration(file, defaults);
 		this.logger.setLevel(this.configuration.getLogLevel());
@@ -124,7 +114,7 @@ public abstract class AbstractPlugin extends JavaPlugin implements Updatable {
 	private void setPermissions() {
 		if (this.getClass().isAnnotationPresent(Permissions.class)) {
 			final Permissions annotation = this.getClass().getAnnotation(Permissions.class);
-			this.permissionManager = new BukkitPermissionManager();
+			this.permissionManager = new BukkitPermissionManager(this.getServer().getPluginManager());
 			this.permissionManager.createPermissions(annotation.permissions());
 		}
 	}

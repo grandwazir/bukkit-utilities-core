@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- OfflinePlayerMatcher.java is part of bukkit-utilities.
+ NestedCommandContext.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,34 +16,25 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.matcher;
+package name.richardson.james.bukkit.utilities.command.context;
 
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 
-public class OfflinePlayerMatcher implements Matcher {
+import org.apache.commons.lang.ArrayUtils;
 
-	private final Server server;
+/**
+ * A NestedCommandContext assumes that the first argument passed is the name of the command to be executed and removes it from the list before parsing the
+ * remaining arguments.
+ */
+public class NestedCommandContext extends AbstractCommandContext {
 
-	public OfflinePlayerMatcher(Server server) {
-		this.server = server;
+	public NestedCommandContext(String[] arguments, CommandSender sender) {
+		super((String[]) ArrayUtils.remove(arguments, 0), sender);
 	}
 
-	@Override
-	public Set<String> matches(String argument) {
-		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-		argument = argument.toLowerCase(Locale.ENGLISH);
-		for (OfflinePlayer player : server.getOfflinePlayers()) {
-			if (results.size() == Matcher.MAX_MATCHES) break;
-			if (!player.getName().toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
-			results.add(player.getName());
-		}
-		return results;
+	public NestedCommandContext(String[] arguments, CommandSender sender, Server server) {
+		super((String[]) ArrayUtils.remove(arguments, 0), sender, server);
 	}
 
 }

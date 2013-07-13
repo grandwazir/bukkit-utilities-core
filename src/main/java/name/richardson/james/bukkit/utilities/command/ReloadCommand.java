@@ -18,8 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import org.bukkit.plugin.PluginManager;
-
+import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.plugin.Reloadable;
@@ -34,14 +33,14 @@ public class ReloadCommand extends AbstractCommand {
 	}
 
 	@Override
-	public void execute(Context context) {
+	public void execute(CommandContext commandContext) {
 		String message;
 		if (reloadable.reload()) {
 			message = getColouredMessage(ColourScheme.Style.INFO, "reload-success");
-			context.getCommandSender().sendMessage(message);
+			commandContext.getCommandSender().sendMessage(message);
 		} else {
 			message = getColouredMessage(ColourScheme.Style.ERROR, "reload-failed");
-			context.getCommandSender().sendMessage(message);
+			commandContext.getCommandSender().sendMessage(message);
 		}
 	}
 

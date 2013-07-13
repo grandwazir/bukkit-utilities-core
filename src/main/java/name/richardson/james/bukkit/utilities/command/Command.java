@@ -22,25 +22,26 @@ import java.util.Set;
 
 import org.bukkit.permissions.Permissible;
 
+import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.formatters.localisation.Localised;
 
 public interface Command extends Localised {
 
 	/**
-	 * Attempt to execute this command using the arguments contained within the {@link CommandContext}. Any feedback regarding success or failure will be handled
+	 * Attempt to execute this command using the arguments contained within the {@link name.richardson.james.bukkit.utilities.command.CommandContext}. Any feedback regarding success or failure will be handled
 	 * within this command.
 	 *
-	 * @param context
+	 * @param commandContext
 	 */
-	public void execute(Context context);
+	public void execute(CommandContext commandContext);
 
 	/**
-	 * Return a {@link Set<String>} of possible matches for the last argument provided within the {@link CommandContext}.
+	 * Return a {@link Set<String>} of possible matches for the last argument provided within the {@link name.richardson.james.bukkit.utilities.command.CommandContext}.
 	 *
-	 * @param context
+	 * @param commandContext
 	 * @return Set of possible matches, an empty Set if no matches are found.
 	 */
-	public Set<String> getArgumentMatches(Context context);
+	public Set<String> getArgumentMatches(CommandContext commandContext);
 
 	public String getDescription();
 
