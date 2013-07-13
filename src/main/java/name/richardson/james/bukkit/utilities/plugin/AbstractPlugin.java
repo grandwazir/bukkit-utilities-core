@@ -37,6 +37,7 @@ import name.richardson.james.bukkit.utilities.persistence.configuration.SimplePl
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
+import name.richardson.james.bukkit.utilities.plugin.updater.PlayerNotifier;
 import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater;
 
 public abstract class AbstractPlugin extends JavaPlugin {
@@ -51,6 +52,10 @@ public abstract class AbstractPlugin extends JavaPlugin {
 
 	public String getGroupID() {
 		return "name.richardson.james.bukkit";
+	}
+
+	public String getArtifactId() {
+		return "";
 	}
 
 	public Logger getLocalisedLogger() {
@@ -88,14 +93,12 @@ public abstract class AbstractPlugin extends JavaPlugin {
 
 	/**
 	 * Attempt to check for an update for this plugin using the settings from the {@link PluginConfiguration}.
-	 *
-	 * Will attempt an update check once within the next 20 seconds. The time is randomised to avoid multiple plugins
-	 * all making a check at the same time.
 	 */
 	private void updatePlugin() {
 		if (this.configuration.getAutomaticUpdaterState() != PluginUpdater.State.OFF) {
-			// final PluginUpdater updater = new MavenPluginUpdater(this, this.configuration.getAutomaticUpdaterState());
-			// this.getServer().getScheduler().runTaskLaterAsynchronously(this, updater, new Random().nextInt(20) * 20);
+			final PluginUpdater updater = new MavenPluginUpdater(getArtifactId(), getGroupID(), getDescription(), this.configuration.getAutomaticUpdaterBranch(), this.configuration.getAutomaticUpdaterState());
+			this.getServer().getScheduler().runTaskAsynchronously(this, updater);
+			new PlayerNotifier(this, this.getServer().getPluginManager(), updater);
 		}
 	}
 

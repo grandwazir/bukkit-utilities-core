@@ -59,11 +59,11 @@ public class PlayerNotifier extends AbstractListener implements Localised {
 
 	@Override
 	public String getMessage(String key, Object... arguments) {
-		return MessageFormat.format(RESOURCE_BUNDLE.getString(key), arguments);
+		return MessageFormat.format(getResourceBundle().getString(key), arguments);
 	}
 
 	private final String getColouredMessage(ColourScheme.Style style, String key, Object... arguments) {
-		String message = getResourceBundle().getString(key);
+		String message = getMessage(key);
 		return colourScheme.format(style, message, arguments);
 	}
 
@@ -76,7 +76,7 @@ public class PlayerNotifier extends AbstractListener implements Localised {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify && updater.isNewVersionAvailable()) {
-			String message = colourScheme.format(ColourScheme.Style.INFO, "new-version-available", updater.getRemoteVersion());
+			String message = getColouredMessage(ColourScheme.Style.HEADER, "new-version-available", pluginName, updater.getRemoteVersion());
 			event.getPlayer().sendMessage(message);
 		}
 	}
