@@ -18,24 +18,22 @@
 
 package name.richardson.james.bukkit.utilities.command.matcher;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.junit.Before;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import name.richardson.james.bukkit.utilities.BukkitTestFixture;
-
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -49,7 +47,7 @@ public class OfflinePlayerMatcherTest extends TestCase {
 	@Test
 	public void testMatches()
 	throws Exception {
-		OfflinePlayer[] players = BukkitTestFixture.getOfflinePlayers(52);
+		OfflinePlayer[] players = getOfflinePlayers(52);
 		when(server.getOfflinePlayers()).thenReturn(players);
 		matcher = new OfflinePlayerMatcher(server);
 		Set<String> matches = matcher.matches("");
@@ -58,6 +56,17 @@ public class OfflinePlayerMatcherTest extends TestCase {
 		String searchName = players[0].getName().substring(0, 4);
 		matches = matcher.matches(searchName);
 		Assert.assertTrue("List does not contain expected name! " + expectedName, matches.contains(expectedName));
+	}
+
+	public static OfflinePlayer[] getOfflinePlayers(int number) {
+		int count;
+		List<OfflinePlayer> players = new ArrayList<OfflinePlayer>();
+		for (count = 0; count < number; count++) {
+			OfflinePlayer player = mock(OfflinePlayer.class);
+			when(player.getName()).thenReturn(RandomStringUtils.randomAlphanumeric(8));
+			players.add(player);
+		}
+		return players.toArray(new OfflinePlayer[players.size()]);
 	}
 
 }

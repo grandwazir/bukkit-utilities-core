@@ -1,0 +1,5 @@
+username: bukkit
+password: walrus
+driver: org.sqlite.JDBC
+isolation: SERIALIZABLE
+url: jdbc:sqlite:{DIR}{NAME}.db

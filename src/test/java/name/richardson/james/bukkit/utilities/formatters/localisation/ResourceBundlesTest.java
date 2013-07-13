@@ -35,4 +35,11 @@ public class ResourceBundlesTest extends TestCase {
 	throws Exception {
 		Assert.assertTrue(ResourceBundles.MESSAGES.getBundleName().contentEquals("Messages"));
 	}
+
+	@Test
+	public void testGetBundle()
+	throws Exception {
+		Assert.assertNotNull(ResourceBundles.MESSAGES.getBundle());
+	}
+
 }

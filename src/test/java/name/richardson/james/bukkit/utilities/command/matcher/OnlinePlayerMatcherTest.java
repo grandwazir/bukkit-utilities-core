@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.command.matcher;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Server;
@@ -25,13 +27,13 @@ import org.bukkit.entity.Player;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import name.richardson.james.bukkit.utilities.BukkitTestFixture;
-
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -45,13 +47,24 @@ public class OnlinePlayerMatcherTest extends TestCase {
 	public void testMatches()
 	throws Exception {
 		matcher = new OnlinePlayerMatcher(server);
-		Player[] players = BukkitTestFixture.getOnlinePlayers(52);
+		Player[] players = getOnlinePlayers(52);
 		when(server.getOnlinePlayers()).thenReturn(players);
 		Set<String> matches = matcher.matches("");
 		Assert.assertTrue("Expected list size of 50, got " + matches.size(), matches.size() == 50);
 		String expectedName = players[0].getName();
 		String searchName = players[0].getName().substring(0, 4);
 		Assert.assertTrue("List does not contain expected name! " + expectedName, matcher.matches(searchName).contains(expectedName));
+	}
+
+	public static Player[] getOnlinePlayers(int number) {
+		int count;
+		List<Player> players = new ArrayList<Player>();
+		for (count = 0; count < number; count++) {
+			Player player = mock(Player.class);
+			when(player.getName()).thenReturn(RandomStringUtils.randomAlphanumeric(8));
+			players.add(player);
+		}
+		return players.toArray(new Player[players.size()]);
 	}
 
 }

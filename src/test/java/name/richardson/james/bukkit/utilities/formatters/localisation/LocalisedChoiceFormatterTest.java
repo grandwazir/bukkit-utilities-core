@@ -25,9 +25,6 @@ import org.junit.Test;
 
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
 
-/**
- * Created with IntelliJ IDEA. User: james Date: 28/06/13 Time: 23:57 To change this template use File | Settings | File Templates.
- */
 public class LocalisedChoiceFormatterTest extends TestCase {
 
 	private LocalisedChoiceFormatter formatter;

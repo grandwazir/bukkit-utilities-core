@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- ResourceBundleNames.java is part of bukkit-utilities.
+ DefaultDatabaseLoader.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,34 +16,31 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.formatters.localisation;
+package name.richardson.james.bukkit.utilities.persistence.database;
 
-import java.util.ResourceBundle;
+import java.util.List;
 
-public enum ResourceBundles {
+import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
-	MESSAGES("Messages"),
-	COMMANDS("Commands"),
-	PERMISSIONS("Permissions");
+public class DefaultDatabaseLoader extends AbstractDatabaseLoader {
 
-	private String bundleName;
-
-	ResourceBundles(String bundleName) {
-		this.bundleName = bundleName;
-	}
-
-	public String getBundleName() {
-		return bundleName;
-	}
-
-	public ResourceBundle getBundle() {
-		return ResourceBundle.getBundle(bundleName);
+	public DefaultDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, SimpleDatabaseConfiguration configuration) {
+		super(classLoader, classes, configuration);
 	}
 
 	@Override
-	public String toString() {
-		return bundleName;
+	public void afterDatabaseCreate() {
+		return;
+	}
+
+	@Override
+	public void beforeDatabaseCreate() {
+		return;
+	}
+
+	@Override
+	public void beforeDatabaseDrop() {
+		return;
 	}
 
 }
-

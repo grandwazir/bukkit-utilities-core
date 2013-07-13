@@ -40,15 +40,10 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class BukkitPermissionManagerTest extends TestCase {
 
-	@Mock
 	private PluginManager pluginManager;
-
-	@Mock
 	private Permission permission;
-
 	private PermissionManager permissionManager;
 	private Server server;
 
@@ -116,6 +111,8 @@ public class BukkitPermissionManagerTest extends TestCase {
 	@Before
 	public void setUp()
 	throws Exception {
+		pluginManager = mock(PluginManager.class);
+		permission = mock(Permission.class);
 		when(pluginManager.getPermission(Matchers.<String>anyObject())).thenReturn(permission);
 		permissionManager =  new BukkitPermissionManager(pluginManager);
 		server = mock(Server.class);

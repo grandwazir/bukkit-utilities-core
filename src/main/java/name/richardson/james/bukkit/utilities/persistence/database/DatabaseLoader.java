@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- ResourceBundleNames.java is part of bukkit-utilities.
+ DatabaseLoader.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,34 +16,24 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.formatters.localisation;
+package name.richardson.james.bukkit.utilities.persistence.database;
 
-import java.util.ResourceBundle;
+import com.avaje.ebean.EbeanServer;
 
-public enum ResourceBundles {
+public interface DatabaseLoader {
 
-	MESSAGES("Messages"),
-	COMMANDS("Commands"),
-	PERMISSIONS("Permissions");
+	public void initalise();
 
-	private String bundleName;
+	public EbeanServer getEbeanServer();
 
-	ResourceBundles(String bundleName) {
-		this.bundleName = bundleName;
-	}
+	public void afterDatabaseCreate();
 
-	public String getBundleName() {
-		return bundleName;
-	}
+	public void beforeDatabaseCreate();
 
-	public ResourceBundle getBundle() {
-		return ResourceBundle.getBundle(bundleName);
-	}
+	public void beforeDatabaseDrop();
 
-	@Override
-	public String toString() {
-		return bundleName;
-	}
+	public String getGenerateDDLScript();
+
+	public String getDeleteDLLScript();
 
 }
-

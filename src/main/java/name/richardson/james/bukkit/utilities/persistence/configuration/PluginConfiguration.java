@@ -31,12 +31,4 @@ public interface PluginConfiguration {
 
 	public boolean isCollectingStats();
 
-	public void setAutomaticUpdaterBranch(final PluginUpdater.Branch branch);
-
-	public void setAutomaticUpdaterState(final PluginUpdater.State state);
-
-	public void setCollectingStats(final boolean value);
-
-	public void setLogLevel(Level level);
-
 }

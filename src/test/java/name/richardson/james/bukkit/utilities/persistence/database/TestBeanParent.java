@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- ResourceBundleNames.java is part of bukkit-utilities.
+ TestBeanParent.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,34 +16,38 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.formatters.localisation;
+package name.richardson.james.bukkit.utilities.persistence.database;
 
-import java.util.ResourceBundle;
+import javax.persistence.*;
 
-public enum ResourceBundles {
+import java.util.List;
 
-	MESSAGES("Messages"),
-	COMMANDS("Commands"),
-	PERMISSIONS("Permissions");
+import com.avaje.ebean.validation.NotNull;
 
-	private String bundleName;
+@Entity
+public class TestBeanParent {
 
-	ResourceBundles(String bundleName) {
-		this.bundleName = bundleName;
+	@OneToMany(targetEntity = TestBeanChild.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+	private List<TestBeanChild> children;
+
+	@NotNull
+	@Id
+	private int id;
+
+	public List<TestBeanChild> getChildren() {
+		return children;
 	}
 
-	public String getBundleName() {
-		return bundleName;
+	public void setChildren(List<TestBeanChild> children) {
+		this.children = children;
 	}
 
-	public ResourceBundle getBundle() {
-		return ResourceBundle.getBundle(bundleName);
+	public int getId() {
+		return id;
 	}
 
-	@Override
-	public String toString() {
-		return bundleName;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }
-

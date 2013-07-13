@@ -22,19 +22,20 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import junit.framework.TestCase;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractListenerTest extends TestCase {
 
-	@Mock
+	private AbstractListenerTestClass listener;
 	private Plugin plugin;
-	@Mock
 	private PluginManager pluginManager;
 
 	public class AbstractListenerTestClass extends AbstractListener {
@@ -46,11 +47,16 @@ public class AbstractListenerTest extends TestCase {
 	}
 
 	@Test
-	public void testConstructor() {
-		AbstractListenerTestClass test = new AbstractListenerTestClass(plugin, pluginManager);
-		verify(pluginManager).registerEvents(test, plugin);
+	public void testListenerRegistered() {
+		verify(pluginManager).registerEvents(listener, plugin);
 	}
 
+	@Before
+	public void setUp() {
+		plugin = mock(Plugin.class);
+		pluginManager = mock(PluginManager.class);
+		listener = new AbstractListenerTestClass(plugin, pluginManager);
+	}
 
 
 }

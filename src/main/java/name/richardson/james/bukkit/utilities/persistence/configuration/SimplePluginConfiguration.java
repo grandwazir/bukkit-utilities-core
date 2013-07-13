@@ -21,81 +21,62 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.persistence.YAMLStorage;
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater.State;
 
-public class SimplePluginConfiguration extends YAMLStorage implements PluginConfiguration {
+public class SimplePluginConfiguration extends AbstractConfiguration implements PluginConfiguration {
+
+	public static final String BRANCH_KEY = "automatic-updates.branch";
+	public static final String UPDATER_STATE_KEY = "automatic-updates.method";
+	public static final String LOGGING_KEY = "logging";
+	public static final String STATISTICS_KEY = "send-anonymous-statistics";
+
+	private final Logger LOGGER = PrefixedLogger.getLogger(SimplePluginConfiguration.class);
 
 	public SimplePluginConfiguration(final File file, final InputStream defaults) throws IOException {
-		super(file, defaults);
-	}
-
-	public SimplePluginConfiguration(final String filePath, final InputStream defaults) throws IOException {
-		super(filePath, defaults);
+		super(file, defaults, true);
 	}
 
 	public Branch getAutomaticUpdaterBranch() {
-		final String key = "automatic-updates.branch";
 		final MavenPluginUpdater.Branch defaultBranch = MavenPluginUpdater.Branch.STABLE;
 		try {
-			return MavenPluginUpdater.Branch.valueOf(this.getConfiguration().getString(key));
+			return MavenPluginUpdater.Branch.valueOf(this.getConfiguration().getString(BRANCH_KEY));
 		} catch (final IllegalArgumentException e) {
-			this.getConfiguration().set(key, defaultBranch.name());
-			this.save();
+			LOGGER.log(Level.WARNING, "invalid-configuration-value", BRANCH_KEY);
+			this.getConfiguration().set(BRANCH_KEY, defaultBranch.name());
 			return defaultBranch;
 		}
 	}
 
 	public State getAutomaticUpdaterState() {
-		final String key = "automatic-updates.method";
 		final MavenPluginUpdater.State defaultState = MavenPluginUpdater.State.NOTIFY;
 		try {
-			return MavenPluginUpdater.State.valueOf(this.getConfiguration().getString(key));
+			return MavenPluginUpdater.State.valueOf(this.getConfiguration().getString(UPDATER_STATE_KEY));
 		} catch (final IllegalArgumentException e) {
-			this.getConfiguration().set(key, defaultState.name());
-			this.save();
+			LOGGER.log(Level.WARNING, "invalid-configuration-value", UPDATER_STATE_KEY);
+			this.getConfiguration().set(UPDATER_STATE_KEY, defaultState.name());
 			return defaultState;
 		}
 	}
 
 	public Level getLogLevel() {
-		final String key = "logging";
 		final Level defaultLevel = Level.INFO;
 		try {
-			return Level.parse(this.getConfiguration().getString(key));
+			return Level.parse(this.getConfiguration().getString(LOGGING_KEY));
 		} catch (final IllegalArgumentException e) {
-			this.getConfiguration().set(key, defaultLevel.getName());
-			this.save();
+			LOGGER.log(Level.WARNING, "invalid-configuration-value", LOGGING_KEY);
+			this.getConfiguration().set(LOGGING_KEY, defaultLevel.getName());
 			return defaultLevel;
 		}
 	}
 
 	public boolean isCollectingStats() {
-		final String key = "send-anonymous-statistics";
 		final boolean defaultValue = true;
-		return this.getConfiguration().getBoolean(key, defaultValue);
+		return this.getConfiguration().getBoolean(STATISTICS_KEY, defaultValue);
 	}
 
-	public void setAutomaticUpdaterBranch(final Branch branch) {
-		final String key = "automatic-updates.branch";
-		this.getConfiguration().set(key, branch.name());
-	}
-
-	public void setAutomaticUpdaterState(final State state) {
-		final String key = "automatic-updates.state";
-		this.getConfiguration().set(key, state.name());
-	}
-
-	public void setCollectingStats(final boolean value) {
-		final String key = "send-anonymous-statistics";
-		this.getConfiguration().set(key, value);
-	}
-
-	public void setLogLevel(final Level level) {
-		final String key = "logging";
-		this.getConfiguration().set(key, level);
-	}
 }

@@ -1,4 +1,6 @@
 language: java
+before_script:
+  - mysql -e 'create database test';
 jdk:
   - oraclejdk7
   - openjdk7

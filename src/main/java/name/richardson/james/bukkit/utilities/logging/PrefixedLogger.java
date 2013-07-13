@@ -12,22 +12,14 @@ public class PrefixedLogger extends Logger {
 
 	private static final String RESOURCE_BUNDLE_NAME = ResourceBundles.MESSAGES.getBundleName();
 
-	private static String PREFIX;
-
-	public static Logger getRootLogger() {
-		if (Bukkit.getServer() == null) return Logger.getLogger("");
-		return Bukkit.getLogger();
-	}
+	private static String PREFIX = "";
 
 	protected PrefixedLogger(String name, String resourceBundleName) {
 		super(name, resourceBundleName);
 		LogManager.getLogManager().addLogger(this);
-		if ((this.getParent() == null) || this.getParent().getName().isEmpty()) {
-			this.setLevel(Level.INFO);
-			this.setUseParentHandlers(true);
-			for (final Handler handler : getRootLogger().getHandlers()) {
-				handler.setLevel(Level.ALL);
-			}
+		this.setLevel(Level.INFO);
+		for (final Handler handler : getParent().getHandlers()) {
+			handler.setLevel(Level.ALL);
 		}
 	}
 
@@ -60,7 +52,7 @@ public class PrefixedLogger extends Logger {
 				record.setMessage(MessageFormat.format(key, record.getParameters()));
 			}
 		}
-		if (this.getLevel() == Level.FINEST) {
+		if (this.isLoggable(Level.FINEST) || isLoggable(Level.FINE) || isLoggable(Level.FINER) || isLoggable(Level.ALL)) {
 			record.setMessage("<" + this.getName() + "> " + record.getMessage());
 		} else {
 			record.setMessage(PREFIX + record.getMessage());

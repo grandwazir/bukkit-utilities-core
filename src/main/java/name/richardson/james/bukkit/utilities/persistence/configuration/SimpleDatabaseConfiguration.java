@@ -20,6 +20,7 @@ package name.richardson.james.bukkit.utilities.persistence.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
@@ -27,48 +28,41 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
-import name.richardson.james.bukkit.utilities.persistence.YAMLStorage;
+import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
-public final class SimpleDatabaseConfiguration extends YAMLStorage implements DatabaseConfiguration {
+public class SimpleDatabaseConfiguration extends AbstractConfiguration implements DatabaseConfiguration {
+
+	private static final Logger LOGGER = PrefixedLogger.getLogger(SimpleDatabaseConfiguration.class);
 
 	private final DataSourceConfig dataSourceConfig;
 	private final ServerConfig serverConfig;
-	private final String folder;
-	private final String PluginName;
+	private final File folder;
+	private final String pluginName;
 
-	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, final String pluginName) throws IOException {
-		super(file, defaults);
-		this.PluginName = pluginName;
-		this.folder = file.getParentFile().getAbsolutePath();
+	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, final String pluginName, final ServerConfig defaultServerConfig, final DataSourceConfig defaultDataSourceConfig) throws IOException {
+		super(file, defaults, false);
+		this.folder = file.getParentFile();
+		this.pluginName = pluginName;
+		this.serverConfig = defaultServerConfig;
+		this.dataSourceConfig = defaultDataSourceConfig;
+		this.serverConfig.setDataSourceConfig(defaultDataSourceConfig);
 		// configure database defaults from bukkit.yml
-		this.serverConfig = new ServerConfig();
 		this.serverConfig.setDefaultServer(false);
 		this.serverConfig.setRegister(false);
-		Bukkit.getServer().configureDbConfig(this.serverConfig);
+		this.serverConfig.setName(pluginName);
 		// configure datastore
-		this.dataSourceConfig = this.serverConfig.getDataSourceConfig();
 		final String username = this.getConfiguration().getString("username");
-		if (username != null) {
-			this.dataSourceConfig.setUsername(username);
-		}
+		if (username != null) this.dataSourceConfig.setUsername(username);
 		final String password = this.getConfiguration().getString("password");
-		if (password != null) {
-			this.dataSourceConfig.setPassword(password);
-		}
-		final String url = this.getConfiguration().getString("url");
-		if (url != null) {
-			this.dataSourceConfig.setUrl(this.replaceDatabaseString(url));
-		} else {
-			this.dataSourceConfig.setUrl(this.replaceDatabaseString(this.dataSourceConfig.getUrl()));
-		}
+		if (password != null) this.dataSourceConfig.setPassword(password);
 		final String driver = this.getConfiguration().getString("driver");
-		if (driver != null) {
-			this.dataSourceConfig.setDriver(driver);
-		}
+		if (driver != null) this.dataSourceConfig.setDriver(driver);
 		final String isolation = this.getConfiguration().getString("isolation");
-		if (isolation != null) {
-			this.dataSourceConfig.setIsolationLevel(TransactionIsolation.getLevel(isolation));
-		}
+		if (isolation != null) this.dataSourceConfig.setIsolationLevel(TransactionIsolation.getLevel(isolation));
+		// parse the database url
+		final String url = this.getConfiguration().getString("url");
+		if (url != null) this.dataSourceConfig.setUrl(url);
+	  this.dataSourceConfig.setUrl(this.replaceDatabaseString(url));
 	}
 
 	public DataSourceConfig getDataSourceConfig() {
@@ -79,10 +73,24 @@ public final class SimpleDatabaseConfiguration extends YAMLStorage implements Da
 		return this.serverConfig;
 	}
 
-	private String replaceDatabaseString(String url) {
-		url = url.replaceAll("\\{DIR\\}", this.folder + File.separatorChar);
-		url = url.replaceAll("\\{NAME\\}", this.PluginName.replaceAll("[^\\w_-]", ""));
-		return url;
+	private String replaceDatabaseString(String input) {
+		input = input.replaceAll("\\{DIR\\}", this.folder.getAbsolutePath() + File.separator);
+		input = input.replaceAll("\\{NAME\\}", this.pluginName.replaceAll("[^\\w_-]", ""));
+		return input;
 	}
 
+	@Override
+	public String toString() {
+		return "SimpleDatabaseConfiguration {" +
+		"dataSourceConfig=" + dataSourceConfig.toString() +
+		", serverConfig=" + serverConfig.toString() +
+		", folder=" + folder +
+		", pluginName='" + pluginName + '\'' +
+		", username='" + this.dataSourceConfig.getUsername() + '\'' +
+		", password='" + this.dataSourceConfig.getPassword().replaceAll(".", "*") +  '\'' +
+		", driver='" + this.dataSourceConfig.getDriver() + '\'' +
+		", isolation='" + this.dataSourceConfig.getIsolationLevel() + '\'' +
+		", url='" + this.dataSourceConfig.getUrl() + '\'' +
+		'}';
+	}
 }

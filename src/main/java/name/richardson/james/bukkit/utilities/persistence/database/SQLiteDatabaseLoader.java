@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- SQLStorage.java is part of BukkitUtilities.
+ SQLiteDatabaseLoader.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,15 +16,7 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.persistence;
-
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.EbeanServerFactory;
-import com.avaje.ebean.LogLevel;
-import com.avaje.ebean.config.DataSourceConfig;
-import com.avaje.ebean.config.ServerConfig;
-import com.avaje.ebeaninternal.api.SpiEbeanServer;
-import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
+package name.richardson.james.bukkit.utilities.persistence.database;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -34,101 +26,49 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
+import com.avaje.ebean.config.dbplatform.SQLitePlatform;
+import com.avaje.ebeaninternal.api.SpiEbeanServer;
+import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
+
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 /**
- * SQLStorage is responsible for initialising and creating a {@link EbeanServer} for the plugin to use.
- *
- * It has responsibility for creating the database, building and validating the schema and updating the database if
- * necessary. It is also responsible for altering the generated DDL script to work on SQLite databases.
+ * SQLite storage handles loading SQLite databases. Due to bug in the persistence library that Bukkit uses attempting to create a database with key constraists
+ * fails. This class handles this by making the necessary modifications to the DDL script for it to be valid when using SQLite.
  */
-public class SQLStorage {
+public class SQLiteDatabaseLoader extends AbstractDatabaseLoader {
 
-	private static final Logger logger = PrefixedLogger.getLogger(SQLStorage.class);
+	private final Logger LOGGER = PrefixedLogger.getLogger(this.getClass());
 
-	private final ClassLoader classLoader;
-	private final List<Class<?>> classes;
-	private final DataSourceConfig datasourceConfig;
-	private final ServerConfig serverConfig;
-
-	private EbeanServer ebeanserver;
-	private DdlGenerator generator;
-	private boolean rebuild;
-
-	public SQLStorage(final SimpleDatabaseConfiguration configuration, final List<Class<?>> classes, final String pluginName, final ClassLoader classLoader) {
-		this.classes = classes;
-		this.serverConfig = configuration.getServerConfig();
-		this.serverConfig.setName(pluginName);
-		this.datasourceConfig = configuration.getDataSourceConfig();
-		this.classLoader = classLoader;
+	public SQLiteDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, SimpleDatabaseConfiguration configuration) {
+		super(classLoader, classes, configuration);
+		configuration.getServerConfig().setDatabasePlatform(new SQLitePlatform());
+		configuration.getServerConfig().getDatabasePlatform().getDbDdlSyntax().setIdentity("");
 	}
 
-	public EbeanServer getEbeanServer() {
-		return this.ebeanserver;
-	}
-
-	public void initalise() {
-		if (this.ebeanserver != null) {
-			SQLStorage.logger.log(Level.WARNING, "already-initalised");
-		}
-		this.load();
-		if (!this.validate() || this.rebuild) {
-			final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
-			this.generator = server.getDdlGenerator();
-			this.drop();
-			this.create();
-			SQLStorage.logger.log(Level.INFO, "rebuilt-schema");
-		}
-	}
-
-	protected void afterDatabaseCreate() {
+	@Override
+	public void afterDatabaseCreate() {
 		return;
 	}
 
-	protected void beforeDatabaseCreate() {
+	@Override
+	public void beforeDatabaseCreate() {
 		return;
 	}
 
-	protected void beforeDatabaseDrop() {
+	@Override
+	public void beforeDatabaseDrop() {
 		return;
 	}
 
-	protected void create() {
-		SQLStorage.logger.log(Level.INFO, "creating-database");
-		this.beforeDatabaseCreate();
-		// reload the database this allows for removing classes
-		String script = this.generator.generateCreateDdl();
-		final Level level = java.util.logging.Logger.getLogger("").getLevel();
-		if (this.datasourceConfig.getDriver().contains("sqlite")) {
-			script = this.fixScript(script);
-		}
-		try {
-			java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
-			this.load();
-			this.generator.runScript(false, script);
-		} finally {
-			java.util.logging.Logger.getLogger("").setLevel(level);
-		}
-		this.afterDatabaseCreate();
-	}
-
-	private void drop() {
-		SQLStorage.logger.log(Level.FINE, "Dropping and destroying database.");
-		this.beforeDatabaseDrop();
-		final Level level = java.util.logging.Logger.getLogger("").getLevel();
-		try {
-			java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
-			this.generator.runScript(true, this.generator.generateDropDdl());
-		} finally {
-			java.util.logging.Logger.getLogger("").setLevel(level);
-		}
-	}
-
-	private String fixScript(final String script) {
-		SQLStorage.logger.log(Level.FINE, "Fixing DDL script for SQLite databases.");
+	@Override
+	public final String getGenerateDDLScript() {
+		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
+		final DdlGenerator generator = server.getDdlGenerator();
+		LOGGER.log(Level.FINE, "Fixing DDL script for SQLite databases.");
 		// Create a BufferedReader out of the potentially invalid script
-		final BufferedReader scriptReader = new BufferedReader(new StringReader(script));
+		final BufferedReader scriptReader = new BufferedReader(new StringReader(generator.generateCreateDdl()));
 		// Create an array to store all the lines
 		final List<String> scriptLines = new ArrayList<String>();
 		// Create some additional variables for keeping track of tables
@@ -203,42 +143,6 @@ public class SQLStorage {
 		// System.out.println(newScript);
 		// Return the fixed script
 		return newScript;
-	}
-
-	private void load() {
-		SQLStorage.logger.log(Level.FINE, "Loading database.");
-		final Level level = java.util.logging.Logger.getLogger("").getLevel();
-		ClassLoader currentClassLoader = null;
-		try {
-			this.serverConfig.setClasses(this.classes);
-			if (SQLStorage.logger.isLoggable(Level.ALL)) {
-				this.serverConfig.setLoggingToJavaLogger(true);
-				this.serverConfig.setLoggingLevel(LogLevel.SQL);
-			}
-			// suppress normal ebean warnings and notifications
-			java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
-			currentClassLoader = Thread.currentThread().getContextClassLoader();
-			Thread.currentThread().setContextClassLoader(this.classLoader);
-			this.ebeanserver = EbeanServerFactory.create(this.serverConfig);
-		} finally {
-			java.util.logging.Logger.getLogger("").setLevel(level);
-			if (currentClassLoader != null) {
-				Thread.currentThread().setContextClassLoader(currentClassLoader);
-			}
-		}
-	}
-
-	private boolean validate() {
-		for (final Class<?> ebean : this.classes) {
-			try {
-				this.ebeanserver.find(ebean).findRowCount();
-			} catch (final Exception exception) {
-				SQLStorage.logger.log(Level.WARNING, "schema-invalid");
-				return false;
-			}
-		}
-		SQLStorage.logger.log(Level.FINE, "Database schema is valid.");
-		return true;
 	}
 
 }
