@@ -12,6 +12,13 @@
     <name>BukkitUtilities</name>
     <description>A utility library containing reusuable classes and implementations for use with Bukkit.</description>
 
+    <repositories>
+        <repository>
+            <id>my-repo</id>
+            <url>http://repository.james.richardson.name/releases</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>
