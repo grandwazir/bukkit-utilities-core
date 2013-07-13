@@ -51,6 +51,7 @@ public class PrefixedLoggerTest extends TestCase {
 		Logger logger = PrefixedLogger.getLogger(this.getClass());
 		Handler handler = mock(Handler.class);
 		logger.addHandler(handler);
+		logger.setLevel(Level.INFO);
 		logger.severe("test");
 		logger.warning("test");
 		logger.info("test");
