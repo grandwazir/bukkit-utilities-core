@@ -18,6 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command.context;
 
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +64,7 @@ public class AbstractCommandContext implements CommandContext {
 		this.sender = sender;
 		setArguments(argument);
 		setFlags(argument);
-		logger.log(Level.FINEST, this.toString());
+		logger.finest(this.toString());
 	}
 
 	/**
@@ -183,11 +184,7 @@ public class AbstractCommandContext implements CommandContext {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() +
-		"{arguments=" + arguments +
-		", flags=" + flags +
-		", sender=" + sender +
-		'}';
+		return MessageFormat.format("{0} [arguments={1}, flags={2}, sender={3}]", this.getClass().getSimpleName(), arguments, flags, sender);
 	}
 
 	/**

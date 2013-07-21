@@ -47,8 +47,10 @@ public class PrefixedLogger extends Logger {
 			String key = record.getMessage();
 			if (bundle.containsKey(key)) {
 				record.setMessage(MessageFormat.format(bundle.getString(key), record.getParameters()));
-			} else {
+			} else if (record.getParameters() != null) {
 				record.setMessage(MessageFormat.format(key, record.getParameters()));
+			} else {
+				record.setMessage(key);
 			}
 		}
 		if (this.isLoggable(Level.FINEST) || isLoggable(Level.FINE) || isLoggable(Level.FINER) || isLoggable(Level.ALL)) {
