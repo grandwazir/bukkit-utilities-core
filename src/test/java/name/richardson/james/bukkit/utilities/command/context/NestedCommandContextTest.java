@@ -121,7 +121,7 @@ public class NestedCommandContextTest extends TestCase {
 	@Test
 	public void testHas()
 	throws Exception {
-		Assert.assertTrue("Argument index is valid but does not appear to be parsed!", context.has(2));
+		Assert.assertTrue("Argument index is valid but does not appear to be parsed!", context.has(1));
 		Assert.assertFalse("Argument index should not be valid!", context.has(99));
 	}
 
