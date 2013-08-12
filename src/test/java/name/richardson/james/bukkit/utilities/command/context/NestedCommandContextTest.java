@@ -45,7 +45,6 @@ public class NestedCommandContextTest extends TestCase {
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
-
 	private String[] arguments = new String[]{"0", "1", "2", "t:123"};
 	private NestedCommandContext context;
 	private Player player;
@@ -130,6 +129,11 @@ public class NestedCommandContextTest extends TestCase {
 	throws Exception {
 		Assert.assertTrue("Command flag was provided but does not appear to be parsed!", context.hasFlag("t"));
 		Assert.assertFalse("Command flag should not be exist!", context.hasFlag("f"));
+	}
+
+	@Test
+	public void testGetInt() {
+		Assert.assertEquals("Integer should be returned!", 1, context.getInt(0));
 	}
 
 	@Test

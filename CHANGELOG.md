@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
 
+2013-07-21 13:35:28 +0100    fix issue logging some messages it was not possible to log any message that includes the reserved chars { or } due to how MessageFormat works. We now skip trying to format a message if no parameters are given. (James Richardson)  
 2013-07-21 13:13:09 +0100    add additional debugging information (James Richardson)  
 2013-07-13 18:54:58 +0100    fixed a problem with has method resulted in inconsistent results (James Richardson)  
 2013-07-13 17:20:26 +0100    remove usage of test only package in runtime (James Richardson)  

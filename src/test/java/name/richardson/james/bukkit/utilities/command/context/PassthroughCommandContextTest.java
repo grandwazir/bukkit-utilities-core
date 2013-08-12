@@ -78,6 +78,11 @@ public class PassthroughCommandContextTest extends TestCase {
 	}
 
 	@Test
+	public void testGetInt() {
+		Assert.assertEquals("Integer should be returned!", 0, context.getInt(0));
+	}
+
+	@Test
 	public void testGetPlayer()
 	throws Exception {
 		when(server.getPlayer("0")).thenReturn(player);

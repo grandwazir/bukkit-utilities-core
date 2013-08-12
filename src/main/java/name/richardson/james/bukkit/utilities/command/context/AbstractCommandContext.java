@@ -114,6 +114,17 @@ public class AbstractCommandContext implements CommandContext {
 	}
 
 	/**
+	 * Convert the argument in the specified index to an integer.
+	 *
+	 * @param index
+	 * @return
+	 */
+	@Override
+	public int getInt(int index) {
+		return Integer.parseInt(getArguments().get(index));
+	}
+
+	/**
 	 * Convert the argument in the specified index to a {@link org.bukkit.entity.Player}.
 	 *
 	 * @param index the argument number to use.

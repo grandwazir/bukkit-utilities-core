@@ -63,6 +63,14 @@ public interface CommandContext {
 	OfflinePlayer getOfflinePlayer(int index);
 
 	/**
+	 * Convert the argument in the specified index to an integer.
+	 *
+	 * @param index
+	 * @return
+	 */
+	int getInt(int index);
+
+	/**
 	 * Convert the argument in the specified index to a {@link Player}.
 	 *
 	 * @param index the argument number to use.
