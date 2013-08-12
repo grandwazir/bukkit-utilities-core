@@ -122,7 +122,7 @@ public abstract class AbstractCommand implements Command {
 		return false;
 	}
 
-	protected void addMatcher(Matcher matcher) {
+	public void addMatcher(Matcher matcher) {
 		matchers.add(matcher);
 	}
 
