@@ -40,7 +40,7 @@ public class HelpCommandTest extends TestCase {
 	private final String PLUGIN_NAME = "TestPlugin";
 	private final String PLUGIN_VERSION = "v1.0";
 	private final String COMMAND_LABEL = "tt";
-	private final Map<String, Command> COMMANDS = new HashMap<String, Command>();
+	private final Set<Command> COMMANDS = new TreeSet<Command>();
 
 	private HelpCommand command;
 	private CommandContext commandContext;
@@ -124,7 +124,7 @@ public class HelpCommandTest extends TestCase {
 		when(nestedCommand.getDescription()).thenReturn("test command");
 		when(nestedCommand.getUsage()).thenReturn("[test] <test>");
 		PluginDescriptionFile pluginDescriptionFile = new PluginDescriptionFile(PLUGIN_NAME, PLUGIN_VERSION, null);
-		COMMANDS.put(nestedCommand.getName(), nestedCommand);
+		COMMANDS.add(nestedCommand);
 		command = new HelpCommand(permissionManager, COMMAND_LABEL, pluginDescriptionFile, COMMANDS);
 	}
 }

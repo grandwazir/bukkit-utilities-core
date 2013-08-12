@@ -18,9 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -32,19 +30,21 @@ import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 
 public class HelpCommand extends AbstractCommand {
 
-	private final Map<String, Command> commands;
+	private final Map<String, Command> commands = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
 	private final PluginDescriptionFile descriptionFile;
 	private final String label;
 
 	private Command command;
 	private CommandContext commandContext;
 
-	public HelpCommand(PermissionManager permissionManager, String label, PluginDescriptionFile descriptionFile, Map<String, Command> commands) {
+	public HelpCommand(PermissionManager permissionManager, String label, PluginDescriptionFile descriptionFile, Set<Command> commands) {
 		super(permissionManager);
 		this.descriptionFile = descriptionFile;
 		this.label = label;
-		this.commands = commands;
-		this.addMatcher(new StringMatcher(commands.keySet()));
+		for (Command command : commands) {
+			this.commands.put(command.getName(), command);
+		}
+		this.addMatcher(new StringMatcher(this.commands.keySet()));
 	}
 
 	/**

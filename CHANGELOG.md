@@ -1,5 +1,7 @@
 # Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
 
+2013-08-12 17:41:13 +0100    make addMatcher public (James Richardson)  
+2013-08-12 17:40:46 +0100    I should commit stuff before I forget what it does! (James Richardson)  
 2013-07-21 13:35:28 +0100    fix issue logging some messages it was not possible to log any message that includes the reserved chars { or } due to how MessageFormat works. We now skip trying to format a message if no parameters are given. (James Richardson)  
 2013-07-21 13:13:09 +0100    add additional debugging information (James Richardson)  
 2013-07-13 18:54:58 +0100    fixed a problem with has method resulted in inconsistent results (James Richardson)  
