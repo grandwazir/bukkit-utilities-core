@@ -40,7 +40,7 @@ public class HelpCommandTest extends TestCase {
 	private final String PLUGIN_NAME = "TestPlugin";
 	private final String PLUGIN_VERSION = "v1.0";
 	private final String COMMAND_LABEL = "tt";
-	private final Set<Command> COMMANDS = new TreeSet<Command>();
+	private final Set<Command> COMMANDS = new HashSet<Command>();
 
 	private HelpCommand command;
 	private CommandContext commandContext;
