@@ -61,8 +61,11 @@ public class SimpleDatabaseConfiguration extends AbstractConfiguration implement
 		if (isolation != null) this.dataSourceConfig.setIsolationLevel(TransactionIsolation.getLevel(isolation));
 		// parse the database url
 		final String url = this.getConfiguration().getString("url");
-		if (url != null) this.dataSourceConfig.setUrl(url);
-	  this.dataSourceConfig.setUrl(this.replaceDatabaseString(url));
+		if (url != null) {
+			this.dataSourceConfig.setUrl(this.replaceDatabaseString(url));
+		} else {
+			this.dataSourceConfig.setUrl(this.replaceDatabaseString(dataSourceConfig.getUrl()));
+		}
 	}
 
 	public DataSourceConfig getDataSourceConfig() {

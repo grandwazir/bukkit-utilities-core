@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
 
+2013-08-12 18:37:07 +0100    implemented database loading (James Richardson)  
 2013-08-12 18:24:56 +0100    fix test failure (James Richardson)  
 2013-08-12 18:22:04 +0100    change the way help command accepts commands (James Richardson)  
 2013-08-12 17:41:13 +0100    make addMatcher public (James Richardson)  

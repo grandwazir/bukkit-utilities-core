@@ -21,6 +21,10 @@ public abstract class AbstractDatabasePlugin extends AbstractPlugin {
 		return this.database;
 	}
 
+	@Override
+	public String getArtifactId() {
+		return "";
+	}
 
 
 	/**
