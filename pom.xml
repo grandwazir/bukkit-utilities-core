@@ -72,7 +72,7 @@
                                     <shadedPattern>name.richardson.james.bukkit.utilities.artifact</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>joda-time</pattern>
+                                    <pattern>org.joda.time</pattern>
                                     <shadedPattern>name.richardson.james.bukkit.utilities.time</shadedPattern>
                                 </relocation>
                             </relocations>

@@ -7,9 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Created with IntelliJ IDEA. User: james Date: 13/07/13 Time: 15:53 To change this template use File | Settings | File Templates.
- */
+
 public class MavenPluginUpdaterTest extends TestCase {
 
 	private PluginDescriptionFile pluginDescriptionFile;

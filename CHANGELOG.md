@@ -1,5 +1,13 @@
-# Changelog for BukkitUtilities (v6.0.0-SNAPSHOT)
+# Changelog for BukkitUtilities (v6.1.0-SNAPSHOT)
 
+2013-08-16 01:19:39 +0100    add tests for new formatter (James Richardson)  
+2013-08-16 01:18:21 +0100    refactored tests together (James Richardson)  
+2013-08-16 00:41:42 +0100    more refactoring (James Richardson)  
+2013-08-15 18:02:52 +0100    code clean up (James Richardson)  
+2013-08-15 17:57:42 +0100    more refactoring added Joda time as time parser (James Richardson)  
+2013-08-15 14:18:53 +0100    refactored Command handling (James Richardson)  
+2013-08-14 17:58:37 +0100    playing with using composition instead of inheritence (James Richardson)  
+2013-08-14 16:41:02 +0100    bug fixes (James Richardson)  
 2013-08-12 18:37:07 +0100    implemented database loading (James Richardson)  
 2013-08-12 18:24:56 +0100    fix test failure (James Richardson)  
 2013-08-12 18:22:04 +0100    change the way help command accepts commands (James Richardson)  
@@ -72,9 +80,9 @@
 2013-06-19 21:28:14 +0100    fixed misc deployment bugs (James Richardson)  
 2013-06-19 18:13:41 +0100    add pluginDescriptionFile to constructor (James Richardson)  
 2013-06-19 18:02:54 +0100    delete old ResourceBundles (James Richardson)  
-2013-06-18 20:38:01 +0100    updated localisation (James Richardson)
+2013-06-18 20:38:01 +0100    updated localisation (James Richardson)  
 2013-06-18 20:03:44 +0100    new resource bundle framework (James Richardson)  
-2013-06-18 20:02:54 +0100    changes to localisation layout (James Richardson)
+2013-06-18 20:02:54 +0100    changes to localisation layout (James Richardson)  
 2013-06-16 23:32:07 +0100    remove remaining localised interface (James Richardson)  
 2013-06-16 23:18:53 +0100    remove Localised (James Richardson)  
 2013-06-16 23:12:57 +0100    documented matchers (James Richardson)  
@@ -97,7 +105,7 @@
 2013-06-01 20:08:58 +0100    fix [#3](https://github.com/grandwazir/BukkitUtilities/bukkit-utilities/issues/3) (James Richardson)  
 
 **v5.0.2**  
-2013-05-31 17:47:16 +0100    mismatch in localisation keys (James Richardson)
+2013-05-31 17:47:16 +0100    mismatch in localisation keys (James Richardson)  
 
 **v5.0.1**  
 2013-05-31 04:07:53 +0100    added missing logger file to git (James Richardson)  
@@ -112,14 +120,14 @@
 2013-05-30 03:30:27 +0100    change to new style key (James Richardson)  
 
 **v5.0.0**  
-2013-05-29 23:59:32 +0100    change localisation path to "localisation" (James Richardson)
+2013-05-29 23:59:32 +0100    change localisation path to "localisation" (James Richardson)  
 2013-05-29 23:23:36 +0100    set Logger prefix statically to avoid having to set it ourselves (James Richardson)  
 2013-05-29 22:52:07 +0100    enable support for people typing commands in CAPS (James Richardson)  
 2013-05-29 22:40:27 +0100    fixes developed while working on BanHammer and Alias (James Richardson)  
 2013-05-29 14:54:04 +0100    refactored listening class (James Richardson)  
 2013-05-29 14:47:44 +0100    update metrics to revison 6 (James Richardson)  
 2013-05-29 14:44:36 +0100    delete unused SQLStorageSchema (James Richardson)  
-2013-05-29 14:41:38 +0100    refactor choiceformatter to use new localisation method (James Richardson)
+2013-05-29 14:41:38 +0100    refactor choiceformatter to use new localisation method (James Richardson)  
 2013-05-29 14:38:13 +0100    added copyright, sorted members, automated cleanup (James Richardson)  
 2013-05-29 14:31:37 +0100    more changes I forgot to commit at the time (James Richardson)  
 2013-05-25 15:42:44 +0100    fixed an issue log messages where not being localised (James Richardson)  
@@ -162,9 +170,9 @@
 2013-03-24 16:05:57 +0000    more readable (James Richardson)  
 2013-03-24 15:55:58 +0000    new way of registering permissions (James Richardson)  
 2013-03-24 15:03:58 +0000    much cleaner and sensible debug messages (James Richardson)  
-2013-03-24 14:53:18 +0000    finished refactoring localisation (James Richardson)
+2013-03-24 14:53:18 +0000    finished refactoring localisation (James Richardson)  
 2013-03-24 14:35:26 +0000    implemented new Localisation method (James Richardson)  
-2013-03-24 14:11:02 +0000    refreshed resource bundle localisation (James Richardson)
+2013-03-24 14:11:02 +0000    refreshed resource bundle localisation (James Richardson)  
 2013-03-24 13:48:26 +0000    added new Localizable interface to replace old one (James Richardson)  
 2012-12-13 22:53:02 +0000    Builds cleanly on a new system (James Richardson)  
 
@@ -196,8 +204,8 @@
 2012-08-05 18:51:34 +0100    change from debug to config fix bug where severe and warning was being logged at config (James Richardson)  
 2012-08-05 18:46:20 +0100    delete raw options (James Richardson)  
 2012-08-05 18:35:25 +0100    lookup class name correctly (James Richardson)  
-2012-08-05 18:32:15 +0100    localisation with logging (James Richardson)
-2012-08-05 18:31:33 +0100    localisation on logger (James Richardson)
+2012-08-05 18:32:15 +0100    localisation with logging (James Richardson)  
+2012-08-05 18:31:33 +0100    localisation on logger (James Richardson)  
 2012-08-05 10:08:33 +0100    fix typo (James Richardson)  
 2012-08-05 10:06:22 +0100    fix NPE (James Richardson)  
 2012-08-05 10:05:54 +0100    misc fixes (James Richardson)  
@@ -210,7 +218,7 @@
 2012-08-05 04:25:46 +0100    added new permission framework (James Richardson)  
 2012-08-05 03:36:46 +0100    remove old methods (James Richardson)  
 2012-08-05 03:35:04 +0100    finished new framework (James Richardson)  
-2012-08-05 03:31:48 +0100    add new localisation framework (James Richardson)
+2012-08-05 03:31:48 +0100    add new localisation framework (James Richardson)  
 2012-08-05 02:44:00 +0100    new logging framework (James Richardson)  
 2012-08-04 05:44:25 +0100    remove loadInitialConfiguration (James Richardson)  
 2012-08-04 05:27:15 +0100    remove duplication (James Richardson)  
@@ -240,14 +248,14 @@
 2012-07-28 19:36:48 +0100    further refactoring (James Richardson)  
 2012-07-28 19:17:27 +0100    Adding debugging to AbstractMetrics (James Richardson)  
 2012-07-28 19:05:42 +0100    PluginManager and CommandManager now extend Localised (James Richardson)  
-2012-07-28 18:56:08 +0100    refactoring localisation (James Richardson)
+2012-07-28 18:56:08 +0100    refactoring localisation (James Richardson)  
 2012-07-27 14:09:37 +0100    added debugging messages (James Richardson)  
 2012-07-26 20:59:11 +0100    fix bug where simpleclass name was being added twice (James Richardson)  
 2012-07-26 20:55:18 +0100    fix key reference (James Richardson)  
-2012-07-26 20:41:27 +0100    various localisation issues (James Richardson)
+2012-07-26 20:41:27 +0100    various localisation issues (James Richardson)  
 2012-07-26 20:32:15 +0100    refer to internal getMessage (James Richardson)  
 2012-07-26 20:29:12 +0100    change scope (James Richardson)  
-2012-07-26 20:24:27 +0100    made localisation exception more useful (James Richardson)
+2012-07-26 20:24:27 +0100    made localisation exception more useful (James Richardson)  
 2012-07-26 20:15:46 +0100    use getMessage instead of plugin.getMessage (James Richardson)  
 2012-07-26 19:40:13 +0100    implements MetricListener (James Richardson)  
 2012-07-26 19:17:57 +0100    removed double lines (James Richardson)  
@@ -256,7 +264,7 @@
 2012-07-26 19:07:11 +0100    finished metrics intergration added localisable to updater (James Richardson)  
 2012-07-26 18:17:41 +0100    finished implementing simple metrics (James Richardson)  
 2012-07-26 18:15:45 +0100    send authors with metrics (James Richardson)  
-2012-07-26 17:43:54 +0100    add automatic categorising of localisation messages (James Richardson)
+2012-07-26 17:43:54 +0100    add automatic categorising of localisation messages (James Richardson)  
 2012-07-26 17:36:20 +0100    add getSchema method (James Richardson)  
 2012-07-26 17:35:32 +0100    clear up imports (James Richardson)  
 2012-07-26 17:34:39 +0100    remove deprecated database (James Richardson)  
@@ -278,8 +286,8 @@
 2012-06-15 21:14:37 +0100    changed scope of logger (James Richardson)  
 2012-06-15 21:00:55 +0100    added debug messages in stubs to remind me to create them in plugins (James Richardson)  
 2012-06-15 20:59:14 +0100    * 20 to convert ticks to seconds (James Richardson)  
-2012-06-15 20:50:45 +0100    Further updated localisation (James Richardson)
-2012-06-15 20:49:21 +0100    amended localisation (James Richardson)
+2012-06-15 20:50:45 +0100    Further updated localisation (James Richardson)  
+2012-06-15 20:49:21 +0100    amended localisation (James Richardson)  
 2012-06-15 20:38:31 +0100    finished refactoring (James Richardson)  
 2012-06-15 19:25:28 +0100    work in progress (James Richardson)  
 
@@ -287,7 +295,7 @@
 2012-06-14 05:19:25 +0100    only match files not directories (James Richardson)  
 
 **v3.0.1**  
-2012-06-14 04:44:53 +0100    fix bug where updated version number was not correctly being passed for localisation (James Richardson)
+2012-06-14 04:44:53 +0100    fix bug where updated version number was not correctly being passed for localisation (James Richardson)  
 
 **v3.0.0**  
 2012-06-14 04:39:02 +0100    Finish added automatic updating capability (James Richardson)  
@@ -306,7 +314,7 @@
 **v2.1.4**  
 2012-03-24 23:50:36 +0000    preparing for release (James Richardson)  
 2012-03-24 23:12:11 +0000    Made getSimpleFormattedMessage consistent (James Richardson)  
-2012-03-24 19:32:58 +0000    Allow ColourCodes in localisation files (James Richardson)
+2012-03-24 19:32:58 +0000    Allow ColourCodes in localisation files (James Richardson)  
 
 **v2.1.3**  
 2012-03-24 13:53:14 +0000    fix issue where commands where not being sorted correctly (James Richardson)  
@@ -337,7 +345,7 @@
 2012-02-23 02:51:56 +0000    update PluginCommand (James Richardson)  
 2012-02-23 02:17:04 +0000    remove Maps from argument handling (James Richardson)  
 2012-02-23 02:13:15 +0000    clean up (James Richardson)  
-2012-02-23 01:36:34 +0000    added new localisation options (James Richardson)
+2012-02-23 01:36:34 +0000    added new localisation options (James Richardson)  
 
 **v1.1.0**  
 2012-02-16 03:09:06 +0000    refactoring, support for localising plugins (James Richardson)  

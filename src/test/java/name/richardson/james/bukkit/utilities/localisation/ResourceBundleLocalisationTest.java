@@ -1,4 +1,4 @@
-package name.richardson.james.bukkit.utilities.formatters;
+package name.richardson.james.bukkit.utilities.localisation;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
