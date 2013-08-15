@@ -18,31 +18,35 @@
 
 package name.richardson.james.bukkit.utilities.command.matcher;
 
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
-import org.bukkit.OfflinePlayer;
+public final class StringMatcher implements Matcher {
 
-public class StringMatcher implements Matcher {
-
-	private final Collection<String> strings;
+	private Set<String> strings = new HashSet<String>();
 
 	public StringMatcher(Collection<String> strings) {
-		this.strings = strings;
+		this.setStrings(new HashSet<String>(strings));
 	}
 
 	@Override
 	public Set<String> matches(String argument) {
 		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		argument = argument.toLowerCase(Locale.ENGLISH);
-		for (String string : strings) {
+		for (String string : getStrings()) {
 			if (results.size() == Matcher.MAX_MATCHES) break;
 			if (!string.toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
 			results.add(string);
 		}
 		return results;
+	}
+
+	protected Set<String> getStrings() {
+		return Collections.unmodifiableSet(strings);
+	}
+
+	protected void setStrings(Collection<String> strings) {
+		this.strings.clear();
+		this.strings.addAll(strings);
 	}
 
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- JodaTimeFormatter.java is part of BukkitUtilities.
+ LocalisedTimeFormatter.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -24,11 +24,11 @@ import org.joda.time.format.PeriodFormat;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
-public class JodaTimeFormatter implements TimeFormatter {
+public class LocalisedTimeFormatter implements TimeFormatter {
 
 	private final PeriodFormatter inputFormatter;
 
-	public JodaTimeFormatter() {
+	public LocalisedTimeFormatter() {
 		inputFormatter = new PeriodFormatterBuilder()
 		.printZeroNever()
 		.appendDays()
