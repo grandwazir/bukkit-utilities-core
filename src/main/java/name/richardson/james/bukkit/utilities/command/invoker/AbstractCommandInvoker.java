@@ -18,22 +18,21 @@
 
 package name.richardson.james.bukkit.utilities.command.invoker;
 
-import java.util.*;
-
-import org.bukkit.command.CommandSender;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.Command;
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.context.PassthroughCommandContext;
 
 public abstract class AbstractCommandInvoker implements CommandInvoker {
 
 	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
-	 * Add a command to this CommandInvoker allowing it to delgate arguments to it that match the command's name.
+	 * Add a command to this CommandInvoker allowing it to delegate arguments to it that match the command's name.
 	 *
 	 * @param command
 	 */
@@ -55,7 +54,6 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 			commandMap.put(command.getName(), command);
 		}
 	}
-
 
 	/**
 	 * Get a unmodifiable map of all the commands assigned to this invoker.

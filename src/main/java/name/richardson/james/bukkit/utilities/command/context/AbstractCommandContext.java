@@ -19,6 +19,7 @@
 package name.richardson.james.bukkit.utilities.command.context;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,6 +53,7 @@ public class AbstractCommandContext implements CommandContext {
 		this.sender = sender;
 		setArguments(argument);
 		setFlags(argument);
+		if (logger.isLoggable(Level.FINEST)) logger.finest("A command context has been creaded: " + this.toString());
 	}
 
 	/**
