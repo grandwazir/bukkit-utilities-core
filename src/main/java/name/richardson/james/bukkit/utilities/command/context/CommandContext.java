@@ -18,12 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command.context;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * A object that represents the context that a {@link Command} has been executed within. This object is responsible for parsing the arguments and providing
@@ -42,7 +37,7 @@ public interface CommandContext {
 	 * Get the contents of the flag.
 	 *
 	 * @param label the flag label to look up.
-	 * @return the contents of the flag.
+	 * @return the contents of the flag or null if the flag is a switch or does not exist.
 	 */
 	String getFlag(String label);
 
@@ -55,34 +50,10 @@ public interface CommandContext {
 	String getJoinedArguments(int initialIndex);
 
 	/**
-	 * Convert the argument in the specified index to a {@link OfflinePlayer}.
-	 *
-	 * @param index the argument number to use.
-	 * @return a matching OfflinePlayer using the argument index as the player's name.
-	 */
-	OfflinePlayer getOfflinePlayer(int index);
-
-	/**
-	 * Convert the argument in the specified index to an integer.
-	 *
-	 * @param index
-	 * @return
-	 */
-	int getInt(int index);
-
-	/**
-	 * Convert the argument in the specified index to a {@link Player}.
-	 *
-	 * @param index the argument number to use.
-	 * @return a matching Player using the argument index as the player's name..
-	 */
-	Player getPlayer(int index);
-
-	/**
 	 * Get the argument at the specified index.
 	 *
 	 * @param index the argument number to fetch.
-	 * @return the argument specified.
+	 * @return the argument specified or null if there is nothing at that index.
 	 */
 	String getString(int index);
 
@@ -101,13 +72,6 @@ public interface CommandContext {
 	 * @return true if the flag exists, false otherwise.
 	 */
 	boolean hasFlag(String label);
-
-	/**
-	 * Check if the {@link CommandSender} is not an instance of {@link Player}.
-	 *
-	 * @return false if the CommandSender is a Player, otherwise true.
-	 */
-	boolean isConsoleCommandSender();
 
 	/**
 	 * Get the total number of arguments contained within this context. The total does not include the CommandSender or any optional flags.

@@ -5,8 +5,6 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.formatters.Localisation;
-
 public final class ResourceBundleLocalisation implements Localisation {
 
 	private final ResourceBundle resourceBundle;
@@ -21,12 +19,16 @@ public final class ResourceBundleLocalisation implements Localisation {
 	}
 
 	public String getMessage(String key) {
-		return this.resourceBundle.getString(key);
+		return this.getResourceBundle().getString(key);
 	}
 
 	@Override
 	public String getMessage(String key, Object... arguments) {
 		return MessageFormat.format(getMessage(key), arguments);
+	}
+
+	protected ResourceBundle getResourceBundle() {
+		return resourceBundle;
 	}
 
 }

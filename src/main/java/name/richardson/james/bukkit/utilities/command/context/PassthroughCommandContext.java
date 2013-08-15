@@ -18,9 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command.context;
 
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * This implementation of CommandContext is simply an unmodified extension of AbstractCommandContext.
@@ -29,10 +27,6 @@ public class PassthroughCommandContext extends AbstractCommandContext {
 
 	public PassthroughCommandContext(String[] arguments, CommandSender sender) {
 		super(arguments, sender);
-	}
-
-	public PassthroughCommandContext(String[] arguments, CommandSender sender, Server server) {
-		super(arguments, sender, server);
 	}
 
 }

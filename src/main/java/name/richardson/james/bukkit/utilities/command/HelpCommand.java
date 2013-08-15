@@ -18,72 +18,80 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permissible;
+
+import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
-import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
-import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
+import name.richardson.james.bukkit.utilities.formatters.ColouredMessaging;
+import name.richardson.james.bukkit.utilities.formatters.DefaultColouredMessaging;
+import name.richardson.james.bukkit.utilities.formatters.Localisation;
+import name.richardson.james.bukkit.utilities.formatters.ResourceBundleByClassLocalisation;
 
-public class HelpCommand extends AbstractCommand {
+public final class HelpCommand extends AbstractCommand {
 
-	private final Map<String, Command> commands = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
-	private final PluginDescriptionFile descriptionFile;
+	private final ColouredMessaging colouredMessaging = new DefaultColouredMessaging();
+	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
+	private final Localisation localisation = new ResourceBundleByClassLocalisation(HelpCommand.class);
 	private final String label;
 
-	private Command command;
-	private CommandContext commandContext;
-
-	public HelpCommand(PermissionManager permissionManager, String label, PluginDescriptionFile descriptionFile, Set<Command> commands) {
-		super(permissionManager);
-		this.descriptionFile = descriptionFile;
+	public HelpCommand(String label, Set<Command> commands) {
+		Validate.notEmpty(label, "Command label can not be empty or null!");
+		Validate.notEmpty(commands, "CommandMap can not be empty or null!");
 		this.label = label;
-		for (Command command : commands) {
-			this.commands.put(command.getName(), command);
+		for(Command command : commands) {
+			commandMap.put(command.getName(), command);
 		}
-		this.addMatcher(new StringMatcher(this.commands.keySet()));
 	}
 
-	/**
-	 * Attempt to execute the command. In this case it will attempt to find a matching command in the commandMap and dynamically display help to the {#link
-	 * CommandSender}. If the command does not exist then a list of all available commands will be displayed.
-	 *
-	 * @param commandContext
-	 */
 	@Override
 	public void execute(CommandContext commandContext) {
-		this.commandContext = commandContext;
-		this.setCommand();
-		if (command == null) {
-			commandContext.getCommandSender().sendMessage(String.format(ChatColor.LIGHT_PURPLE + "%s (%s)", descriptionFile.getName(), descriptionFile.getVersion()));
-			commandContext.getCommandSender().sendMessage(ChatColor.AQUA + descriptionFile.getDescription());
-			String usage = getColourScheme().format(ColourScheme.Style.COMMAND_USAGE, getUsage());
-			String message = getColouredMessage(ColourScheme.Style.WARNING, "help-usage-hint", "/" + label, getName(), usage);
-			commandContext.getCommandSender().sendMessage(message);
-			for (Command command : commands.values()) {
-				if (!command.isAuthorised(commandContext.getCommandSender())) continue;
-				usage = getColourScheme().format(ColourScheme.Style.COMMAND_USAGE, command.getUsage());
-				message = ChatColor.RED + "/" + label + " " + ChatColor.YELLOW + command.getName() + " " + usage;
-				commandContext.getCommandSender().sendMessage(message);
+		Validate.notNull(commandContext, "Command context may not be null!");
+		CommandSender commandSender = commandContext.getCommandSender();
+		Command requestedCommand = getCommand(commandContext);
+		if (requestedCommand == null) {
+			commandSender.sendMessage(ChatColor.LIGHT_PURPLE + localisation.getMessage("plugin-name-and-version"));
+			commandSender.sendMessage(ChatColor.AQUA + localisation.getMessage("plugin-description"));
+			commandSender.sendMessage(colouredMessaging.format(localisation.getMessage("using-help"), ColouredMessaging.FormatStyle.WARNING, "/" + label, getName(), getColouredCommandUsage(getUsage())));
+			for(Command command : commandMap.values()) {
+				if (!command.isAuthorised(commandSender)) continue;
+				commandSender.sendMessage(getCommandUsage(command));
 			}
 		} else {
-			String message = getColourScheme().format(ColourScheme.Style.HEADER, command.getDescription());
-			commandContext.getCommandSender().sendMessage(message);
-			String usage = getColourScheme().format(ColourScheme.Style.COMMAND_USAGE, command.getUsage());
-			message = String.format(ChatColor.RED + "/%s " + ChatColor.YELLOW + "%s %s", label, command.getName(), usage);
-			commandContext.getCommandSender().sendMessage(message);
+			commandSender.sendMessage(ChatColor.AQUA + requestedCommand.getDescription());
+			commandSender.sendMessage(getCommandUsage(requestedCommand));
 		}
 	}
 
-	private void setCommand() {
-		if (commandContext.has(1)) {
-			command = commands.get(commandContext.getString(1));
+	@Override
+	public boolean isAuthorised(Permissible permissible) {
+		return true;
+	}
+
+	private String getColouredCommandUsage(String usage) {
+		usage = usage.replaceAll("\\<", ChatColor.YELLOW + "\\<");
+		usage = usage.replaceAll("\\[", ChatColor.GREEN + "\\[");
+		return usage;
+	}
+
+	private Command getCommand(CommandContext commandContext) {
+		if (commandContext.has(0)) {
+			return commandMap.get(commandContext.getString(0));
 		} else {
-			command = null;
+			return null;
 		}
+	}
+
+	private String getCommandUsage(Command command) {
+		String usage = getColouredCommandUsage(command.getUsage());
+		String message = ChatColor.RED + "/" + label + " " + ChatColor.YELLOW + command.getName() + " " + usage;
+		return message;
 	}
 
 }

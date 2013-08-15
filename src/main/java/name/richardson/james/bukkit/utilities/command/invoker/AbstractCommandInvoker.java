@@ -38,7 +38,7 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 	 * @param command
 	 */
 	@Override
-	public void addCommand(Command command) {
+	public final void addCommand(Command command) {
 		Validate.notNull(command);
 		commandMap.put(command.getName(), command);
 	}
@@ -49,7 +49,7 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 	 * @param commands
 	 */
 	@Override
-	public void addCommands(Collection<Command> commands) {
+	public final void addCommands(Collection<Command> commands) {
 		Validate.notNull(commands);
 		for (Command command : commands) {
 			commandMap.put(command.getName(), command);
@@ -63,7 +63,7 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 	 * @return the commands
 	 */
 	@Override
-	public Map<String, Command> getCommands() {
+	public final Map<String, Command> getCommands() {
 		return Collections.unmodifiableMap(commandMap);
 	}
 
