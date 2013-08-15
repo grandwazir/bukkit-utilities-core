@@ -49,4 +49,5 @@ public class OnlinePlayerMatcher implements Matcher {
 		}
 		return results;
 	}
+
 }

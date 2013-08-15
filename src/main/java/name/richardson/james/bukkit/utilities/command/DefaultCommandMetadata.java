@@ -2,9 +2,8 @@ package name.richardson.james.bukkit.utilities.command;
 
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.formatters.Localisation;
-import name.richardson.james.bukkit.utilities.formatters.ResourceBundleByClassLocalisation;
-import name.richardson.james.bukkit.utilities.formatters.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 
 public final class DefaultCommandMetadata implements CommandMetadata {
 

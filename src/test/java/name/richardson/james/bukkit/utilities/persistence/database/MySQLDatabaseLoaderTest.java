@@ -34,19 +34,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created with IntelliJ IDEA. User: james Date: 13/07/13 Time: 12:36 To change this template use File | Settings | File Templates.
- */
 public class MySQLDatabaseLoaderTest extends TestCase {
 
 	private final Logger logger = PrefixedLogger.getLogger(MySQLDatabaseLoaderTest.class);
 
-	private SimpleDatabaseConfiguration configuration;
+	private DatabaseConfiguration configuration;
 	private DefaultDatabaseLoader database;
 	private ArrayList<Class<?>> databaseClasses;
 
@@ -74,7 +72,7 @@ public class MySQLDatabaseLoaderTest extends TestCase {
 		dataSourceConfig.setUsername("travis");
 		dataSourceConfig.setDriver("com.mysql.jdbc.Driver");
 		dataSourceConfig.setIsolationLevel(8);
-		configuration = mock(SimpleDatabaseConfiguration.class);
+		configuration = mock(DatabaseConfiguration.class);
 		when(configuration.getDataSourceConfig()).thenReturn(dataSourceConfig);
 		when(configuration.getServerConfig()).thenReturn(serverConfig);
 		logger.setLevel(Level.ALL);

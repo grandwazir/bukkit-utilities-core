@@ -31,17 +31,18 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 /**
  * SQLite storage handles loading SQLite databases. Due to bug in the persistence library that Bukkit uses attempting to create a database with key constraists
  * fails. This class handles this by making the necessary modifications to the DDL script for it to be valid when using SQLite.
  */
-public class SQLiteDatabaseLoader extends AbstractDatabaseLoader {
+public final class SQLiteDatabaseLoader extends AbstractDatabaseLoader {
 
 	private final Logger LOGGER = PrefixedLogger.getLogger(this.getClass());
 
-	public SQLiteDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, SimpleDatabaseConfiguration configuration) {
+	public SQLiteDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, DatabaseConfiguration configuration) {
 		super(classLoader, classes, configuration);
 		configuration.getServerConfig().setDatabasePlatform(new SQLitePlatform());
 		configuration.getServerConfig().getDatabasePlatform().getDbDdlSyntax().setIdentity("");

@@ -20,11 +20,12 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 
 import java.util.List;
 
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
-public class DefaultDatabaseLoader extends AbstractDatabaseLoader {
+public final class DefaultDatabaseLoader extends AbstractDatabaseLoader {
 
-	public DefaultDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, SimpleDatabaseConfiguration configuration) {
+	public DefaultDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, DatabaseConfiguration configuration) {
 		super(classLoader, classes, configuration);
 	}
 

@@ -146,9 +146,6 @@ public class AbstractCommandContext implements CommandContext {
 	@Override
 	public String toString() {
 		return "AbstractCommandContext{" +
-		"ARGUMENT_MATCHER=" + ARGUMENT_MATCHER +
-		", FLAG_WITH_ARGUMENTS_MATCHER=" + FLAG_WITH_ARGUMENTS_MATCHER +
-		", FLAG_WITHOUT_ARGUMENTS_MATCHER=" + FLAG_WITHOUT_ARGUMENTS_MATCHER +
 		", arguments=" + arguments +
 		", flags=" + flags +
 		", sender=" + sender +

@@ -64,32 +64,32 @@ public class BukkitPermissionManagerTest extends TestCase {
 
 	@Test
 	public void testCreatedPermissionDescription() {
-		Permission permission = permissionManager.createPermission("test");
-		Assert.assertTrue(permission.getDescription(), permission.getDescription().contentEquals("This is a test permission."));
+		Permission permission = permissionManager.createPermission("test", "description");
+		Assert.assertTrue(permission.getDescription(), permission.getDescription().contentEquals("description"));
 	}
 
 	@Test
 	public void testCreatedPermissionName() {
-		Permission permission = permissionManager.createPermission("test");
+		Permission permission = permissionManager.createPermission("test", "description");
 		Assert.assertTrue(permission.getName(), permission.getName().contentEquals("test"));
 	}
 
 	@Test
 	public void testCreatedPermissionDefault() {
-		Permission permission = permissionManager.createPermission("test");
+		Permission permission = permissionManager.createPermission("test", "description");
 		Assert.assertTrue(permission.getDefault().toString(), permission.getDefault() == PermissionDefault.OP);
 	}
 
 	@Test
 	public void testCreatedPermissionParent() {
 		when(permission.getName()).thenReturn("test");
-		Permission permission = permissionManager.createPermission("test.node");
+		Permission permission = permissionManager.createPermission("test.node", "description");
 		verify(pluginManager).getPermission("test");
 	}
 
 	@Test
 	public void testCreatePermissionWithParentSupplied() {
-		Permission permission = permissionManager.createPermission("test.node", PermissionDefault.NOT_OP, this.permission, false);
+		Permission permission = permissionManager.createPermission("test.node", "description", PermissionDefault.NOT_OP, this.permission, false);
 		verify(pluginManager, never()).getPermission("test");
 	}
 

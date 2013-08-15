@@ -28,15 +28,15 @@ import org.bukkit.permissions.Permissible;
 
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.formatters.ColouredMessaging;
-import name.richardson.james.bukkit.utilities.formatters.DefaultColouredMessaging;
-import name.richardson.james.bukkit.utilities.formatters.Localisation;
-import name.richardson.james.bukkit.utilities.formatters.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
+import name.richardson.james.bukkit.utilities.formatters.DefaultColourFormatter;
 
 public final class HelpCommand extends AbstractCommand {
 
-	private final ColouredMessaging colouredMessaging = new DefaultColouredMessaging();
+	private final ColourFormatter colourFormatter = new DefaultColourFormatter();
 	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
 	private final Localisation localisation = new ResourceBundleByClassLocalisation(HelpCommand.class);
 	private final String label;
@@ -58,7 +58,7 @@ public final class HelpCommand extends AbstractCommand {
 		if (requestedCommand == null) {
 			commandSender.sendMessage(ChatColor.LIGHT_PURPLE + localisation.getMessage("plugin-name-and-version"));
 			commandSender.sendMessage(ChatColor.AQUA + localisation.getMessage("plugin-description"));
-			commandSender.sendMessage(colouredMessaging.format(localisation.getMessage("using-help"), ColouredMessaging.FormatStyle.WARNING, "/" + label, getName(), getColouredCommandUsage(getUsage())));
+			commandSender.sendMessage(colourFormatter.format(localisation.getMessage("using-help"), ColourFormatter.FormatStyle.WARNING, "/" + label, getName(), getColouredCommandUsage(getUsage())));
 			for(Command command : commandMap.values()) {
 				if (!command.isAuthorised(commandSender)) continue;
 				commandSender.sendMessage(getCommandUsage(command));

@@ -4,9 +4,7 @@ import java.text.MessageFormat;
 
 import org.bukkit.ChatColor;
 
-import name.richardson.james.bukkit.utilities.formatters.ColouredMessaging;
-
-public class DefaultColouredMessaging implements ColouredMessaging {
+public class DefaultColourFormatter implements ColourFormatter {
 
 	private static final ChatColor WARNING = ChatColor.YELLOW;
 	private static final ChatColor WARNING_HIGHLIGHT = ChatColor.GREEN;

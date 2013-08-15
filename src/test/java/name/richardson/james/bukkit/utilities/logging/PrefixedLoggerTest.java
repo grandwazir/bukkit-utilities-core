@@ -86,13 +86,6 @@ public class PrefixedLoggerTest extends TestCase {
 	}
 
 	@Test
-	public void testSetPrefix()
-	throws Exception {
-		PrefixedLogger.setPrefix("test");
-		assertEquals("Prefix has not been set correctly!", PrefixedLogger.getPrefix(), "test");
-	}
-
-	@Test
 	public void testGetLoggerByName()
 	throws Exception {
 		Logger logger = PrefixedLogger.getLogger("name.richardson.james.bukkit.utilities.logging");

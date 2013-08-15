@@ -20,10 +20,7 @@ package name.richardson.james.bukkit.utilities.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Locale;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +34,6 @@ import name.richardson.james.bukkit.utilities.persistence.configuration.SimplePl
 import name.richardson.james.bukkit.utilities.permissions.BukkitPermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
-import name.richardson.james.bukkit.utilities.plugin.updater.PlayerNotifier;
 import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater;
 
 public abstract class AbstractPlugin extends JavaPlugin {
@@ -83,12 +79,11 @@ public abstract class AbstractPlugin extends JavaPlugin {
 	 */
 	private void loadConfiguration()
 	throws IOException {
-		PrefixedLogger.setPrefix("[" + this.getName() + "] ");
 		final File file = new File(this.getDataFolder().getPath(), AbstractPlugin.CONFIG_NAME);
 		final InputStream defaults = this.getResource(CONFIG_NAME);
 		this.configuration = new SimplePluginConfiguration(file, defaults);
 		this.logger.setLevel(this.configuration.getLogLevel());
-		this.logger.log(Level.CONFIG, "Localisation locale: {0}", Locale.getDefault());
+		this.logger.log(Level.CONFIG, "localisation locale: {0}", Locale.getDefault());
 	}
 
 	/**
@@ -98,7 +93,6 @@ public abstract class AbstractPlugin extends JavaPlugin {
 		if (this.configuration.getAutomaticUpdaterState() != PluginUpdater.State.OFF) {
 			final PluginUpdater updater = new MavenPluginUpdater(getArtifactId(), getGroupID(), getDescription(), this.configuration.getAutomaticUpdaterBranch(), this.configuration.getAutomaticUpdaterState());
 			this.getServer().getScheduler().runTaskAsynchronously(this, updater);
-			new PlayerNotifier(this, this.getServer().getPluginManager(), updater);
 		}
 	}
 

@@ -35,6 +35,7 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 import static org.mockito.Mockito.mock;
@@ -43,7 +44,7 @@ import static org.mockito.Mockito.when;
 @RunWith(JUnit4.class)
 public class SQLiteDatabaseLoaderTest extends TestCase {
 
-	private SimpleDatabaseConfiguration configuration;
+	private DatabaseConfiguration configuration;
 	private SQLiteDatabaseLoader database;
 	private ArrayList<Class<?>> databaseClasses;
 
@@ -71,7 +72,7 @@ public class SQLiteDatabaseLoaderTest extends TestCase {
 		dataSourceConfig.setUsername("travis");
 		dataSourceConfig.setDriver("org.sqlite.JDBC");
 		dataSourceConfig.setIsolationLevel(8);
-		configuration = mock(SimpleDatabaseConfiguration.class);
+		configuration = mock(DatabaseConfiguration.class);
 		when(configuration.getDataSourceConfig()).thenReturn(dataSourceConfig);
 		when(configuration.getServerConfig()).thenReturn(serverConfig);
 	}

@@ -33,6 +33,7 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
@@ -47,7 +48,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private EbeanServer ebeanserver;
 	private DdlGenerator generator;
 
-	public AbstractDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, SimpleDatabaseConfiguration configuration) {
+	public AbstractDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, DatabaseConfiguration configuration) {
 		Validate.notEmpty(classes, "Database classes must be provided!");
 		Validate.notNull(configuration, "A configuration is required!");
 		Validate.notNull(classLoader, "A classloader is required!");

@@ -1,4 +1,4 @@
-package name.richardson.james.bukkit.utilities.formatters;
+package name.richardson.james.bukkit.utilities.localisation;
 
 
 public interface Localisation {

@@ -1,6 +1,6 @@
 package name.richardson.james.bukkit.utilities.formatters;
 
-public interface ColouredMessaging {
+public interface ColourFormatter {
 
 	public enum FormatStyle {
 		HEADER,

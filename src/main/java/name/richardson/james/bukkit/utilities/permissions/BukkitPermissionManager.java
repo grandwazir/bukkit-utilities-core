@@ -29,17 +29,16 @@ import org.bukkit.plugin.PluginManager;
 
 import org.apache.commons.lang.StringUtils;
 
-import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 /**
  * An implementation of {@link PermissionManager} using the Bukkit SuperPerms system.
  */
-public class BukkitPermissionManager implements PermissionManager {
+public final class BukkitPermissionManager implements PermissionManager {
 
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundles.PERMISSIONS.getBundle();
-	private static final Logger LOGGER = PrefixedLogger.getLogger(BukkitPermissionManager.class);
-
+	private final Logger logger = PrefixedLogger.getLogger(BukkitPermissionManager.class);
 	private final PluginManager pluginManager;
 	private final List<Permission> permissions = new ArrayList<Permission>();
 
@@ -52,27 +51,25 @@ public class BukkitPermissionManager implements PermissionManager {
 	}
 
 	public Permission addPermission(final Permission permission) {
-		LOGGER.log(Level.CONFIG, "Adding permission: {0}", permission.getName());
+		logger.log(Level.CONFIG, "Adding permission: {0}", permission.getName());
 		pluginManager.addPermission(permission);
 		this.permissions.add(permission);
 		return permission;
 	}
 
-	public Permission createPermission(final String node) {
-		return createPermission(node, PermissionDefault.OP);
+	public Permission createPermission(final String node, String description) {
+		return createPermission(node, description, PermissionDefault.OP);
 	}
 
-	public Permission createPermission(final String node, final PermissionDefault defaultPermission) {
-		return createPermission(node, defaultPermission, getParentPermission(node));
+	public Permission createPermission(final String node,  String description, final PermissionDefault defaultPermission) {
+		return createPermission(node, description, defaultPermission, getParentPermission(node));
 	}
 
-	public Permission createPermission(final String node, final PermissionDefault defaultPermission, final Permission parent) {
-		return createPermission(node, defaultPermission, parent, true);
+	public Permission createPermission(final String node, String description, final PermissionDefault defaultPermission, final Permission parent) {
+		return createPermission(node, description, defaultPermission, parent, true);
 	}
 
-	@Override
-	public Permission createPermission(final String node, final PermissionDefault defaultPermission, final Permission parent, final boolean defaultParent) {
-		final String description = RESOURCE_BUNDLE.getString(node);
+	public Permission createPermission(final String node, String description, final PermissionDefault defaultPermission, final Permission parent, final boolean defaultParent) {
 		final Permission permission = new Permission(node, description, defaultPermission);
 		if (parent != null) permission.addParent(parent, defaultParent);
 		return this.addPermission(permission);
@@ -80,7 +77,7 @@ public class BukkitPermissionManager implements PermissionManager {
 
 	public List<Permission> createPermissions(final String[] nodes) {
 		for (final String node : nodes) {
-			this.createPermission(node);
+			this.createPermission(node, "No description available");
 		}
 		return permissions;
 	}
@@ -94,7 +91,7 @@ public class BukkitPermissionManager implements PermissionManager {
 		if (nodes.size() > 1) {
 			nodes.remove(nodes.size() - 1);
 			final String parentNode = StringUtils.join(nodes, ".");
-			LOGGER.log(Level.FINEST, "Resolving parent permission as " +  parentNode);
+			logger.log(Level.FINEST, "Resolving parent permission as " +  parentNode);
 			return pluginManager.getPermission(parentNode);
 		} else {
 			return null;

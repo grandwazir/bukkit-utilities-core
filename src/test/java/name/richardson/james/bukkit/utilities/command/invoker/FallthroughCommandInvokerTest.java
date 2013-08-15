@@ -36,118 +36,68 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Matchers;
 
 import name.richardson.james.bukkit.utilities.command.Command;
+import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.context.NestedCommandContext;
 import name.richardson.james.bukkit.utilities.command.context.PassthroughCommandContext;
 
 import static org.mockito.Mockito.*;
 
-public class FallthroughCommandInvokerTest extends TestCase {
+public class FallthroughCommandInvokerTest extends AbstractCommandInvokerTest {
 
-	private String[] arguments = {"test"};
-	private FallthroughCommandInvoker commandInvoker;
 	private Command defaultCommand;
-	private Server server;
-
-	@Before
-	public void setUp()
-	throws Exception {
-		defaultCommand = mock(Command.class);
-		server = mock(Server.class);
-		commandInvoker = new FallthroughCommandInvoker(defaultCommand);
-	}
-
-	@After
-	public void tearDown()
-	throws Exception {
-		setServer(null);
-	}
 
 	@Test
-	public void testAddCommand()
-	throws Exception {
-		Command nestedCommand = mock(Command.class);
-		when(nestedCommand.getName()).thenReturn("test");
-		commandInvoker.addCommand(nestedCommand);
-		verify(nestedCommand).getName();
-	}
-
-	@Test
-	public void testAddCommands()
-	throws Exception {
-		Command nestedCommand = mock(Command.class);
-		when(nestedCommand.getName()).thenReturn("test");
-		List<Command> commandList = new ArrayList<Command>();
-		commandList.add(nestedCommand);
-		commandInvoker.addCommands(commandList);
-		verify(nestedCommand).getName();
-	}
-
-	@Test
-	public void testGetCommands()
-	throws Exception {
-		Assert.assertNotNull("A map of commands should be returned!", commandInvoker.getCommands());
-	}
-
-	@Test
-	public void testOnCommandMatches()
-	throws Exception {
-		setServer(server);
-		Command nestedCommand = mock(Command.class);
-		CommandSender sender = mock(CommandSender.class);
-		when(nestedCommand.getName()).thenReturn("test");
-		commandInvoker.addCommand(nestedCommand);
-		commandInvoker.onCommand(sender, null, null, arguments);
-		verify(nestedCommand).execute(Matchers.<NestedCommandContext>anyObject());
-	}
-
-	@Test
-	public void testOnCommandNoMatch()
-	throws Exception {
-		setServer(server);
-		CommandSender sender = mock(CommandSender.class);
-		commandInvoker.onCommand(sender, null, null, arguments);
+	public void onCommand_WhenCommandIsNotInMap_FallThroughToDefaultCommand() {
+		String[] arguments = {""};
+		execute(arguments);
 		verify(defaultCommand).execute(Matchers.<PassthroughCommandContext>anyObject());
 	}
 
 	@Test
-	public void testOnTabCompleteDefaultCommand()
-	throws Exception {
-		setServer(server);
-		CommandSender sender = mock(CommandSender.class);
-		commandInvoker.onTabComplete(sender, null, null, arguments);
+	public void onCommand_WhenCommandIsInMap_ExecuteCommand() {
+		Command mappedCommand = setMappedCommand();
+		String[] arguments = {mappedCommand.getName()};
+		execute(arguments);
+		verify(mappedCommand).execute(Matchers.<NestedCommandContext>anyObject());
+	}
+
+	@Test
+	public void onTabComplete_WhenCommandIsNotInMap_FallThroughToDefaultCommand() {
+		String[] arguments = {""};
+		tabComplete(arguments);
 		verify(defaultCommand).getArgumentMatches(Matchers.<PassthroughCommandContext>anyObject());
 	}
 
-	@Test
-	public void testOnTabCompleteNestedCommand()
-	throws Exception {
-		setServer(server);
-		Command nestedCommand = mock(Command.class);
-		CommandSender sender = mock(CommandSender.class);
-		when(nestedCommand.getName()).thenReturn("test");
-		commandInvoker.addCommand(nestedCommand);
-		commandInvoker.onTabComplete(sender, null, null, arguments);
-		verify(nestedCommand).getArgumentMatches(Matchers.<NestedCommandContext>anyObject());
-	}
 
 	@Test
-	public void testThatCommandsAreSorted()
-	throws Exception {
-		Command nestedCommand1 = mock(Command.class);
-		when(nestedCommand1.getName()).thenReturn("test");
-		Command nestedCommand2 = mock(Command.class);
-		when(nestedCommand2.getName()).thenReturn("Frank");
-		commandInvoker.addCommand(nestedCommand1);
-		commandInvoker.addCommand(nestedCommand2);
-		String firstCommand = (String) commandInvoker.getCommands().keySet().toArray()[0];
-		Assert.assertTrue("The command list has not been sorted alphabetically!", firstCommand.contentEquals(nestedCommand2.getName()));
+	public void onTabComplete_WhenCommandIsInMap_MatchCommand() {
+		Command mappedCommand = setMappedCommand();
+		String[] arguments = {mappedCommand.getName()};
+		tabComplete(arguments);
+		verify(mappedCommand).getArgumentMatches(Matchers.<NestedCommandContext>anyObject());
 	}
 
-	private void setServer(Server server)
+	private Command setMappedCommand() {
+		Command mappedCommand = getMockCommand();
+		getCommandInvoker().addCommand(mappedCommand);
+		return mappedCommand;
+	}
+
+	protected void execute(String[] arguments) {
+		CommandSender commandSender = mock(CommandSender.class);
+		getCommandInvoker().onCommand(commandSender, null, null, arguments);
+	}
+
+	protected void tabComplete(String[] arguments) {
+		CommandSender commandSender = mock(CommandSender.class);
+		getCommandInvoker().onTabComplete(commandSender, null, null, arguments);
+	}
+
+	@Before
+	public void setUp()
 	throws Exception {
-		Field field = Bukkit.class.getDeclaredField("server");
-		field.setAccessible(true);
-		field.set(null, server);
+		defaultCommand = getMockCommand();
+		setCommandInvoker(new FallthroughCommandInvoker(defaultCommand));
 	}
 
 }

@@ -1,43 +1,51 @@
 package name.richardson.james.bukkit.utilities.logging;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.logging.*;
 
-import org.bukkit.Bukkit;
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 
-import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
+public final class PrefixedLogger extends Logger {
 
-public class PrefixedLogger extends Logger {
-
-	private static final String RESOURCE_BUNDLE_NAME = ResourceBundles.MESSAGES.getBundleName();
-
-	private static String PREFIX = "";
+	private final Localisation localisation = new ResourceBundleByClassLocalisation(PrefixedLogger.class);
 
 	protected PrefixedLogger(String name, String resourceBundleName) {
 		super(name, resourceBundleName);
+		registerLogger();
+	}
+
+	private void registerLogger() {
 		LogManager.getLogManager().addLogger(this);
 		for (final Handler handler : getParent().getHandlers()) {
 			handler.setLevel(Level.ALL);
 		}
 	}
 
-	public static Logger getLogger(Class<?> object) {
-		final String name = object.getPackage().getName();
+	public static Logger getLogger(Class<?> classz) {
+		final String name = classz.getPackage().getName();
 		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
 		if (logger == null) {
-			return new PrefixedLogger(name, RESOURCE_BUNDLE_NAME);
+			String resourceBundleName = getResourceBundleName(classz);
+			if (resourceExists(resourceBundleName)) {
+				return new PrefixedLogger(name, getResourceBundleName(classz));
+			} else {
+				return new PrefixedLogger(name, null);
+			}
 		} else {
 			return logger;
 		}
 	}
 
-	public static String getPrefix() {
-		return PREFIX;
+	private static final String getResourceBundleName(Class classz) {
+		return "localisation" + "/" + classz.getSimpleName();
 	}
 
-	public static void setPrefix(final String prefix) {
-		PREFIX = prefix;
+	private static final boolean resourceExists(String resourcePath) {
+		File f = new File(resourcePath);
+		return f.exists();
 	}
 
 	@Override
@@ -56,7 +64,7 @@ public class PrefixedLogger extends Logger {
 		if (this.isLoggable(Level.FINEST) || isLoggable(Level.FINE) || isLoggable(Level.FINER) || isLoggable(Level.ALL)) {
 			record.setMessage("<" + this.getName() + "> " + record.getMessage());
 		} else {
-			record.setMessage(PREFIX + record.getMessage());
+			record.setMessage(localisation.getMessage("prefix") + record.getMessage());
 		}
 		super.log(record);
 	}

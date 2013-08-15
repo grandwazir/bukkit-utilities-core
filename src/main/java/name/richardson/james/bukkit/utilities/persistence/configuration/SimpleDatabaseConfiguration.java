@@ -30,9 +30,7 @@ import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
-public class SimpleDatabaseConfiguration extends AbstractConfiguration implements DatabaseConfiguration {
-
-	private static final Logger LOGGER = PrefixedLogger.getLogger(SimpleDatabaseConfiguration.class);
+public final class SimpleDatabaseConfiguration extends AbstractConfiguration implements DatabaseConfiguration {
 
 	private final DataSourceConfig dataSourceConfig;
 	private final ServerConfig serverConfig;
@@ -96,4 +94,5 @@ public class SimpleDatabaseConfiguration extends AbstractConfiguration implement
 		", url='" + this.dataSourceConfig.getUrl() + '\'' +
 		'}';
 	}
+
 }

@@ -28,7 +28,6 @@ import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.apache.commons.lang.Validate;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * AbstractConfiguration is responsible for creating YAML configuration files, setting defaults from a provided {@link
@@ -36,8 +35,7 @@ import org.codehaus.plexus.util.FileUtils;
  */
 public abstract class AbstractConfiguration {
 
-	private static final Logger logger = PrefixedLogger.getLogger(AbstractConfiguration.class);
-
+	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
 	private final YamlConfiguration defaults;
 	private final File file;
 	private final boolean runtimeDefaults;
@@ -58,20 +56,24 @@ public abstract class AbstractConfiguration {
 		return this.configuration;
 	}
 
+	protected final Logger getLogger() {
+		return logger;
+	}
+
 	protected final void save()
 	throws IOException {
-		AbstractConfiguration.logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
+		getLogger().log(Level.CONFIG, "Saving configuration: " + this.file.getName());
 		this.configuration.save(this.file);
 	}
 
 	protected final void load()
 	throws IOException {
-		AbstractConfiguration.logger.log(Level.CONFIG, "Loading configuration: " + this.getClass().getSimpleName());
-		AbstractConfiguration.logger.log(Level.CONFIG, "Using path: " + this.file.getAbsolutePath());
+		getLogger().log(Level.CONFIG, "Loading configuration: " + this.getClass().getSimpleName());
+		getLogger().log(Level.CONFIG, "Using path: " + this.file.getAbsolutePath());
 		if (!this.file.exists() || this.file.length() == 0) {
 			this.defaults.options().copyHeader(true);
 			this.defaults.options().copyDefaults(true);
-			AbstractConfiguration.logger.log(Level.WARNING, "saving-default-configuration", this.file.getName());
+			getLogger().log(Level.WARNING, "saving-default-configuration", this.file.getName());
 			defaults.save(this.file);
 		}
 		this.configuration = YamlConfiguration.loadConfiguration(this.file);

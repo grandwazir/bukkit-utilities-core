@@ -8,7 +8,7 @@
         <relativePath/>
     </parent>
     <artifactId>bukkit-utilities</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <version>6.1.0-SNAPSHOT</version>
     <name>BukkitUtilities</name>
     <description>A utility library containing reusuable classes and implementations for use with Bukkit.</description>
 
@@ -24,6 +24,11 @@
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
             <version>3.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.2</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -58,6 +63,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.apache.maven:maven-artifact</include>
+                                    <include>joda-time:joda-time</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -65,7 +71,12 @@
                                     <pattern>org.apache.maven.artifact</pattern>
                                     <shadedPattern>name.richardson.james.bukkit.utilities.artifact</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>joda-time</pattern>
+                                    <shadedPattern>name.richardson.james.bukkit.utilities.time</shadedPattern>
+                                </relocation>
                             </relocations>
+                            <minimizeJar>true</minimizeJar>
                         </configuration>
                     </execution>
                 </executions>

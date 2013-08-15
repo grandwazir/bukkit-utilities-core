@@ -28,11 +28,15 @@ import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 public class AbstractListener implements Listener {
 
-	private static final Logger logger = PrefixedLogger.getLogger(AbstractListener.class);
+	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
 
 	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
-		logger.log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events,");
+		if (getLogger().isLoggable(Level.FINEST)) getLogger().log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events.");
 		pluginManager.registerEvents(this, plugin);
+	}
+
+	protected Logger getLogger() {
+		return logger;
 	}
 
 }

@@ -49,7 +49,7 @@ public interface PermissionManager {
 	 *
 	 * @return the permission that was created.
 	 */
-	public Permission createPermission(String node);
+	public Permission createPermission(String node, String description);
 
 	/**
 	 * Create a permission
@@ -63,7 +63,7 @@ public interface PermissionManager {
 	 *
 	 * @return the permission that was created.
 	 */
-	public Permission createPermission(String node, PermissionDefault defaultPermission);
+	public Permission createPermission(String node, String description, PermissionDefault defaultPermission);
 
 
 	/**
@@ -79,9 +79,9 @@ public interface PermissionManager {
 	 *
 	 * @return the permission that was created.
 	 */
-	public Permission createPermission(String node, PermissionDefault defaultPermission, Permission parent);
+	public Permission createPermission(String node, String description, PermissionDefault defaultPermission, Permission parent);
 
-	public Permission createPermission(String node, PermissionDefault defaultPermission, Permission parent, boolean defaultParent);
+	public Permission createPermission(String node, String description, PermissionDefault defaultPermission, Permission parent, boolean defaultParent);
 
 	/**
 	 * Create permissions
