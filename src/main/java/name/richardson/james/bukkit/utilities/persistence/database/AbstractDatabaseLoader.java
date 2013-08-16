@@ -39,7 +39,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
 	private final DataSourceConfig datasourceConfig;
-	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
+	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseLoader.class);
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
 	private EbeanServer ebeanserver;
