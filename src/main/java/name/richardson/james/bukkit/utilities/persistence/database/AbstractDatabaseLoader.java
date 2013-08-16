@@ -42,37 +42,21 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
-
 	private EbeanServer ebeanserver;
 	private DdlGenerator generator;
 
-	public AbstractDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, DatabaseConfiguration configuration) {
-		Validate.notEmpty(classes, "Database classes must be provided!");
+	public AbstractDatabaseLoader(DatabaseConfiguration configuration) {
+		Validate.notEmpty(configuration.getServerConfig().getClasses(), "Database classes must be provided!");
 		Validate.notNull(configuration, "A configuration is required!");
-		Validate.notNull(classLoader, "A classloader is required!");
-		this.classes = classes;
+		this.classes = configuration.getServerConfig().getClasses();
 		this.serverConfig = configuration.getServerConfig();
 		this.datasourceConfig = configuration.getDataSourceConfig();
-		this.classLoader = classLoader;
-	}
-
-	@Override
-	public String getDeleteDLLScript() {
-		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
-		final DdlGenerator generator = server.getDdlGenerator();
-		return generator.generateDropDdl();
+		this.classLoader = configuration.getClass().getClassLoader();
 	}
 
 	@Override
 	public final EbeanServer getEbeanServer() {
 		return ebeanserver;
-	}
-
-	@Override
-	public String getGenerateDDLScript() {
-		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
-		final DdlGenerator generator = server.getDdlGenerator();
-		return generator.generateCreateDdl();
 	}
 
 	synchronized public final void initalise() {
@@ -88,7 +72,25 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		}
 	}
 
-	private void create() {
+	protected abstract void afterDatabaseCreate();
+
+	protected abstract void beforeDatabaseCreate();
+
+	protected abstract void beforeDatabaseDrop();
+
+	protected String getDeleteDLLScript() {
+		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
+		final DdlGenerator generator = server.getDdlGenerator();
+		return generator.generateDropDdl();
+	}
+
+	protected String getGenerateDDLScript() {
+		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
+		final DdlGenerator generator = server.getDdlGenerator();
+		return generator.generateCreateDdl();
+	}
+
+	private final void create() {
 		logger.log(Level.INFO, "creating-database");
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
@@ -98,13 +100,13 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		this.afterDatabaseCreate();
 	}
 
-	private void drop() {
+	private final void drop() {
 		logger.log(Level.FINER, "Dropping and destroying database.");
 		this.beforeDatabaseDrop();
 		generator.runScript(true, this.getDeleteDLLScript());
 	}
 
-	private void load() {
+	private final void load() {
 		logger.log(Level.FINE, "Loading database.");
 		final Level level = java.util.logging.Logger.getLogger("").getLevel();
 		ClassLoader currentClassLoader = null;
@@ -136,7 +138,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	 * @param generator
 	 * @param value
 	 */
-	private void setGeneratorDebug(DdlGenerator generator, boolean value) {
+	private final void setGeneratorDebug(DdlGenerator generator, boolean value) {
 		try {
 			Field field = generator.getClass().getDeclaredField("debug");
 			field.setAccessible(true);
@@ -146,7 +148,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		}
 	}
 
-	private boolean validate() {
+	private final boolean validate() {
 		for (final Class<?> ebean : this.classes) {
 			try {
 				this.ebeanserver.find(ebean).findRowCount();

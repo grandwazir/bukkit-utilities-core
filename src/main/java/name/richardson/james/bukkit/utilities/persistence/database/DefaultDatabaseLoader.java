@@ -22,22 +22,22 @@ import java.util.List;
 
 public final class DefaultDatabaseLoader extends AbstractDatabaseLoader {
 
-	public DefaultDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, DatabaseConfiguration configuration) {
-		super(classLoader, classes, configuration);
+	public DefaultDatabaseLoader(DatabaseConfiguration configuration) {
+		super(configuration);
 	}
 
 	@Override
-	public void afterDatabaseCreate() {
+	protected void afterDatabaseCreate() {
 		return;
 	}
 
 	@Override
-	public void beforeDatabaseCreate() {
+	protected void beforeDatabaseCreate() {
 		return;
 	}
 
 	@Override
-	public void beforeDatabaseDrop() {
+	protected void beforeDatabaseDrop() {
 		return;
 	}
 

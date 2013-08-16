@@ -28,55 +28,35 @@ import com.avaje.ebean.config.ServerConfig;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class MySQLDatabaseLoaderTest extends TestCase {
-
-	private final Logger logger = PluginLoggerFactory.getLogger(MySQLDatabaseLoaderTest.class);
-
-	private DatabaseConfiguration configuration;
-	private DefaultDatabaseLoader database;
-	private ArrayList<Class<?>> databaseClasses;
-
-	@Test
-	public void testInitalise()
-	throws Exception {
-		database = new DefaultDatabaseLoader(this.getClass().getClassLoader(), databaseClasses, configuration);
-		database.initalise();
-	}
+@RunWith(JUnit4.class)
+public class MySQLDatabaseLoaderTest extends AbstractDatabaseLoaderTest {
 
 	@Before
 	public void setUp()
 	throws Exception {
-		ServerConfig serverConfig = new ServerConfig();
-		serverConfig.setDefaultServer(false);
-		serverConfig.setRegister(false);
-		databaseClasses = new ArrayList<Class<?>>();
-		databaseClasses.add(TestBeanParent.class);
-		databaseClasses.add(TestBeanChild.class);
-		serverConfig.setClasses(databaseClasses);
-		serverConfig.setName("MySQLDatabaseLoaderTest");
+		ServerConfig serverConfig = getServerConfig();
 		DataSourceConfig dataSourceConfig = serverConfig.getDataSourceConfig();
 		dataSourceConfig.setUrl("jdbc:mysql://127.0.0.1:3306/test");
 		dataSourceConfig.setPassword("");
 		dataSourceConfig.setUsername("travis");
 		dataSourceConfig.setDriver("com.mysql.jdbc.Driver");
 		dataSourceConfig.setIsolationLevel(8);
-		configuration = mock(DatabaseConfiguration.class);
-		when(configuration.getDataSourceConfig()).thenReturn(dataSourceConfig);
-		when(configuration.getServerConfig()).thenReturn(serverConfig);
-		logger.setLevel(Level.ALL);
+		setDatabaseLoader(serverConfig);
 	}
 
 	public void tearDown()
 	throws Exception {
-		Method method = database.getClass().getSuperclass().getDeclaredMethod("drop");
+		Method method = getDatabaseLoader().getClass().getSuperclass().getDeclaredMethod("drop");
 		method.setAccessible(true);
-		method.invoke(database);
+		method.invoke(getDatabaseLoader());
 	}
 
 }

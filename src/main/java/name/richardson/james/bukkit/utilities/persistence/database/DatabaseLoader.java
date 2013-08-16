@@ -26,14 +26,4 @@ public interface DatabaseLoader {
 
 	public EbeanServer getEbeanServer();
 
-	public void afterDatabaseCreate();
-
-	public void beforeDatabaseCreate();
-
-	public void beforeDatabaseDrop();
-
-	public String getGenerateDDLScript();
-
-	public String getDeleteDLLScript();
-
 }

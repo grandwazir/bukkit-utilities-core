@@ -38,26 +38,24 @@ import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
  */
 public final class SQLiteDatabaseLoader extends AbstractDatabaseLoader {
 
-	private final Logger LOGGER = PluginLoggerFactory.getLogger(this.getClass());
-
-	public SQLiteDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, DatabaseConfiguration configuration) {
-		super(classLoader, classes, configuration);
+	public SQLiteDatabaseLoader(DatabaseConfiguration configuration) {
+		super(configuration);
 		configuration.getServerConfig().setDatabasePlatform(new SQLitePlatform());
 		configuration.getServerConfig().getDatabasePlatform().getDbDdlSyntax().setIdentity("");
 	}
 
 	@Override
-	public void afterDatabaseCreate() {
+	protected void afterDatabaseCreate() {
 		return;
 	}
 
 	@Override
-	public void beforeDatabaseCreate() {
+	protected void beforeDatabaseCreate() {
 		return;
 	}
 
 	@Override
-	public void beforeDatabaseDrop() {
+	protected void beforeDatabaseDrop() {
 		return;
 	}
 
@@ -65,7 +63,6 @@ public final class SQLiteDatabaseLoader extends AbstractDatabaseLoader {
 	public final String getGenerateDDLScript() {
 		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
 		final DdlGenerator generator = server.getDdlGenerator();
-		LOGGER.log(Level.FINE, "Fixing DDL script for SQLite databases.");
 		// Create a BufferedReader out of the potentially invalid script
 		final BufferedReader scriptReader = new BufferedReader(new StringReader(generator.generateCreateDdl()));
 		// Create an array to store all the lines

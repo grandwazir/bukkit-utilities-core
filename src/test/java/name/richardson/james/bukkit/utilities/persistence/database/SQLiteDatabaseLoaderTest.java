@@ -33,46 +33,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
-public class SQLiteDatabaseLoaderTest extends TestCase {
-
-	private DatabaseConfiguration configuration;
-	private SQLiteDatabaseLoader database;
-	private ArrayList<Class<?>> databaseClasses;
-
-	@Test
-	public void testInitalise()
-	throws Exception {
-		database = new SQLiteDatabaseLoader(this.getClass().getClassLoader(), databaseClasses, configuration);
-		database.initalise();
-	}
+public class SQLiteDatabaseLoaderTest extends AbstractDatabaseLoaderTest {
 
 	@Before
 	public void setUp()
 	throws Exception {
-		ServerConfig serverConfig = new ServerConfig();
-		serverConfig.setDefaultServer(false);
-		serverConfig.setRegister(false);
-		databaseClasses = new ArrayList<Class<?>>();
-		databaseClasses.add(TestBeanParent.class);
-		databaseClasses.add(TestBeanChild.class);
-		serverConfig.setClasses(databaseClasses);
-		serverConfig.setName("SQLiteDatabaseLoaderTest");
+		ServerConfig serverConfig = getServerConfig();
 		DataSourceConfig dataSourceConfig = serverConfig.getDataSourceConfig();
 		dataSourceConfig.setUrl("jdbc:sqlite::memory:");
 		dataSourceConfig.setPassword("");
 		dataSourceConfig.setUsername("travis");
 		dataSourceConfig.setDriver("org.sqlite.JDBC");
 		dataSourceConfig.setIsolationLevel(8);
-		configuration = mock(DatabaseConfiguration.class);
-		when(configuration.getDataSourceConfig()).thenReturn(dataSourceConfig);
-		when(configuration.getServerConfig()).thenReturn(serverConfig);
-	}
-
-	public void tearDown()
-	throws Exception {
-		Method method = database.getClass().getSuperclass().getDeclaredMethod("drop");
-		method.setAccessible(true);
-		method.invoke(database);
+		setDatabaseLoader(serverConfig);
 	}
 
 }

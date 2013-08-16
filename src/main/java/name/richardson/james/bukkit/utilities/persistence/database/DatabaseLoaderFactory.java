@@ -25,12 +25,11 @@ import com.avaje.ebean.config.ServerConfig;
 
 public final class DatabaseLoaderFactory {
 
-	public static DatabaseLoader getDatabaseLoader(List<Class<?>> databaseClassList, DatabaseConfiguration databaseConfiguration) {
-		ClassLoader classLoader = databaseConfiguration.getClass().getClassLoader();
+	public static DatabaseLoader getDatabaseLoader(DatabaseConfiguration databaseConfiguration) {
 		if (databaseConfiguration.getDataSourceConfig().getDriver().contains("sqlite")) {
-			return new SQLiteDatabaseLoader(classLoader, databaseClassList, databaseConfiguration);
+			return new SQLiteDatabaseLoader(databaseConfiguration);
 		} else {
-			return new DefaultDatabaseLoader(classLoader, databaseClassList, databaseConfiguration);
+			return new DefaultDatabaseLoader(databaseConfiguration);
 		}
 	}
 

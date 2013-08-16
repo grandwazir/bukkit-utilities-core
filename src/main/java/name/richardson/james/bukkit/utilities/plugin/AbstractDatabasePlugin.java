@@ -33,7 +33,7 @@ public abstract class AbstractDatabasePlugin extends AbstractPlugin {
 	 */
 	protected void loadDatabase()
 	throws IOException {
-		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.DATABASE_CONFIG_NAME);
+	/*	final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.DATABASE_CONFIG_NAME);
 		final InputStream defaults = this.getResource(DATABASE_CONFIG_NAME);
 		final ServerConfig serverConfig = new ServerConfig();
 		this.getServer().configureDbConfig(serverConfig);
@@ -45,7 +45,7 @@ public abstract class AbstractDatabasePlugin extends AbstractPlugin {
 			loader = new DefaultDatabaseLoader(this.getClassLoader(), this.getDatabaseClasses(), configuration);
 		}
 		loader.initalise();
-		this.database = loader.getEbeanServer();
+		this.database = loader.getEbeanServer();*/
 	}
 
 }

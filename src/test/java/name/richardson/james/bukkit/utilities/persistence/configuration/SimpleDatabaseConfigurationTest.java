@@ -66,7 +66,7 @@ public class SimpleDatabaseConfigurationTest extends TestCase {
 	throws Exception {
 		serverConfig = new ServerConfig();
 		datasourceConfig = new DataSourceConfig();
-		configuration = new SimpleDatabaseConfiguration(folder.newFile("database.yml"), getClass().getClassLoader().getResourceAsStream("database-default.yml"), "Test", serverConfig, datasourceConfig);
+		configuration = new SimpleDatabaseConfiguration(folder.newFile("database.yml"), getClass().getClassLoader().getResourceAsStream("database-default.yml"), "Test", serverConfig);
 	}
 
 }
