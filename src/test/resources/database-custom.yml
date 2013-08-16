@@ -1,0 +1,5 @@
+username: frank
+password: ted
+driver: org.sqf.JDBC
+isolation: READ_COMMITTED
+url: jdbc:ted:{DIR}{NAME}.db

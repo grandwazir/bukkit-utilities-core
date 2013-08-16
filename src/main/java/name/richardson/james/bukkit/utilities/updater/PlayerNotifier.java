@@ -15,7 +15,7 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.plugin.updater;
+package name.richardson.james.bukkit.utilities.updater;
 
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
@@ -26,23 +26,23 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
-import name.richardson.james.bukkit.utilities.formatters.colours.CoreColourScheme;
-import name.richardson.james.bukkit.utilities.formatters.localisation.Localised;
-import name.richardson.james.bukkit.utilities.formatters.localisation.ResourceBundles;
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
+import name.richardson.james.bukkit.utilities.formatters.DefaultColourFormatter;
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 
 /**
  * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update
  * available for the plugin. The players will be notified when they join the server. The permission required for players
  * to receive the notice is the name of the plugin in lowercase.
  */
-public class PlayerNotifier extends AbstractListener implements Localised {
+public class PlayerNotifier extends AbstractListener {
 
-	private final ResourceBundle RESOURCE_BUNDLE = ResourceBundles.MESSAGES.getBundle();
+	private final Localisation localisation = new ResourceBundleByClassLocalisation(PlayerNotifier.class);
+	private final ColourFormatter colourFormatter = new DefaultColourFormatter();
 	private final String permission;
 	private final String pluginName;
-	private final ColourScheme colourScheme = new CoreColourScheme();
 	private final PluginUpdater updater;
 
 	public PlayerNotifier(Plugin plugin, PluginManager pluginManager, PluginUpdater updater) {
@@ -50,21 +50,6 @@ public class PlayerNotifier extends AbstractListener implements Localised {
 		this.pluginName = plugin.getName();
 		this.permission = pluginName.toLowerCase();
 		this.updater = updater;
-	}
-
-	@Override
-	public ResourceBundle getResourceBundle() {
-		return RESOURCE_BUNDLE;
-	}
-
-	@Override
-	public String getMessage(String key, Object... arguments) {
-		return MessageFormat.format(getResourceBundle().getString(key), arguments);
-	}
-
-	private final String getColouredMessage(ColourScheme.Style style, String key, Object... arguments) {
-		String message = getMessage(key);
-		return colourScheme.format(style, message, arguments);
 	}
 
 	/**
@@ -76,7 +61,7 @@ public class PlayerNotifier extends AbstractListener implements Localised {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify && updater.isNewVersionAvailable()) {
-			String message = getColouredMessage(ColourScheme.Style.HEADER, "new-version-available", pluginName, updater.getRemoteVersion());
+			String message = colourFormatter.format(localisation.getMessage("new-version-available"), ColourFormatter.FormatStyle.WARNING, pluginName, updater.getRemoteVersion());
 			event.getPlayer().sendMessage(message);
 		}
 	}
