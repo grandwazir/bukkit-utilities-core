@@ -37,7 +37,7 @@ import org.apache.commons.lang.Validate;
  */
 public abstract class AbstractConfiguration {
 
-	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
+	private final Logger logger = PluginLoggerFactory.getLogger(AbstractConfiguration.class);
 	private final YamlConfiguration defaults;
 	private final File file;
 	private final boolean runtimeDefaults;
@@ -58,24 +58,20 @@ public abstract class AbstractConfiguration {
 		return this.configuration;
 	}
 
-	protected final Logger getLogger() {
-		return logger;
-	}
-
 	protected final void save()
 	throws IOException {
-		getLogger().log(Level.CONFIG, "Saving configuration: " + this.file.getName());
+		logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
 		this.configuration.save(this.file);
 	}
 
 	protected final void load()
 	throws IOException {
-		getLogger().log(Level.CONFIG, "Loading configuration: " + this.getClass().getSimpleName());
-		getLogger().log(Level.CONFIG, "Using path: " + this.file.getAbsolutePath());
+		logger.log(Level.CONFIG, "Loading configuration: " + this.getClass().getSimpleName());
+		logger.log(Level.CONFIG, "Using path: " + this.file.getAbsolutePath());
 		if (!this.file.exists() || this.file.length() == 0) {
 			this.defaults.options().copyHeader(true);
 			this.defaults.options().copyDefaults(true);
-			getLogger().log(Level.WARNING, "saving-default-configuration", this.file.getName());
+			logger.log(Level.WARNING, "saving-default-configuration", this.file.getName());
 			defaults.save(this.file);
 		}
 		this.configuration = YamlConfiguration.loadConfiguration(this.file);
