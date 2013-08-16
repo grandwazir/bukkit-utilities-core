@@ -32,16 +32,15 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
-import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
 	private final DataSourceConfig datasourceConfig;
-	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
+	private final Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
 

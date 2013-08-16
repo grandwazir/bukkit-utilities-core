@@ -20,15 +20,10 @@ package name.richardson.james.bukkit.utilities.persistence.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Logger;
-
-import org.bukkit.Bukkit;
 
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
-
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 public final class SimpleDatabaseConfiguration extends AbstractConfiguration implements DatabaseConfiguration {
 

@@ -20,29 +20,24 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import junit.framework.TestCase;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
-import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class MySQLDatabaseLoaderTest extends TestCase {
 
-	private final Logger logger = PrefixedLogger.getLogger(MySQLDatabaseLoaderTest.class);
+	private final Logger logger = AbstractPrefixedLogger.getLogger(MySQLDatabaseLoaderTest.class);
 
 	private DatabaseConfiguration configuration;
 	private DefaultDatabaseLoader database;

@@ -18,7 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.plugin.updater;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -31,21 +31,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.PluginDescriptionFile;
-
-import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
 
 /**
  * The MavenPluginUpdater implementation of {@link PluginUpdater} checks the maven repository attached to a plugin to
@@ -54,7 +49,7 @@ import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
  */
 public class MavenPluginUpdater extends AbstractPluginUpdater {
 
-	private static final Logger logger = PrefixedLogger.getLogger(MavenPluginUpdater.class);
+	private static final Logger logger = AbstractPrefixedLogger.getLogger(MavenPluginUpdater.class);
 	private final String artifactId;
 	private final String groupId;
 	private MavenManifest manifest;

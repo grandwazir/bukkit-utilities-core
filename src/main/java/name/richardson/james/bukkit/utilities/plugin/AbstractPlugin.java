@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,7 +41,7 @@ public abstract class AbstractPlugin extends JavaPlugin {
 	public static final String CONFIG_NAME = "config.yml";
 	public static final String DATABASE_CONFIG_NAME = "database.yml";
 
-	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
+	private final Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
 
 	private PluginConfiguration configuration;
 	private PermissionManager permissionManager;

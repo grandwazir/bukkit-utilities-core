@@ -29,7 +29,7 @@ import org.bukkit.command.CommandSender;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
  * An example implementation of {@link CommandContext}. This implementation makes no additional verification checks on requested arguments and may throw
@@ -43,7 +43,7 @@ public class AbstractCommandContext implements CommandContext {
 
 	private final List<String> arguments = new ArrayList<String>();
 	private final Map<String, String> flags = new HashMap<String, String>();
-	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
+	private final Logger logger = PluginLoggerFactory.getLogger(AbstractCommandContext.class);
 	private final CommandSender sender;
 
 	public AbstractCommandContext(String[] arguments, CommandSender sender) {

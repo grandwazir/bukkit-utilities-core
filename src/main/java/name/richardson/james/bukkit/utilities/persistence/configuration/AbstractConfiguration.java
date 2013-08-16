@@ -24,7 +24,8 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.apache.commons.lang.Validate;
@@ -35,7 +36,7 @@ import org.apache.commons.lang.Validate;
  */
 public abstract class AbstractConfiguration {
 
-	private final Logger logger = PrefixedLogger.getLogger(this.getClass());
+	private final Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
 	private final YamlConfiguration defaults;
 	private final File file;
 	private final boolean runtimeDefaults;

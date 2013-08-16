@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- PrefixedLoggerTest.java is part of bukkit-utilities.
+ AbstractPluginLoggerTest.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -23,9 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import junit.framework.Assert.*;
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Matchers.anyObject;
@@ -33,12 +31,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class PrefixedLoggerTest extends TestCase {
+public class AbstractPluginLoggerTest extends TestCase {
 
 	@Test
 	public void testLogLocalisedMessage()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger(this.getClass());
+		Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
 		Handler handler = mock(Handler.class);
 		logger.addHandler(handler);
 	  logger.info("test-message");
@@ -48,7 +46,7 @@ public class PrefixedLoggerTest extends TestCase {
 	@Test
 	public void testNormalLog()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger(this.getClass());
+		Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
 		Handler handler = mock(Handler.class);
 		logger.addHandler(handler);
 		logger.setLevel(Level.INFO);
@@ -64,7 +62,7 @@ public class PrefixedLoggerTest extends TestCase {
 	@Test
 	public void testDebugLog()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger(this.getClass());
+		Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
 		Handler handler = mock(Handler.class);
 		logger.addHandler(handler);
 		logger.setLevel(Level.ALL);
@@ -80,15 +78,15 @@ public class PrefixedLoggerTest extends TestCase {
 	@Test
 	public void testParentResolution()
 	throws Exception {
-		Logger logger1 = PrefixedLogger.getLogger("name.richardson.james.bukkit.utilities.logging");
-		Logger logger2 = PrefixedLogger.getLogger("name.richardson.james.bukkit.utilities.logging.resolution.frank");
+		Logger logger1 = AbstractPrefixedLogger.getLogger("name.richardson.james.bukkit.utilities.logging");
+		Logger logger2 = AbstractPrefixedLogger.getLogger("name.richardson.james.bukkit.utilities.logging.resolution.frank");
 		assertEquals("Logger parent has not been set correctly!!", logger1, logger2.getParent());
 	}
 
 	@Test
 	public void testGetLoggerByName()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger("name.richardson.james.bukkit.utilities.logging");
+		Logger logger = AbstractPrefixedLogger.getLogger("name.richardson.james.bukkit.utilities.logging");
 		assertNotNull("Logger should not be null!", logger);
 		assertEquals("Logger name is not correct!", "name.richardson.james.bukkit.utilities.logging", logger.getName());
 	}
@@ -96,15 +94,15 @@ public class PrefixedLoggerTest extends TestCase {
 	@Test
 	public void testGetLoggerByClass()
 	throws Exception {
-		Logger logger = PrefixedLogger.getLogger(this.getClass());
+		Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
 		assertNotNull("Logger should not be null!", logger);
 		assertEquals("Logger name is not correct!", "name.richardson.james.bukkit.utilities.logging", logger.getName());
 	}
 
 	@Test
 	public void testNoDuplicateLogger() {
-		Logger logger1 = PrefixedLogger.getLogger(this.getClass());
-		Logger logger2 = PrefixedLogger.getLogger(this.getClass());
+		Logger logger1 = AbstractPrefixedLogger.getLogger(this.getClass());
+		Logger logger2 = AbstractPrefixedLogger.getLogger(this.getClass());
 		assertEquals("Both loggers should be the same instance!", logger1, logger2);
 	}
 
