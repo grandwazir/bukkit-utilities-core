@@ -28,6 +28,7 @@ import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.persistence.configuration.PluginConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.configuration.SimplePluginConfiguration;
@@ -41,7 +42,7 @@ public abstract class AbstractPlugin extends JavaPlugin {
 	public static final String CONFIG_NAME = "config.yml";
 	public static final String DATABASE_CONFIG_NAME = "database.yml";
 
-	private final Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
+	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 
 	private PluginConfiguration configuration;
 	private PermissionManager permissionManager;

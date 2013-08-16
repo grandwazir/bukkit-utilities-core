@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
 import static org.mockito.Mockito.mock;
@@ -37,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 public class MySQLDatabaseLoaderTest extends TestCase {
 
-	private final Logger logger = AbstractPrefixedLogger.getLogger(MySQLDatabaseLoaderTest.class);
+	private final Logger logger = PluginLoggerFactory.getLogger(MySQLDatabaseLoaderTest.class);
 
 	private DatabaseConfiguration configuration;
 	private DefaultDatabaseLoader database;

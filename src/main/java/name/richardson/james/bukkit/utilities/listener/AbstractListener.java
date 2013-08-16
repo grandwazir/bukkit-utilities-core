@@ -25,10 +25,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 public class AbstractListener implements Listener {
 
-	private final Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
+	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 
 	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
 		if (getLogger().isLoggable(Level.FINEST)) getLogger().log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events.");

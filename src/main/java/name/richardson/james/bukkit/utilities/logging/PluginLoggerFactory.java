@@ -19,6 +19,10 @@
 package name.richardson.james.bukkit.utilities.logging;
 
 import java.io.File;
+import java.net.URL;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -29,9 +33,11 @@ public class PluginLoggerFactory {
 		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
 		if (logger != null) return logger;
 		String resourceBundleName = getResourceBundleName(classz);
-		if (resourceExists(resourceBundleName)) {
+		if (resourceExists(classz, resourceBundleName)) {
+			System.out.print("Bundle exists!");
 			return new PermissivePrefixedLogger(name, getResourceBundleName(classz));
 		} else {
+			System.out.print("Bundle does not exist!");
 			return new PermissivePrefixedLogger(name, null);
 		}
 
@@ -41,9 +47,13 @@ public class PluginLoggerFactory {
 		return "localisation" + "/" + classz.getSimpleName();
 	}
 
-	private static final boolean resourceExists(String resourcePath) {
-		File f = new File(resourcePath);
-		return f.exists();
+	private static final boolean resourceExists(Class classz, String resourcePath) {
+		try {
+			ResourceBundle resourceBundle = ResourceBundle.getBundle(resourcePath, Locale.getDefault(), classz.getClassLoader());
+		} catch (MissingResourceException e) {
+			return false;
+		}
+		return true;
 	}
 
 

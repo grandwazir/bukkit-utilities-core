@@ -19,6 +19,8 @@
 package name.richardson.james.bukkit.utilities.plugin.updater;
 
 import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
+
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -41,6 +43,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginLogger;
 
 /**
  * The MavenPluginUpdater implementation of {@link PluginUpdater} checks the maven repository attached to a plugin to
@@ -49,7 +52,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
  */
 public class MavenPluginUpdater extends AbstractPluginUpdater {
 
-	private static final Logger logger = AbstractPrefixedLogger.getLogger(MavenPluginUpdater.class);
+	private static final Logger logger = PluginLoggerFactory.getLogger(MavenPluginUpdater.class);
 	private final String artifactId;
 	private final String groupId;
 	private MavenManifest manifest;

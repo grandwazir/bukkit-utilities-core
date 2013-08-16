@@ -31,6 +31,7 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 
 import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
 /**
@@ -39,7 +40,7 @@ import name.richardson.james.bukkit.utilities.persistence.configuration.Database
  */
 public final class SQLiteDatabaseLoader extends AbstractDatabaseLoader {
 
-	private final Logger LOGGER = AbstractPrefixedLogger.getLogger(this.getClass());
+	private final Logger LOGGER = PluginLoggerFactory.getLogger(this.getClass());
 
 	public SQLiteDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, DatabaseConfiguration configuration) {
 		super(classLoader, classes, configuration);

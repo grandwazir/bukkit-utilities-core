@@ -30,13 +30,14 @@ import org.bukkit.plugin.PluginManager;
 import org.apache.commons.lang.StringUtils;
 
 import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
  * An implementation of {@link PermissionManager} using the Bukkit SuperPerms system.
  */
 public final class BukkitPermissionManager implements PermissionManager {
 
-	private final Logger logger = AbstractPrefixedLogger.getLogger(BukkitPermissionManager.class);
+	private final Logger logger = PluginLoggerFactory.getLogger(BukkitPermissionManager.class);
 	private final PluginManager pluginManager;
 	private final List<Permission> permissions = new ArrayList<Permission>();
 

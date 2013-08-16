@@ -33,6 +33,7 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
@@ -40,7 +41,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
 	private final DataSourceConfig datasourceConfig;
-	private final Logger logger = AbstractPrefixedLogger.getLogger(this.getClass());
+	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
 

@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.logging;
 
+import java.util.logging.Logger;
+
 public interface PrefixedLogger {
 
 	public String getPrefix();
