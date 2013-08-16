@@ -24,49 +24,36 @@ import java.util.Set;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.mockito.Mockito.RETURNS_SMART_NULLS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OfflinePlayerMatcherTest extends TestCase {
+@RunWith(JUnit4.class)
+public class OfflinePlayerMatcherTest extends PlayerMatcherTest {
 
-	private OfflinePlayerMatcher matcher;
-
-	@Mock
-	private Server server;
-
-	@Test
-	public void testMatches()
-	throws Exception {
-		OfflinePlayer[] players = getOfflinePlayers(52);
-		when(server.getOfflinePlayers()).thenReturn(players);
-		matcher = new OfflinePlayerMatcher(server);
-		Set<String> matches = matcher.matches("");
-		Assert.assertTrue("Expected list size of 50, got " + matches.size(), matches.size() == 50);
-		String expectedName = players[0].getName();
-		String searchName = players[0].getName().substring(0, 4);
-		matches = matcher.matches(searchName);
-		Assert.assertTrue("List does not contain expected name! " + expectedName, matches.contains(expectedName));
+	@Before
+	public void setUp() {
+		super.setUp();
+		setMatcher(new OfflinePlayerMatcher(getServer()));
 	}
 
-	public static OfflinePlayer[] getOfflinePlayers(int number) {
-		int count;
-		List<OfflinePlayer> players = new ArrayList<OfflinePlayer>();
-		for (count = 0; count < number; count++) {
-			OfflinePlayer player = mock(OfflinePlayer.class);
-			when(player.getName()).thenReturn(RandomStringUtils.randomAlphanumeric(8));
-			players.add(player);
-		}
-		return players.toArray(new OfflinePlayer[players.size()]);
+	protected Player[] setPlayers() {
+		Player[] players = getPlayers();
+		when(getServer().getOfflinePlayers()).thenReturn(players);
+		return players;
 	}
+
 
 }
