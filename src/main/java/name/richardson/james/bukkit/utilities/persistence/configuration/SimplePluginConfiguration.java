@@ -24,9 +24,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
-import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater.Branch;
-import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater.State;
+import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
 public class SimplePluginConfiguration extends AbstractConfiguration implements PluginConfiguration {
 

@@ -119,18 +119,17 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		final String password = this.getConfiguration().getString(PASSWORD_KEY);
 		if (password != null) {
 			logger.log(Level.CONFIG, "override-value", new Object[]{PASSWORD_KEY, maskString(password)});
-			this.dataSourceConfig.setUsername(password);
+			this.dataSourceConfig.setPassword(password);
 		}
 	}
 
 	private void setUrl() {
 		final String url = this.getConfiguration().getString("url");
 		if (url != null) {
-			this.dataSourceConfig.setUrl(this.replaceDatabaseString(url));
 			logger.log(Level.CONFIG, "override-value", new Object[]{URL_KEY, url});
 			this.dataSourceConfig.setUrl(replaceDatabaseString(url));
 		} else {
-			this.dataSourceConfig.setUrl(this.replaceDatabaseString(dataSourceConfig.getUrl()));
+			this.dataSourceConfig.setUrl(replaceDatabaseString(dataSourceConfig.getUrl()));
 		}
 	}
 

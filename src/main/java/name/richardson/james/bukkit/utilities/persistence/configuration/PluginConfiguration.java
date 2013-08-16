@@ -19,7 +19,7 @@ package name.richardson.james.bukkit.utilities.persistence.configuration;
 
 import java.util.logging.Level;
 
-import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 
 public interface PluginConfiguration {
 

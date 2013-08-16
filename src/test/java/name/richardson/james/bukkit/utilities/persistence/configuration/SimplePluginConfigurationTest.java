@@ -28,7 +28,7 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 
 @RunWith(JUnit4.class)
 public class SimplePluginConfigurationTest extends TestCase {

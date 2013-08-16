@@ -1,4 +1,4 @@
-package name.richardson.james.bukkit.utilities.plugin.updater;
+package name.richardson.james.bukkit.utilities.updater;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 

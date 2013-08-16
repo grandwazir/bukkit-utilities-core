@@ -1,12 +1,10 @@
-package name.richardson.james.bukkit.utilities.plugin.updater;
+package name.richardson.james.bukkit.utilities.updater;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
-
-import junit.framework.Assert.*;
 
 /**
  * Created with IntelliJ IDEA. User: james Date: 13/07/13 Time: 15:48 To change this template use File | Settings | File Templates.
