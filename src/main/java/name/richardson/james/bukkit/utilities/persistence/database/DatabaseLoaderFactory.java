@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- DefaultDatabaseLoader.java is part of bukkit-utilities.
+ DatabaseLoaderFactory.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -20,25 +20,18 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 
 import java.util.List;
 
-public final class DefaultDatabaseLoader extends AbstractDatabaseLoader {
+import com.avaje.ebean.config.DataSourceConfig;
+import com.avaje.ebean.config.ServerConfig;
 
-	public DefaultDatabaseLoader(ClassLoader classLoader, List<Class<?>> classes, DatabaseConfiguration configuration) {
-		super(classLoader, classes, configuration);
-	}
+public final class DatabaseLoaderFactory {
 
-	@Override
-	public void afterDatabaseCreate() {
-		return;
-	}
-
-	@Override
-	public void beforeDatabaseCreate() {
-		return;
-	}
-
-	@Override
-	public void beforeDatabaseDrop() {
-		return;
+	public static DatabaseLoader getDatabaseLoader(List<Class<?>> databaseClassList, DatabaseConfiguration databaseConfiguration) {
+		ClassLoader classLoader = databaseConfiguration.getClass().getClassLoader();
+		if (databaseConfiguration.getDataSourceConfig().getDriver().contains("sqlite")) {
+			return new SQLiteDatabaseLoader(classLoader, databaseClassList, databaseConfiguration);
+		} else {
+			return new DefaultDatabaseLoader(classLoader, databaseClassList, databaseConfiguration);
+		}
 	}
 
 }

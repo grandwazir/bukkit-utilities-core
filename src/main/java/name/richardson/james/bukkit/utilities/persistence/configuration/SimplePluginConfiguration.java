@@ -21,7 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.plugin.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.plugin.updater.PluginUpdater.State;
@@ -33,11 +35,13 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 	private static final String LOGGING_KEY = "logging";
 	private static final String STATISTICS_KEY = "send-anonymous-statistics";
 
+	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
+
 	public SimplePluginConfiguration(final File file, final InputStream defaults) throws IOException {
 		super(file, defaults, true);
 	}
 
-	public Branch getAutomaticUpdaterBranch() {
+	public final Branch getAutomaticUpdaterBranch() {
 			final MavenPluginUpdater.Branch defaultBranch = MavenPluginUpdater.Branch.STABLE;
 			try {
 				return MavenPluginUpdater.Branch.valueOf(this.getConfiguration().getString(BRANCH_KEY));
@@ -48,7 +52,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 			}
 		}
 
-	public State getAutomaticUpdaterState() {
+	public final State getAutomaticUpdaterState() {
 		final MavenPluginUpdater.State defaultState = MavenPluginUpdater.State.NOTIFY;
 		try {
 			return MavenPluginUpdater.State.valueOf(this.getConfiguration().getString(UPDATER_STATE_KEY));
@@ -59,7 +63,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		}
 	}
 
-	public Level getLogLevel() {
+	public final Level getLogLevel() {
 		final Level defaultLevel = Level.INFO;
 		try {
 			return Level.parse(this.getConfiguration().getString(LOGGING_KEY));
@@ -70,11 +74,13 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		}
 	}
 
-	public boolean isCollectingStats() {
+	public final boolean isCollectingStats() {
 		final boolean defaultValue = true;
 		return this.getConfiguration().getBoolean(STATISTICS_KEY, defaultValue);
 	}
 
-
+	protected final Logger getLogger() {
+		return logger;
+	}
 
 }

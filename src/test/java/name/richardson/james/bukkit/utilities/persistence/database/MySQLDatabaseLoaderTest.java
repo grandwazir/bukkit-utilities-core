@@ -29,9 +29,7 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

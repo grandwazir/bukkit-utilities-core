@@ -7,7 +7,7 @@ import java.io.InputStream;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.config.ServerConfig;
 
-import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.persistence.database.SimpleDatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.database.DatabaseLoader;
 import name.richardson.james.bukkit.utilities.persistence.database.DefaultDatabaseLoader;
 import name.richardson.james.bukkit.utilities.persistence.database.SQLiteDatabaseLoader;

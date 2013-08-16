@@ -18,25 +18,16 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
-import com.avaje.ebean.config.dbplatform.SQLitePlatform;
 import junit.framework.TestCase;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
-import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

@@ -30,9 +30,7 @@ import com.avaje.ebean.config.dbplatform.SQLitePlatform;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 
-import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
 /**
  * SQLite storage handles loading SQLite databases. Due to bug in the persistence library that Bukkit uses attempting to create a database with key constraists

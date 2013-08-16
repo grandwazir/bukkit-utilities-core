@@ -28,6 +28,8 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import name.richardson.james.bukkit.utilities.persistence.database.SimpleDatabaseConfiguration;
+
 import static org.mockito.Mockito.mock;
 
 @RunWith(JUnit4.class)
