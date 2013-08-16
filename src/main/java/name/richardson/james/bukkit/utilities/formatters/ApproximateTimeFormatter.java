@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- JodaTimeFormatterTest.java is part of bukkit-utilities.
+ PreciseTimeFormatter.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -18,31 +18,18 @@
 
 package name.richardson.james.bukkit.utilities.formatters;
 
-import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import java.util.Date;
 
-@RunWith(JUnit4.class)
-public class JodaTimeFormatterTest extends TestCase {
+import org.ocpsoft.prettytime.Duration;
+import org.ocpsoft.prettytime.PrettyTime;
 
-	private TimeFormatter formatter;
+public class ApproximateTimeFormatter extends AbstractTimeFormatter {
 
-	@Test
-	public void getDurationInMilliseconds_ReturnCorrectTime() {
-		assertEquals(109815000, formatter.getDurationInMilliseconds("1d6h30m15s"));
-	}
-
-	@Test
-	public void getHumanReadableDuration_ReturnCorrectTime() {
-		assertEquals("1 day, 6 hours, 30 minutes and 15 seconds", formatter.getHumanReadableDuration(109815000));
-	}
-
-	@Before
-	public void setUp()
-	throws Exception {
-		formatter = new LocalisedTimeFormatter();
+	@Override
+	public String getHumanReadableDuration(long time) {
+		Date date = new Date(time);
+		PrettyTime timeFormatter = new PrettyTime();
+		return timeFormatter.format(date);
 	}
 
 }

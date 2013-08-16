@@ -26,7 +26,7 @@
               <artifactSet>
                 <includes>
                   <include>org.apache.maven:maven-artifact</include>
-                  <include>joda-time:joda-time</include>
+                  <include>org.ocpsoft.prettytime:prettytime</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -35,11 +35,11 @@
                   <shadedPattern>name.richardson.james.bukkit.utilities.artifact</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>org.joda.time</pattern>
+                  <pattern>org.ocpsoft.prettytime</pattern>
                   <shadedPattern>name.richardson.james.bukkit.utilities.time</shadedPattern>
                 </relocation>
               </relocations>
-              <minimizeJar>true</minimizeJar>
+              <minimizeJar>false</minimizeJar>
             </configuration>
           </execution>
         </executions>
@@ -53,6 +53,12 @@
     </repository>
   </repositories>
   <dependencies>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.2</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>

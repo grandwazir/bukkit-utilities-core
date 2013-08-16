@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v6.1.0-SNAPSHOT)
 
+2013-08-16 00:48:45 +0100    moved into the right package (James Richardson)  
 2013-08-16 01:19:39 +0100    add tests for new formatter (James Richardson)  
 2013-08-16 01:18:21 +0100    refactored tests together (James Richardson)  
 2013-08-16 00:41:42 +0100    more refactoring (James Richardson)  
