@@ -18,10 +18,25 @@
 
 package name.richardson.james.bukkit.utilities.formatters;
 
+/**
+ * Converts times represented within Strings to milliseconds and back again.
+ */
 public interface TimeFormatter {
 
+	/**
+	 * Return the milliseconds represented by the String provided.
+	 *
+	 * @param timeString the string to parse.
+	 * @return the number of milliseconds it represents.
+	 */
 	public long getDurationInMilliseconds(String timeString);
 
+	/**
+	 * Return the human readable duration for a given number of milliseconds.
+	 *
+	 * @param time the number of milliseconds
+	 * @return the string representing the number of milliseconds in a human readable format.
+	 */
 	public String getHumanReadableDuration(long time);
 
 }

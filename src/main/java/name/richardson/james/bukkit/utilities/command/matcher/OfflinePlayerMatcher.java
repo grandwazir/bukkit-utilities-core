@@ -22,10 +22,16 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 
+/**
+ * Matches arguments against a list of OfflinePlayer names and returns any possible matches. Used for returning a list of possible player names for tab
+ * completion when using commands interactively.
+ * <p/>
+ * At the moment all known offline players are iterated each time a match request is made making this matcher potentially slow on busier servers. If possible
+ * use {@link OnlinePlayerMatcher} instead or implement a custom matcher that is more accurate for your requirements.
+ */
 public class OfflinePlayerMatcher implements Matcher {
 
 	private final Server server;
@@ -34,6 +40,14 @@ public class OfflinePlayerMatcher implements Matcher {
 		this.server = server;
 	}
 
+	/**
+	 * Return all offline player names that start with the specified argument.
+	 * <p/>
+	 * This method is case insensitive.
+	 *
+	 * @param argument the argument to use for matching
+	 * @return the set containing all the possible matches, ordered alphabetically.
+	 */
 	@Override
 	public Set<String> matches(String argument) {
 		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);

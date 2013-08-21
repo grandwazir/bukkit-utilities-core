@@ -87,6 +87,10 @@ public class AbstractCommandTest extends CommandTestCase {
 		Assert.assertEquals(command.getArgumentMatches(commandContext), new HashSet<String>(Arrays.asList("1", "2", "3")));
 	}
 
+	@Test
+	public void getDescription_ReturnDescription() {
+		Assert.assertEquals(command.getDescription(), "test");
+	}
 
 	private void configureCommandContext(CommandContext commandContext) {
 		when(commandContext.size()).thenReturn(1);

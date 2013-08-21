@@ -20,10 +20,21 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 
 import com.avaje.ebean.EbeanServer;
 
+/**
+ * Loads and initalises an Ebean server. Once the database is initalised the loader holds an instance of the database for plugins to use.
+ */
 public interface DatabaseLoader {
 
+	/**
+	 * Initalise the database.
+	 */
 	public void initalise();
 
+	/**
+	 * Returns the Ebean server created by this database loader.
+	 *
+	 * @return the EBean server.
+	 */
 	public EbeanServer getEbeanServer();
 
 }

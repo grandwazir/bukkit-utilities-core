@@ -27,6 +27,9 @@ import org.bukkit.plugin.PluginManager;
 import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
+/**
+ * Provides a class which automatically registers itself as a listener with the Bukkit PluginManager. This class should be used for convenience when creating your own listeners.
+ */
 public class AbstractListener implements Listener {
 
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
@@ -36,7 +39,12 @@ public class AbstractListener implements Listener {
 		pluginManager.registerEvents(this, plugin);
 	}
 
-	protected Logger getLogger() {
+	/**
+	 * Return the PrefixedLogger belonging to this class.
+	 *
+	 * @return the logger belonging to this class.
+	 */
+	protected final Logger getLogger() {
 		return logger;
 	}
 

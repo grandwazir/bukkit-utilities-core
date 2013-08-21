@@ -18,14 +18,19 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database;
 
-import java.util.List;
-
-import com.avaje.ebean.config.DataSourceConfig;
-import com.avaje.ebean.config.ServerConfig;
-
+/**
+ * Create and return a suitable database loader depending on the database configuration provided. This is used to abstract away the implementation requirement
+ * to have a different database loader for SQLite due to a bug in the schema generation when using the Ebean versions shipped with Bukkit.
+ */
 public final class DatabaseLoaderFactory {
 
-	public static DatabaseLoader getDatabaseLoader(DatabaseConfiguration databaseConfiguration) {
+	/**
+	 * Returns a database loader configured with the provided database configuration.
+	 *
+	 * @param databaseConfiguration the configuration to use for the database loader
+	 * @return the database loader
+	 */
+	public final static DatabaseLoader getDatabaseLoader(DatabaseConfiguration databaseConfiguration) {
 		if (databaseConfiguration.getDataSourceConfig().getDriver().contains("sqlite")) {
 			return new SQLiteDatabaseLoader(databaseConfiguration);
 		} else {

@@ -23,6 +23,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
+/**
+ * Logs all messages regardless of if they can be localised or not. Messages which can not be localised are logged without modification.
+ */
 public class PermissivePrefixedLogger extends AbstractPrefixedLogger {
 
 	protected PermissivePrefixedLogger(String name, String resourceBundleName) {

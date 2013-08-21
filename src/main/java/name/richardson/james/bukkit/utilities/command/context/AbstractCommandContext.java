@@ -46,6 +46,12 @@ public class AbstractCommandContext implements CommandContext {
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractCommandContext.class);
 	private final CommandSender sender;
 
+	/**
+	 * Constructs a new AbstractCommandContext with the arguments and CommandSender.
+	 *
+	 * @param arguments provided arguments
+	 * @param sender the CommandSender executing the command
+	 */
 	public AbstractCommandContext(String[] arguments, CommandSender sender) {
 		Validate.notNull(arguments);
 		Validate.notNull(sender);

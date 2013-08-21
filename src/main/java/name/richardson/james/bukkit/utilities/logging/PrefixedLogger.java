@@ -20,10 +20,23 @@ package name.richardson.james.bukkit.utilities.logging;
 
 import java.util.logging.Logger;
 
+/**
+ * Provides a prefix and debugging prefix which may be applied to logging messages in certain circumstances.
+ */
 public interface PrefixedLogger {
 
+	/**
+	 * Returns the prefix to be placed in front of log messages when the logger is set at INFO or above.
+	 *
+	 * @return the prefix to be used.
+	 */
 	public String getPrefix();
 
+	/**
+	 * Returns the prefix to be placed in front of log messages when the logger is set at FINE or below.
+	 *
+	 * @return the prefix to be used.
+	 */
 	public String getDebuggingPrefix();
 
 }

@@ -4,6 +4,13 @@ import java.text.MessageFormat;
 
 import org.bukkit.ChatColor;
 
+/**
+ * Provides colour formatting for messages depending on the severity of the message. Additionally colours arguments provided in a different colour, using the
+ * formatting style one level below.
+ * <p/>
+ * For example formatting a error message with arguments would result in a red message and the arguments in yellow. Formatting the same message as a warning
+ * would result in a yellow message with green arguments. For a full list of colours see the constants specified in this class.
+ */
 public class DefaultColourFormatter implements ColourFormatter {
 
 	private static final ChatColor WARNING = ChatColor.YELLOW;

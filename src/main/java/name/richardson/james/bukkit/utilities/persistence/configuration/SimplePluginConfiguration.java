@@ -28,12 +28,17 @@ import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
+/**
+ * Represents a basic plugin configuration. This is designed to be extended to create custom plugin configuration.
+ */
 public class SimplePluginConfiguration extends AbstractConfiguration implements PluginConfiguration {
 
 	private static final String BRANCH_KEY = "automatic-updates.branch";
 	private static final String UPDATER_STATE_KEY = "automatic-updates.method";
 	private static final String LOGGING_KEY = "logging";
 	private static final String STATISTICS_KEY = "send-anonymous-statistics";
+
+	private static final String INVALID_CONFIGURATION_VALUE_KEY = "invalid-configuration-value";
 
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 
@@ -46,7 +51,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 			try {
 				return MavenPluginUpdater.Branch.valueOf(this.getConfiguration().getString(BRANCH_KEY));
 			} catch (final IllegalArgumentException e) {
-				getLogger().log(Level.WARNING, "invalid-configuration-value", BRANCH_KEY);
+				getLogger().log(Level.WARNING, INVALID_CONFIGURATION_VALUE_KEY, BRANCH_KEY);
 				this.getConfiguration().set(BRANCH_KEY, defaultBranch.name());
 				return defaultBranch;
 			}
@@ -57,7 +62,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		try {
 			return MavenPluginUpdater.State.valueOf(this.getConfiguration().getString(UPDATER_STATE_KEY));
 		} catch (final IllegalArgumentException e) {
-			getLogger().log(Level.WARNING, "invalid-configuration-value", UPDATER_STATE_KEY);
+			getLogger().log(Level.WARNING, INVALID_CONFIGURATION_VALUE_KEY, UPDATER_STATE_KEY);
 			this.getConfiguration().set(UPDATER_STATE_KEY, defaultState.name());
 			return defaultState;
 		}
@@ -68,7 +73,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		try {
 			return Level.parse(this.getConfiguration().getString(LOGGING_KEY));
 		} catch (final IllegalArgumentException e) {
-			getLogger().log(Level.WARNING, "invalid-configuration-value", LOGGING_KEY);
+			getLogger().log(Level.WARNING, INVALID_CONFIGURATION_VALUE_KEY, LOGGING_KEY);
 			this.getConfiguration().set(LOGGING_KEY, defaultLevel.getName());
 			return defaultLevel;
 		}

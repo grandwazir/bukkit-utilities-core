@@ -22,13 +22,12 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 /**
- * An OnlinePlayerMatcher attempts to match an argument against a list of all the {@link Player} known to the server.
- *
+ * Matches arguments against a list of currently online players and returns any possible matches. Used for returning a list of possible player names for tab
+ * completion when using commands interactively.
  */
 public class OnlinePlayerMatcher implements Matcher {
 
@@ -38,6 +37,14 @@ public class OnlinePlayerMatcher implements Matcher {
 		this.server = server;
 	}
 
+	/**
+	 * Return all online player names that start with the specified argument.
+	 * <p/>
+	 * This method is case insensitive.
+	 *
+	 * @param argument the argument to use for matching
+	 * @return the set containing all the possible matches, ordered alphabetically.
+	 */
 	@Override
 	public Set<String> matches(String argument) {
 		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
@@ -49,5 +56,7 @@ public class OnlinePlayerMatcher implements Matcher {
 		}
 		return results;
 	}
+
+
 
 }

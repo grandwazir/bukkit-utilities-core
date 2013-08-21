@@ -19,7 +19,6 @@
 package name.richardson.james.bukkit.utilities.command.invoker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
@@ -39,15 +38,20 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 
 	private final Command fallthroughCommand;
 
-	public FallthroughCommandInvoker(Command fallthroughCommand) {
-		Validate.notNull(fallthroughCommand);
-		this.fallthroughCommand = fallthroughCommand;
+	/**
+	 * Constructs a FallthroughCommandInvoker with a default command.
+	 *
+	 * @param command the command that the invoker should execute if it is unable to match with any other command.
+	 */
+	public FallthroughCommandInvoker(Command command) {
+		Validate.notNull(command);
+		this.fallthroughCommand = command;
 	}
 
 	@Override
 	public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command bukkitCommand, String commandLabel, String[] arguments) {
 		String commandName = (arguments.length == 0) ? null : arguments[0];
-		if (commandName != null &&  getCommands().containsKey(commandName)) {
+		if (commandName != null && getCommands().containsKey(commandName)) {
 			Command command = getCommands().get(commandName);
 			CommandContext commandContext = new NestedCommandContext(arguments, commandSender);
 			command.execute(commandContext);

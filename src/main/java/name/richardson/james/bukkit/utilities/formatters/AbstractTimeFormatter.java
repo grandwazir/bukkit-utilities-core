@@ -22,14 +22,27 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Provides a final implementation of {@code getDurationInMilliseconds}. This class should be used when implementing other TimeFormatters which return different
+ * style human readable durations.
+ */
 public abstract class AbstractTimeFormatter implements TimeFormatter {
 
 	private final Matcher inputFormatter = Pattern.compile("(\\d+)(\\w)").matcher("");
 
+	/**
+	 * Return the time in milliseconds represented by the String.
+	 * <p/>
+	 * This method expects a String to be in the following format {@code xdxhxmxs} where x are units of time. d are days, h are hours, m are minutes and s are
+	 * seconds. Any units which are not understood by the parser will be ignored.
+	 *
+	 * @param timeString the string to parse.
+	 * @return the number of milliseconds represented by the String.
+	 */
 	public final long getDurationInMilliseconds(String timeString) {
 		long duration = 0;
 		getInputFormatter().reset(timeString.toLowerCase(Locale.ENGLISH));
-		while(getInputFormatter().find()) {
+		while (getInputFormatter().find()) {
 			int value = Integer.parseInt(getInputFormatter().group(1));
 			String unit = getInputFormatter().group(2);
 			if (unit.equalsIgnoreCase("d")) {
@@ -45,6 +58,11 @@ public abstract class AbstractTimeFormatter implements TimeFormatter {
 		return duration;
 	}
 
+	/**
+	 * The regular expression matcher used to parse the input for {@code getDurationInMilliseconds}.
+	 *
+	 * @return the matcher
+	 */
 	protected final Matcher getInputFormatter() {
 		return inputFormatter;
 	}

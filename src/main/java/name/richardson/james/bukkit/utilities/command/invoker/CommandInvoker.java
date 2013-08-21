@@ -19,32 +19,36 @@
 package name.richardson.james.bukkit.utilities.command.invoker;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import org.bukkit.command.TabExecutor;
 
 import name.richardson.james.bukkit.utilities.command.Command;
-import name.richardson.james.bukkit.utilities.command.context.AbstractCommandContext;
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 
+/**
+ * Manages and handles the execution of {@link name.richardson.james.bukkit.utilities.command.Command}s. It is responsible for creating a {@link
+ * name.richardson.james.bukkit.utilities.command.context.CommandContext} and executing the correct command depending on the arguments provided.
+ */
 public interface CommandInvoker extends TabExecutor {
 
 	/**
 	 * Add a command to this CommandInvoker allowing it to delgate arguments to it that match the command's name.
-	 * @param command
+	 *
+	 * @param command the command to add
 	 */
 	public void addCommand(Command command);
 
 	/**
 	 * Add a collection of commands to this CommandInvoker.
-	 * @param commands
+	 *
+	 * @param commands the commands to add
 	 */
 	public void addCommands(Collection<Command> commands);
 
 	/**
 	 * Get a unmodifiable map of all the commands assigned to this invoker.
-	 * @return the commands
+	 *
+	 * @return the map of commands with the command name as the key
 	 */
 	public Map<String, Command> getCommands();
 

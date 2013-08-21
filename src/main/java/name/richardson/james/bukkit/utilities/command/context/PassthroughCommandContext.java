@@ -25,6 +25,12 @@ import org.bukkit.command.CommandSender;
  */
 public class PassthroughCommandContext extends AbstractCommandContext {
 
+	/**
+	 * Constructs a PassthroughCommandContext from the provided arguments and CommandSender.
+	 *
+	 * @param arguments provided arguments
+	 * @param sender the CommandSender executing the command
+	 */
 	public PassthroughCommandContext(String[] arguments, CommandSender sender) {
 		super(arguments, sender);
 	}

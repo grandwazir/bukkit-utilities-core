@@ -18,36 +18,33 @@
 
 package name.richardson.james.bukkit.utilities.logging;
 
-import java.io.File;
-import java.net.URL;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class PluginLoggerFactory {
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 
-	public static Logger getLogger(Class classz) {
+/**
+ * Constructs appropriate loggers based on the class provided. At the moment this will always return {@link PermissivePrefixedLogger} with an attached resource
+ * bundle if available.
+ */
+public final class PluginLoggerFactory {
+
+	public final static Logger getLogger(Class classz) {
 		final String name = classz.getPackage().getName();
 		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
 		if (logger != null) return logger;
-		String resourceBundleName = getResourceBundleName(classz);
+		String resourceBundleName = ResourceBundleByClassLocalisation.getResourceBundleName(classz);
 		if (resourceExists(classz, resourceBundleName)) {
-			System.out.print("Bundle exists!");
-			return new PermissivePrefixedLogger(name, getResourceBundleName(classz));
+			return new PermissivePrefixedLogger(name, ResourceBundleByClassLocalisation.getResourceBundleName(classz));
 		} else {
-			System.out.print("Bundle does not exist!");
 			return new PermissivePrefixedLogger(name, null);
 		}
-
 	}
 
-	private static final String getResourceBundleName(Class classz) {
-		return "localisation" + "/" + classz.getSimpleName();
-	}
-
-	private static final boolean resourceExists(Class classz, String resourcePath) {
+	private final static boolean resourceExists(Class classz, String resourcePath) {
 		try {
 			ResourceBundle resourceBundle = ResourceBundle.getBundle(resourcePath, Locale.getDefault(), classz.getClassLoader());
 		} catch (MissingResourceException e) {
@@ -55,6 +52,5 @@ public class PluginLoggerFactory {
 		}
 		return true;
 	}
-
 
 }

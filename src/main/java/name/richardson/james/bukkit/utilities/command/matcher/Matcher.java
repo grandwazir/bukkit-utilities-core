@@ -25,8 +25,17 @@ import java.util.Set;
  */
 public interface Matcher {
 
+	/**
+	 * The maximum matches that will be returned. This is used to prevent flooding a player's chat with results.
+	 */
 	public static final int MAX_MATCHES = 50;
 
+	/**
+	 * Return all the possible matches.
+	 *
+	 * @param argument
+	 * @return the set of possible matches.
+	 */
 	public Set<String> matches(String argument);
 
 }

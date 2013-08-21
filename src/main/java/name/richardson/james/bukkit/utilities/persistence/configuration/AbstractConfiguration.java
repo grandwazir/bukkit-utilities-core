@@ -24,26 +24,32 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
-import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
+
 /**
- * AbstractConfiguration is responsible for creating YAML configuration files, setting defaults from a provided {@link
- * InputStream} and handling any exceptions when the file is saved.
+ * AbstractConfiguration is responsible for creating YAML configuration files, setting defaults from a provided {@link InputStream} and handling any exceptions
+ * when the file is saved.
  */
 public abstract class AbstractConfiguration {
 
-	private final Logger logger = PluginLoggerFactory.getLogger(AbstractConfiguration.class);
 	private final YamlConfiguration defaults;
 	private final File file;
+	private final Logger logger = PluginLoggerFactory.getLogger(AbstractConfiguration.class);
 	private final boolean runtimeDefaults;
-
 	private YamlConfiguration configuration;
 
+	/**
+	 * Construct an AbstractConfiguration
+	 *
+	 * @param file               the file where this configuration is stored
+	 * @param defaults           the defaults that should be used for this configuration
+	 * @param useRuntimeDefaults {@code true} if the defaults should be applied if the value is missing in the configuration; {@code false} otherwise.
+	 * @throws IOException
+	 */
 	public AbstractConfiguration(final File file, final InputStream defaults, boolean useRuntimeDefaults)
 	throws IOException {
 		Validate.notNull(file, "File can not be null!");
@@ -56,12 +62,6 @@ public abstract class AbstractConfiguration {
 
 	protected final YamlConfiguration getConfiguration() {
 		return this.configuration;
-	}
-
-	protected final void save()
-	throws IOException {
-		logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
-		this.configuration.save(this.file);
 	}
 
 	protected final void load()
@@ -77,5 +77,11 @@ public abstract class AbstractConfiguration {
 		this.configuration = YamlConfiguration.loadConfiguration(this.file);
 		if (runtimeDefaults) this.configuration.setDefaults(this.defaults);
 		this.configuration.options().copyDefaults(false);
+	}
+
+	protected final void save()
+	throws IOException {
+		logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
+		this.configuration.save(this.file);
 	}
 }

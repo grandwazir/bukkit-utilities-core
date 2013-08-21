@@ -18,18 +18,34 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.Set;
-
 import org.bukkit.permissions.Permissible;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
+import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
 
-public interface Command extends CommandMetadata {
+/**
+ * Executes actions on behalf of a user, notifies the user of the outcome. Used anywhere where a user is required instructions to a plugin interactively.
+ * Commands also provide a method for users to check to see if they are authorised to use the command in the first place.
+ */
+public interface Command extends CommandMetadata, MatcherInvoker {
 
+	/**
+	 * Execute a command using the provided {@link CommandContext}.
+	 *
+	 * @param commandContext the command context to execute this command within.
+	 * @since 6.0.0
+	 */
 	public void execute(CommandContext commandContext);
 
-	public Set<String> getArgumentMatches(CommandContext commandContext);
-
+	/**
+	 * Returns {@code true} if the user is authorised to use this command.
+	 * <p/>
+	 * Authorisation does not guarantee that the user may use all the features associated with a command.
+	 *
+	 * @param permissible the permissible requesting authorisation
+	 * @return {@code true} if the user is authorised; {@code false} otherwise
+	 * @since 6.0.0
+	 */
 	public boolean isAuthorised(Permissible permissible);
 
 }

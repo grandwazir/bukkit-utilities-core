@@ -6,7 +6,11 @@ import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
 
-public abstract class AbstractCommand implements Command, MatcherInvoker {
+/**
+ * This abstract implementation provides final methods for most of the methods provided the Command interface. It should be used for convenience when
+ * implementing your own Commands.
+ */
+public abstract class AbstractCommand implements Command {
 
 	private final CommandMetadata commandMetadata = new DefaultCommandMetadata(this.getClass());
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
@@ -39,10 +43,20 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 		return getCommandMetadata().getUsage();
 	}
 
+	/**
+	 * Return the CommandMetadata attached to this command.
+	 *
+	 * @return the command metadata.
+	 */
 	protected final CommandMetadata getCommandMetadata() {
 		return commandMetadata;
 	}
 
+	/**
+	 * Returns an ordered list of all the matchers attached to this command.
+	 *
+	 * @return the matchers currently attached.
+	 */
 	protected final List<Matcher> getMatchers() {
 		return Collections.unmodifiableList(matchers);
 	}

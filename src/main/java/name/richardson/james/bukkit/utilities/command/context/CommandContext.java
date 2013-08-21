@@ -21,7 +21,7 @@ package name.richardson.james.bukkit.utilities.command.context;
 import org.bukkit.command.CommandSender;
 
 /**
- * A object that represents the context that a {@link Command} has been executed within. This object is responsible for parsing the arguments and providing
+ * A object that represents the context that a {@link name.richardson.james.bukkit.utilities.command.Command} has been executed within. This object is responsible for parsing the arguments and providing
  * convenience methods to retrieve them. It is up to individual implementations to decide what to do when a requested argument does not exist.
  */
 public interface CommandContext {

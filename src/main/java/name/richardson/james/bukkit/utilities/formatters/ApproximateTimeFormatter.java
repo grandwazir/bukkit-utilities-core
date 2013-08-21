@@ -20,15 +20,32 @@ package name.richardson.james.bukkit.utilities.formatters;
 
 import java.util.Date;
 
-import org.ocpsoft.prettytime.Duration;
 import org.ocpsoft.prettytime.PrettyTime;
 
+/**
+ * Formats milliseconds into approximate time durations to create Twitter or FaceBook like durations, for example 1 day ago. This should be used when the exact
+ * time of an event occurred is not important.
+ */
 public class ApproximateTimeFormatter extends AbstractTimeFormatter {
 
+	private final PrettyTime timeFormatter;
+
+	public ApproximateTimeFormatter() {
+		timeFormatter = new PrettyTime();
+	}
+
+	/**
+	 * Returns a human readable style time in the style of FaceBook or Twitter.
+	 * <p/>
+	 * Times in the future are returned are suffixed with "from now", while times in the past use "ago". This does return approximations so for example 1 day and
+	 * 16 hours will return as "2 days".
+	 *
+	 * @param time the number of milliseconds
+	 * @return the time as a human readable duration.
+	 */
 	@Override
 	public String getHumanReadableDuration(long time) {
 		Date date = new Date(time);
-		PrettyTime timeFormatter = new PrettyTime();
 		return timeFormatter.format(date);
 	}
 
