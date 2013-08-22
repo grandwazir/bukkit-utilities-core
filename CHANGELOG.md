@@ -1,5 +1,7 @@
 # Changelog for BukkitUtilities (v6.1.0-SNAPSHOT)
 
+2013-08-22 15:26:01 +0100    fix test failure and add ChoiceFormatter (James Richardson)  
+2013-08-21 19:40:30 +0100    documentation and testing changes (James Richardson)  
 2013-08-16 18:24:05 +0100    remove Joda (James Richardson)  
 2013-08-16 18:19:37 +0100    add remaining properties files (James Richardson)  
 2013-08-16 18:19:14 +0100    localisation issues (James Richardson)  
