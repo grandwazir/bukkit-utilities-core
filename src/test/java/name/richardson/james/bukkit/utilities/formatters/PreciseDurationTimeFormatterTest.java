@@ -12,12 +12,12 @@ public class PreciseDurationTimeFormatterTest extends AbstractTimeFormatterTest 
 
 	@Test
 	public void getHumanReadableTime_WhenTimeInFuture_GetPreciseDuration() {
-		assertEquals("1 day 12 hours 30 minutes 15 seconds", getFormatter().getHumanReadableDuration(System.currentTimeMillis() + 131415000));
+		assertEquals("1 day 12 hours 30 minutes 15 seconds", getFormatter().getHumanReadableDuration(131415000));
 	}
 
 	@Test
-	public void getHumanReadableTime_WhenTimeInPast_GetPreciseDuration() {
-		assertEquals("1 day 12 hours 30 minutes 15 seconds", getFormatter().getHumanReadableDuration(System.currentTimeMillis() - 131415000));
+	public void getHumanReadableTime_WhenTimeisShort_GetPreciseDuration() {
+		assertEquals("10 seconds", getFormatter().getHumanReadableDuration(10000));
 	}
 
 	@Before

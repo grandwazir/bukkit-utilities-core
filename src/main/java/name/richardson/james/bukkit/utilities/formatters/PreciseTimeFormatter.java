@@ -8,19 +8,12 @@ import org.ocpsoft.prettytime.PrettyTime;
 import org.ocpsoft.prettytime.TimeFormat;
 import org.ocpsoft.prettytime.units.JustNow;
 import org.ocpsoft.prettytime.units.Millisecond;
+import org.ocpsoft.prettytime.units.Second;
 
 /**
  * Formats time into their exact respective units without prefixes or suffixes. For example "3 hours 12 seconds".
  */
 public class PreciseTimeFormatter extends AbstractTimeFormatter {
-
-	private final PrettyTime formatter;
-
-	public PreciseTimeFormatter() {
-		formatter = new PrettyTime();
-		formatter.removeUnit(JustNow.class);
-		formatter.removeUnit(Millisecond.class);
-	}
 
 	/**
 	 * Return the human readable duration for a given number of milliseconds.
@@ -30,9 +23,12 @@ public class PreciseTimeFormatter extends AbstractTimeFormatter {
 	 */
 	@Override
 	public String getHumanReadableDuration(long time) {
+		if (time < System.currentTimeMillis()) throw new IllegalArgumentException("Dates in the past are not formatted correctly.");
+		PrettyTime formatter = new PrettyTime();
+		// formatter.removeUnit(Millisecond.class);
 		Date date = new Date(time);
-		List<Duration> durations = formatter.calculatePreciseDuration(date);
-		return formatter.format(durations);
+		List<Duration> duration = formatter.calculatePreciseDuration(date);
+		return formatter.format(duration);
 	}
 
 }

@@ -13,14 +13,6 @@ import org.ocpsoft.prettytime.units.Millisecond;
  */
 public class PreciseDurationTimeFormatter extends AbstractTimeFormatter {
 
-	private final PrettyTime formatter;
-
-	public PreciseDurationTimeFormatter() {
-		formatter = new PrettyTime();
-		formatter.removeUnit(JustNow.class);
-		formatter.removeUnit(Millisecond.class);
-	}
-
 	/**
 	 * Return the human readable duration for a given number of milliseconds.
 	 *
@@ -30,11 +22,14 @@ public class PreciseDurationTimeFormatter extends AbstractTimeFormatter {
 	@Override
 	public String getHumanReadableDuration(long time) {
 		// This is a bit of a hack so it only works with the english langauge
-		Date date = new Date(time);
+		PrettyTime formatter = new PrettyTime();
+		formatter.removeUnit(JustNow.class);
+		Date date = new Date(System.currentTimeMillis() + time);
 		List<Duration> durationList = formatter.calculatePreciseDuration(date);
 		String duration = formatter.format(durationList);
 		duration = duration.replaceAll("from now", "");
 		duration = duration.replaceAll("ago", "");
 		return duration.trim();
 	}
+
 }
