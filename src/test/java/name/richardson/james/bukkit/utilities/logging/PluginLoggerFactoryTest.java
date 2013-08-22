@@ -23,9 +23,12 @@ import java.util.logging.LogManager;
 
 import junit.framework.TestCase;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import name.richardson.james.bukkit.utilities.command.HelpCommand;
 
 @RunWith(JUnit4.class)
 public class PluginLoggerFactoryTest extends TestCase {
@@ -33,7 +36,7 @@ public class PluginLoggerFactoryTest extends TestCase {
 	@Test
 	public void getLogger_WhenResourceBundleExists_ReturnLogger()
 	throws Exception {
-		assertNotNull(PluginLoggerFactory.getLogger(PluginLoggerFactory.class));
+		assertNotNull(PluginLoggerFactory.getLogger(HelpCommand.class));
 	}
 
 	@Test
@@ -45,7 +48,7 @@ public class PluginLoggerFactoryTest extends TestCase {
 	@Test
 	public void getLogger_WhenCalledTwice_ReturnSameLogger()
 	throws Exception {
-		assertSame(PluginLoggerFactory.getLogger(PluginLoggerFactory.class), PluginLoggerFactory.getLogger(PluginLoggerFactory.class));
+		assertSame(PluginLoggerFactory.getLogger(HelpCommand.class), PluginLoggerFactory.getLogger(HelpCommand.class));
 	}
 
 	@After

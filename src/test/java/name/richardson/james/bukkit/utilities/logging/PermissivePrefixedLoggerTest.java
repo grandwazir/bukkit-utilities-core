@@ -20,30 +20,27 @@ package name.richardson.james.bukkit.utilities.logging;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 
 import junit.framework.TestCase;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(JUnit4.class)
 public class PermissivePrefixedLoggerTest extends AbstractPrefixedLoggerTest {
 
-
 	@Test
 	public void log_WhenPassedStringKey_LogTranslatedMessage() {
 		ArgumentCaptor<LogRecord> argument = captureLogRecord(Level.INFO, "test-message");
-		assertTrue(argument.getValue().getMessage().contains("Test log message"));
+		assertTrue(argument.getValue().getMessage(), argument.getValue().getMessage().contains("Test log message"));
 	}
 
 	@Test
@@ -54,8 +51,9 @@ public class PermissivePrefixedLoggerTest extends AbstractPrefixedLoggerTest {
 
 	@Test
 	public void log_WhenLogging_AddPrefix() {
+		getLogger().setLevel(Level.INFO);
 		ArgumentCaptor<LogRecord> argument = captureLogRecord(Level.INFO, "Blah!");
-		assertTrue(argument.getValue().getMessage().contains(getLogger().getPrefix()));
+		assertTrue("Prefix is not set! " + argument.getValue().getMessage(), argument.getValue().getMessage().contains(getLogger().getPrefix()));
 	}
 
 	@Test
@@ -65,10 +63,23 @@ public class PermissivePrefixedLoggerTest extends AbstractPrefixedLoggerTest {
 		assertTrue(argument.getValue().getMessage().contains(getLogger().getDebuggingPrefix()));
 	}
 
+	@Test
+	public void GetPrefix_PrefixIsNotNull()
+	throws Exception {
+		assertNotNull(getLogger().getPrefix());
+	}
+
+	@Test
+	public void getDebuggingPrefix_PrefixContainsLoggerName()
+	throws Exception {
+		assertTrue(getLogger().getDebuggingPrefix().contains(getLogger().getName()));
+	}
+
+
 	@Before
 	public void setUp()
 	throws Exception {
-		this.setLogger((AbstractPrefixedLogger) PluginLoggerFactory.getLogger(PermissivePrefixedLoggerTest.class));
+		setLogger((PermissivePrefixedLogger) PluginLoggerFactory.getLogger(PermissivePrefixedLoggerTest.class));
 	}
 
 }

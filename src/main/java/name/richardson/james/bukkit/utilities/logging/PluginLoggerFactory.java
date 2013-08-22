@@ -38,8 +38,10 @@ public final class PluginLoggerFactory {
 		if (logger != null) return logger;
 		String resourceBundleName = ResourceBundleByClassLocalisation.getResourceBundleName(classz);
 		if (resourceExists(classz, resourceBundleName)) {
+			System.out.print("Bundle exists " + resourceBundleName + " ");
 			return new PermissivePrefixedLogger(name, ResourceBundleByClassLocalisation.getResourceBundleName(classz));
 		} else {
+			System.out.print("Bundle does not exist " + resourceBundleName + " ");
 			return new PermissivePrefixedLogger(name, null);
 		}
 	}
