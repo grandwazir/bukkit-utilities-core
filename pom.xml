@@ -47,6 +47,14 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -68,14 +76,15 @@
                             </artifactSet>
                             <relocations>
                                 <relocation>
-                                    <pattern>org.apache.maven.artifact</pattern>
-                                    <shadedPattern>name.richardson.james.bukkit.utilities.artifact</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>org.ocpsoft.prettytime</pattern>
                                     <shadedPattern>name.richardson.james.bukkit.utilities.time</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.apache.maven.artifact</pattern>
+                                    <shadedPattern>name.richardson.james.bukkit.utilities.artifact</shadedPattern>
+                                </relocation>
                             </relocations>
+                            <minimizeJar>true</minimizeJar>
                         </configuration>
                     </execution>
                 </executions>

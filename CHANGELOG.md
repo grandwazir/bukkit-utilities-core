@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v6.1.0-SNAPSHOT)
 
+2013-08-23 13:13:49 +0100    remove stray debugging messages (James Richardson)  
 2013-08-23 13:10:44 +0100    fix complaining about isolation level when there wasn't a problem (James Richardson)  
 2013-08-23 12:59:50 +0100    remembered why I had this class now (James Richardson)  
 2013-08-23 11:59:10 +0100    fix returning class specific branches and states (James Richardson)  

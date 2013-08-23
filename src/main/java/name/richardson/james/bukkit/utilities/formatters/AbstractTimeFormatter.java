@@ -22,11 +22,27 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.ocpsoft.prettytime.i18n.Resources_de;
+import org.ocpsoft.prettytime.i18n.Resources_en;
+import org.ocpsoft.prettytime.i18n.Resources_fr;
+import org.ocpsoft.prettytime.i18n.Resources_ru;
+
 /**
  * Provides a final implementation of {@code getDurationInMilliseconds}. This class should be used when implementing other TimeFormatters which return different
  * style human readable durations.
  */
 public abstract class AbstractTimeFormatter implements TimeFormatter {
+
+	/**
+	 * This is a dummy method to force Maven to include the resources required by PrettyTime.
+	 * It serves no other purpose.
+	 */
+	private static final void getResources() {
+		new Resources_en();
+		new Resources_fr();
+		new Resources_de();
+		new Resources_ru();
+	}
 
 	private final Matcher inputFormatter = Pattern.compile("(\\d+)(\\w)").matcher("");
 
