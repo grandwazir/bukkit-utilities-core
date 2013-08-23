@@ -50,7 +50,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 	public final Branch getAutomaticUpdaterBranch() {
 			final PluginUpdater.Branch defaultBranch = PluginUpdater.Branch.STABLE;
 			try {
-				return MavenPluginUpdater.Branch.valueOf(this.getConfiguration().getString(BRANCH_KEY));
+				return PluginUpdater.Branch.valueOf(this.getConfiguration().getString(BRANCH_KEY));
 			} catch (final IllegalArgumentException e) {
 				getLogger().log(Level.WARNING, INVALID_CONFIGURATION_VALUE_KEY, BRANCH_KEY);
 				this.getConfiguration().set(BRANCH_KEY, defaultBranch.name());
@@ -61,7 +61,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 	public final State getAutomaticUpdaterState() {
 		final PluginUpdater.State defaultState = PluginUpdater.State.NOTIFY;
 		try {
-			return MavenPluginUpdater.State.valueOf(this.getConfiguration().getString(UPDATER_STATE_KEY));
+			return PluginUpdater.State.valueOf(this.getConfiguration().getString(UPDATER_STATE_KEY));
 		} catch (final IllegalArgumentException e) {
 			getLogger().log(Level.WARNING, INVALID_CONFIGURATION_VALUE_KEY, UPDATER_STATE_KEY);
 			this.getConfiguration().set(UPDATER_STATE_KEY, defaultState.name());

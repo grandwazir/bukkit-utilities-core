@@ -29,6 +29,7 @@ import org.bukkit.permissions.Permissible;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
+import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.formatters.DefaultColourFormatter;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
@@ -65,6 +66,7 @@ public final class HelpCommand extends AbstractCommand {
 		for (Command command : commands) {
 			commandMap.put(command.getName(), command);
 		}
+		this.addMatcher(new StringMatcher(commandMap.keySet()));
 	}
 
 	@Override
