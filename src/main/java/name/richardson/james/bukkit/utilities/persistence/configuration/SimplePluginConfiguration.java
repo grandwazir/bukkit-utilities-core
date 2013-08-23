@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
+import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
@@ -47,7 +48,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 	}
 
 	public final Branch getAutomaticUpdaterBranch() {
-			final MavenPluginUpdater.Branch defaultBranch = MavenPluginUpdater.Branch.STABLE;
+			final PluginUpdater.Branch defaultBranch = PluginUpdater.Branch.STABLE;
 			try {
 				return MavenPluginUpdater.Branch.valueOf(this.getConfiguration().getString(BRANCH_KEY));
 			} catch (final IllegalArgumentException e) {
@@ -58,7 +59,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		}
 
 	public final State getAutomaticUpdaterState() {
-		final MavenPluginUpdater.State defaultState = MavenPluginUpdater.State.NOTIFY;
+		final PluginUpdater.State defaultState = PluginUpdater.State.NOTIFY;
 		try {
 			return MavenPluginUpdater.State.valueOf(this.getConfiguration().getString(UPDATER_STATE_KEY));
 		} catch (final IllegalArgumentException e) {

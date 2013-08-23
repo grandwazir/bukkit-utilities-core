@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v6.1.0-SNAPSHOT)
 
+2013-08-22 23:12:22 +0100    quick work around dodgy formatting when time is in the past (James Richardson)  
 2013-08-22 17:46:33 +0100    add formatters for precise times (James Richardson)  
 2013-08-22 15:26:01 +0100    fix test failure and add ChoiceFormatter (James Richardson)  
 2013-08-21 19:40:30 +0100    documentation and testing changes (James Richardson)  
