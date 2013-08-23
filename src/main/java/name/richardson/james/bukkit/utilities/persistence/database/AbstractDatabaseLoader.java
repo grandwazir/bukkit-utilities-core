@@ -84,12 +84,14 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	protected String getDeleteDLLScript() {
 		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
 		final DdlGenerator generator = server.getDdlGenerator();
+		setGeneratorDebug(generator, false);
 		return generator.generateDropDdl();
 	}
 
 	protected String getGenerateDDLScript() {
 		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
 		final DdlGenerator generator = server.getDdlGenerator();
+		setGeneratorDebug(generator, false);
 		return generator.generateCreateDdl();
 	}
 
@@ -112,6 +114,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final void load() {
 		logger.log(Level.FINE, "Loading database.");
 		final Level level = java.util.logging.Logger.getLogger("").getLevel();
+		java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
 		ClassLoader currentClassLoader = null;
 		try {
 			this.serverConfig.setClasses(this.classes);
@@ -120,11 +123,9 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 				this.serverConfig.setLoggingLevel(LogLevel.SQL);
 			}
 			// suppress normal ebean warnings and notifications
-			java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
 			currentClassLoader = Thread.currentThread().getContextClassLoader();
 			Thread.currentThread().setContextClassLoader(this.classLoader);
 			this.ebeanserver = EbeanServerFactory.create(this.serverConfig);
-			System.out.print(ebeanserver.getName());
 		} finally {
 			// re-enable logging
 			java.util.logging.Logger.getLogger("").setLevel(level);

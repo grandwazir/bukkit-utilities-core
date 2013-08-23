@@ -1,5 +1,18 @@
-# Changelog for BukkitUtilities (v6.1.0-SNAPSHOT)
+# Changelog for BukkitUtilities (v6.0.2-SNAPSHOT)
 
+2013-08-23 17:36:31 +0100    typo (James Richardson)  
+2013-08-23 17:36:03 +0100    another go at doing localisation (James Richardson)  
+2013-08-23 16:19:28 +0100    remove brittle test (James Richardson)  
+
+**v6.0.1**  
+2013-08-23 16:18:11 +0100    fix test failure (James Richardson)  
+2013-08-23 16:16:42 +0100    seperate shaded jar from actual jar (James Richardson)  
+
+**v6.0.0**  
+2013-08-23 16:14:26 +0100    forget needs to be snapshot for maven release (James Richardson)  
+2013-08-23 16:13:43 +0100    put username back (James Richardson)  
+2013-08-23 16:13:22 +0100    bump version down (James Richardson)  
+2013-08-23 14:50:19 +0100    slight hack to get maven to include the resources I want (James Richardson)  
 2013-08-23 13:13:49 +0100    remove stray debugging messages (James Richardson)  
 2013-08-23 13:10:44 +0100    fix complaining about isolation level when there wasn't a problem (James Richardson)  
 2013-08-23 12:59:50 +0100    remembered why I had this class now (James Richardson)  
