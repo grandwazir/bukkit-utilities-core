@@ -59,7 +59,7 @@ public class AbstractCommandContext implements CommandContext {
 		this.sender = sender;
 		setArguments(argument);
 		setFlags(argument);
-		if (logger.isLoggable(Level.FINEST)) logger.finest("A command context has been creaded: " + this.toString());
+		if (logger.isLoggable(Level.FINEST)) logger.finest("A command context has been created: " + this.toString());
 	}
 
 	/**
