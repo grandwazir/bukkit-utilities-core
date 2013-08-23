@@ -71,7 +71,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			if (!this.logger.isLoggable(Level.FINEST)) setGeneratorDebug(generator, false);
 			this.drop();
 			this.create();
-			logger.log(Level.INFO, localisation.getMessage("rebuild-schema"));
+			logger.log(Level.INFO, localisation.getMessage("rebuilt-schema"));
 		}
 	}
 
