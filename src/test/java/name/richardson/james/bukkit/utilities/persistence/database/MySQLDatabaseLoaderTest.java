@@ -46,7 +46,7 @@ public class MySQLDatabaseLoaderTest extends AbstractDatabaseLoaderTest {
 		DataSourceConfig dataSourceConfig = serverConfig.getDataSourceConfig();
 		dataSourceConfig.setUrl("jdbc:mysql://127.0.0.1:3306/test");
 		dataSourceConfig.setPassword("");
-		dataSourceConfig.setUsername("travis");
+		dataSourceConfig.setUsername();
 		dataSourceConfig.setDriver("com.mysql.jdbc.Driver");
 		dataSourceConfig.setIsolationLevel(8);
 		setDatabaseLoader(serverConfig);
