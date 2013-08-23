@@ -73,7 +73,7 @@ public class HelpCommandTest extends CommandTestCase {
 	throws Exception {
 		CommandContext commandContext = getCommandContext();
 		when(commandContext.has(anyInt())).thenReturn(true);
-		when(commandContext.getString(0)).thenReturn("test");
+		when(commandContext.getString(1)).thenReturn("test");
 		command.execute(commandContext);
 		verify(commandContext.getCommandSender(), times(2)).sendMessage(anyString());
 	}

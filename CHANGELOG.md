@@ -1,5 +1,8 @@
-# Changelog for BukkitUtilities (v6.0.2-SNAPSHOT)
+# Changelog for BukkitUtilities (v6.0.3-SNAPSHOT)
 
+
+**v6.0.2**  
+2013-08-23 18:11:57 +0100    prepare for release (James Richardson)  
 2013-08-23 18:04:25 +0100    revert shading change as it breaks shading down the line (James Richardson)  
 2013-08-23 17:36:31 +0100    typo (James Richardson)  
 2013-08-23 17:36:03 +0100    another go at doing localisation (James Richardson)  

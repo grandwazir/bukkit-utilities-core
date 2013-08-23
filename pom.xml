@@ -83,8 +83,7 @@
                                     <shadedPattern>name.richardson.james.bukkit.utilities.artifact</shadedPattern>
                                 </relocation>
                             </relocations>
-                            <minimizeJar>true</minimizeJar>
-                        </configuration>
+                         </configuration>
                     </execution>
                 </executions>
             </plugin>

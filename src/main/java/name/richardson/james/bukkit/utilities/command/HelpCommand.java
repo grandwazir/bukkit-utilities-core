@@ -107,8 +107,8 @@ public final class HelpCommand extends AbstractCommand {
 	}
 
 	private Command getCommand(CommandContext commandContext) {
-		if (commandContext.has(0)) {
-			return commandMap.get(commandContext.getString(0));
+		if (commandContext.has(1)) {
+			return commandMap.get(commandContext.getString(1));
 		} else {
 			return null;
 		}
