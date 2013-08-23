@@ -32,6 +32,8 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
@@ -39,6 +41,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
 	private final DataSourceConfig datasourceConfig;
+	private final Localisation localisation = new ResourceBundleByClassLocalisation(AbstractDatabaseLoader.class);
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseLoader.class);
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
@@ -68,7 +71,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			if (!this.logger.isLoggable(Level.FINEST)) setGeneratorDebug(generator, false);
 			this.drop();
 			this.create();
-			logger.log(Level.INFO, "rebuilt-schema");
+			logger.log(Level.INFO, localisation.getMessage("rebuild-schema"));
 		}
 	}
 
@@ -91,7 +94,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	private final void create() {
-		logger.log(Level.INFO, "creating-database");
+		logger.log(Level.INFO, localisation.getMessage("creating-database"));
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
 		String script = getGenerateDDLScript();
@@ -153,7 +156,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			try {
 				this.ebeanserver.find(ebean).findRowCount();
 			} catch (final Exception exception) {
-				logger.log(Level.WARNING, "schema-invalid");
+				logger.log(Level.WARNING, localisation.getMessage("schema-invalid"));
 				return false;
 			}
 		}
