@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v6.0.2-SNAPSHOT)
 
+2013-08-23 18:04:25 +0100    revert shading change as it breaks shading down the line (James Richardson)  
 2013-08-23 17:36:31 +0100    typo (James Richardson)  
 2013-08-23 17:36:03 +0100    another go at doing localisation (James Richardson)  
 2013-08-23 16:19:28 +0100    remove brittle test (James Richardson)  
