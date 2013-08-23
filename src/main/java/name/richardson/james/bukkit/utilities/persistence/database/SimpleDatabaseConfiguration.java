@@ -40,7 +40,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 
 	private final DataSourceConfig dataSourceConfig;
 	private final File folder;
-	private final Logger logger = PluginLoggerFactory.getLogger(SimpleDatabaseConfiguration.class);
+	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 	private final String pluginName;
 	private final ServerConfig serverConfig;
 
@@ -105,7 +105,6 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private void setIsolation() {
 		try {
 			String isolation = this.getConfiguration().getString("isolation");
-			int transactionIsolation = TransactionIsolation.getLevel(isolation);
 			if (isolation != null) {
 				logger.log(Level.CONFIG, "override-value", new Object[]{ISOLATION_KEY, isolation});
 				this.dataSourceConfig.setIsolationLevel(TransactionIsolation.getLevel(isolation));
