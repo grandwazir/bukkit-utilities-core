@@ -7,7 +7,7 @@
         <relativePath />
     </parent>
     <artifactId>bukkit-utilities</artifactId>
-    <version>6.0.2</version>
+    <version>6.0.3-SNAPSHOT</version>
     <name>BukkitUtilities</name>
     <description>A utility library containing reusuable classes and implementations for use with Bukkit.</description>
 
