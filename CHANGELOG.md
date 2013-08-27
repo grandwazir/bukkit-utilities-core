@@ -1,5 +1,10 @@
-# Changelog for BukkitUtilities (v6.0.3-SNAPSHOT)
+# Changelog for BukkitUtilities (v6.0.4-SNAPSHOT)
 
+2013-08-27 19:34:33 +0100    remove test which is no longer valid (James Richardson)  
+2013-08-27 19:31:59 +0100    linked to grandwazir/BanHammer[#87](https://github.com/grandwazir/BukkitUtilities/bukkit-utilities/issues/87) Logger has difficulty finding ResourceBundles (James Richardson)  
+
+**v6.0.3**  
+2013-08-23 18:35:08 +0100    fix bug where help command was not returning any help (useful!) (James Richardson)  
 
 **v6.0.2**  
 2013-08-23 18:11:57 +0100    prepare for release (James Richardson)  

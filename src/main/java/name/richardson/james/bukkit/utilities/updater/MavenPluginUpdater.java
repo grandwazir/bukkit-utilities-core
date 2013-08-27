@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.updater;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
@@ -56,6 +58,7 @@ public final class MavenPluginUpdater extends AbstractPluginUpdater {
 	private final Logger logger = PluginLoggerFactory.getLogger(MavenPluginUpdater.class);
 	private final String artifactId;
 	private final String groupId;
+	private final Localisation localisation = new ResourceBundleByClassLocalisation(MavenPluginUpdater.class);
 	private MavenManifest manifest;
 	private URL repositoryURL;
 
@@ -100,23 +103,23 @@ public final class MavenPluginUpdater extends AbstractPluginUpdater {
 	@Override
 	public void run() {
 		if (this.getState() == State.UPDATE) {
-			this.logger.log(Level.WARNING, "policy-restriction");
+			this.logger.log(Level.WARNING, localisation.getMessage("policy-restriction"));
 		} else {
 			try {
 				this.parseMavenMetaData();
 				if (this.isNewVersionAvailable()) {
 					Object[] arguments = {getName(), this.getRemoteVersion()};
-					this.logger.log(Level.INFO, "new-version-available", arguments);
+					this.logger.log(Level.INFO, localisation.getMessage("new-version-available", arguments));
 				} else {
 					Object[] arguments = {this.getLocalVersion(), this.getRemoteVersion()};
 					this.logger.log(Level.FINE, "New version unavailable: {0} <= {1}", arguments);
 				}
 			} catch (final IOException e) {
-				this.logger.log(Level.WARNING, "unable-to-read-metadata", this.repositoryURL.toString());
+				this.logger.log(Level.WARNING, localisation.getMessage("unable-to-read-metadata", this.repositoryURL.toString()));
 			} catch (final SAXException e) {
-				this.logger.log(Level.WARNING, "unable-to-read-metadata", this.repositoryURL.toString());
+				this.logger.log(Level.WARNING, localisation.getMessage("unable-to-read-metadata", this.repositoryURL.toString()));
 			} catch (final ParserConfigurationException e) {
-				this.logger.log(Level.WARNING, "unable-to-read-metadata", this.repositoryURL.toString());
+				this.logger.log(Level.WARNING, localisation.getMessage("unable-to-read-metadata", this.repositoryURL.toString()));
 			}
 		}
 	}
