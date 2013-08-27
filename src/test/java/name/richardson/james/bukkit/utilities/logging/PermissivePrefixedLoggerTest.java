@@ -38,12 +38,6 @@ import static org.mockito.Mockito.verify;
 public class PermissivePrefixedLoggerTest extends AbstractPrefixedLoggerTest {
 
 	@Test
-	public void log_WhenPassedStringKey_LogTranslatedMessage() {
-		ArgumentCaptor<LogRecord> argument = captureLogRecord(Level.INFO, "test-message");
-		assertTrue(argument.getValue().getMessage(), argument.getValue().getMessage().contains("Test log message"));
-	}
-
-	@Test
 	public void log_WhenPassedInvalidStringKey_LogMessageAnyway() {
 		ArgumentCaptor<LogRecord> argument = captureLogRecord(Level.INFO, "Blah!");
 		assertTrue(argument.getValue().getMessage().contains("Blah"));
