@@ -37,20 +37,8 @@ public final class PluginLoggerFactory {
 		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
 		if (logger != null) return logger;
 		String resourceBundleName = ResourceBundleByClassLocalisation.getResourceBundleName(classz);
-		if (resourceExists(classz, resourceBundleName)) {
-			return new PermissivePrefixedLogger(name, ResourceBundleByClassLocalisation.getResourceBundleName(classz));
-		} else {
-			return new PermissivePrefixedLogger(name, null);
-		}
+		return new PermissivePrefixedLogger(name, null);
 	}
 
-	private final static boolean resourceExists(Class classz, String resourcePath) {
-		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(resourcePath, Locale.getDefault(), classz.getClassLoader());
-		} catch (MissingResourceException e) {
-			return false;
-		}
-		return true;
-	}
 
 }
