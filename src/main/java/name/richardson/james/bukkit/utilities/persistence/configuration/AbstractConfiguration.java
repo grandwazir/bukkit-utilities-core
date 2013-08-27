@@ -28,6 +28,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
@@ -39,6 +41,7 @@ public abstract class AbstractConfiguration {
 	private final YamlConfiguration defaults;
 	private final File file;
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractConfiguration.class);
+	private final Localisation localisation = new ResourceBundleByClassLocalisation(AbstractConfiguration.class);
 	private final boolean runtimeDefaults;
 	private YamlConfiguration configuration;
 
@@ -71,7 +74,7 @@ public abstract class AbstractConfiguration {
 		if (!this.file.exists() || this.file.length() == 0) {
 			this.defaults.options().copyHeader(true);
 			this.defaults.options().copyDefaults(true);
-			logger.log(Level.WARNING, "saving-default-configuration", this.file.getName());
+			logger.log(Level.WARNING, localisation.getMessage("saving-default-configuration", this.file.getName()));
 			defaults.save(this.file);
 		}
 		this.configuration = YamlConfiguration.loadConfiguration(this.file);
