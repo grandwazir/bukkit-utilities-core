@@ -115,7 +115,7 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				JSONObject latest = (JSONObject) versions.previous();
 				versionType = (String) latest.get(API_RELEASE_TYPE_VALUE);
 				versionGameVersion = (String) latest.get(API_GAME_VERSION_VALUE);
-				if (versionType.equals("beta") && getBranch().equals(Branch.STABLE)) continue;
+				if ((versionType.equals("beta") || versionType.equals("alpha")) && getBranch().equals(Branch.STABLE)) continue;
 				if (!isCompatiableWithGameVersion()) continue;
 				versionName = (String) latest.get(API_NAME_VALUE);
 				versionLink = (String) latest.get(API_LINK_VALUE);
