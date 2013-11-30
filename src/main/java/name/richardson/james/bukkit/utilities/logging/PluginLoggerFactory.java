@@ -18,9 +18,6 @@
 
 package name.richardson.james.bukkit.utilities.logging;
 
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 

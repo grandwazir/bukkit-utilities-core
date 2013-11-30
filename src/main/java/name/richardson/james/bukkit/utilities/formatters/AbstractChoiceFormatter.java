@@ -4,7 +4,6 @@ import java.text.ChoiceFormat;
 import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;

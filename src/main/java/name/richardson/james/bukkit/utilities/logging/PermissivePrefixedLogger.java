@@ -18,8 +18,6 @@
 
 package name.richardson.james.bukkit.utilities.logging;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 

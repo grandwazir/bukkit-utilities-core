@@ -1,10 +1,12 @@
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
-import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
 
 /**
  * This abstract implementation provides final methods for most of the methods provided the Command interface. It should be used for convenience when

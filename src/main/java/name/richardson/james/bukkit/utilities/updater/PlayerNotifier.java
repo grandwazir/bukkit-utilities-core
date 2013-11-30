@@ -17,9 +17,6 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.updater;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;

@@ -7,12 +7,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Iterator;
 import java.util.logging.Level;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.codehaus.plexus.util.FileUtils;

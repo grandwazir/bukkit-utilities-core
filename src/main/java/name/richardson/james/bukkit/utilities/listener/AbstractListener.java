@@ -24,7 +24,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**

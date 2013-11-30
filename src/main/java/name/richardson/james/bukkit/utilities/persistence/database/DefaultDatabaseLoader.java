@@ -18,8 +18,6 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database;
 
-import java.util.List;
-
 public final class DefaultDatabaseLoader extends AbstractDatabaseLoader {
 
 	public DefaultDatabaseLoader(DatabaseConfiguration configuration) {

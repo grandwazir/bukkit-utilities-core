@@ -6,7 +6,6 @@ import java.util.List;
 import org.ocpsoft.prettytime.Duration;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.ocpsoft.prettytime.units.JustNow;
-import org.ocpsoft.prettytime.units.Millisecond;
 
 /**
  * Created with IntelliJ IDEA. User: james Date: 22/08/13 Time: 17:31 To change this template use File | Settings | File Templates.

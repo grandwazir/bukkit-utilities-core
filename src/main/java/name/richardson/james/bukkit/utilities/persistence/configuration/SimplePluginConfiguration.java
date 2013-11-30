@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-import name.richardson.james.bukkit.utilities.updater.MavenPluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;

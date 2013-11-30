@@ -23,14 +23,10 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.avaje.ebean.config.dbplatform.SQLitePlatform;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
-
-import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
  * SQLite storage handles loading SQLite databases. Due to bug in the persistence library that Bukkit uses attempting to create a database with key constraists

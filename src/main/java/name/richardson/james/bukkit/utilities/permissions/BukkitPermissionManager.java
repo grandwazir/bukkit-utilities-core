@@ -29,7 +29,6 @@ import org.bukkit.plugin.PluginManager;
 
 import org.apache.commons.lang.StringUtils;
 
-import name.richardson.james.bukkit.utilities.logging.AbstractPrefixedLogger;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**

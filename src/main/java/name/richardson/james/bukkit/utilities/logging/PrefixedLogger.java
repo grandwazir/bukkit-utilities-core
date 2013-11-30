@@ -18,8 +18,6 @@
 
 package name.richardson.james.bukkit.utilities.logging;
 
-import java.util.logging.Logger;
-
 /**
  * Provides a prefix and debugging prefix which may be applied to logging messages in certain circumstances.
  */
