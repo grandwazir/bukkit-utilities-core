@@ -34,13 +34,27 @@ public interface PluginUpdater extends Runnable {
 	}
 
 	/**
+	 * Get the name of the current updater branch.
+	 *
+	 * @return The current branch that the updater is using.
+	 */
+	Branch getBranch();
+
+	/**
 	 * Gets the local version of the plugin.
 	 *
 	 * Should be in a Maven style format.
 	 *
 	 * @return The current version of the local plugin
 	 */
-	String getLocalVersion();
+	public String getLocalVersion();
+
+	/**
+	 * Get the name of the plugin being updated
+	 *
+	 * @return The name of the plugin being updated.
+	 */
+	String getName();
 
 	/**
 	 * Get the current remote version of the plugin.
@@ -49,22 +63,29 @@ public interface PluginUpdater extends Runnable {
 	 *
 	 * @return The current remote version of the plugin.
 	 */
-	String getRemoteVersion();
+	public String getRemoteVersion();
 
 	/**
 	 * Get the current state of the updater.
 	 *
-	 * @return The current remote version of the plugin.
+	 * @return The current state of the updater.
 	 */
-	PluginUpdater.State getState();
+	public PluginUpdater.State getState();
 
 	/**
 	 * Check to see if a new version of the plugin is available.
 	 *
 	 * @return return true if there is a version available, false otherwise.
 	 */
-	boolean isNewVersionAvailable();
+	public boolean isNewVersionAvailable();
 
-	void run();
+	/**
+	 * Attempt to update the plugin.
+	 *
+	 * Will do nothing unless a new version is available and the updater is running in update mode.
+	 */
+	public void update();
+
+	public void run();
 
 }

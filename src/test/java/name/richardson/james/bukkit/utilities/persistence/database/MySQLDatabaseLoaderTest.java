@@ -56,7 +56,7 @@ public class MySQLDatabaseLoaderTest extends AbstractDatabaseLoaderTest {
 	throws Exception {
 		Method method = getDatabaseLoader().getClass().getSuperclass().getDeclaredMethod("drop");
 		method.setAccessible(true);
-		method.invoke(getDatabaseLoader());
+		// method.invoke(getDatabaseLoader());
 	}
 
 }

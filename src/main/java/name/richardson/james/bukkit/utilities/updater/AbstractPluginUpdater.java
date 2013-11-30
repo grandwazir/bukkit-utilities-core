@@ -17,7 +17,14 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.updater;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.bukkit.plugin.PluginDescriptionFile;
+
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
  * This abstract class provides a default implementation for common methods of {@link PluginUpdater}. In addition it
@@ -29,18 +36,22 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 	private final String name;
 	private final PluginUpdater.State state;
 	private final String version;
+	private final Logger logger;
 
 	public AbstractPluginUpdater(PluginDescriptionFile pluginDescriptionFile, PluginUpdater.Branch branch, PluginUpdater.State state) {
 		this.name = pluginDescriptionFile.getName();
 		this.version = pluginDescriptionFile.getVersion();
 		this.branch = branch;
 		this.state = state;
+		this.logger = PluginLoggerFactory.getLogger(this.getClass());
 	}
 
+	@Override
 	public final Branch getBranch() {
 		return branch;
 	}
 
+	@Override
 	public final String getName() {
 		return name;
 	}
@@ -52,6 +63,22 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 
 	public final String getLocalVersion() {
 		return version;
+	}
+
+	public final Logger getLogger() {
+		return logger;
+	}
+
+	public boolean isNewVersionAvailable() {
+		final DefaultArtifactVersion current = new DefaultArtifactVersion(getLocalVersion());
+		final DefaultArtifactVersion target = new DefaultArtifactVersion(getRemoteVersion());
+		final Object params[] = {target.toString(), current.toString()};
+		if (current.compareTo(target) == -1) {
+			this.logger.log(Level.FINE, "New version available: {0} > {1}", params);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

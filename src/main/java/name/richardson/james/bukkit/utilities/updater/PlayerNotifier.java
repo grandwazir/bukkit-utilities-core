@@ -61,7 +61,16 @@ public class PlayerNotifier extends AbstractListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify && updater.isNewVersionAvailable()) {
-			String message = colourFormatter.format(localisation.getMessage("new-version-available"), ColourFormatter.FormatStyle.WARNING, pluginName, updater.getRemoteVersion());
+			String key = null;
+			switch (updater.getState()) {
+				case UPDATE:
+					key = "new-version-downloaded";
+					break;
+				case NOTIFY:
+					key = "new-version-available";
+					break;
+			}
+			String message = colourFormatter.format(localisation.getMessage(key), ColourFormatter.FormatStyle.WARNING, pluginName, updater.getRemoteVersion());
 			event.getPlayer().sendMessage(message);
 		}
 	}
