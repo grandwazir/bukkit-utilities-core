@@ -1,5 +1,8 @@
 # Changelog for BukkitUtilities (v6.0.5-SNAPSHOT)
 
+2013-12-14 14:18:39 +0000    remove duplicate statement (James Richardson)  
+2013-12-14 14:16:12 +0000    attempt to fix IndexOutOfBounds exception on Windows (James Richardson)  
+2013-12-14 14:06:34 +0000    fix various bugs in plugin updater (James Richardson)  
 2013-11-30 14:30:15 +0000    fix a possible bug if I ever decided to release alphas (James Richardson)  
 2013-11-30 14:11:17 +0000    add file to test resources (James Richardson)  
 2013-11-30 14:08:41 +0000    remove old localisation file (James Richardson)  
