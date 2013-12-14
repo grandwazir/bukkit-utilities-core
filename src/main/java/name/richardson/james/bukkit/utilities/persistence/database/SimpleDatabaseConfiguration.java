@@ -89,7 +89,6 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		input = input.replaceAll("\\{DIR\\}", this.folder.getAbsolutePath() + "/");
 		input = input.replaceAll("\\{NAME\\}", this.pluginName.replaceAll("[^\\w_-]", ""));
 		return input;
-		return input;
 	}
 
 	private void setDefaults() {
