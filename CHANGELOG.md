@@ -1,5 +1,16 @@
-# Changelog for BukkitUtilities (v6.0.4-SNAPSHOT)
+# Changelog for BukkitUtilities (v6.0.5-SNAPSHOT)
 
+2013-11-30 14:30:15 +0000    fix a possible bug if I ever decided to release alphas (James Richardson)  
+2013-11-30 14:11:17 +0000    add file to test resources (James Richardson)  
+2013-11-30 14:08:41 +0000    remove old localisation file (James Richardson)  
+2013-11-30 14:07:38 +0000    organise imports (James Richardson)  
+2013-11-30 14:04:04 +0000    remove old maven updater and switch to bukkitdev this is required to comply with the new submission rules (James Richardson)  
+
+**v6.0.4**  
+2013-08-27 21:40:02 +0100    remember to commit localisation file (James Richardson)  
+2013-08-27 21:39:06 +0100    last message that needed refactoring (James Richardson)  
+2013-08-27 21:30:08 +0100    fix remaining unlocalised logging messages (James Richardson)  
+2013-08-27 19:44:11 +0100    refactor code which previously depended on loggers looking up keys by themselves (James Richardson)  
 2013-08-27 19:34:33 +0100    remove test which is no longer valid (James Richardson)  
 2013-08-27 19:31:59 +0100    linked to grandwazir/BanHammer[#87](https://github.com/grandwazir/BukkitUtilities/bukkit-utilities/issues/87) Logger has difficulty finding ResourceBundles (James Richardson)  
 

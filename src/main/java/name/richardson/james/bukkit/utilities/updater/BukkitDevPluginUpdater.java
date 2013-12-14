@@ -68,15 +68,23 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	@Override
 	public void update() {
 		if (isNewVersionAvailable() && getState() == State.UPDATE) {
-			try {
-				getLogger().log(Level.INFO, "downloading-new-version", versionLink);
-				File destination = new File(updateFolder, getName() + ".jar");
-				URLConnection urlConnection = getConnection(versionLink);
-				FileUtils.copyURLToFile(urlConnection.getURL(), destination);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-			} catch (IOException e) {
-				e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			// Avoid automatically updating major versions
+			final DefaultArtifactVersion current = new DefaultArtifactVersion(this.gameVersion);
+			final DefaultArtifactVersion target = new DefaultArtifactVersion(versionGameVersion);
+			if (current.getMajorVersion() != target.getMajorVersion()) {
+				getLogger().log(Level.WARNING, localisation.getMessage("major-version-change", versionLink));
+				return;
+			} else {
+				try {
+					getLogger().log(Level.INFO, localisation.getMessage("downloading-new-version", versionLink));
+					File destination = new File(updateFolder, getName() + ".jar");
+					URLConnection urlConnection = getConnection(versionLink);
+					FileUtils.copyURLToFile(urlConnection.getURL(), destination);
+				} catch (MalformedURLException e) {
+					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+				} catch (IOException e) {
+					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+				}
 			}
 		}
 	}
@@ -110,7 +118,7 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 			final BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 			String response = reader.readLine();
 			JSONArray array = (JSONArray) JSONValue.parse(response);
-			java.util.ListIterator versions = array.listIterator(array.size() - 1);
+			java.util.ListIterator versions = array.listIterator(array.size());
 			while(versions.hasPrevious()) {
 				JSONObject latest = (JSONObject) versions.previous();
 				versionType = (String) latest.get(API_RELEASE_TYPE_VALUE);
@@ -120,10 +128,11 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				versionName = (String) latest.get(API_NAME_VALUE);
 				versionLink = (String) latest.get(API_LINK_VALUE);
 				versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
-				versionGameVersion = (String) latest.get(API_GAME_VERSION_VALUE);
-				String[] params = {getName(), getRemoteVersion()};
-				getLogger().log(Level.INFO, "new-version-available", params);
-				break;
+				if (isNewVersionAvailable()) {
+					String[] params = {getName(), getRemoteVersion()};
+					getLogger().log(Level.INFO, localisation.getMessage("new-version-available", params));
+					break;
+				}
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
