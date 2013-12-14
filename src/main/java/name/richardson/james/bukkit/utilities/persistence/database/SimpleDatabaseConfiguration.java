@@ -86,8 +86,9 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	}
 
 	private String replaceDatabaseString(String input) {
-		input = input.replaceAll("\\{DIR\\}", this.folder.getAbsolutePath() + File.separator);
+		input = input.replaceAll("\\{DIR\\}", this.folder.getAbsolutePath() + "/");
 		input = input.replaceAll("\\{NAME\\}", this.pluginName.replaceAll("[^\\w_-]", ""));
+		return input;
 		return input;
 	}
 
