@@ -25,6 +25,10 @@ import com.avaje.ebean.EbeanServer;
  */
 public interface DatabaseLoader {
 
+	public void create();
+
+	public void drop();
+
 	/**
 	 * Initalise the database.
 	 */
@@ -37,4 +41,7 @@ public interface DatabaseLoader {
 	 */
 	public EbeanServer getEbeanServer();
 
+	public void load();
+
+	public boolean validate();
 }

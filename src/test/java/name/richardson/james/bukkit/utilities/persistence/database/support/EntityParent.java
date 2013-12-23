@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- TestBeanChild.java is part of bukkit-utilities.
+ EntityParent.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,30 +16,26 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.persistence.database;
+package name.richardson.james.bukkit.utilities.persistence.database.support;
 
 import javax.persistence.*;
+
 import java.util.List;
 
-import com.avaje.ebean.validation.NotNull;
+import name.richardson.james.bukkit.utilities.persistence.database.AbstractRecord;
 
 @Entity
-public class TestBeanChild {
+public class EntityParent extends AbstractRecord {
 
-	@ManyToOne(targetEntity = TestBeanParent.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
-	@PrimaryKeyJoinColumn(name = "parentId", referencedColumnName = "id")
-	private List<TestBeanChild> children;
+	@OneToMany(targetEntity = EntityChild.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+	private List<EntityChild> children;
 
-	@NotNull
-	@Id
-	private int id;
-
-	public int getId() {
-		return id;
+	public List<EntityChild> getChildren() {
+		return children;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setChildren(List<EntityChild> children) {
+		this.children = children;
 	}
 
 }

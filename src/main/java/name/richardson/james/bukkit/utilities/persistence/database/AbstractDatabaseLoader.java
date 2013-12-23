@@ -63,7 +63,6 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	synchronized public final void initalise() {
-		if (this.ebeanserver != null) throw new IllegalStateException("Database is already initalised!");
 		this.load();
 		if (!this.validate() || this.rebuild) {
 			final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
@@ -95,7 +94,8 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		return generator.generateCreateDdl();
 	}
 
-	private final void create() {
+	@Override
+	public final void create() {
 		logger.log(Level.INFO, localisation.getMessage("creating-database"));
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
@@ -105,13 +105,15 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		this.afterDatabaseCreate();
 	}
 
-	private final void drop() {
+	@Override
+	public final void drop() {
 		logger.log(Level.FINER, "Dropping and destroying database.");
 		this.beforeDatabaseDrop();
 		generator.runScript(true, this.getDeleteDLLScript());
 	}
 
-	private final void load() {
+	@Override
+	public final void load() {
 		logger.log(Level.FINE, "Loading database.");
 		final Level level = java.util.logging.Logger.getLogger("").getLevel();
 		java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
@@ -142,7 +144,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	 * @param generator
 	 * @param value
 	 */
-	private final void setGeneratorDebug(DdlGenerator generator, boolean value) {
+	protected final void setGeneratorDebug(DdlGenerator generator, boolean value) {
 		try {
 			Field field = generator.getClass().getDeclaredField("debug");
 			field.setAccessible(true);
@@ -152,7 +154,8 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		}
 	}
 
-	private final boolean validate() {
+	@Override
+	public final boolean validate() {
 		for (final Class<?> ebean : this.classes) {
 			try {
 				this.ebeanserver.find(ebean).findRowCount();

@@ -19,11 +19,13 @@
 package name.richardson.james.bukkit.utilities.persistence.database;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.avaje.ebean.config.ServerConfig;
 import junit.framework.TestCase;
 import org.junit.Test;
+
+import name.richardson.james.bukkit.utilities.persistence.database.support.EntityChild;
+import name.richardson.james.bukkit.utilities.persistence.database.support.EntityParent;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,8 +46,8 @@ public abstract class AbstractDatabaseLoaderTest extends TestCase {
 		serverConfig.setDefaultServer(false);
 		serverConfig.setRegister(false);
 		ArrayList<Class<?>> databaseClasses = new ArrayList<Class<?>>();
-		databaseClasses.add(TestBeanParent.class);
-		databaseClasses.add(TestBeanChild.class);
+		databaseClasses.add(EntityParent.class);
+		databaseClasses.add(EntityChild.class);
 		serverConfig.setClasses(databaseClasses);
 		serverConfig.setName(this.getClass().getSimpleName());
 		return serverConfig;
