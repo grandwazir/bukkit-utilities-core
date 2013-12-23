@@ -16,7 +16,7 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalis
  */
 public class AbstractPrefixedLogger extends Logger implements PrefixedLogger {
 
-	private static final String PREFIX_KEY = "prefix";
+	private static final String PREFIX_KEY = "plugin.name";
 
 	private final String debuggingPrefix;
 	private final String prefix;
@@ -34,7 +34,7 @@ public class AbstractPrefixedLogger extends Logger implements PrefixedLogger {
 			handler.setLevel(Level.ALL);
 		}
 		Localisation localisation = new ResourceBundleLocalisation();
-		prefix = localisation.getMessage(PREFIX_KEY) + " ";
+		prefix = "[" + localisation.getMessage(PREFIX_KEY) + "]" + " ";
 		debuggingPrefix = "<" + this.getName() + "> ";
 	}
 

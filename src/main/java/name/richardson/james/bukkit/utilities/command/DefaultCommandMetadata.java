@@ -10,15 +10,18 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalis
  */
 public final class DefaultCommandMetadata implements CommandMetadata {
 
-	private static final String NAME_KEY = "name";
-	private static final String DESCRIPTION_KEY = "description";
-	private static final String USAGE_KEY = "usage";
+	private final String NAME_KEY;
+	private final String DESCRIPTION_KEY;
+	private final String USAGE_KEY;
 
 	private final Localisation localisation;
 
 	public DefaultCommandMetadata(Class classz) {
 		Validate.notNull(classz, "You have no class! Haha");
 		this.localisation = new ResourceBundleLocalisation();
+		NAME_KEY = classz.getSimpleName().toLowerCase() + ".name";
+		DESCRIPTION_KEY = classz.getSimpleName().toLowerCase() + ".description";
+		USAGE_KEY = classz.getSimpleName().toLowerCase() + ".usage";
 	}
 
 	@Override

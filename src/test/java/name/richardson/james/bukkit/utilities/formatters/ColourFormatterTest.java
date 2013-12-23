@@ -32,7 +32,7 @@ public abstract class ColourFormatterTest extends TestCase {
 	public void format_WhenMessageAndArugmentsSupplied_AddColourAndInsertArguments()
 	throws Exception {
 		for (ColourFormatter.FormatStyle style : ColourFormatter.FormatStyle.values()) {
-			String message = getColourFormatter().format("Hello {0}!", style, "James");
+			String message = getColourFormatter().getMessage("Hello {0}!", style, "James");
 			assertTrue(message.contains("James"));
 			assertTrue(message.contains("§"));
 		}
@@ -42,7 +42,7 @@ public abstract class ColourFormatterTest extends TestCase {
 	public void format_WhenMessageSupplied_AddColour()
 	throws Exception {
 		for (ColourFormatter.FormatStyle style : ColourFormatter.FormatStyle.values()) {
-			assertTrue(getColourFormatter().format("Hello", style).contains("§"));
+			assertTrue(getColourFormatter().getMessage("Hello", style).contains("§"));
 		}
 	}
 
