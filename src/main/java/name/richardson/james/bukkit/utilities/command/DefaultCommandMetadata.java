@@ -3,7 +3,7 @@ package name.richardson.james.bukkit.utilities.command;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 
 /**
  * Retrieves localised metadata for a command. Internally this class uses {@link ResourceBundleByClassLocalisation} to locate an appropriate resource bundle.
@@ -18,7 +18,7 @@ public final class DefaultCommandMetadata implements CommandMetadata {
 
 	public DefaultCommandMetadata(Class classz) {
 		Validate.notNull(classz, "You have no class! Haha");
-		this.localisation = new ResourceBundleByClassLocalisation(classz);
+		this.localisation = new ResourceBundleLocalisation();
 	}
 
 	@Override

@@ -28,7 +28,8 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.persistence.configuration.AbstractConfiguration;
 
@@ -45,7 +46,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 	private final String pluginName;
 	private final ServerConfig serverConfig;
-	private final Localisation localisation = new ResourceBundleByClassLocalisation(SimpleDatabaseConfiguration.class);
+	private final Localisation localisation = new ResourceBundleLocalisation();
 
 	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, final String pluginName, final ServerConfig serverConfig)
 	throws IOException {
@@ -100,7 +101,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private void setDriver() {
 		final String driver = this.getConfiguration().getString(DRIVER_KEY);
 		if (driver != null) {
-			logger.log(Level.CONFIG, localisation.getMessage("override-value", DRIVER_KEY, driver));
+			logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, DRIVER_KEY, driver));
 			this.dataSourceConfig.setDriver(driver);
 		}
 	}
@@ -109,18 +110,18 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		try {
 			String isolation = this.getConfiguration().getString("isolation");
 			if (isolation != null) {
-				logger.log(Level.CONFIG, localisation.getMessage("override-value", ISOLATION_KEY, isolation));
+				logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, ISOLATION_KEY, isolation));
 				this.dataSourceConfig.setIsolationLevel(TransactionIsolation.getLevel(isolation));
 			}
 		} catch (RuntimeException e) {
-			logger.log(Level.WARNING, localisation.getMessage("transaction-level-invalid"));
+			logger.log(Level.WARNING, localisation.getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, ISOLATION_KEY));
 		}
 	}
 
 	private void setPassword() {
 		final String password = this.getConfiguration().getString(PASSWORD_KEY);
 		if (password != null) {
-			logger.log(Level.CONFIG, localisation.getMessage("override-value", PASSWORD_KEY, maskString(password)));
+			logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, PASSWORD_KEY, maskString(password)));
 			this.dataSourceConfig.setPassword(password);
 		}
 	}
@@ -128,7 +129,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private void setUrl() {
 		final String url = this.getConfiguration().getString("url");
 		if (url != null) {
-			logger.log(Level.CONFIG, localisation.getMessage("override-value", URL_KEY, url));
+			logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, URL_KEY, url));
 			this.dataSourceConfig.setUrl(replaceDatabaseString(url));
 		} else {
 			this.dataSourceConfig.setUrl(replaceDatabaseString(dataSourceConfig.getUrl()));
@@ -138,7 +139,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private void setUserName() {
 		final String username = this.getConfiguration().getString(USERNAME_KEY);
 		if (username != null) {
-			logger.log(Level.CONFIG, localisation.getMessage("override-value", USERNAME_KEY, username));
+			logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, USERNAME_KEY, username));
 			this.dataSourceConfig.setUsername(username);
 		}
 	}

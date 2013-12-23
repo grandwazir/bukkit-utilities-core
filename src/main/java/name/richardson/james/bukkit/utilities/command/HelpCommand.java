@@ -31,9 +31,10 @@ import org.apache.commons.lang.Validate;
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
-import name.richardson.james.bukkit.utilities.formatters.DefaultColourFormatter;
+import name.richardson.james.bukkit.utilities.localisation.ColouredLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
 
 /**
  * Formats and returns basic help information for a {@link Command} using the {@link CommandMetadata}. Additionally it can provide a list of all known commands
@@ -44,13 +45,9 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClass
  */
 public final class HelpCommand extends AbstractCommand {
 
-	private static final String PLUGIN_NAME_AND_VERSION_KEY = "plugin-name-and-version";
-	private static final String PLUGIN_DESCRIPTION_KEY = "plugin-description";
-	private static final String USING_HELP_KEY = "using-help";
-	private final ColourFormatter colourFormatter = new DefaultColourFormatter();
 	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
 	private final String label;
-	private final Localisation localisation = new ResourceBundleByClassLocalisation(HelpCommand.class);
+	private final ColouredLocalisation localisation = new ResourceBundleLocalisation();
 
 	/**
 	 * Construct a HelpCommand using the label and commands.
@@ -75,15 +72,15 @@ public final class HelpCommand extends AbstractCommand {
 		CommandSender commandSender = commandContext.getCommandSender();
 		Command requestedCommand = getCommand(commandContext);
 		if (requestedCommand == null) {
-			commandSender.sendMessage(ChatColor.LIGHT_PURPLE + localisation.getMessage(PLUGIN_NAME_AND_VERSION_KEY));
-			commandSender.sendMessage(ChatColor.AQUA + localisation.getMessage(PLUGIN_DESCRIPTION_KEY));
-			commandSender.sendMessage(colourFormatter.format(localisation.getMessage(USING_HELP_KEY), ColourFormatter.FormatStyle.WARNING, "/" + label, getName(), getColouredCommandUsage(getUsage())));
+			commandSender.sendMessage(localisation.getMessage(PluginLocalisation.HELPCOMMAND_HEADER, ColourFormatter.FormatStyle.HEADER, PluginLocalisation.PLUGIN_NAME, PluginLocalisation.PLUGIN_VERSION));
+			commandSender.sendMessage(localisation.getMessage(PluginLocalisation.PLUGIN_DESCRIPTION, ColourFormatter.FormatStyle.HEADER));
+			commandSender.sendMessage(localisation.getMessage(PluginLocalisation.HELPCOMMAND_HINT, ColourFormatter.FormatStyle.WARNING, "/" + label, getName(), getColouredCommandUsage(getUsage())));
 			for (Command command : commandMap.values()) {
 				if (!command.isAuthorised(commandSender)) continue;
 				commandSender.sendMessage(getCommandUsage(command));
 			}
 		} else {
-			commandSender.sendMessage(ChatColor.AQUA + requestedCommand.getDescription());
+			commandSender.sendMessage(localisation.getMessage(PluginLocalisation.HELPCOMMAND_COMMAND_DESC, ColourFormatter.FormatStyle.HEADER, requestedCommand.getDescription()));
 			commandSender.sendMessage(getCommandUsage(requestedCommand));
 		}
 	}

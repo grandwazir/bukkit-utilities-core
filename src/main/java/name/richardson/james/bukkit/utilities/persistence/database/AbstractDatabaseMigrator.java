@@ -18,7 +18,15 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.avaje.ebean.EbeanServer;
+
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
  * This class provides a reference implementation that takes two seperate database loaders and migrates the data from one to the other.
@@ -36,6 +44,8 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 
 	private final DatabaseLoader newDatabaseLoader;
 	private final DatabaseLoader oldDatabaseLoader;
+	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseMigrator.class);
+	private final Localisation localisation = new ResourceBundleLocalisation();
 
 	public AbstractDatabaseMigrator(DatabaseLoader oldDatabaseLoader, DatabaseLoader newDatabaseLoader) {
 		this.oldDatabaseLoader = oldDatabaseLoader;
@@ -68,6 +78,7 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 	public void initalise() {
 		this.newDatabaseLoader.load();
 		if (this.newDatabaseLoader.validate() == false) {
+			logger.log(Level.WARNING, PluginLocalisation.DATABASE_UPGRADE_REQUIRED);
 			this.oldDatabaseLoader.initalise();
 			this.beforeUpgrade(this.oldDatabaseLoader.getEbeanServer());
 			this.newDatabaseLoader.initalise();

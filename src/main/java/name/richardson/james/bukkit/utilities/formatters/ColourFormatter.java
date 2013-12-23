@@ -20,7 +20,7 @@ public interface ColourFormatter {
 	 * @param formatStyle the formatting style to apply
 	 * @return the formatted message
 	 */
-	public String format(String message, FormatStyle formatStyle);
+	public String getMessage(String message, FormatStyle formatStyle);
 
 	/**
 	 * Returns a String formatted with arguments using a FormatStyle.
@@ -30,6 +30,6 @@ public interface ColourFormatter {
 	 * @param arguments the arguments to insert into the message
 	 * @return the formatted message
 	 */
-	public String format(String message, FormatStyle formatStyle, Object ... arguments);
+	public String getMessage(String message, FormatStyle formatStyle, Object ... arguments);
 
 }

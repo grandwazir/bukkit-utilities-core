@@ -23,8 +23,15 @@ public class DefaultColourFormatter implements ColourFormatter {
 	private static final ChatColor HEADER_HIGHLIGHT = ChatColor.AQUA;
 	private static final ChatColor DEBUG = ChatColor.LIGHT_PURPLE;
 
+	/**
+	 * Returns a String formatted using a FormatStyle.
+	 *
+	 * @param message     the message to be formatted
+	 * @param formatStyle the formatting style to apply
+	 * @return the formatted message
+	 */
 	@Override
-	public String format(String message, FormatStyle formatStyle) {
+	public String getMessage(String message, FormatStyle formatStyle) {
 		switch (formatStyle) {
 			case ERROR:
 				return ERROR + message.replaceAll("\\{", ERROR_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + ERROR);
@@ -41,9 +48,17 @@ public class DefaultColourFormatter implements ColourFormatter {
 		}
 	}
 
+	/**
+	 * Returns a String formatted with arguments using a FormatStyle.
+	 *
+	 * @param message     the message to be formatted in MessageFormat style.
+	 * @param formatStyle the formatting style to apply
+	 * @param arguments   the arguments to insert into the message
+	 * @return the formatted message
+	 */
 	@Override
-	public String format(String message, FormatStyle formatStyle, Object... arguments) {
-		return MessageFormat.format(format(message, formatStyle), arguments);
+	public String getMessage(String message, FormatStyle formatStyle, Object... arguments) {
+		return MessageFormat.format(getMessage(message, formatStyle), arguments);
 	}
 
 }

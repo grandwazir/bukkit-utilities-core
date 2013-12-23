@@ -26,18 +26,18 @@ import org.bukkit.plugin.PluginManager;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.formatters.DefaultColourFormatter;
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
+import name.richardson.james.bukkit.utilities.localisation.ColouredLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 
 /**
- * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update
- * available for the plugin. The players will be notified when they join the server. The permission required for players
- * to receive the notice is the name of the plugin in lowercase.
+ * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update available for the plugin. The players will be
+ * notified when they join the server. The permission required for players to receive the notice is the name of the plugin in lowercase.
  */
 public class PlayerNotifier extends AbstractListener {
 
-	private final Localisation localisation = new ResourceBundleByClassLocalisation(PlayerNotifier.class);
-	private final ColourFormatter colourFormatter = new DefaultColourFormatter();
+	private final ColouredLocalisation localisation = new ResourceBundleLocalisation();
 	private final String permission;
 	private final String pluginName;
 	private final PluginUpdater updater;
@@ -58,17 +58,7 @@ public class PlayerNotifier extends AbstractListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify && updater.isNewVersionAvailable()) {
-			String key = null;
-			switch (updater.getState()) {
-				case UPDATE:
-					key = "new-version-downloaded";
-					break;
-				case NOTIFY:
-					key = "new-version-available";
-					break;
-			}
-			String message = colourFormatter.format(localisation.getMessage(key), ColourFormatter.FormatStyle.WARNING, pluginName, updater.getRemoteVersion());
-			event.getPlayer().sendMessage(message);
+			event.getPlayer().sendMessage(localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, ColourFormatter.FormatStyle.WARNING, pluginName, updater.getRemoteVersion()));
 		}
 	}
 

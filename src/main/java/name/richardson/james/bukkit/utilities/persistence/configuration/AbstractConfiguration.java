@@ -29,7 +29,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
@@ -41,7 +42,7 @@ public abstract class AbstractConfiguration {
 	private final YamlConfiguration defaults;
 	private final File file;
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractConfiguration.class);
-	private final Localisation localisation = new ResourceBundleByClassLocalisation(AbstractConfiguration.class);
+	private final Localisation localisation = new ResourceBundleLocalisation();
 	private final boolean runtimeDefaults;
 	private YamlConfiguration configuration;
 
@@ -69,12 +70,12 @@ public abstract class AbstractConfiguration {
 
 	protected final void load()
 	throws IOException {
-		logger.log(Level.CONFIG, "Loading configuration: " + this.getClass().getSimpleName());
-		logger.log(Level.CONFIG, "Using path: " + this.file.getAbsolutePath());
+		logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_LOADING, this.getClass().getSimpleName()));
+		logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_USING_PATH, this.file.getAbsolutePath()));
 		if (!this.file.exists() || this.file.length() == 0) {
 			this.defaults.options().copyHeader(true);
 			this.defaults.options().copyDefaults(true);
-			logger.log(Level.WARNING, localisation.getMessage("saving-default-configuration", this.file.getName()));
+			logger.log(Level.WARNING, localisation.getMessage(PluginLocalisation.CONFIGURATION_SAVING_DEFAULT, this.file.getName()));
 			defaults.save(this.file);
 		}
 		this.configuration = YamlConfiguration.loadConfiguration(this.file);
@@ -84,7 +85,7 @@ public abstract class AbstractConfiguration {
 
 	protected final void save()
 	throws IOException {
-		logger.log(Level.CONFIG, "Saving configuration: " + this.file.getName());
+		logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_SAVING, this.file.getName()));
 		this.configuration.save(this.file);
 	}
 }

@@ -33,7 +33,8 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
@@ -41,7 +42,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
 	private final DataSourceConfig datasourceConfig;
-	private final Localisation localisation = new ResourceBundleByClassLocalisation(AbstractDatabaseLoader.class);
+	private final Localisation localisation = new ResourceBundleLocalisation();
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseLoader.class);
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
@@ -70,7 +71,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			if (!this.logger.isLoggable(Level.FINEST)) setGeneratorDebug(generator, false);
 			this.drop();
 			this.create();
-			logger.log(Level.INFO, localisation.getMessage("rebuilt-schema"));
+			logger.log(Level.INFO, localisation.getMessage(PluginLocalisation.DATABASE_REBUILT_SCHEMA));
 		}
 	}
 
@@ -96,7 +97,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	@Override
 	public final void create() {
-		logger.log(Level.INFO, localisation.getMessage("creating-database"));
+		logger.log(Level.INFO, localisation.getMessage(PluginLocalisation.DATABASE_CREATING));
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
 		String script = getGenerateDDLScript();
@@ -107,14 +108,14 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	@Override
 	public final void drop() {
-		logger.log(Level.FINER, "Dropping and destroying database.");
+		logger.log(Level.FINER, localisation.getMessage(PluginLocalisation.DATABASE_DROPPING_TABLES));
 		this.beforeDatabaseDrop();
 		generator.runScript(true, this.getDeleteDLLScript());
 	}
 
 	@Override
 	public final void load() {
-		logger.log(Level.FINE, "Loading database.");
+		logger.log(Level.FINE, localisation.getMessage(PluginLocalisation.DATABASE_LOADING));
 		final Level level = java.util.logging.Logger.getLogger("").getLevel();
 		java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
 		ClassLoader currentClassLoader = null;
@@ -160,11 +161,11 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			try {
 				this.ebeanserver.find(ebean).findRowCount();
 			} catch (final Exception exception) {
-				logger.log(Level.WARNING, localisation.getMessage("schema-invalid"));
+				logger.log(Level.WARNING, localisation.getMessage(PluginLocalisation.DATABASE_INVALID_SCHEMA));
 				return false;
 			}
 		}
-		logger.log(Level.FINER, "Database schema is valid.");
+		logger.log(Level.FINER, localisation.getMessage(PluginLocalisation.DATABASE_VALID_SCHEMA));
 		return true;
 	}
 

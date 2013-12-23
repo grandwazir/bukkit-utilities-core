@@ -5,6 +5,8 @@ package name.richardson.james.bukkit.utilities.localisation;
  */
 public interface Localisation {
 
+	public static String RESOURCE_BUNDLE_NAME = "localisation/Messages";
+
 	/**
 	 * Return the localised message matching the key.
 	 *

@@ -19,7 +19,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 
 public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
@@ -35,7 +36,7 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
 	private static final String DL_HOST = "cursecdn.com";
 
-	private final Localisation localisation = new ResourceBundleByClassLocalisation(BukkitDevPluginUpdater.class);
+	private final Localisation localisation = new ResourceBundleLocalisation();
 	private final int projectId;
 	private final File updateFolder;
 	private final String gameVersion;
@@ -72,11 +73,11 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 			final DefaultArtifactVersion current = new DefaultArtifactVersion(this.gameVersion);
 			final DefaultArtifactVersion target = new DefaultArtifactVersion(versionGameVersion);
 			if (current.getMajorVersion() != target.getMajorVersion()) {
-				getLogger().log(Level.WARNING, localisation.getMessage("major-version-change", versionLink));
+				getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.UPDATER_MANUAL_UPDATE_REQUIRED, versionLink));
 				return;
 			} else {
 				try {
-					getLogger().log(Level.INFO, localisation.getMessage("downloading-new-version", versionLink));
+					getLogger().log(Level.INFO, localisation.getMessage(PluginLocalisation.UPDATER_DOWNLOADING, versionLink));
 					File destination = new File(updateFolder, getName() + ".jar");
 					URLConnection urlConnection = getConnection(versionLink);
 					FileUtils.copyURLToFile(urlConnection.getURL(), destination);
@@ -129,8 +130,7 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				versionLink = (String) latest.get(API_LINK_VALUE);
 				versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
 				if (isNewVersionAvailable()) {
-					String[] params = {getName(), getRemoteVersion()};
-					getLogger().log(Level.INFO, localisation.getMessage("new-version-available", params));
+					getLogger().log(Level.INFO, localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, getName(), getRemoteVersion()));
 					break;
 				}
 			}

@@ -6,11 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
 
 public abstract class AbstractChoiceFormatter implements ChoiceFormatter {
 
-		private final Localisation localisation = new ResourceBundleByClassLocalisation(this.getClass());
+		private final Localisation localisation = new ResourceBundleLocalisation();
 
 		private Object[] arguments;
 		private String[] formats;

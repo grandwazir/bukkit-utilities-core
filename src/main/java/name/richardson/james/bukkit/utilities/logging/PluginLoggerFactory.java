@@ -21,8 +21,6 @@ package name.richardson.james.bukkit.utilities.logging;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleByClassLocalisation;
-
 /**
  * Constructs appropriate loggers based on the class provided. At the moment this will always return {@link PermissivePrefixedLogger} with an attached resource
  * bundle if available.
@@ -33,7 +31,6 @@ public final class PluginLoggerFactory {
 		final String name = classz.getPackage().getName();
 		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
 		if (logger != null) return logger;
-		String resourceBundleName = ResourceBundleByClassLocalisation.getResourceBundleName(classz);
 		return new PermissivePrefixedLogger(name, null);
 	}
 
