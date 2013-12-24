@@ -18,9 +18,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 
 public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
@@ -36,7 +37,7 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
 	private static final String DL_HOST = "cursecdn.com";
 
-	private final Localisation localisation = new ResourceBundleLocalisation();
+	private final Localisation localisation = new StrictResourceBundleLocalisation();
 	private final int projectId;
 	private final File updateFolder;
 	private final String gameVersion;

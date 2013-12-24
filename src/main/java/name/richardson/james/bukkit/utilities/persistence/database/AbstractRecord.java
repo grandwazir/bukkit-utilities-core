@@ -60,12 +60,12 @@ public abstract class AbstractRecord implements Record {
 	}
 
 	@PrePersist
-	private void onCreate() {
+	public void onCreate() {
 		setCreatedAt(AbstractRecord.getTimeNow());
 	}
 
 	@PreUpdate
-	private void OnSave() {
+	public void OnSave() {
 		setModifiedAt(AbstractRecord.getTimeNow());
 	}
 

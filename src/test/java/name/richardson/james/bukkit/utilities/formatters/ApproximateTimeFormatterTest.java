@@ -18,11 +18,12 @@
 
 package name.richardson.james.bukkit.utilities.formatters;
 
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import name.richardson.james.bukkit.utilities.formatters.time.ApproximateTimeFormatter;
 
 @RunWith(JUnit4.class)
 public class ApproximateTimeFormatterTest extends AbstractTimeFormatterTest {

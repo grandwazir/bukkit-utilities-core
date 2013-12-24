@@ -5,8 +5,9 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBundleLocalisation;
 
 /**
  * Provides final methods implementing PrefixedLogger. This class should be used as a base for implementing Loggers which care about how the actual messages are
@@ -33,7 +34,7 @@ public class AbstractPrefixedLogger extends Logger implements PrefixedLogger {
 		for (final Handler handler : getParent().getHandlers()) {
 			handler.setLevel(Level.ALL);
 		}
-		Localisation localisation = new ResourceBundleLocalisation();
+		Localisation localisation = new PermissiveResourceBundleLocalisation();
 		prefix = "[" + localisation.getMessage(PREFIX_KEY) + "]" + " ";
 		debuggingPrefix = "<" + this.getName() + "> ";
 	}

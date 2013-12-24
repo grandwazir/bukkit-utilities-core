@@ -27,9 +27,10 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.persistence.configuration.AbstractConfiguration;
 
@@ -46,7 +47,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 	private final String pluginName;
 	private final ServerConfig serverConfig;
-	private final Localisation localisation = new ResourceBundleLocalisation();
+	private final Localisation localisation = new StrictResourceBundleLocalisation();
 
 	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, final String pluginName, final ServerConfig serverConfig)
 	throws IOException {

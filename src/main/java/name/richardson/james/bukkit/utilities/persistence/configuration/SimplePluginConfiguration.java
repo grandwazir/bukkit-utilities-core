@@ -23,9 +23,10 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
@@ -42,7 +43,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 	private static final String STATISTICS_KEY = "send-anonymous-statistics";
 
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
-	private final Localisation localisation = new ResourceBundleLocalisation();
+	private final Localisation localisation = new StrictResourceBundleLocalisation();
 
 	public SimplePluginConfiguration(final File file, final InputStream defaults) throws IOException {
 		super(file, defaults, true);

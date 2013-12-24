@@ -32,9 +32,10 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
@@ -42,7 +43,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
 	private final DataSourceConfig datasourceConfig;
-	private final Localisation localisation = new ResourceBundleLocalisation();
+	private final Localisation localisation = new StrictResourceBundleLocalisation();
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseLoader.class);
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;

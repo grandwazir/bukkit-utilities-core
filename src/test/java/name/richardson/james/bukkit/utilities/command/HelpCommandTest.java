@@ -18,12 +18,11 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -31,6 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
@@ -43,50 +43,82 @@ import static org.mockito.Mockito.*;
 public class HelpCommandTest extends CommandTestCase {
 
 	private static final String COMMAND_LABEL = "test";
+	private static final String PLUGIN_NAME = "BukkitUtilities";
+	private static final String PLUGIN_VERSION = "v0.0.1-SNAPSHOT";
+	private static final String COMMAND_NAME = "test";
+	private static final String COMMAND_USAGE = "<test> [test] <test>";
+	private static final String COMMAND_DESCRIPTION = "A description.";
+	private static final String VALID_ARGUMENT = COMMAND_NAME;
+	private static final String INVALID_ARGUMENT = "frank";
 
 	private HelpCommand command;
 	private Command mockCommand;
 
 	@Test
-	public void IsAuthorised_RegardlessOfParameter_ReturnTrue()
-	throws Exception {
-		Assert.assertTrue(command.isAuthorised(null));
-	}
-
-	@Test
-	public void Execute_WhenCommandNotInMap_ReturnCommandList() throws Exception {
+	public void respondWithCommandListIfNoArguments() {
 		CommandContext commandContext = getCommandContext();
+		CommandSender commandSender = commandContext.getCommandSender();
 		command.execute(commandContext);
-		verify(commandContext.getCommandSender(), times(4)).sendMessage(anyString());
+		verify(commandSender, times(4)).sendMessage(anyString());
 	}
 
 	@Test
-	public void Execute_WhenListingCommands_OnlyIncludeAuthorisedCommands() throws Exception {
+	public void respondWithCommandDescriptionIfArgumentValid() {
 		CommandContext commandContext = getCommandContext();
+		CommandSender commandSender = commandContext.getCommandSender();
+		when(commandContext.has(1)).thenReturn(true);
+		when(commandContext.getString(1)).thenReturn(VALID_ARGUMENT);
+		command.execute(commandContext);
+		verify(commandSender, times(2)).sendMessage(anyString());
+	}
+
+	@Test
+	public void respondWithCommandListIfArgumentInvalid() {
+		CommandContext commandContext = getCommandContext();
+		CommandSender commandSender = commandContext.getCommandSender();
+		when(commandContext.has(1)).thenReturn(true);
+		when(commandContext.getString(1)).thenReturn(INVALID_ARGUMENT);
+		command.execute(commandContext);
+		verify(commandSender, times(4)).sendMessage(anyString());
+	}
+
+	@Test
+	public void respondWithCommandListOnlyIncludingAccessibleCommandsIfNoArguments() {
+		CommandContext commandContext = getCommandContext();
+		CommandSender commandSender = commandContext.getCommandSender();
 		when(mockCommand.isAuthorised(Matchers.<Permissible>any())).thenReturn(false);
 		command.execute(commandContext);
-		verify(commandContext.getCommandSender(), times(3)).sendMessage(anyString());
+		verify(commandSender, times(3)).sendMessage(anyString());
 	}
 
 	@Test
-	public void Execute_WhenCommandInMap_ReturnHelp()
-	throws Exception {
+	public void respondWithCommandListIfRequestedCommandIsInaccessible() {
 		CommandContext commandContext = getCommandContext();
-		when(commandContext.has(anyInt())).thenReturn(true);
-		when(commandContext.getString(1)).thenReturn("test");
+		CommandSender commandSender = commandContext.getCommandSender();
+		when(mockCommand.isAuthorised(Matchers.<Permissible>any())).thenReturn(false);
+		when(commandContext.getString(1)).thenReturn(VALID_ARGUMENT);
 		command.execute(commandContext);
-		verify(commandContext.getCommandSender(), times(2)).sendMessage(anyString());
+		verify(commandSender, times(3)).sendMessage(anyString());
+	}
+
+	@Test
+	public void commandShouldAlwaysBeAccessible() {
+		assertTrue(command.isAuthorised(null));
 	}
 
 	@Before
 	public void setUp()
 	throws Exception {
 		mockCommand = mock(Command.class);
-		when(mockCommand.getName()).thenReturn("test");
-		when(mockCommand.getUsage()).thenReturn("<test> [test] <test>");
-		when(mockCommand.getDescription()).thenReturn("A description.");
+		when(mockCommand.getName()).thenReturn(COMMAND_NAME);
+		when(mockCommand.getUsage()).thenReturn(COMMAND_USAGE);
+		when(mockCommand.getDescription()).thenReturn(COMMAND_DESCRIPTION);
 		when(mockCommand.isAuthorised(Matchers.<Permissible>any())).thenReturn(true);
-		command = new HelpCommand("test", new HashSet<Command>(Arrays.asList(mockCommand)));
+		command = new HelpCommand(getPluginDescriptionFile(), COMMAND_LABEL, new HashSet<Command>(Arrays.asList(mockCommand)));
+	}
+
+	public static PluginDescriptionFile getPluginDescriptionFile() {
+		return new PluginDescriptionFile(PLUGIN_NAME, PLUGIN_VERSION, null);
 	}
 
 }

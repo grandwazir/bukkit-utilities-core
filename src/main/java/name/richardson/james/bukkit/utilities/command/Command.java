@@ -27,7 +27,7 @@ import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
  * Executes actions on behalf of a user, notifies the user of the outcome. Used anywhere where a user is required instructions to a plugin interactively.
  * Commands also provide a method for users to check to see if they are authorised to use the command in the first place.
  */
-public interface Command extends CommandMetadata, MatcherInvoker {
+public interface Command extends MatcherInvoker {
 
 	/**
 	 * Execute a command using the provided {@link CommandContext}.
@@ -47,5 +47,26 @@ public interface Command extends CommandMetadata, MatcherInvoker {
 	 * @since 6.0.0
 	 */
 	public boolean isAuthorised(Permissible permissible);
+
+	/**
+	 * Return the short name of this command.
+	 *
+	 * @return the localised name of the command
+	 */
+	public String getName();
+
+	/**
+	 * Returns a brief description of what this command does.
+	 *
+	 * @return the localised description of the command
+	 */
+	public String getDescription();
+
+	/**
+	 * Returns the arguments that can be passed to this command.
+	 *
+	 * @return the localised usage message
+	 */
+	public String getUsage();
 
 }

@@ -18,23 +18,20 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
-import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
-import name.richardson.james.bukkit.utilities.localisation.ColouredLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBundleLocalisation;
 
 /**
  * Formats and returns basic help information for a {@link Command} using the {@link CommandMetadata}. Additionally it can provide a list of all known commands
@@ -45,9 +42,14 @@ import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
  */
 public final class HelpCommand extends AbstractCommand {
 
+	public static String HINT_KEY = "helpcommand.hint";
+	public static String PLUGIN_DESCRIPTION = "helpcommand.plugin-description";
+	public static String COMMAND_DESCRIPTION_KEY = "helpcommand.command-description";
+
 	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
+	private final PluginDescriptionFile descriptionFile;
 	private final String label;
-	private final ColouredLocalisation localisation = new ResourceBundleLocalisation();
+	private final FormattedLocalisation localisation = new PermissiveResourceBundleLocalisation();
 
 	/**
 	 * Construct a HelpCommand using the label and commands.
@@ -56,9 +58,10 @@ public final class HelpCommand extends AbstractCommand {
 	 *                 executor is attached to.
 	 * @param commands the commands that the class should provide help for.
 	 */
-	public HelpCommand(String label, Set<Command> commands) {
+	public HelpCommand(PluginDescriptionFile descriptionFile, String label, Set<Command> commands) {
 		Validate.notEmpty(label, "Command label can not be empty or null!");
 		Validate.notEmpty(commands, "CommandMap can not be empty or null!");
+		this.descriptionFile = descriptionFile;
 		this.label = label;
 		for (Command command : commands) {
 			commandMap.put(command.getName(), command);
@@ -70,18 +73,11 @@ public final class HelpCommand extends AbstractCommand {
 	public void execute(CommandContext commandContext) {
 		Validate.notNull(commandContext, "Command context may not be null!");
 		CommandSender commandSender = commandContext.getCommandSender();
-		Command requestedCommand = getCommand(commandContext);
-		if (requestedCommand == null) {
-			commandSender.sendMessage(localisation.getMessage(PluginLocalisation.HELPCOMMAND_HEADER, ColourFormatter.FormatStyle.HEADER, PluginLocalisation.PLUGIN_NAME, PluginLocalisation.PLUGIN_VERSION));
-			commandSender.sendMessage(localisation.getMessage(PluginLocalisation.PLUGIN_DESCRIPTION, ColourFormatter.FormatStyle.HEADER));
-			commandSender.sendMessage(localisation.getMessage(PluginLocalisation.HELPCOMMAND_HINT, ColourFormatter.FormatStyle.WARNING, "/" + label, getName(), getColouredCommandUsage(getUsage())));
-			for (Command command : commandMap.values()) {
-				if (!command.isAuthorised(commandSender)) continue;
-				commandSender.sendMessage(getCommandUsage(command));
-			}
+		Command command = setCommandFromContext(commandContext);
+		if (command == null) {
+			respondWithCommandList(commandSender);
 		} else {
-			commandSender.sendMessage(localisation.getMessage(PluginLocalisation.HELPCOMMAND_COMMAND_DESC, ColourFormatter.FormatStyle.HEADER, requestedCommand.getDescription()));
-			commandSender.sendMessage(getCommandUsage(requestedCommand));
+			respondWithCommandDescription(commandSender, command);
 		}
 	}
 
@@ -97,13 +93,14 @@ public final class HelpCommand extends AbstractCommand {
 		return true;
 	}
 
-	private String getColouredCommandUsage(String usage) {
-		usage = usage.replaceAll("\\<", ChatColor.YELLOW + "\\<");
-		usage = usage.replaceAll("\\[", ChatColor.GREEN + "\\[");
-		return usage;
+	private String getColouredCommandUsage(Command command) {
+		String message = command.getUsage();
+		message = message.replaceAll("\\<", ChatColor.YELLOW + "\\<");
+		message = message.replaceAll("\\[", ChatColor.GREEN + "\\[");
+		return message;
 	}
 
-	private Command getCommand(CommandContext commandContext) {
+	private Command setCommandFromContext(CommandContext commandContext) {
 		if (commandContext.has(1)) {
 			return commandMap.get(commandContext.getString(1));
 		} else {
@@ -111,10 +108,25 @@ public final class HelpCommand extends AbstractCommand {
 		}
 	}
 
-	private String getCommandUsage(Command command) {
-		String usage = getColouredCommandUsage(command.getUsage());
-		String message = ChatColor.RED + "/" + label + " " + ChatColor.YELLOW + command.getName() + " " + usage;
-		return message;
+	private void respondWithCommandDescription(CommandSender commandSender, Command command) {
+		String message = getLocalisation().formatAsHeaderMessage(COMMAND_DESCRIPTION_KEY, command.getDescription());
+		commandSender.sendMessage(message);
+		respondWithCommandUsage(commandSender, command);
+	}
+
+	private void respondWithCommandList(CommandSender commandSender) {
+		commandSender.sendMessage(localisation.formatAsHeaderMessage(descriptionFile.getFullName()));
+		commandSender.sendMessage((getLocalisation().formatAsHeaderMessage(PLUGIN_DESCRIPTION)));
+		commandSender.sendMessage((getLocalisation().formatAsInfoMessage(HINT_KEY, "/" + label, getName(), getColouredCommandUsage(this))));
+		for (Command command : commandMap.values()) {
+			if (!command.isAuthorised(commandSender)) continue;
+			respondWithCommandUsage(commandSender, command);
+		}
+	}
+
+	private void respondWithCommandUsage(CommandSender commandSender, Command command) {
+	  String message = ChatColor.RED + "/" + label + " " + ChatColor.YELLOW + command.getName() + " " + getColouredCommandUsage(command);
+		commandSender.sendMessage(message);
 	}
 
 }

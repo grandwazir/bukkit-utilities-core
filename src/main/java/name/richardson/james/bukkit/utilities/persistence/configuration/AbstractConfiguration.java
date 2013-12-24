@@ -28,9 +28,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
@@ -42,7 +43,7 @@ public abstract class AbstractConfiguration {
 	private final YamlConfiguration defaults;
 	private final File file;
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractConfiguration.class);
-	private final Localisation localisation = new ResourceBundleLocalisation();
+	private final Localisation localisation = new StrictResourceBundleLocalisation();
 	private final boolean runtimeDefaults;
 	private YamlConfiguration configuration;
 

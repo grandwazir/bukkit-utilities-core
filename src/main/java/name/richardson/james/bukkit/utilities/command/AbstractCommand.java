@@ -7,6 +7,9 @@ import java.util.Set;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 
 /**
  * This abstract implementation provides final methods for most of the methods provided the Command interface. It should be used for convenience when
@@ -14,8 +17,9 @@ import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
  */
 public abstract class AbstractCommand implements Command {
 
-	private final CommandMetadata commandMetadata = new DefaultCommandMetadata(this.getClass());
+	private final FormattedLocalisation formattedLocalisation = new StrictResourceBundleLocalisation();
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
+	private final String keyPrefix = this.getClass().getSimpleName().toLowerCase();
 
 	@Override
 	public final void addMatcher(Matcher matcher) {
@@ -32,26 +36,21 @@ public abstract class AbstractCommand implements Command {
 
 	@Override
 	public final String getDescription() {
-		return getCommandMetadata().getDescription();
+		return formattedLocalisation.getMessage(keyPrefix + ".description");
+	}
+
+	public final FormattedLocalisation getLocalisation() {
+		return formattedLocalisation;
 	}
 
 	@Override
 	public final String getName() {
-		return getCommandMetadata().getName();
+		return formattedLocalisation.getMessage(keyPrefix + ".name");
 	}
 
 	@Override
 	public final String getUsage() {
-		return getCommandMetadata().getUsage();
-	}
-
-	/**
-	 * Return the CommandMetadata attached to this command.
-	 *
-	 * @return the command metadata.
-	 */
-	protected final CommandMetadata getCommandMetadata() {
-		return commandMetadata;
+		return formattedLocalisation.getMessage(keyPrefix + ".usage");
 	}
 
 	/**

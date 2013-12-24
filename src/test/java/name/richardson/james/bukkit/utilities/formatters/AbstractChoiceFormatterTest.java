@@ -19,7 +19,7 @@ public class AbstractChoiceFormatterTest extends TestCase {
 	public void getMessage_WhenSetupCorrectly_ProvideFormattedMessage()
 	throws Exception {
 		formatter.setLimits(0,1,2);
-		formatter.setFormats("zero", "one", "many");
+		formatter.setFormats("test.zero", "test.one", "test.many");
 		formatter.setArguments(2);
 		formatter.setMessage("We have {0}.");
 		assertEquals("We have 2 bananas.", formatter.getMessage());

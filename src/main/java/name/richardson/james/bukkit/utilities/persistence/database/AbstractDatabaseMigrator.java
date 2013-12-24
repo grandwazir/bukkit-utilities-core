@@ -21,11 +21,10 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.avaje.ebean.EbeanServer;
-
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
@@ -45,7 +44,7 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 	private final DatabaseLoader newDatabaseLoader;
 	private final DatabaseLoader oldDatabaseLoader;
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseMigrator.class);
-	private final Localisation localisation = new ResourceBundleLocalisation();
+	private final Localisation localisation = new StrictResourceBundleLocalisation();
 
 	public AbstractDatabaseMigrator(DatabaseLoader oldDatabaseLoader, DatabaseLoader newDatabaseLoader) {
 		this.oldDatabaseLoader = oldDatabaseLoader;
@@ -81,6 +80,7 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 			logger.log(Level.WARNING, PluginLocalisation.DATABASE_UPGRADE_REQUIRED);
 			this.oldDatabaseLoader.initalise();
 			this.beforeUpgrade(this.oldDatabaseLoader.getEbeanServer());
+			this.oldDatabaseLoader.drop();
 			this.newDatabaseLoader.initalise();
 			this.afterUpgrade(this.newDatabaseLoader.getEbeanServer());
 		}

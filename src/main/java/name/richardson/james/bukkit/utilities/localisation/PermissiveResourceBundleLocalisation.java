@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013 James Richardson.
  *
- * ColouredLocalisation.java is part of BukkitUtilities.
+ * PermissionResourceBundleLocalisation.java is part of BukkitUtilities.
  *
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,8 +18,25 @@
 
 package name.richardson.james.bukkit.utilities.localisation;
 
-import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
+public class PermissiveResourceBundleLocalisation extends AbstractResourceBundleLocalisation {
 
-public interface ColouredLocalisation extends Localisation, ColourFormatter {
+	public PermissiveResourceBundleLocalisation() {
+		super();
+	}
+
+	public PermissiveResourceBundleLocalisation(String bundleName) {
+		super(bundleName);
+	}
+
+	@Override
+	public String getMessage(String key) {
+		String message;
+		if (getResourceBundle().containsKey(key)) {
+			message = getResourceBundle().getString(key);
+		} else {
+			message = key;
+		}
+		return message;
+	}
 
 }

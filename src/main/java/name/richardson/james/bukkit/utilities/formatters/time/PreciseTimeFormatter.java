@@ -1,4 +1,4 @@
-package name.richardson.james.bukkit.utilities.formatters;
+package name.richardson.james.bukkit.utilities.formatters.time;
 
 import java.util.Date;
 import java.util.List;

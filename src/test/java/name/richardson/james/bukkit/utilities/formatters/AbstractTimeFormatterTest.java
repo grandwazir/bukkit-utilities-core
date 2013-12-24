@@ -18,13 +18,12 @@
 
 package name.richardson.james.bukkit.utilities.formatters;
 
-import java.util.Date;
-
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import name.richardson.james.bukkit.utilities.formatters.time.TimeFormatter;
 
 @RunWith(JUnit4.class)
 public abstract class AbstractTimeFormatterTest extends TestCase {

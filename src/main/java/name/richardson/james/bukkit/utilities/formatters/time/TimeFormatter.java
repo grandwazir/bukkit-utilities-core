@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- DefaultColourFormatterTest.java is part of BukkitUtilities.
+ TimeFormatter.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,19 +16,27 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.formatters;
+package name.richardson.james.bukkit.utilities.formatters.time;
 
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+/**
+ * Converts times represented within Strings to milliseconds and back again.
+ */
+public interface TimeFormatter {
 
-@RunWith(JUnit4.class)
-public class DefaultColourFormatterTest extends ColourFormatterTest {
+	/**
+	 * Return the milliseconds represented by the String provided.
+	 *
+	 * @param timeString the string to parse.
+	 * @return the number of milliseconds it represents.
+	 */
+	public long getDurationInMilliseconds(String timeString);
 
-	@Before
-	public void setUp()
-	throws Exception {
-		setColourFormatter(new DefaultColourFormatter());
-	}
+	/**
+	 * Return the human readable duration for a given number of milliseconds.
+	 *
+	 * @param time the number of milliseconds
+	 * @return the string representing the number of milliseconds in a human readable format.
+	 */
+	public String getHumanReadableDuration(long time);
 
 }

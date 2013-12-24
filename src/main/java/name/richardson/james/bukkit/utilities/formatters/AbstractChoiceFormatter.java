@@ -5,12 +5,13 @@ import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 
 public abstract class AbstractChoiceFormatter implements ChoiceFormatter {
 
-		private final Localisation localisation = new ResourceBundleLocalisation();
+		private final Localisation localisation = new StrictResourceBundleLocalisation();
 
 		private Object[] arguments;
 		private String[] formats;

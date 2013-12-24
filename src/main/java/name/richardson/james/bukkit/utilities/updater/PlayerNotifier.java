@@ -23,13 +23,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
-import name.richardson.james.bukkit.utilities.formatters.DefaultColourFormatter;
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
-import name.richardson.james.bukkit.utilities.localisation.ColouredLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 
 /**
  * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update available for the plugin. The players will be
@@ -37,7 +35,7 @@ import name.richardson.james.bukkit.utilities.localisation.ResourceBundleLocalis
  */
 public class PlayerNotifier extends AbstractListener {
 
-	private final ColouredLocalisation localisation = new ResourceBundleLocalisation();
+	private final FormattedLocalisation localisation = new StrictResourceBundleLocalisation();
 	private final String permission;
 	private final String pluginName;
 	private final PluginUpdater updater;
@@ -58,7 +56,7 @@ public class PlayerNotifier extends AbstractListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify && updater.isNewVersionAvailable()) {
-			event.getPlayer().sendMessage(localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, ColourFormatter.FormatStyle.WARNING, pluginName, updater.getRemoteVersion()));
+			event.getPlayer().sendMessage(localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, pluginName, updater.getRemoteVersion()));
 		}
 	}
 

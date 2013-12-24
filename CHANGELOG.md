@@ -1,5 +1,11 @@
 # Changelog for BukkitUtilities (v6.0.6-SNAPSHOT)
 
+2013-12-23 23:25:05 +0000    delete permission manager. no longer used (James Richardson)  
+2013-12-23 23:23:58 +0000    now passes tests (James Richardson)  
+2013-12-23 23:16:39 +0000    remove old localisation files (James Richardson)  
+2013-12-23 23:06:52 +0000    add new localisation classes (James Richardson)  
+2013-12-23 23:06:34 +0000    finished refactoring localisation (James Richardson)  
+2013-12-23 18:58:04 +0000    implemented DatabaseMigrator (James Richardson)  
 
 **v6.0.5**  
 2013-12-14 15:04:22 +0000    commit changelog (James Richardson)  
