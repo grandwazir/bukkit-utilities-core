@@ -21,7 +21,6 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
@@ -30,7 +29,7 @@ import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 /**
  * This class provides a reference implementation that takes two seperate database loaders and migrates the data from one to the other.
  * <p/>
- * It does this by attempting to validate the database against the current schema. If validate fails it then attempts to load the old database schema, allowing for
+ * It does this by attempting to isSchemaValid the database against the current schema. If isSchemaValid fails it then attempts to load the old database schema, allowing for
  * getting the data out by implementing {@link #beforeUpgrade(com.avaje.ebean.EbeanServer)} and then rebuild the database with the new schema. Once the schema has
  * been regenerated you can reinsert the data by implementing {@link #afterUpgrade(com.avaje.ebean.EbeanServer)}.
  * <p/>
@@ -76,7 +75,7 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 	@Override
 	public void initalise() {
 		this.newDatabaseLoader.load();
-		if (this.newDatabaseLoader.validate() == false) {
+		if (this.newDatabaseLoader.isSchemaValid() == false) {
 			logger.log(Level.WARNING, PluginLocalisation.DATABASE_UPGRADE_REQUIRED);
 			this.oldDatabaseLoader.initalise();
 			this.beforeUpgrade(this.oldDatabaseLoader.getEbeanServer());

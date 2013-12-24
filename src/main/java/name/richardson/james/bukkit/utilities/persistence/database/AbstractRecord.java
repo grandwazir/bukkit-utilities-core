@@ -65,7 +65,7 @@ public abstract class AbstractRecord implements Record {
 	}
 
 	@PreUpdate
-	public void OnSave() {
+	public void onSave() {
 		setModifiedAt(AbstractRecord.getTimeNow());
 	}
 

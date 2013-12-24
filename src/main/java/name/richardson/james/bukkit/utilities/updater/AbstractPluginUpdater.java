@@ -38,9 +38,9 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 	private final String version;
 	private final Logger logger;
 
-	public AbstractPluginUpdater(PluginDescriptionFile pluginDescriptionFile, PluginUpdater.Branch branch, PluginUpdater.State state) {
-		this.name = pluginDescriptionFile.getName();
-		this.version = pluginDescriptionFile.getVersion();
+	public AbstractPluginUpdater(PluginDescriptionFile descriptionFile, PluginUpdater.Branch branch, PluginUpdater.State state) {
+		this.name = descriptionFile.getName();
+		this.version = descriptionFile.getVersion();
 		this.branch = branch;
 		this.state = state;
 		this.logger = PluginLoggerFactory.getLogger(this.getClass());

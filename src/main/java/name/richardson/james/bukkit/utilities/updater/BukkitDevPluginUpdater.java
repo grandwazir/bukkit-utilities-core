@@ -48,8 +48,8 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	private String versionName;
 	private String versionType;
 
-	public BukkitDevPluginUpdater(PluginDescriptionFile pluginDescriptionFile, Branch branch, State state, int projectId, File updateFolder, String gameVersion) {
-		super(pluginDescriptionFile, branch, state);
+	public BukkitDevPluginUpdater(PluginDescriptionFile descriptionFile, Branch branch, State state, int projectId, File updateFolder, String gameVersion) {
+		super(descriptionFile, branch, state);
 		this.projectId = projectId;
 		this.updateFolder = updateFolder;
 		this.gameVersion = gameVersion;

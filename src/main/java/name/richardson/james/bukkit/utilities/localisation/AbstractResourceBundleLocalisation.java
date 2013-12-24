@@ -49,8 +49,8 @@ public abstract class AbstractResourceBundleLocalisation implements FormattedLoc
 
 	@Override
 	public String formatAsHeaderMessage(String message, Object... arguments) {
-		String formattedMessageWithoutArguments = messageFormatter.formatAsHeaderMessage(getMessage(message));
-		return MessageFormat.format(formattedMessageWithoutArguments, arguments);
+		String s = messageFormatter.formatAsHeaderMessage(getMessage(message));
+		return MessageFormat.format(s, arguments);
 	}
 
 	@Override
@@ -60,14 +60,14 @@ public abstract class AbstractResourceBundleLocalisation implements FormattedLoc
 
 	@Override
 	public String formatAsInfoMessage(String message, Object... arguments) {
-		String formattedMessageWithoutArguments = messageFormatter.formatAsInfoMessage(getMessage(message));
-		return MessageFormat.format(formattedMessageWithoutArguments, arguments);
+		String s = messageFormatter.formatAsInfoMessage(getMessage(message));
+		return MessageFormat.format(s, arguments);
 	}
 
 	@Override
 	public String formatAsWarningMessage(String message, Object... arguments) {
-		String formattedMessageWithoutArguments = messageFormatter.formatAsWarningMessage(getMessage(message));
-		return MessageFormat.format(formattedMessageWithoutArguments, arguments);
+		String s = messageFormatter.formatAsWarningMessage(getMessage(message));
+		return MessageFormat.format(s, arguments);
 	}
 
 	@Override
@@ -78,8 +78,8 @@ public abstract class AbstractResourceBundleLocalisation implements FormattedLoc
 
 	@Override
 	public String formatAsErrorMessage(String message, Object... arguments) {
-		String formattedMessageWithoutArguments = messageFormatter.formatAsErrorMessage(getMessage(message));
-		return MessageFormat.format(formattedMessageWithoutArguments, arguments);
+		String s = messageFormatter.formatAsErrorMessage(getMessage(message));
+		return MessageFormat.format(s, arguments);
 	}
 
 	@Override

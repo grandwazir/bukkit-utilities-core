@@ -42,9 +42,9 @@ import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBun
  */
 public final class HelpCommand extends AbstractCommand {
 
-	public static String HINT_KEY = "helpcommand.hint";
-	public static String PLUGIN_DESCRIPTION = "helpcommand.plugin-description";
-	public static String COMMAND_DESCRIPTION_KEY = "helpcommand.command-description";
+	public static final String HINT_KEY = "helpcommand.hint";
+	public static final String PLUGIN_DESCRIPTION = "helpcommand.plugin-description";
+	public static final String COMMAND_DESCRIPTION_KEY = "helpcommand.command-description";
 
 	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
 	private final PluginDescriptionFile descriptionFile;

@@ -27,14 +27,14 @@ public final class DatabaseLoaderFactory {
 	/**
 	 * Returns a database loader configured with the provided database configuration.
 	 *
-	 * @param databaseConfiguration the configuration to use for the database loader
+	 * @param configuration the configuration to use for the database loader
 	 * @return the database loader
 	 */
-	public final static DatabaseLoader getDatabaseLoader(DatabaseConfiguration databaseConfiguration) {
-		if (databaseConfiguration.getDataSourceConfig().getDriver().contains("sqlite")) {
-			return new SQLiteDatabaseLoader(databaseConfiguration);
+	public final static DatabaseLoader getDatabaseLoader(DatabaseConfiguration configuration) {
+		if (configuration.getDataSourceConfig().getDriver().contains("sqlite")) {
+			return new SQLiteDatabaseLoader(configuration);
 		} else {
-			return new DefaultDatabaseLoader(databaseConfiguration);
+			return new DefaultDatabaseLoader(configuration);
 		}
 	}
 

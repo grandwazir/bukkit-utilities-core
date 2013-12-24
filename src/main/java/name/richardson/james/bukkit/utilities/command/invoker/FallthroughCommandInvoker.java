@@ -49,30 +49,30 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command bukkitCommand, String commandLabel, String[] arguments) {
-		String commandName = (arguments.length == 0) ? null : arguments[0];
+	public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+		String commandName = (args.length == 0) ? null : args[0];
 		if (commandName != null && getCommands().containsKey(commandName)) {
-			Command command = getCommands().get(commandName);
-			CommandContext commandContext = new NestedCommandContext(arguments, commandSender);
-			command.execute(commandContext);
+			Command selectedCommand = getCommands().get(commandName);
+			CommandContext commandContext = new NestedCommandContext(args, sender);
+			selectedCommand.execute(commandContext);
 			return true;
 		} else {
-			CommandContext commandContext = new PassthroughCommandContext(arguments, commandSender);
+			CommandContext commandContext = new PassthroughCommandContext(args, sender);
 			fallthroughCommand.execute(commandContext);
 			return true;
 		}
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender commandSender, org.bukkit.command.Command bukkitCommand, String commandLabel, String[] arguments) {
-		String commandName = (arguments.length == 0) ? null : arguments[0];
+	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
+		String commandName = (args.length == 0) ? null : args[0];
 		if (commandName != null && getCommands().containsKey(commandName)) {
-			Command command = getCommands().get(commandName);
-			CommandContext commandContext = new NestedCommandContext(arguments, commandSender);
-			List<String> results = new ArrayList<String>(command.getArgumentMatches(commandContext));
+			Command selectedCommand = getCommands().get(commandName);
+			CommandContext commandContext = new NestedCommandContext(args, sender);
+			List<String> results = new ArrayList<String>(selectedCommand.getArgumentMatches(commandContext));
 			return results;
 		} else {
-			CommandContext commandContext = new PassthroughCommandContext(arguments, commandSender);
+			CommandContext commandContext = new PassthroughCommandContext(args, sender);
 			List<String> results = new ArrayList<String>(fallthroughCommand.getArgumentMatches(commandContext));
 			return results;
 		}

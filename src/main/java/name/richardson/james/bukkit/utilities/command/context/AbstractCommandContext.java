@@ -37,9 +37,9 @@ import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
  */
 public class AbstractCommandContext implements CommandContext {
 
-	private final Matcher ARGUMENT_MATCHER = Pattern.compile("(\\w+)").matcher("");
-	private final Matcher FLAG_WITHOUT_ARGUMENTS_MATCHER = Pattern.compile("-(\\w+)").matcher("");
-	private final Matcher FLAG_WITH_ARGUMENTS_MATCHER = Pattern.compile("(\\w{1}):(\\w+)").matcher("");
+	private final Matcher argumentMatcher = Pattern.compile("(\\w+)").matcher("");
+	private final Matcher flagWithoutArgumentsMatcher = Pattern.compile("-(\\w+)").matcher("");
+	private final Matcher flagWithArgumentsMatcher = Pattern.compile("(\\w{1}):(\\w+)").matcher("");
 
 	private final List<String> arguments = new ArrayList<String>();
 	private final Map<String, String> flags = new HashMap<String, String>();
@@ -81,11 +81,11 @@ public class AbstractCommandContext implements CommandContext {
 	@Override
 	public String getFlag(String label) {
 		Validate.notNull(label);
+		String flag = null;
 		if (hasFlag(label)) {
-			return flags.get(label);
-		} else {
-			return null;
+			flag = flags.get(label);
 		}
+		return flag;
 	}
 
 	/**
@@ -170,22 +170,22 @@ public class AbstractCommandContext implements CommandContext {
 	}
 
 	private final void setArguments(String arguments) {
-		arguments = arguments.replaceAll(FLAG_WITH_ARGUMENTS_MATCHER.pattern().toString(), "");
-		arguments = arguments.replaceAll(FLAG_WITHOUT_ARGUMENTS_MATCHER.pattern().toString(), "");
-		ARGUMENT_MATCHER.reset(arguments);
-		while (ARGUMENT_MATCHER.find()) {
-			this.arguments.add(ARGUMENT_MATCHER.group(1));
+		arguments = arguments.replaceAll(flagWithArgumentsMatcher.pattern().toString(), "");
+		arguments = arguments.replaceAll(flagWithoutArgumentsMatcher.pattern().toString(), "");
+		argumentMatcher.reset(arguments);
+		while (argumentMatcher.find()) {
+			this.arguments.add(argumentMatcher.group(1));
 		}
 	}
 
 	private final void setFlags(String arguments) {
-		FLAG_WITH_ARGUMENTS_MATCHER.reset(arguments);
-		while (FLAG_WITH_ARGUMENTS_MATCHER.find()) {
-			flags.put(FLAG_WITH_ARGUMENTS_MATCHER.group(1), FLAG_WITH_ARGUMENTS_MATCHER.group(2));
+		flagWithArgumentsMatcher.reset(arguments);
+		while (flagWithArgumentsMatcher.find()) {
+			flags.put(flagWithArgumentsMatcher.group(1), flagWithArgumentsMatcher.group(2));
 		}
-		FLAG_WITHOUT_ARGUMENTS_MATCHER.reset(arguments);
-		while (FLAG_WITHOUT_ARGUMENTS_MATCHER.find()) {
-			flags.put(FLAG_WITHOUT_ARGUMENTS_MATCHER.group(1), null);
+		flagWithoutArgumentsMatcher.reset(arguments);
+		while (flagWithoutArgumentsMatcher.find()) {
+			flags.put(flagWithoutArgumentsMatcher.group(1), null);
 		}
 	}
 

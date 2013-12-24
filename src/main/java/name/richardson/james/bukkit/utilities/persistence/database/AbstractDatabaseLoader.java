@@ -32,7 +32,6 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
@@ -66,7 +65,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	synchronized public final void initalise() {
 		this.load();
-		if (!this.validate() || this.rebuild) {
+		if (!this.isSchemaValid() || this.rebuild) {
 			final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
 			generator = server.getDdlGenerator();
 			if (!this.logger.isLoggable(Level.FINEST)) setGeneratorDebug(generator, false);
@@ -157,7 +156,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	@Override
-	public final boolean validate() {
+	public final boolean isSchemaValid() {
 		for (final Class<?> ebean : this.classes) {
 			try {
 				this.ebeanserver.find(ebean).findRowCount();

@@ -43,5 +43,5 @@ public interface DatabaseLoader {
 
 	public void load();
 
-	public boolean validate();
+	public boolean isSchemaValid();
 }
