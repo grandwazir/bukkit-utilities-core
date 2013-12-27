@@ -27,6 +27,8 @@ import java.util.logging.Logger;
  */
 public final class PluginLoggerFactory {
 
+	private PluginLoggerFactory() {};
+
 	public final static Logger getLogger(Class classz) {
 		final String name = classz.getPackage().getName();
 		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);

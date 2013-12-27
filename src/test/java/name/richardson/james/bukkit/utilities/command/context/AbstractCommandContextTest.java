@@ -38,11 +38,11 @@ public abstract class AbstractCommandContextTest extends TestCase {
 		assertNotNull(getCommandContext().getCommandSender());
 	}
 
-	protected CommandContext getCommandContext() {
+	public CommandContext getCommandContext() {
 		return commandContext;
 	}
 
-	protected void setCommandContext(CommandContext commandContext) {
+	public void setCommandContext(CommandContext commandContext) {
 		this.commandContext = commandContext;
 	}
 

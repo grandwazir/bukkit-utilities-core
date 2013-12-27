@@ -37,31 +37,31 @@ public abstract class AbstractCommandInvokerTest extends TestCase {
 	private CommandInvoker commandInvoker;
 
 	@Test
-	public void addCommand_whenAddCommand_isAddedToCollection() {
+	public void addCommandandVerifyCommandIsAddedToCollection() {
 		Command command = getMockCommand();
 		getCommandInvoker().addCommand(command);
-		Assert.assertTrue(commandInvoker.getCommands().containsValue(command));
+		Assert.assertTrue(getCommandInvoker().getCommands().containsValue(command));
 	}
 
-	@Test
-	public void addCommands_whenAddCommand_isAddedToCollection() {
-		Command command = getMockCommand();
-		getCommandInvoker().addCommands(Arrays.asList(command));
-		Assert.assertTrue(commandInvoker.getCommands().containsValue(command));
+	public CommandInvoker getCommandInvoker() {
+		return commandInvoker;
 	}
 
-	protected final Command getMockCommand() {
+	public void setCommandInvoker(CommandInvoker commandInvoker) {
+		this.commandInvoker = commandInvoker;
+	}
+
+	public static final Command getMockCommand() {
 		Command command = mock(Command.class);
 		when(command.getName()).thenReturn("test");
 		return command;
 	}
 
-	protected CommandInvoker getCommandInvoker() {
-		return commandInvoker;
-	}
-
-	protected void setCommandInvoker(CommandInvoker commandInvoker) {
-		this.commandInvoker = commandInvoker;
+	@Test
+	public void addCommandsandVerifyCommandsAreAddedToCollection() {
+		Command command = getMockCommand();
+		getCommandInvoker().addCommands(Arrays.asList(command));
+		Assert.assertTrue(getCommandInvoker().getCommands().containsValue(command));
 	}
 
 }

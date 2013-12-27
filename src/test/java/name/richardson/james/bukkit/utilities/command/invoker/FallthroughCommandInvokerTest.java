@@ -47,14 +47,14 @@ public class FallthroughCommandInvokerTest extends AbstractCommandInvokerTest {
 	private Command defaultCommand;
 
 	@Test
-	public void onCommand_WhenCommandIsNotInMap_FallThroughToDefaultCommand() {
+	public void onCommandWhenCommandIsNotInMapFallThroughToDefaultCommand() {
 		String[] arguments = {""};
 		execute(arguments);
 		verify(defaultCommand).execute(Matchers.<PassthroughCommandContext>anyObject());
 	}
 
 	@Test
-	public void onCommand_WhenCommandIsInMap_ExecuteCommand() {
+	public void onCommandWhenCommandIsInMapExecuteCommand() {
 		Command mappedCommand = setMappedCommand();
 		String[] arguments = {mappedCommand.getName()};
 		execute(arguments);
@@ -62,7 +62,7 @@ public class FallthroughCommandInvokerTest extends AbstractCommandInvokerTest {
 	}
 
 	@Test
-	public void onTabComplete_WhenCommandIsNotInMap_FallThroughToDefaultCommand() {
+	public void onTabCompleteWhenCommandIsNotInMapFallThroughToDefaultCommand() {
 		String[] arguments = {""};
 		tabComplete(arguments);
 		verify(defaultCommand).getArgumentMatches(Matchers.<PassthroughCommandContext>anyObject());
@@ -70,7 +70,7 @@ public class FallthroughCommandInvokerTest extends AbstractCommandInvokerTest {
 
 
 	@Test
-	public void onTabComplete_WhenCommandIsInMap_MatchCommand() {
+	public void onTabCompleteWhenCommandIsInMapMatchCommand() {
 		Command mappedCommand = setMappedCommand();
 		String[] arguments = {mappedCommand.getName()};
 		tabComplete(arguments);

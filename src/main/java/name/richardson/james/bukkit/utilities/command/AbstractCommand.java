@@ -17,7 +17,8 @@ import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleL
  */
 public abstract class AbstractCommand implements Command, MatcherInvoker {
 
-	private final FormattedLocalisation formattedLocalisation = new StrictResourceBundleLocalisation();
+	private static final FormattedLocalisation LOCALISATION = new StrictResourceBundleLocalisation();
+
 	private final String keyPrefix = this.getClass().getSimpleName().toLowerCase();
 	private final MatcherInvoker matcherInvoker = new SimpleMatcherInvoker();
 	private final List<Matcher> matchers = new ArrayList<Matcher>();
@@ -47,22 +48,22 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 	}
 
 	public final FormattedLocalisation getLocalisation() {
-		return formattedLocalisation;
+		return LOCALISATION;
 	}
 
 	@Override
 	public final String getName() {
-		return formattedLocalisation.getMessage(keyPrefix + ".name");
+		return LOCALISATION.getMessage(keyPrefix + ".name");
 	}
 
 	@Override
 	public final String getDescription() {
-		return formattedLocalisation.getMessage(keyPrefix + ".description");
+		return LOCALISATION.getMessage(keyPrefix + ".description");
 	}
 
 	@Override
 	public final String getUsage() {
-		return formattedLocalisation.getMessage(keyPrefix + ".usage");
+		return LOCALISATION.getMessage(keyPrefix + ".usage");
 	}
 
 }
