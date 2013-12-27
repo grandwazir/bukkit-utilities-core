@@ -93,6 +93,15 @@ public abstract class AbstractResourceBundleLocalisation implements FormattedLoc
 	}
 
 	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractResourceBundleLocalisation{");
+		sb.append("messageFormatter=").append(messageFormatter);
+		sb.append(", resourceBundle=").append(resourceBundle);
+		sb.append('}');
+		return sb.toString();
+	}
+
+	@Override
 	public String getMessage(String key, Object... arguments) {
 		return MessageFormat.format(getMessage(key), arguments);
 	}
