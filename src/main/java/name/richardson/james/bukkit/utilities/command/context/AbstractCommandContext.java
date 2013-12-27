@@ -32,34 +32,72 @@ import org.apache.commons.lang.Validate;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
- * An example implementation of {@link CommandContext}. This implementation makes no additional verification checks on requested arguments and may throw
+ * An example implementation of {@link CommandContext}. This implementation makes no additional verification checks on requested argumentsList and may throw
  * IndexOutOfBoundExceptions from the internal backing storage.
  */
 public class AbstractCommandContext implements CommandContext {
 
-	private final Matcher argumentMatcher = Pattern.compile("(\\w+)").matcher("");
-	private final Matcher flagWithoutArgumentsMatcher = Pattern.compile("-(\\w+)").matcher("");
-	private final Matcher flagWithArgumentsMatcher = Pattern.compile("(\\w{1}):(\\w+)").matcher("");
-
-	private final List<String> arguments = new ArrayList<String>();
-	private final Map<String, String> flags = new HashMap<String, String>();
-	private final Logger logger = PluginLoggerFactory.getLogger(AbstractCommandContext.class);
-	private final CommandSender sender;
+	public static final Pattern ARGUMENT_PATTERN_WORDS = Pattern.compile("(\\S+)");
+	public static final Pattern ARGUMENT_PATTERN_FOR_FLAGS = Pattern.compile("(\\w{1}):(\\w+)");
+	public static final Pattern ARGUMENT_PATTERN_FOR_SWITCHES = Pattern.compile("-(\\w+)");
+	private static final Logger LOGGER = PluginLoggerFactory.getLogger(CommandContext.class);
+	private final String argumentsAsString;
+	private final List<String> argumentsList = new ArrayList<String>();
+	private final CommandSender commandSender;
+	private final Map<String, String> flagsMap = new HashMap<String, String>();
+	private final Set<String> switchesSet = new HashSet<String>();
 
 	/**
-	 * Constructs a new AbstractCommandContext with the arguments and CommandSender.
+	 * Constructs a new AbstractCommandContext with the argumentsList and CommandSender.
 	 *
-	 * @param arguments provided arguments
-	 * @param sender the CommandSender executing the command
+	 * @param arguments provided argumentsList
+	 * @param commandSender the CommandSender executing the command
 	 */
-	public AbstractCommandContext(String[] arguments, CommandSender sender) {
+	public AbstractCommandContext(String[] arguments, CommandSender commandSender) {
 		Validate.notNull(arguments);
-		Validate.notNull(sender);
-		String argument = StringUtils.join(arguments, " ");
-		this.sender = sender;
-		setArguments(argument);
-		setFlags(argument);
-		if (logger.isLoggable(Level.FINEST)) logger.finest("A command context has been created: " + this.toString());
+		Validate.notNull(commandSender);
+		this.commandSender = commandSender;
+		argumentsAsString = StringUtils.join(arguments, " ");
+		parseArgumentList();
+		parseFlags();
+		parseSwitches();
+		if (LOGGER.isLoggable(Level.FINEST)) LOGGER.finest(this.toString());
+	}
+
+	private final void parseSwitches() {
+		Matcher matcher = ARGUMENT_PATTERN_FOR_SWITCHES.matcher(argumentsAsString);
+		while (matcher.find()) {
+			switchesSet.add(matcher.group(1));
+		}
+	}
+
+	private final void parseFlags() {
+		Matcher matcher = ARGUMENT_PATTERN_FOR_FLAGS.matcher(argumentsAsString);
+		while (matcher.find()) {
+			flagsMap.put(matcher.group(1), matcher.group(2));
+		}
+	}
+
+	private final void parseArgumentList() {
+		String argumentsList = argumentsAsString;
+		argumentsList = argumentsList.replaceAll(ARGUMENT_PATTERN_FOR_FLAGS.pattern(), "");
+		argumentsList = argumentsList.replaceAll(ARGUMENT_PATTERN_FOR_SWITCHES.pattern(), "");
+		Matcher matcher = ARGUMENT_PATTERN_WORDS.matcher(argumentsList);
+		while (matcher.find()) {
+			this.argumentsList.add(matcher.group(1));
+		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractCommandContext{");
+		sb.append("argumentsAsString='").append(argumentsAsString).append('\'');
+		sb.append(", argumentsList=").append(argumentsList);
+		sb.append(", flagsMap=").append(flagsMap);
+		sb.append(", commandSender=").append(commandSender);
+		sb.append(", switchesSet=").append(switchesSet);
+		sb.append('}');
+		return sb.toString();
 	}
 
 	/**
@@ -69,7 +107,7 @@ public class AbstractCommandContext implements CommandContext {
 	 */
 	@Override
 	public CommandSender getCommandSender() {
-		return sender;
+		return commandSender;
 	}
 
 	/**
@@ -81,24 +119,29 @@ public class AbstractCommandContext implements CommandContext {
 	@Override
 	public String getFlag(String label) {
 		Validate.notNull(label);
-		String flag = null;
-		if (hasFlag(label)) {
-			flag = flags.get(label);
-		}
-		return flag;
+		return flagsMap.get(label);
 	}
 
 	/**
-	 * Join all the arguments from a specified index onwards into one String.
+	 * Join all the argumentsList from a specified index onwards into one String.
 	 *
 	 * @param initialIndex the index to start at at
-	 * @return a String containing all the arguments seperated by ' '.
+	 * @return a String containing all the argumentsList seperated by ' '.
 	 */
 	@Override
 	public String getJoinedArguments(int initialIndex) {
 		Validate.notNull(initialIndex);
 		Validate.isTrue(initialIndex < size(), "Initial index can not be greater than size!");
-		return StringUtils.join(getArguments().subList(initialIndex, size()), " ");
+		return StringUtils.join(getArgumentsList().subList(initialIndex, size()), " ");
+	}
+
+	/**
+	 * Get a list containing all argumentsList.
+	 *
+	 * @return a immutable list.
+	 */
+	protected final List<String> getArgumentsList() {
+		return Collections.unmodifiableList(argumentsList);
 	}
 
 	/**
@@ -110,11 +153,11 @@ public class AbstractCommandContext implements CommandContext {
 	@Override
 	public String getString(int index) {
 		Validate.notNull(index);
+		String s = null;
 		if (has(index)) {
-			return arguments.get(index);
-		} else {
-			return null;
+			s = argumentsList.get(index);
 		}
+		return s;
 	}
 
 	/**
@@ -132,61 +175,23 @@ public class AbstractCommandContext implements CommandContext {
 	/**
 	 * Check to see if the context contains a flag.
 	 *
-	 * @param label the prefix of the flag to check
+	 * @param switchName the prefix of the flag to check
 	 * @return true if the flag exists, false otherwise.
 	 */
 	@Override
-	public boolean hasFlag(String label) {
-		Validate.notNull(label);
-		return flags.containsKey(label);
+	public boolean hasSwitch(String switchName) {
+		Validate.notNull(switchName);
+		return switchesSet.contains(switchName);
 	}
 
 	/**
-	 * Get the total number of arguments contained within this context. The total does not include the CommandSender or any optional flags.
+	 * Get the total number of argumentsList contained within this context. The total does not include the CommandSender or any optional flagsMap.
 	 *
-	 * @return total number of arguments.
+	 * @return total number of argumentsList.
 	 */
 	@Override
 	public int size() {
-		return arguments.size();
-	}
-
-	@Override
-	public String toString() {
-		return "AbstractCommandContext{" +
-		", arguments=" + arguments +
-		", flags=" + flags +
-		", sender=" + sender +
-		'}';
-	}
-
-	/**
-	 * Get a list containing all arguments.
-	 *
-	 * @return a immutable list.
-	 */
-	protected final List<String> getArguments() {
-		return Collections.unmodifiableList(arguments);
-	}
-
-	private final void setArguments(String arguments) {
-		arguments = arguments.replaceAll(flagWithArgumentsMatcher.pattern().toString(), "");
-		arguments = arguments.replaceAll(flagWithoutArgumentsMatcher.pattern().toString(), "");
-		argumentMatcher.reset(arguments);
-		while (argumentMatcher.find()) {
-			this.arguments.add(argumentMatcher.group(1));
-		}
-	}
-
-	private final void setFlags(String arguments) {
-		flagWithArgumentsMatcher.reset(arguments);
-		while (flagWithArgumentsMatcher.find()) {
-			flags.put(flagWithArgumentsMatcher.group(1), flagWithArgumentsMatcher.group(2));
-		}
-		flagWithoutArgumentsMatcher.reset(arguments);
-		while (flagWithoutArgumentsMatcher.find()) {
-			flags.put(flagWithoutArgumentsMatcher.group(1), null);
-		}
+		return argumentsList.size();
 	}
 
 }

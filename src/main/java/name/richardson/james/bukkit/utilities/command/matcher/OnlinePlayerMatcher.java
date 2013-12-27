@@ -38,9 +38,7 @@ public class OnlinePlayerMatcher implements Matcher {
 	}
 
 	/**
-	 * Return all online player names that start with the specified argument.
-	 * <p/>
-	 * This method is case insensitive.
+	 * Return all online player names that start with the specified argument. <p/> This method is case insensitive.
 	 *
 	 * @param argument the argument to use for matching
 	 * @return the set containing all the possible matches, ordered alphabetically.
@@ -56,7 +54,5 @@ public class OnlinePlayerMatcher implements Matcher {
 		}
 		return results;
 	}
-
-
 
 }

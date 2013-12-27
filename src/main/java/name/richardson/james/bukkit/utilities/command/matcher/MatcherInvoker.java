@@ -19,9 +19,8 @@ public interface MatcherInvoker {
 	public void addMatcher(Matcher matcher);
 
 	/**
-	 * Returns all the matches for the last argument passed to the CommandContext.
-	 * <p/>
-	 * The order in which the matchers are checked is reflected by the order in which they are passed to addMatcher.
+	 * Returns all the matches for the last argument passed to the CommandContext. <p/> The order in which the matchers are checked is reflected by the order in
+	 * which they are passed to addMatcher.
 	 *
 	 * @param commandContext
 	 * @return the set of possible matches

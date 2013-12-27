@@ -18,7 +18,9 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -28,16 +30,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
 import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBundleLocalisation;
 
 /**
  * Formats and returns basic help information for a {@link Command} using the {@link CommandMetadata}. Additionally it can provide a list of all known commands
- * and their usage information.
- * <p/>
- * This command was designed to be a fall through command for the {@link name.richardson.james.bukkit.utilities.command.invoker.FallthroughCommandInvoker}
+ * and their usage information. <p/> This command was designed to be a fall through command for the {@link name.richardson.james.bukkit.utilities.command.invoker.FallthroughCommandInvoker}
  * providing the user with additional help if the command they request does not exist.
  */
 public final class HelpCommand extends AbstractCommand {
@@ -53,8 +52,8 @@ public final class HelpCommand extends AbstractCommand {
 	/**
 	 * Construct a HelpCommand using the label and commands.
 	 *
-	 * @param label    the label that must be prefixed for commands to be valid. This is usually the name of the {@link org.bukkit.command.PluginCommand} that the
-	 *                 executor is attached to.
+	 * @param label the label that must be prefixed for commands to be valid. This is usually the name of the {@link org.bukkit.command.PluginCommand} that the
+	 * executor is attached to.
 	 * @param commands the commands that the class should provide help for.
 	 */
 	public HelpCommand(PluginDescriptionFile descriptionFile, String label, Set<Command> commands) {
@@ -116,7 +115,7 @@ public final class HelpCommand extends AbstractCommand {
 	}
 
 	private void respondWithCommandUsage(CommandSender commandSender, Command command) {
-	  String message = ChatColor.RED + "/" + label + " " + ChatColor.YELLOW + command.getName() + " " + getColouredCommandUsage(command);
+		String message = ChatColor.RED + "/" + label + " " + ChatColor.YELLOW + command.getName() + " " + getColouredCommandUsage(command);
 		commandSender.sendMessage(message);
 	}
 

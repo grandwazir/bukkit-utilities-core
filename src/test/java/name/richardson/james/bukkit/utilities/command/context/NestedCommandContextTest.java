@@ -20,18 +20,22 @@ package name.richardson.james.bukkit.utilities.command.context;
 
 import org.bukkit.command.CommandSender;
 
-import junit.framework.TestCase;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 
 import static org.mockito.Mockito.mock;
 
 public class NestedCommandContextTest extends AbstractCommandContextTest {
 
-	private static final String JOINED_STRING_ARGUMENT_WIHTOUT_FIRST_WORD = "is a test argument";
-
 	@Override
 	public void getJoinedArgumentsWhenMixedContextPassedReturnedStringOnlyIncludesArguments() {
-		assertEquals(JOINED_STRING_ARGUMENT_WIHTOUT_FIRST_WORD, getCommandContext().getJoinedArguments(0));
+		String joinedArguments = StringUtils.join(ARGUMENTS, " ", 1, ARGUMENTS.length - 2);
+		assertEquals(joinedArguments, getCommandContext().getJoinedArguments(0));
+	}
+
+	@Override
+	public void sizeWhenArgumentsPassedReturnCorrectSize() {
+		assertEquals(ARGUMENTS.length - 3, getCommandContext().size());
 	}
 
 	@Before
@@ -39,10 +43,5 @@ public class NestedCommandContextTest extends AbstractCommandContextTest {
 	throws Exception {
 		CommandContext commandContext = new NestedCommandContext(ARGUMENTS, mock(CommandSender.class));
 		setCommandContext(commandContext);
-	}
-
-	@Override
-	public void sizeWhenArgumentsPassedReturnCorrectSize() {
-		assertEquals(4, getCommandContext().size());
 	}
 }

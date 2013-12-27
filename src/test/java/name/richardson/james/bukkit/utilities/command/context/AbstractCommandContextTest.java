@@ -18,28 +18,32 @@
 
 package name.richardson.james.bukkit.utilities.command.context;
 
-import org.bukkit.command.CommandSender;
-
 import junit.framework.TestCase;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.mockito.Mockito.mock;
-
 @RunWith(JUnit4.class)
 public abstract class AbstractCommandContextTest extends TestCase {
 
-	public static final String[] ARGUMENTS = {"This", "is", "a", "test", "argument", "-silent", "t:12345"};
-	public static final String JOINED_STRING_ARGUMENTS = "This is a test argument";
+	public static final String EXAMPLE_UNICODE = "tämä";
+	public static final String[] ARGUMENTS = {"This", "is", "a", "test", "argument", "with", "unicode", "chars", EXAMPLE_UNICODE, "-silent", "t:12345"};
 	public static final String INVALID_FLAG = "blah";
 	public static final String SWITCH_FLAG_NAME = "silent";
-
 	private CommandContext commandContext;
 
 	@Test
 	public void getCommandSenderwhenContextCreatedReturnsNotNull() {
 		assertNotNull(getCommandContext().getCommandSender());
+	}
+
+	protected CommandContext getCommandContext() {
+		return commandContext;
+	}
+
+	protected void setCommandContext(CommandContext commandContext) {
+		this.commandContext = commandContext;
 	}
 
 	@Test
@@ -53,13 +57,14 @@ public abstract class AbstractCommandContextTest extends TestCase {
 	}
 
 	@Test
-	public void getStringWhenRequestedMethodIsOverriden() {
-		assertTrue(getCommandContext().toString().contains("CommandContext"));
+	public void getJoinedArgumentsWhenMixedContextPassedReturnedStringOnlyIncludesArguments() {
+		String joinedArguments = StringUtils.join(ARGUMENTS, " ", 0, ARGUMENTS.length - 2);
+		assertEquals(joinedArguments, getCommandContext().getJoinedArguments(0));
 	}
 
 	@Test
-	public void getJoinedArgumentsWhenMixedContextPassedReturnedStringOnlyIncludesArguments() {
-		assertEquals(JOINED_STRING_ARGUMENTS, getCommandContext().getJoinedArguments(0));
+	public void getStringWhenRequestedMethodIsOverriden() {
+		assertTrue(getCommandContext().toString().contains("CommandContext"));
 	}
 
 	@Test
@@ -73,31 +78,23 @@ public abstract class AbstractCommandContextTest extends TestCase {
 	}
 
 	@Test
-	public void hasFlagWhenFlagIsInvalidReturnFalse() {
-		assertFalse(getCommandContext().hasFlag(INVALID_FLAG));
+	public void returnFalseWhenSwitchIsNotPresent() {
+		assertFalse(getCommandContext().hasSwitch(INVALID_FLAG));
 	}
 
 	@Test
-	public void hasFlagWhenFlagIsSwitchReturnTrue() {
-		assertTrue(getCommandContext().hasFlag(SWITCH_FLAG_NAME));
-	}
-
-	@Test
-	public void whenStringContainsUnicodeDoNotStripUnicodeChars() {
-
+	public void returnTrueWhenSwitchIsPresent() {
+		assertTrue(getCommandContext().hasSwitch(SWITCH_FLAG_NAME));
 	}
 
 	@Test
 	public void sizeWhenArgumentsPassedReturnCorrectSize() {
-		assertEquals(5, getCommandContext().size());
+		assertEquals(ARGUMENTS.length - 2, getCommandContext().size());
 	}
 
-	protected CommandContext getCommandContext() {
-		return commandContext;
-	}
-
-	protected void setCommandContext(CommandContext commandContext) {
-		this.commandContext = commandContext;
+	@Test
+	public void whenStringContainsUnicodeDoNotStripUnicodeChars() {
+		assertTrue(getCommandContext().getJoinedArguments(0).contains(EXAMPLE_UNICODE));
 	}
 
 }

@@ -18,7 +18,10 @@
 
 package name.richardson.james.bukkit.utilities.command.matcher;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 
@@ -38,9 +41,8 @@ public final class SimpleMatcherInvoker implements MatcherInvoker {
 	}
 
 	/**
-	 * Returns all the matches for the last argument passed to the CommandContext.
-	 * <p/>
-	 * The order in which the matchers are checked is reflected by the order in which they are passed to addMatcher. If no matching matcher is found an empty set is returned.
+	 * Returns all the matches for the last argument passed to the CommandContext. <p/> The order in which the matchers are checked is reflected by the order in
+	 * which they are passed to addMatcher. If no matching matcher is found an empty set is returned.
 	 *
 	 * @param commandContext
 	 * @return the set of possible matches

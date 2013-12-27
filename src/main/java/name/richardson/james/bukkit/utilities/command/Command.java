@@ -38,9 +38,8 @@ public interface Command extends MatcherInvoker {
 	public void execute(CommandContext commandContext);
 
 	/**
-	 * Returns {@code true} if the user is authorised to use this command.
-	 * <p/>
-	 * Authorisation does not guarantee that the user may use all the features associated with a command.
+	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
+	 * with a command.
 	 *
 	 * @param permissible the permissible requesting authorisation
 	 * @return {@code true} if the user is authorised; {@code false} otherwise

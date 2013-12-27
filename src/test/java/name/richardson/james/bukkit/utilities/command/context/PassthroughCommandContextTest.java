@@ -20,7 +20,6 @@ package name.richardson.james.bukkit.utilities.command.context;
 
 import org.bukkit.command.CommandSender;
 
-import junit.framework.TestCase;
 import org.junit.Before;
 
 import static org.mockito.Mockito.mock;

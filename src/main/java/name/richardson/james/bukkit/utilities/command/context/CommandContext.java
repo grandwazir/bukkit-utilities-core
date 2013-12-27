@@ -21,8 +21,9 @@ package name.richardson.james.bukkit.utilities.command.context;
 import org.bukkit.command.CommandSender;
 
 /**
- * A object that represents the context that a {@link name.richardson.james.bukkit.utilities.command.Command} has been executed within. This object is responsible for parsing the arguments and providing
- * convenience methods to retrieve them. It is up to individual implementations to decide what to do when a requested argument does not exist.
+ * A object that represents the context that a {@link name.richardson.james.bukkit.utilities.command.Command} has been executed within. This object is
+ * responsible for parsing the arguments and providing convenience methods to retrieve them. It is up to individual implementations to decide what to do when a
+ * requested argument does not exist.
  */
 public interface CommandContext {
 
@@ -66,12 +67,12 @@ public interface CommandContext {
 	boolean has(int index);
 
 	/**
-	 * Check to see if the context contains a flag.
+	 * Check to see if the context has a certain switch
 	 *
-	 * @param label the prefix of the flag to check
-	 * @return true if the flag exists, false otherwise.
+	 * @param label the name of the switch to check
+	 * @return true if the switch exists, false otherwise.
 	 */
-	boolean hasFlag(String label);
+	boolean hasSwitch(String switchName);
 
 	/**
 	 * Get the total number of arguments contained within this context. The total does not include the CommandSender or any optional flags.

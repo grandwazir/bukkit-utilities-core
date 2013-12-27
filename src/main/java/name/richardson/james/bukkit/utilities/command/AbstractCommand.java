@@ -1,7 +1,6 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -9,7 +8,6 @@ import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
 import name.richardson.james.bukkit.utilities.command.matcher.SimpleMatcherInvoker;
-import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 
@@ -27,7 +25,6 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 	/**
 	 * Add a matcher to this class.
 	 *
-	 *
 	 * @param matcher
 	 * @since 6.1.0
 	 */
@@ -37,10 +34,8 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 	}
 
 	/**
-	 * Returns all the matches for the last argument passed to the CommandContext.
-	 * <p/>
-	 * The order in which the matchers are checked is reflected by the order in which they are passed to addMatcher.
-	 *
+	 * Returns all the matches for the last argument passed to the CommandContext. <p/> The order in which the matchers are checked is reflected by the order in
+	 * which they are passed to addMatcher.
 	 *
 	 * @param commandContext
 	 * @return the set of possible matches
@@ -49,11 +44,6 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 	@Override
 	public Set<String> getArgumentMatches(CommandContext commandContext) {
 		return matcherInvoker.getArgumentMatches(commandContext);
-	}
-
-	@Override
-	public final String getDescription() {
-		return formattedLocalisation.getMessage(keyPrefix + ".description");
 	}
 
 	public final FormattedLocalisation getLocalisation() {
@@ -66,10 +56,13 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 	}
 
 	@Override
+	public final String getDescription() {
+		return formattedLocalisation.getMessage(keyPrefix + ".description");
+	}
+
+	@Override
 	public final String getUsage() {
 		return formattedLocalisation.getMessage(keyPrefix + ".usage");
 	}
-
-
 
 }
