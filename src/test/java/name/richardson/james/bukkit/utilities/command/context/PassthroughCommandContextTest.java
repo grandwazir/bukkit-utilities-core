@@ -18,15 +18,19 @@
 
 package name.richardson.james.bukkit.utilities.command.context;
 
+import org.bukkit.command.CommandSender;
+
 import junit.framework.TestCase;
 import org.junit.Before;
+
+import static org.mockito.Mockito.mock;
 
 public class PassthroughCommandContextTest extends AbstractCommandContextTest {
 
 	@Before
 	public void setUp()
 	throws Exception {
-		CommandContext commandContext = new PassthroughCommandContext(getArguments(), getCommandSender());
+		CommandContext commandContext = new PassthroughCommandContext(ARGUMENTS, mock(CommandSender.class));
 		setCommandContext(commandContext);
 	}
 

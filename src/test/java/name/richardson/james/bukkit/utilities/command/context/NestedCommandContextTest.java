@@ -18,25 +18,31 @@
 
 package name.richardson.james.bukkit.utilities.command.context;
 
+import org.bukkit.command.CommandSender;
+
 import junit.framework.TestCase;
 import org.junit.Before;
 
+import static org.mockito.Mockito.mock;
+
 public class NestedCommandContextTest extends AbstractCommandContextTest {
 
+	private static final String JOINED_STRING_ARGUMENT_WIHTOUT_FIRST_WORD = "is a test argument";
+
 	@Override
-	public void getJoinedArguments_WhenMixedContextPassed_ReturnedStringOnlyIncludesArguments() {
-		assertEquals("is a test argument", getCommandContext().getJoinedArguments(0));
+	public void getJoinedArgumentsWhenMixedContextPassedReturnedStringOnlyIncludesArguments() {
+		assertEquals(JOINED_STRING_ARGUMENT_WIHTOUT_FIRST_WORD, getCommandContext().getJoinedArguments(0));
 	}
 
 	@Before
 	public void setUp()
 	throws Exception {
-		CommandContext commandContext = new NestedCommandContext(getArguments(), getCommandSender());
+		CommandContext commandContext = new NestedCommandContext(ARGUMENTS, mock(CommandSender.class));
 		setCommandContext(commandContext);
 	}
 
 	@Override
-	public void size_WhenArgumentsPassed_ReturnCorrectSize() {
+	public void sizeWhenArgumentsPassedReturnCorrectSize() {
 		assertEquals(4, getCommandContext().size());
 	}
 }

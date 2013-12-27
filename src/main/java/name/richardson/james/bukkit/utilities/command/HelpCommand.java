@@ -28,8 +28,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
+import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
-import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBundleLocalisation;
 
@@ -45,7 +45,6 @@ public final class HelpCommand extends AbstractCommand {
 	public static final String HINT_KEY = "helpcommand.hint";
 	public static final String PLUGIN_DESCRIPTION = "helpcommand.plugin-description";
 	public static final String COMMAND_DESCRIPTION_KEY = "helpcommand.command-description";
-
 	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
 	private final PluginDescriptionFile descriptionFile;
 	private final String label;
@@ -100,14 +99,6 @@ public final class HelpCommand extends AbstractCommand {
 		return message;
 	}
 
-	private Command setCommandFromContext(CommandContext commandContext) {
-		if (commandContext.has(1)) {
-			return commandMap.get(commandContext.getString(1));
-		} else {
-			return null;
-		}
-	}
-
 	private void respondWithCommandDescription(CommandSender commandSender, Command command) {
 		String message = getLocalisation().formatAsHeaderMessage(COMMAND_DESCRIPTION_KEY, command.getDescription());
 		commandSender.sendMessage(message);
@@ -127,6 +118,14 @@ public final class HelpCommand extends AbstractCommand {
 	private void respondWithCommandUsage(CommandSender commandSender, Command command) {
 	  String message = ChatColor.RED + "/" + label + " " + ChatColor.YELLOW + command.getName() + " " + getColouredCommandUsage(command);
 		commandSender.sendMessage(message);
+	}
+
+	private Command setCommandFromContext(CommandContext commandContext) {
+		if (commandContext.has(0)) {
+			return commandMap.get(commandContext.getString(0));
+		} else {
+			return null;
+		}
 	}
 
 }

@@ -20,9 +20,7 @@ package name.richardson.james.bukkit.utilities.command.context;
 
 import org.bukkit.command.CommandSender;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -32,62 +30,66 @@ import static org.mockito.Mockito.mock;
 @RunWith(JUnit4.class)
 public abstract class AbstractCommandContextTest extends TestCase {
 
-	private final String[] ARGUMENTS = {"This", "is", "a", "test", "argument", "-silent", "t:12345"};
-	private final CommandSender commandSender = mock(CommandSender.class);
+	public static final String[] ARGUMENTS = {"This", "is", "a", "test", "argument", "-silent", "t:12345"};
+	public static final String JOINED_STRING_ARGUMENTS = "This is a test argument";
+	public static final String INVALID_FLAG = "blah";
+	public static final String SWITCH_FLAG_NAME = "silent";
+
 	private CommandContext commandContext;
 
 	@Test
-	public void getCommandSender_whenContextCreated_ReturnsNotNull() {
+	public void getCommandSenderwhenContextCreatedReturnsNotNull() {
 		assertNotNull(getCommandContext().getCommandSender());
 	}
 
 	@Test
-	public void getFlag_WhenFlagIsInvalid_ReturnNull() {
-		assertNull(getCommandContext().getFlag("blah"));
+	public void getFlagWhenFlagIsInvalidReturnNull() {
+		assertNull(getCommandContext().getFlag(INVALID_FLAG));
 	}
 
 	@Test
-	public void getFlag_whenFlagIsSwitch_ReturnNull() {
-		assertNull(getCommandContext().getFlag("silent"));
+	public void getFlagwhenFlagIsSwitchReturnNull() {
+		assertNull(getCommandContext().getFlag(SWITCH_FLAG_NAME));
 	}
 
 	@Test
-	public void getString_WhenRequested_MethodIsOverriden() {
+	public void getStringWhenRequestedMethodIsOverriden() {
 		assertTrue(getCommandContext().toString().contains("CommandContext"));
 	}
 
 	@Test
-	public void getJoinedArguments_WhenMixedContextPassed_ReturnedStringOnlyIncludesArguments() {
-		assertEquals("This is a test argument", getCommandContext().getJoinedArguments(0));
+	public void getJoinedArgumentsWhenMixedContextPassedReturnedStringOnlyIncludesArguments() {
+		assertEquals(JOINED_STRING_ARGUMENTS, getCommandContext().getJoinedArguments(0));
 	}
 
 	@Test
-	public void getString_whenIndexInvalid_ReturnNull() {
+	public void getStringwhenIndexInvalidReturnNull() {
 		assertNull(getCommandContext().getString(99));
 	}
 
 	@Test
-	public void getString_whenIndexValid_ReturnString() {
+	public void getStringwhenIndexValidReturnString() {
 		assertNotNull(getCommandContext().getString(0));
 	}
 
 	@Test
-	public void hasFlag_WhenFlagIsInvalid_ReturnFalse() {
-		assertFalse(getCommandContext().hasFlag("blah"));
+	public void hasFlagWhenFlagIsInvalidReturnFalse() {
+		assertFalse(getCommandContext().hasFlag(INVALID_FLAG));
 	}
 
 	@Test
-	public void hasFlag_WhenFlagIsSwitch_ReturnTrue() {
-		assertTrue(getCommandContext().hasFlag("silent"));
+	public void hasFlagWhenFlagIsSwitchReturnTrue() {
+		assertTrue(getCommandContext().hasFlag(SWITCH_FLAG_NAME));
 	}
 
 	@Test
-	public void size_WhenArgumentsPassed_ReturnCorrectSize() {
+	public void whenStringContainsUnicodeDoNotStripUnicodeChars() {
+
+	}
+
+	@Test
+	public void sizeWhenArgumentsPassedReturnCorrectSize() {
 		assertEquals(5, getCommandContext().size());
-	}
-
-	protected String[] getArguments() {
-		return ARGUMENTS;
 	}
 
 	protected CommandContext getCommandContext() {
@@ -96,10 +98,6 @@ public abstract class AbstractCommandContextTest extends TestCase {
 
 	protected void setCommandContext(CommandContext commandContext) {
 		this.commandContext = commandContext;
-	}
-
-	protected CommandSender getCommandSender() {
-		return commandSender;
 	}
 
 }

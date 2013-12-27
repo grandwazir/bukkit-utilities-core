@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 
 import junit.framework.Assert;
@@ -33,6 +34,8 @@ import org.junit.runners.JUnit4;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
+import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
+import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvokerTest;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -40,73 +43,44 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
-public class AbstractCommandTest extends CommandTestCase {
+public abstract class AbstractCommandTest extends TestCase {
 
-	private TestCommand command;
+	private Command command;
 
-	public class TestCommand extends AbstractCommand {
-
-		@Override
-		public void execute(CommandContext commandContext) {
-			return;
-		}
-
-		@Override
-		public boolean isAuthorised(Permissible permissible) {
-			return false;
-		}
-
+	public static CommandContext getMockCommandContext() {
+		CommandContext commandContext = mock(CommandContext.class);
+		CommandSender commandSender = mock(CommandSender.class);
+		when(commandContext.getCommandSender()).thenReturn(commandSender);
+		return commandContext;
 	}
 
 	@Test
-	public void addMatcher_whenAdding_IsAddedToCollection() {
-		Matcher dummyMatcher = mock(Matcher.class);
-		command.addMatcher(dummyMatcher);
-		Assert.assertTrue(command.getMatchers().contains(dummyMatcher));
+	public void checkCommandNameIsNotNull() {
+		assertNotNull(command.getName());
 	}
 
 	@Test
-	public void getArgumentMatches_whenNoArguments_ReturnEmptySet() {
-		CommandContext commandContext = getCommandContext();
-		Assert.assertEquals(command.getArgumentMatches(commandContext), Collections.EMPTY_SET);
+	public void checkCommandDescriptionIsNotNull() {
+		assertNotNull(command.getDescription());
 	}
 
 	@Test
-	public void getArgumentMatches_whenNoMatcher_ReturnEmptySet() {
-		CommandContext commandContext = getCommandContext();
-		configureCommandContext(commandContext);
-		Assert.assertEquals(command.getArgumentMatches(commandContext), Collections.EMPTY_SET);
+	public void checkCommandUsageIsNotNull() {
+		assertNotNull(command.getUsage());
 	}
 
-	@Test
-	public void getArgumentMatches_whenMatcherFound_ReturnSet() {
-		CommandContext commandContext = getCommandContext();
-		configureCommandContext(commandContext);
-		Matcher matcher = getMockMatcher();
-		command.addMatcher(matcher);
-		Assert.assertEquals(command.getArgumentMatches(commandContext), new HashSet<String>(Arrays.asList("1", "2", "3")));
+
+
+	public final Command getCommand() {
+		return command;
 	}
 
-	@Test
-	public void getDescription_ReturnDescription() {
-		Assert.assertEquals(command.getDescription(), "test");
+	public final void setCommand(Command command) {
+		this.command = command;
 	}
 
-	private void configureCommandContext(CommandContext commandContext) {
-		when(commandContext.size()).thenReturn(1);
-		when(commandContext.has(anyInt())).thenReturn(true);
-		when(commandContext.getString(anyInt())).thenReturn("test");
-	}
 
-	private Matcher getMockMatcher() {
-		Matcher matcher = mock(Matcher.class);
-		when(matcher.matches(anyString())).thenReturn(new HashSet<String>(Arrays.asList("1", "2", "3")));
-		return matcher;
-	}
 
-	@Before
-	public void setUp()
-	throws Exception {
-		command = new TestCommand();
-	}
+
+
 }

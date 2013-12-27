@@ -7,6 +7,8 @@ import java.util.Set;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
+import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
+import name.richardson.james.bukkit.utilities.command.matcher.SimpleMatcherInvoker;
 import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
@@ -15,23 +17,38 @@ import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleL
  * This abstract implementation provides final methods for most of the methods provided the Command interface. It should be used for convenience when
  * implementing your own Commands.
  */
-public abstract class AbstractCommand implements Command {
+public abstract class AbstractCommand implements Command, MatcherInvoker {
 
 	private final FormattedLocalisation formattedLocalisation = new StrictResourceBundleLocalisation();
-	private final List<Matcher> matchers = new ArrayList<Matcher>();
 	private final String keyPrefix = this.getClass().getSimpleName().toLowerCase();
+	private final MatcherInvoker matcherInvoker = new SimpleMatcherInvoker();
+	private final List<Matcher> matchers = new ArrayList<Matcher>();
 
+	/**
+	 * Add a matcher to this class.
+	 *
+	 *
+	 * @param matcher
+	 * @since 6.1.0
+	 */
 	@Override
-	public final void addMatcher(Matcher matcher) {
-		this.matchers.add(matcher);
+	public void addMatcher(Matcher matcher) {
+		matcherInvoker.addMatcher(matcher);
 	}
 
+	/**
+	 * Returns all the matches for the last argument passed to the CommandContext.
+	 * <p/>
+	 * The order in which the matchers are checked is reflected by the order in which they are passed to addMatcher.
+	 *
+	 *
+	 * @param commandContext
+	 * @return the set of possible matches
+	 * @since 6.1.0
+	 */
 	@Override
-	public final Set<String> getArgumentMatches(CommandContext commandContext) {
-		int lastArgumentIndex = commandContext.size() - 1;
-		if (commandContext.size() < lastArgumentIndex || commandContext.size() == 0) return Collections.EMPTY_SET;
-		if (commandContext.size() < lastArgumentIndex || getMatchers().isEmpty()) return Collections.EMPTY_SET;
-		return getMatchers().get(lastArgumentIndex).matches(commandContext.getString(lastArgumentIndex));
+	public Set<String> getArgumentMatches(CommandContext commandContext) {
+		return matcherInvoker.getArgumentMatches(commandContext);
 	}
 
 	@Override
@@ -53,13 +70,6 @@ public abstract class AbstractCommand implements Command {
 		return formattedLocalisation.getMessage(keyPrefix + ".usage");
 	}
 
-	/**
-	 * Returns an ordered list of all the matchers attached to this command.
-	 *
-	 * @return the matchers currently attached.
-	 */
-	protected final List<Matcher> getMatchers() {
-		return Collections.unmodifiableList(matchers);
-	}
+
 
 }
