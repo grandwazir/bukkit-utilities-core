@@ -64,7 +64,7 @@ public interface CommandContext {
 	 * @param index the argument number to check
 	 * @return true if the argument exists, false otherwise.
 	 */
-	boolean has(int index);
+	boolean hasArgument(int index);
 
 	/**
 	 * Check to see if the context has a certain switch

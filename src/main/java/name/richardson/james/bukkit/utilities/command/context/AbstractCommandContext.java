@@ -45,7 +45,7 @@ public class AbstractCommandContext implements CommandContext {
 	private final List<String> argumentsList = new ArrayList<String>();
 	private final CommandSender commandSender;
 	private final Map<String, String> flagsMap = new HashMap<String, String>();
-	private final Set<String> switchesSet = new HashSet<String>();
+	private final Collection<String> switchesCollection = new HashSet<String>();
 
 	/**
 	 * Constructs a new AbstractCommandContext with the argumentsList and CommandSender.
@@ -67,7 +67,7 @@ public class AbstractCommandContext implements CommandContext {
 	private final void parseSwitches() {
 		Matcher matcher = ARGUMENT_PATTERN_FOR_SWITCHES.matcher(argumentsAsString);
 		while (matcher.find()) {
-			switchesSet.add(matcher.group(1));
+			switchesCollection.add(matcher.group(1));
 		}
 	}
 
@@ -95,7 +95,7 @@ public class AbstractCommandContext implements CommandContext {
 		sb.append(", argumentsList=").append(argumentsList);
 		sb.append(", flagsMap=").append(flagsMap);
 		sb.append(", commandSender=").append(commandSender);
-		sb.append(", switchesSet=").append(switchesSet);
+		sb.append(", switchesCollection=").append(switchesCollection);
 		sb.append('}');
 		return sb.toString();
 	}
@@ -154,7 +154,7 @@ public class AbstractCommandContext implements CommandContext {
 	public String getString(int index) {
 		Validate.notNull(index);
 		String s = null;
-		if (has(index)) {
+		if (hasArgument(index)) {
 			s = argumentsList.get(index);
 		}
 		return s;
@@ -167,7 +167,7 @@ public class AbstractCommandContext implements CommandContext {
 	 * @return true if the argument exists, false otherwise.
 	 */
 	@Override
-	public boolean has(int index) {
+	public boolean hasArgument(int index) {
 		Validate.notNull(index);
 		return size() > 0 && (index + 1) <= size();
 	}
@@ -181,7 +181,7 @@ public class AbstractCommandContext implements CommandContext {
 	@Override
 	public boolean hasSwitch(String switchName) {
 		Validate.notNull(switchName);
-		return switchesSet.contains(switchName);
+		return switchesCollection.contains(switchName);
 	}
 
 	/**

@@ -61,7 +61,7 @@ public class HelpCommandTest extends AbstractCommandTest {
 	@Test
 	public void getArgumentMatchForPartialCommandName() {
 		CommandContext commandContext = getMockCommandContext();
-		when(commandContext.has(0)).thenReturn(true);
+		when(commandContext.hasArgument(0)).thenReturn(true);
 		when(commandContext.getString(0)).thenReturn(PARTIAL_COMMAND_NAME);
 		when(commandContext.size()).thenReturn(1);
 		Set<String> matches = getCommand().getArgumentMatches(commandContext);
@@ -72,7 +72,7 @@ public class HelpCommandTest extends AbstractCommandTest {
 	public void respondWithCommandDescriptionIfArgumentValid() {
 		CommandContext commandContext = getMockCommandContext();
 		CommandSender commandSender = commandContext.getCommandSender();
-		when(commandContext.has(0)).thenReturn(true);
+		when(commandContext.hasArgument(0)).thenReturn(true);
 		when(commandContext.getString(0)).thenReturn(VALID_ARGUMENT);
 		getCommand().execute(commandContext);
 		verify(commandSender, times(2)).sendMessage(anyString());
@@ -82,7 +82,7 @@ public class HelpCommandTest extends AbstractCommandTest {
 	public void respondWithCommandListIfArgumentInvalid() {
 		CommandContext commandContext = getMockCommandContext();
 		CommandSender commandSender = commandContext.getCommandSender();
-		when(commandContext.has(0)).thenReturn(true);
+		when(commandContext.hasArgument(0)).thenReturn(true);
 		when(commandContext.getString(0)).thenReturn(INVALID_ARGUMENT);
 		getCommand().execute(commandContext);
 		verify(commandSender, times(4)).sendMessage(anyString());

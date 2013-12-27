@@ -52,6 +52,7 @@ public class PlayerNotifier extends AbstractListener {
 	 *
 	 * @param event
 	 */
+	@SuppressWarnings("PublicMethodNotExposedInInterface")
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);

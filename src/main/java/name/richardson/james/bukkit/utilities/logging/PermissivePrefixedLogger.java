@@ -30,6 +30,7 @@ public class PermissivePrefixedLogger extends AbstractPrefixedLogger {
 		super(name, resourceBundleName);
 	}
 
+	@SuppressWarnings("PublicMethodNotExposedInInterface")
 	@Override
 	public void log(final LogRecord record) {
 		if (this.isLoggable(Level.FINEST) || isLoggable(Level.FINE) || isLoggable(Level.FINER) || isLoggable(Level.ALL)) {

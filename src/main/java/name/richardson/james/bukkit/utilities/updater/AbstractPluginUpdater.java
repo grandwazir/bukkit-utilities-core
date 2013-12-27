@@ -65,7 +65,7 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 		return version;
 	}
 
-	public final Logger getLogger() {
+	protected final Logger getLogger() {
 		return logger;
 	}
 

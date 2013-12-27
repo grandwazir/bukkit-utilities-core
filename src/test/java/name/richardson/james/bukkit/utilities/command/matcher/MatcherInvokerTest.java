@@ -23,10 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bukkit.command.CommandSender;
-
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -47,7 +44,7 @@ public abstract class MatcherInvokerTest extends TestCase {
 
 	public static CommandContext getMockCommandContext() {
 		CommandContext commandContext = mock(CommandContext.class);
-		when(commandContext.has(0)).thenReturn(true);
+		when(commandContext.hasArgument(0)).thenReturn(true);
 		when(commandContext.getString(anyInt())).thenReturn(PROVIDED_ARGUMENTS);
 		when(commandContext.size()).thenReturn(1);
 		return commandContext;
@@ -76,7 +73,7 @@ public abstract class MatcherInvokerTest extends TestCase {
 	public void getEmptyCollectionWhenNoMatcherPresentForArgumentIndex() {
 		invoker.addMatcher(getMockMatcher());
 		CommandContext commandContext = getMockCommandContext();
-		when(commandContext.has(1)).thenReturn(true);
+		when(commandContext.hasArgument(1)).thenReturn(true);
 		when(commandContext.size()).thenReturn(2);
 		Set<String> matches = invoker.getArgumentMatches(commandContext);
 		assertEquals(Collections.<String>emptySet(), matches);

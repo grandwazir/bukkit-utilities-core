@@ -32,6 +32,7 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
  * SQLite storage handles loading SQLite databases. Due to bug in the persistence library that Bukkit uses attempting to create a database with key constraists
  * fails. This class handles this by making the necessary modifications to the DDL script for it to be valid when using SQLite.
  */
+@SuppressWarnings("ALL")
 public final class SQLiteDatabaseLoader extends AbstractDatabaseLoader {
 
 	public SQLiteDatabaseLoader(DatabaseConfiguration configuration) {

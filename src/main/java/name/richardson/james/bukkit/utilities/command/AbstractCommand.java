@@ -47,7 +47,7 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 		return matcherInvoker.getArgumentMatches(commandContext);
 	}
 
-	public final FormattedLocalisation getLocalisation() {
+	protected final FormattedLocalisation getLocalisation() {
 		return LOCALISATION;
 	}
 

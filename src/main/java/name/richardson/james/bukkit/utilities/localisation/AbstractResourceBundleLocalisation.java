@@ -97,7 +97,7 @@ public abstract class AbstractResourceBundleLocalisation implements FormattedLoc
 		return MessageFormat.format(getMessage(key), arguments);
 	}
 
-	public final ResourceBundle getResourceBundle() {
+	protected final ResourceBundle getResourceBundle() {
 		return resourceBundle;
 	}
 
