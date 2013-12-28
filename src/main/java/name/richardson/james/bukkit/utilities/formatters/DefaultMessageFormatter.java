@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
  * For example formatting a error message with arguments would result in a red message and the arguments in yellow. Formatting the same message as a warning
  * would result in a yellow message with green arguments. For a full list of colours see the constants specified in this class.
  */
+@SuppressWarnings("HardcodedFileSeparator")
 public class DefaultMessageFormatter implements MessageFormatter {
 
 	private static final ChatColor WARNING = ChatColor.YELLOW;
