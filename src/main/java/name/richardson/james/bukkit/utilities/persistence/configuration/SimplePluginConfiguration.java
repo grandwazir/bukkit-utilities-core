@@ -42,11 +42,8 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 	private static final String LOGGING_KEY = "logging";
 	private static final String STATISTICS_KEY = "send-anonymous-statistics";
 
-	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
-	private final Localisation localisation = new StrictResourceBundleLocalisation();
-
 	public SimplePluginConfiguration(final File file, final InputStream defaults) throws IOException {
-		super(file, defaults, true);
+		super(file, defaults);
 	}
 
 	public final Branch getAutomaticUpdaterBranch() {
@@ -54,7 +51,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 			try {
 				return PluginUpdater.Branch.valueOf(this.getConfiguration().getString(BRANCH_KEY).toUpperCase());
 			} catch (final IllegalArgumentException e) {
-				getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, BRANCH_KEY, defaultBranch.name()));
+				getLogger().log(Level.WARNING, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, BRANCH_KEY, defaultBranch.name()));
 				this.getConfiguration().set(BRANCH_KEY, defaultBranch.name());
 				return defaultBranch;
 			}
@@ -65,7 +62,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		try {
 			return PluginUpdater.State.valueOf(this.getConfiguration().getString(UPDATER_STATE_KEY).toUpperCase());
 		} catch (final IllegalArgumentException e) {
-			getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, UPDATER_STATE_KEY, defaultState.name()));
+			getLogger().log(Level.WARNING, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, UPDATER_STATE_KEY, defaultState.name()));
 			this.getConfiguration().set(UPDATER_STATE_KEY, defaultState.name());
 			return defaultState;
 		}
@@ -76,7 +73,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		try {
 			return Level.parse(this.getConfiguration().getString(LOGGING_KEY).toUpperCase());
 		} catch (final IllegalArgumentException e) {
-			getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, LOGGING_KEY, defaultLevel.getName()));
+			getLogger().log(Level.WARNING, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, LOGGING_KEY, defaultLevel.getName()));
 			this.getConfiguration().set(LOGGING_KEY, defaultLevel.getName());
 			return defaultLevel;
 		}
@@ -85,10 +82,6 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 	public final boolean isCollectingStats() {
 		final boolean defaultValue = true;
 		return this.getConfiguration().getBoolean(STATISTICS_KEY, defaultValue);
-	}
-
-	protected final Logger getLogger() {
-		return logger;
 	}
 
 }
