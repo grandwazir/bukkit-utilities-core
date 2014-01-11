@@ -18,14 +18,14 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database.support;
 
-import javax.persistence.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import java.util.List;
 
-import name.richardson.james.bukkit.utilities.persistence.database.AbstractRecord;
-
 @Entity
-public class EntityParent extends AbstractRecord {
+public class EntityParent {
 
 	@OneToMany(targetEntity = EntityChild.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	private List<EntityChild> children;

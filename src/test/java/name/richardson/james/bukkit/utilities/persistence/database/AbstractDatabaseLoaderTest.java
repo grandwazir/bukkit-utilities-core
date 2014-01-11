@@ -24,6 +24,7 @@ import com.avaje.ebean.config.ServerConfig;
 import junit.framework.TestCase;
 import org.junit.Test;
 
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.database.support.EntityChild;
 import name.richardson.james.bukkit.utilities.persistence.database.support.EntityParent;
 

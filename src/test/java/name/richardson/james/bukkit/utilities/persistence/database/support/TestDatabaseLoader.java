@@ -19,15 +19,12 @@
 package name.richardson.james.bukkit.utilities.persistence.database.support;
 
 import java.util.List;
-import java.util.Random;
 
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.WordUtils;
-import org.apache.commons.lang.math.RandomUtils;
 
-import name.richardson.james.bukkit.utilities.persistence.database.DatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.database.DatabaseLoader;
 import name.richardson.james.bukkit.utilities.persistence.database.DatabaseLoaderFactory;
 

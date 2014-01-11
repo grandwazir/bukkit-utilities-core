@@ -41,7 +41,7 @@ public class AbstractConfigurationTest extends TestCase {
 
 		public AbstractConfigurationTestClass(File file, InputStream defaults)
 		throws IOException {
-			super(file, defaults, true);
+			super(file, defaults);
 		}
 
 	}
@@ -53,7 +53,7 @@ public class AbstractConfigurationTest extends TestCase {
 		configuration.save();
 		File file = FileUtils.resolveFile(folder.getRoot(), "test.yml");
 		String content = FileUtils.fileRead(file);
-		assertTrue("Configuration has not been saved sorrectly!", content.contains("test: test"));
+		assertTrue("Configuration has not been saved correctly!", content.contains("test: test"));
 	}
 
 	@Test

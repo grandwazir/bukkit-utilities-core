@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database;
 
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+
 /**
  * Create and return a suitable database loader depending on the database configuration provided. This is used to abstract away the implementation requirement
  * to have a different database loader for SQLite due to a bug in the schema generation when using the Ebean versions shipped with Bukkit.

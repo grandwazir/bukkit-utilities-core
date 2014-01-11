@@ -36,6 +36,7 @@ import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 

@@ -15,7 +15,7 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.persistence.database;
+package name.richardson.james.bukkit.utilities.persistence.configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,12 +27,10 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
-import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-import name.richardson.james.bukkit.utilities.persistence.configuration.AbstractConfiguration;
 
 public final class SimpleDatabaseConfiguration extends AbstractConfiguration implements DatabaseConfiguration {
 
@@ -42,21 +40,17 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private static final String ISOLATION_KEY = "isolation";
 	private static final String URL_KEY = "url";
 
-	private final DataSourceConfig dataSourceConfig;
 	private final File folder;
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 	private final String pluginName;
 	private final ServerConfig serverConfig;
-	private final Localisation localisation = new StrictResourceBundleLocalisation();
 
-	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, final String pluginName, final ServerConfig serverConfig)
+	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, final ServerConfig serverConfig, final String pluginName)
 	throws IOException {
-		super(file, defaults, false);
+		super(file, defaults);
+		this.pluginName = pluginName;
 		this.folder = file.getParentFile();
 		this.serverConfig = serverConfig;
-		this.dataSourceConfig = serverConfig.getDataSourceConfig();
-		this.pluginName = pluginName;
-		setDefaults();
 		setUserName();
 		setPassword();
 		setDriver();
@@ -64,27 +58,22 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		setUrl();
 	}
 
-	public DataSourceConfig getDataSourceConfig() {
-		return this.dataSourceConfig;
+	public final DataSourceConfig getDataSourceConfig() {
+		return this.serverConfig.getDataSourceConfig();
 	}
 
-	public ServerConfig getServerConfig() {
+	public final ServerConfig getServerConfig() {
 		return this.serverConfig;
 	}
 
 	@Override
 	public String toString() {
-		return "SimpleDatabaseConfiguration {" +
-		"dataSourceConfig=" + dataSourceConfig.toString() +
-		", serverConfig=" + serverConfig.toString() +
-		", folder=" + folder +
-		", pluginName='" + pluginName + '\'' +
-		", username='" + this.dataSourceConfig.getUsername() + '\'' +
-		", password='" + maskString(this.dataSourceConfig.getPassword()) + '\'' +
-		", driver='" + this.dataSourceConfig.getDriver() + '\'' +
-		", isolation='" + this.dataSourceConfig.getIsolationLevel() + '\'' +
-		", url='" + this.dataSourceConfig.getUrl() + '\'' +
-		'}';
+		final StringBuilder sb = new StringBuilder("SimpleDatabaseConfiguration{");
+		sb.append("folder=").append(folder);
+		sb.append(", pluginName='").append(pluginName).append('\'');
+		sb.append(", serverConfig=").append(serverConfig);
+		sb.append('}');
+		return sb.toString();
 	}
 
 	private String replaceDatabaseString(String input) {
@@ -93,17 +82,11 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		return input;
 	}
 
-	private void setDefaults() {
-		this.serverConfig.setDefaultServer(false);
-		this.serverConfig.setRegister(false);
-		this.serverConfig.setName(pluginName);
-	}
-
 	private void setDriver() {
 		final String driver = this.getConfiguration().getString(DRIVER_KEY);
 		if (driver != null) {
-			logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, DRIVER_KEY, driver));
-			this.dataSourceConfig.setDriver(driver);
+			logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, DRIVER_KEY, driver));
+			getDataSourceConfig().setDriver(driver);
 		}
 	}
 
@@ -111,37 +94,37 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		try {
 			String isolation = this.getConfiguration().getString("isolation");
 			if (isolation != null) {
-				logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, ISOLATION_KEY, isolation));
-				this.dataSourceConfig.setIsolationLevel(TransactionIsolation.getLevel(isolation));
+				logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, ISOLATION_KEY, isolation));
+				getDataSourceConfig().setIsolationLevel(TransactionIsolation.getLevel(isolation));
 			}
 		} catch (RuntimeException e) {
-			logger.log(Level.WARNING, localisation.getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, ISOLATION_KEY));
+			logger.log(Level.WARNING, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, ISOLATION_KEY));
 		}
 	}
 
 	private void setPassword() {
 		final String password = this.getConfiguration().getString(PASSWORD_KEY);
 		if (password != null) {
-			logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, PASSWORD_KEY, maskString(password)));
-			this.dataSourceConfig.setPassword(password);
+			logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, PASSWORD_KEY, maskString(password)));
+			getDataSourceConfig().setPassword(password);
 		}
 	}
 
 	private void setUrl() {
 		final String url = this.getConfiguration().getString("url");
 		if (url != null) {
-			logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, URL_KEY, url));
-			this.dataSourceConfig.setUrl(replaceDatabaseString(url));
+			logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, URL_KEY, url));
+			getDataSourceConfig().setUrl(replaceDatabaseString(url));
 		} else {
-			this.dataSourceConfig.setUrl(replaceDatabaseString(dataSourceConfig.getUrl()));
+			getDataSourceConfig().setUrl(replaceDatabaseString(getDataSourceConfig().getUrl()));
 		}
 	}
 
 	private void setUserName() {
 		final String username = this.getConfiguration().getString(USERNAME_KEY);
 		if (username != null) {
-			logger.log(Level.CONFIG, localisation.getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, USERNAME_KEY, username));
-			this.dataSourceConfig.setUsername(username);
+			logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, USERNAME_KEY, username));
+			getDataSourceConfig().setUsername(username);
 		}
 	}
 

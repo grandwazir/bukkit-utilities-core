@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+
 import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)

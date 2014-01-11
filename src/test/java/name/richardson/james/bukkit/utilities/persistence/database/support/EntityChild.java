@@ -21,10 +21,8 @@ package name.richardson.james.bukkit.utilities.persistence.database.support;
 import javax.persistence.*;
 import java.util.List;
 
-import name.richardson.james.bukkit.utilities.persistence.database.AbstractRecord;
-
 @Entity
-public class EntityChild extends AbstractRecord {
+public class EntityChild {
 
 	@ManyToOne(targetEntity = EntityParent.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	@PrimaryKeyJoinColumn(name = "parentId", referencedColumnName = "id")

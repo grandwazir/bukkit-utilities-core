@@ -21,7 +21,6 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 import java.io.File;
 import java.io.IOException;
 
-import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -31,8 +30,7 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.mockito.Matchers.contains;
-import static org.mockito.Mockito.when;
+import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 @RunWith(JUnit4.class)
 public class SimpleDatabaseConfigurationTest extends TestCase {
@@ -59,7 +57,7 @@ public class SimpleDatabaseConfigurationTest extends TestCase {
 	public void onCreation_WhenValuesAreOverriden_ReturnModifiedServerConfig()
 	throws IOException {
 		File f = new File(getClass().getClassLoader().getResource("database-custom.yml").getPath());
-		configuration = new SimpleDatabaseConfiguration(f, getClass().getClassLoader().getResourceAsStream("database-empty.yml"), "Test", serverConfig);
+		configuration = new SimpleDatabaseConfiguration(f, getClass().getClassLoader().getResourceAsStream("database-empty.yml"), serverConfig, "Test");
 		ServerConfig serverConfig = getDefaultServerConfig();
 		assertFalse(serverConfig.getDataSourceConfig().getUsername().contentEquals(configuration.getDataSourceConfig().getUsername()));
 		assertFalse(serverConfig.getDataSourceConfig().getPassword().contentEquals(configuration.getDataSourceConfig().getPassword()));
@@ -97,7 +95,7 @@ public class SimpleDatabaseConfigurationTest extends TestCase {
 
 	private SimpleDatabaseConfiguration createConfiguration(String defaultFile)
 	throws IOException {
-		return new SimpleDatabaseConfiguration(folder.newFile("database.yml"), getClass().getClassLoader().getResourceAsStream(defaultFile), "Test", serverConfig);
+		return new SimpleDatabaseConfiguration(folder.newFile("database.yml"), getClass().getClassLoader().getResourceAsStream(defaultFile), serverConfig, "Test");
 	}
 
 }
