@@ -61,7 +61,6 @@ public class AbstractCommandContext implements CommandContext {
 		parseArgumentList();
 		parseFlags();
 		parseSwitches();
-		if (LOGGER.isLoggable(Level.FINEST)) LOGGER.finest(this.toString());
 	}
 
 	private final void parseSwitches() {
@@ -126,7 +125,7 @@ public class AbstractCommandContext implements CommandContext {
 	 * Join all the argumentsList from a specified index onwards into one String.
 	 *
 	 * @param initialIndex the index to start at at
-	 * @return a String containing all the argumentsList seperated by ' '.
+	 * @return a String containing all the argumentsList separated by ' '.
 	 */
 	@Override
 	public String getJoinedArguments(int initialIndex) {

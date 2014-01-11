@@ -18,6 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -31,6 +32,7 @@ import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
+import name.richardson.james.bukkit.utilities.formatters.MessageFormatter;
 import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBundleLocalisation;
 
@@ -47,7 +49,7 @@ public final class HelpCommand extends AbstractCommand {
 	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
 	private final PluginDescriptionFile descriptionFile;
 	private final String label;
-	private final FormattedLocalisation localisation = new PermissiveResourceBundleLocalisation();
+	private final MessageFormatter localisation = new PermissiveResourceBundleLocalisation();
 
 	/**
 	 * Construct a HelpCommand using the label and commands.
@@ -56,7 +58,7 @@ public final class HelpCommand extends AbstractCommand {
 	 * executor is attached to.
 	 * @param commands the commands that the class should provide help for.
 	 */
-	public HelpCommand(PluginDescriptionFile descriptionFile, String label, Set<Command> commands) {
+	public HelpCommand(PluginDescriptionFile descriptionFile, String label, Collection<Command> commands) {
 		Validate.notEmpty(label, "Command label can not be empty or null!");
 		Validate.notEmpty(commands, "CommandMap can not be empty or null!");
 		this.descriptionFile = descriptionFile;
@@ -125,6 +127,17 @@ public final class HelpCommand extends AbstractCommand {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("HelpCommand{");
+		sb.append("commandMap=").append(commandMap);
+		sb.append(", descriptionFile=").append(descriptionFile);
+		sb.append(", label='").append(label).append('\'');
+		sb.append(", localisation=").append(localisation);
+		sb.append('}');
+		return sb.toString();
 	}
 
 }

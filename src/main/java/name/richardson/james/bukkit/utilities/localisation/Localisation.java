@@ -1,7 +1,7 @@
 package name.richardson.james.bukkit.utilities.localisation;
 
 /**
- * Retrives localised messages using keys from a backing store.
+ * Retrieves localised messages using keys from a backing store.
  */
 public interface Localisation {
 

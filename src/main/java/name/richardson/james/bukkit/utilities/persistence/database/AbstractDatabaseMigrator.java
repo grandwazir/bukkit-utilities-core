@@ -85,4 +85,13 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 		}
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractDatabaseMigrator{");
+		sb.append("localisation=").append(localisation);
+		sb.append(", newDatabaseLoader=").append(newDatabaseLoader);
+		sb.append(", oldDatabaseLoader=").append(oldDatabaseLoader);
+		sb.append('}');
+		return sb.toString();
+	}
 }

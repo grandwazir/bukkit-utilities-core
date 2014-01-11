@@ -2,6 +2,7 @@ package name.richardson.james.bukkit.utilities.formatters;
 
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,4 +51,15 @@ public abstract class AbstractChoiceFormatter implements ChoiceFormatter {
 			this.message = message;
 		}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractChoiceFormatter{");
+		sb.append("arguments=").append(Arrays.toString(arguments));
+		sb.append(", formats=").append(Arrays.toString(formats));
+		sb.append(", limits=").append(Arrays.toString(limits));
+		sb.append(", localisation=").append(localisation);
+		sb.append(", message='").append(message).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

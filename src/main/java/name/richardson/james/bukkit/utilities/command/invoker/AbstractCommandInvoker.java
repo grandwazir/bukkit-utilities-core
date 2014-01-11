@@ -28,7 +28,7 @@ import org.apache.commons.lang.Validate;
 import name.richardson.james.bukkit.utilities.command.Command;
 
 /**
- * This abstract implementation provides final methods for all the methods specified in the CommandInvoker interface. It should be used for conviencne when
+ * This abstract implementation provides final methods for all the methods specified in the CommandInvoker interface. It should be used for convenience when
  * implementing your own CommandInvokers.
  */
 public abstract class AbstractCommandInvoker implements CommandInvoker {
@@ -54,4 +54,11 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 		return Collections.unmodifiableMap(commandMap);
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractCommandInvoker{");
+		sb.append("commandMap=").append(commandMap);
+		sb.append('}');
+		return sb.toString();
+	}
 }

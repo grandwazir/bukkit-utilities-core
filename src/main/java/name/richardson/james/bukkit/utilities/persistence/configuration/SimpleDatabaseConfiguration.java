@@ -128,6 +128,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		}
 	}
 
+	@SuppressWarnings("ReplaceAllDot")
 	private String maskString(String string) {
 		return string.replaceAll(".", "*");
 	}

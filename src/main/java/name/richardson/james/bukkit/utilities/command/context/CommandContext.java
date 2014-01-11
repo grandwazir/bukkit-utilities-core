@@ -46,7 +46,7 @@ public interface CommandContext {
 	 * Join all the arguments from a specified index onwards into one String.
 	 *
 	 * @param initialIndex the index to start at at
-	 * @return a String containing all the arguments seperated by ' '.
+	 * @return a String containing all the arguments separated by ' '.
 	 */
 	String getJoinedArguments(int initialIndex);
 

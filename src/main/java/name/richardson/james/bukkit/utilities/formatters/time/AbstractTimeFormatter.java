@@ -83,4 +83,11 @@ public abstract class AbstractTimeFormatter implements TimeFormatter {
 		return inputFormatter;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractTimeFormatter{");
+		sb.append("inputFormatter=").append(inputFormatter);
+		sb.append('}');
+		return sb.toString();
+	}
 }

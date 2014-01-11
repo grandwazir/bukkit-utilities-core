@@ -32,7 +32,7 @@ import name.richardson.james.bukkit.utilities.command.Command;
 public interface CommandInvoker extends TabExecutor {
 
 	/**
-	 * Add a command to this CommandInvoker allowing it to delgate arguments to it that match the command's name.
+	 * Add a command to this CommandInvoker allowing it to delegate arguments to it that match the supplied command's name.
 	 *
 	 * @param command the command to add
 	 */

@@ -49,4 +49,11 @@ public class ApproximateTimeFormatter extends AbstractTimeFormatter {
 		return timeFormatter.format(date);
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("ApproximateTimeFormatter{");
+		sb.append("timeFormatter=").append(timeFormatter);
+		sb.append('}');
+		return sb.toString();
+	}
 }

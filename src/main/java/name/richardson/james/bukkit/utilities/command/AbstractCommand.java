@@ -66,4 +66,13 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 		return LOCALISATION.getMessage(keyPrefix + ".usage");
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractCommand{");
+		sb.append("keyPrefix='").append(keyPrefix).append('\'');
+		sb.append(", matcherInvoker=").append(matcherInvoker);
+		sb.append(", matchers=").append(matchers);
+		sb.append('}');
+		return sb.toString();
+	}
 }

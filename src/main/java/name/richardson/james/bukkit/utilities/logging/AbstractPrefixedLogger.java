@@ -49,4 +49,12 @@ public class AbstractPrefixedLogger extends Logger implements PrefixedLogger {
 		return prefix;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractPrefixedLogger{");
+		sb.append("debuggingPrefix='").append(debuggingPrefix).append('\'');
+		sb.append(", prefix='").append(prefix).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

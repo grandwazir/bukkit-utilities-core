@@ -57,4 +57,11 @@ public class OfflinePlayerMatcher implements Matcher {
 		return results;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("OfflinePlayerMatcher{");
+		sb.append("server=").append(server);
+		sb.append('}');
+		return sb.toString();
+	}
 }

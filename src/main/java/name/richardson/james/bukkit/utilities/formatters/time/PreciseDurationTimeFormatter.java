@@ -7,9 +7,6 @@ import org.ocpsoft.prettytime.Duration;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.ocpsoft.prettytime.units.JustNow;
 
-/**
- * Created with IntelliJ IDEA. User: james Date: 22/08/13 Time: 17:31 To change this template use File | Settings | File Templates.
- */
 public class PreciseDurationTimeFormatter extends AbstractTimeFormatter {
 
 	/**
@@ -20,7 +17,7 @@ public class PreciseDurationTimeFormatter extends AbstractTimeFormatter {
 	 */
 	@Override
 	public String getHumanReadableDuration(long time) {
-		// This is a bit of a hack so it only works with the english langauge
+		// This is a bit of a hack so it only works with the english language
 		PrettyTime formatter = new PrettyTime();
 		formatter.removeUnit(JustNow.class);
 		Date date = new Date(System.currentTimeMillis() + time);

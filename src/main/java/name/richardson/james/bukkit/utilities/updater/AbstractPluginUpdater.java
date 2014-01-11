@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
@@ -70,8 +71,8 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 	}
 
 	public boolean isNewVersionAvailable() {
-		final DefaultArtifactVersion current = new DefaultArtifactVersion(getLocalVersion());
-		final DefaultArtifactVersion target = new DefaultArtifactVersion(getRemoteVersion());
+		final Comparable current = new DefaultArtifactVersion(getLocalVersion());
+		final ArtifactVersion target = new DefaultArtifactVersion(getRemoteVersion());
 		final Object params[] = {target.toString(), current.toString()};
 		if (current.compareTo(target) == -1) {
 			this.logger.log(Level.FINE, "New version available: {0} > {1}", params);
@@ -81,4 +82,14 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 		}
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractPluginUpdater{");
+		sb.append("branch=").append(branch);
+		sb.append(", name='").append(name).append('\'');
+		sb.append(", state=").append(state);
+		sb.append(", version='").append(version).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

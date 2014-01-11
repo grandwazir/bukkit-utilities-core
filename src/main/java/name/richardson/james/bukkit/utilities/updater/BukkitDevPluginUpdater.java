@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.codehaus.plexus.util.FileUtils;
 import org.json.simple.JSONArray;
@@ -68,11 +69,27 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	}
 
 	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("BukkitDevPluginUpdater{");
+		sb.append("gameVersion='").append(gameVersion).append('\'');
+		sb.append(", localisation=").append(localisation);
+		sb.append(", projectId=").append(projectId);
+		sb.append(", updateFolder=").append(updateFolder);
+		sb.append(", versionFileName='").append(versionFileName).append('\'');
+		sb.append(", versionGameVersion='").append(versionGameVersion).append('\'');
+		sb.append(", versionLink='").append(versionLink).append('\'');
+		sb.append(", versionName='").append(versionName).append('\'');
+		sb.append(", versionType='").append(versionType).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
+
+	@Override
 	public void update() {
 		if (isNewVersionAvailable() && getState() == State.UPDATE) {
 			// Avoid automatically updating major versions
-			final DefaultArtifactVersion current = new DefaultArtifactVersion(this.gameVersion);
-			final DefaultArtifactVersion target = new DefaultArtifactVersion(versionGameVersion);
+			final ArtifactVersion current = new DefaultArtifactVersion(this.gameVersion);
+			final ArtifactVersion target = new DefaultArtifactVersion(versionGameVersion);
 			if (current.getMajorVersion() != target.getMajorVersion()) {
 				getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.UPDATER_MANUAL_UPDATE_REQUIRED, versionLink));
 				return;
@@ -89,19 +106,6 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				}
 			}
 		}
-	}
-
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this)
-		.append("projectId", projectId)
-		.append("updateFolder", updateFolder)
-		.append("versionFileName", versionFileName)
-		.append("versionGameVersion", versionGameVersion)
-		.append("versionLink", versionLink)
-		.append("versionName", versionName)
-		.append("versionType", versionType)
-		.toString();
 	}
 
 	private URLConnection getConnection(String urlString)
@@ -143,7 +147,7 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	}
 
 	private boolean isCompatiableWithGameVersion() {
-		final DefaultArtifactVersion current = new DefaultArtifactVersion(this.gameVersion);
+		final Comparable current = new DefaultArtifactVersion(this.gameVersion);
 		final DefaultArtifactVersion target = new DefaultArtifactVersion(versionGameVersion);
 		final Object params[] = {target.toString(), current.toString()};
 		return current.compareTo(target) != -1;

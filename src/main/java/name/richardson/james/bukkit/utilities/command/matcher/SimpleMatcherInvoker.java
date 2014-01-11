@@ -60,4 +60,11 @@ public final class SimpleMatcherInvoker implements MatcherInvoker {
 		return matches;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("SimpleMatcherInvoker{");
+		sb.append("matchers=").append(matchers);
+		sb.append('}');
+		return sb.toString();
+	}
 }

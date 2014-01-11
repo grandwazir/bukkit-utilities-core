@@ -24,10 +24,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
-import name.richardson.james.bukkit.utilities.localisation.AbstractResourceBundleLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.*;
 
 /**
  * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update available for the plugin. The players will be
@@ -35,7 +32,7 @@ import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleL
  */
 public class PlayerNotifier extends AbstractListener {
 
-	private final FormattedLocalisation localisation = new StrictResourceBundleLocalisation();
+	private final Localisation localisation = new StrictResourceBundleLocalisation();
 	private final String permission;
 	private final String pluginName;
 	private final PluginUpdater updater;
@@ -61,4 +58,14 @@ public class PlayerNotifier extends AbstractListener {
 		}
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("PlayerNotifier{");
+		sb.append("localisation=").append(localisation);
+		sb.append(", permission='").append(permission).append('\'');
+		sb.append(", pluginName='").append(pluginName).append('\'');
+		sb.append(", updater=").append(updater);
+		sb.append('}');
+		return sb.toString();
+	}
 }

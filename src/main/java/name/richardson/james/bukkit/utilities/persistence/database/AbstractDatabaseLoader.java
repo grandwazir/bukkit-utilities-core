@@ -170,4 +170,18 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractDatabaseLoader{");
+		sb.append("classes=").append(classes);
+		sb.append(", classLoader=").append(classLoader);
+		sb.append(", datasourceConfig=").append(datasourceConfig);
+		sb.append(", ebeanserver=").append(ebeanserver);
+		sb.append(", generator=").append(generator);
+		sb.append(", localisation=").append(localisation);
+		sb.append(", rebuild=").append(rebuild);
+		sb.append(", serverConfig=").append(serverConfig);
+		sb.append('}');
+		return sb.toString();
+	}
 }

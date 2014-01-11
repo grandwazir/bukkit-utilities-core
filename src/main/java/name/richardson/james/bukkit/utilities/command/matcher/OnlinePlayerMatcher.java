@@ -55,4 +55,11 @@ public class OnlinePlayerMatcher implements Matcher {
 		return results;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("OnlinePlayerMatcher{");
+		sb.append("server=").append(server);
+		sb.append('}');
+		return sb.toString();
+	}
 }

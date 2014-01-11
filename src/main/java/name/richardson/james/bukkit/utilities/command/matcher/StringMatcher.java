@@ -4,7 +4,7 @@ import java.util.*;
 
 public final class StringMatcher implements Matcher {
 
-	private Set<String> strings = new HashSet<String>();
+	private Collection<String> strings = new HashSet<String>();
 
 	public StringMatcher(Collection<String> strings) {
 		this.strings.addAll(strings);
@@ -20,6 +20,14 @@ public final class StringMatcher implements Matcher {
 			results.add(string);
 		}
 		return results;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("StringMatcher{");
+		sb.append("strings=").append(strings);
+		sb.append('}');
+		return sb.toString();
 	}
 
 }
