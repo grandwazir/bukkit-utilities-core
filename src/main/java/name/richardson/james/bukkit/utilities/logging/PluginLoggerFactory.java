@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.logging;
 
+import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -27,13 +29,21 @@ import java.util.logging.Logger;
  */
 public final class PluginLoggerFactory {
 
-	private PluginLoggerFactory() {};
-
 	public final static Logger getLogger(Class owningClass) {
 		final String name = owningClass.getPackage().getName();
-		final java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
-		if (logger != null) return logger;
-		return new PermissivePrefixedLogger(name, null);
+	  java.util.logging.Logger logger = LogManager.getLogManager().getLogger(name);
+		if (logger == null) {
+			logger = new PrefixedLogger(name, null);
+			LogManager.getLogManager().addLogger(logger);
+			if (logger.getParent() != null) setParentHandlerLevels(logger);
+		}
+		return logger;
+	}
+
+	private final static void setParentHandlerLevels(Logger logger) {
+		for (final Handler handler : logger.getParent().getHandlers()) {
+			handler.setLevel(Level.ALL);
+		}
 	}
 
 

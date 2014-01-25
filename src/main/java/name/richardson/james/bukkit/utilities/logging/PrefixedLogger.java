@@ -1,40 +1,61 @@
-/*******************************************************************************
- Copyright (c) 2013 James Richardson.
-
- PrefixedLogger.java is part of BukkitUtilities.
-
- BukkitUtilities is free software: you can redistribute it and/or modify it
- under the terms of the GNU General Public License as published by the Free
- Software Foundation, either version 3 of the License, or (at your option) any
- later version.
-
- BukkitUtilities is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along with
- BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
-
 package name.richardson.james.bukkit.utilities.logging;
 
+import java.util.logging.*;
+
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBundleLocalisation;
+
 /**
- * Provides a prefix and debugging prefix which may be applied to logging messages in certain circumstances.
+ * Provides final methods implementing PrefixedLogger. This class should be used as a base for implementing Loggers which care about how the actual messages are
+ * localised. <p/> Internally will get the prefix for this logger by using {@link ResourceBundleByClassLocalisation} using this class name as the class.
  */
-public interface PrefixedLogger {
+public class PrefixedLogger extends Logger {
+
+	private static final Localisation LOCALISATION = new PermissiveResourceBundleLocalisation();
+	private static String PREFIX;
+	private final String debuggingPrefix;
 
 	/**
-	 * Returns the prefix to be placed in front of log messages when the logger is set at INFO or above.
+	 * Returns a logger using the name of the class provided and a resource bundle name.
 	 *
-	 * @return the prefix to be used.
+	 * @param name the name of the class that this logger belongs to.
+	 * @param resourceBundleName the resource bundle the class should use.
 	 */
-	public String getPrefix();
+	protected PrefixedLogger(String name, String resourceBundleName) {
+		super(name, resourceBundleName);
+		debuggingPrefix = "<" + this.getName() + "> ";
 
-	/**
-	 * Returns the prefix to be placed in front of log messages when the logger is set at FINE or below.
-	 *
-	 * @return the prefix to be used.
-	 */
-	public String getDebuggingPrefix();
+	}
+
+	@Override
+	public void log(final LogRecord record) {
+		if (this.isLoggable(Level.FINEST) || isLoggable(Level.FINE) || isLoggable(Level.FINER) || isLoggable(Level.ALL)) {
+			record.setMessage(getDebuggingPrefix() + record.getMessage());
+		} else {
+			record.setMessage(getPrefix() + record.getMessage());
+		}
+		super.log(record);
+	}
+
+	public static String getPrefix() {
+		return PREFIX;
+	}
+
+	public static void setPrefix(final String prefix) {
+		PrefixedLogger.PREFIX = "[" + prefix + "]";
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("PrefixedLogger{");
+		sb.append("debuggingPrefix='").append(getDebuggingPrefix()).append('\'');
+		sb.append(", ").append(super.toString());
+		sb.append('}');
+		return sb.toString();
+	}
+
+	protected String getDebuggingPrefix() {
+		return debuggingPrefix;
+	}
 
 }
