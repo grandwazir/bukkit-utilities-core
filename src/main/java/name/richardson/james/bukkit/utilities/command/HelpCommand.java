@@ -20,7 +20,6 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.bukkit.ChatColor;
@@ -33,7 +32,6 @@ import org.apache.commons.lang.Validate;
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
 import name.richardson.james.bukkit.utilities.formatters.MessageFormatter;
-import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBundleLocalisation;
 
 /**
@@ -93,6 +91,18 @@ public final class HelpCommand extends AbstractCommand {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("HelpCommand{");
+		sb.append("commandMap=").append(commandMap);
+		sb.append(", descriptionFile=").append(descriptionFile);
+		sb.append(", label='").append(label).append('\'');
+		sb.append(", localisation=").append(localisation);
+		sb.append(", ").append(super.toString());
+		sb.append('}');
+		return sb.toString();
+	}
+
 	private String getColouredCommandUsage(Command command) {
 		String message = command.getUsage();
 		message = message.replaceAll("\\<", ChatColor.YELLOW + "\\<");
@@ -129,15 +139,6 @@ public final class HelpCommand extends AbstractCommand {
 		}
 	}
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("HelpCommand{");
-		sb.append("commandMap=").append(commandMap);
-		sb.append(", descriptionFile=").append(descriptionFile);
-		sb.append(", label='").append(label).append('\'');
-		sb.append(", localisation=").append(localisation);
-		sb.append('}');
-		return sb.toString();
-	}
+
 
 }

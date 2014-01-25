@@ -37,15 +37,6 @@ public class AbstractConfigurationTest extends TestCase {
 	public TemporaryFolder folder = new TemporaryFolder();
 	private AbstractConfiguration configuration;
 
-	public class AbstractConfigurationTestClass extends AbstractConfiguration {
-
-		public AbstractConfigurationTestClass(File file, InputStream defaults)
-		throws IOException {
-			super(file, defaults);
-		}
-
-	}
-
 	@Test
 	public void testSave()
 	throws Exception {

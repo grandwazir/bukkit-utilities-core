@@ -46,6 +46,11 @@ public abstract class AbstractTimeFormatterTest extends TestCase {
 		assertEquals(0, getFormatter().getDurationInMilliseconds("fred"));
 	}
 
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", formatter.toString().contains("TimeFormatter"));
+	}
+
 	protected TimeFormatter getFormatter() {
 		return formatter;
 	}

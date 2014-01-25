@@ -94,6 +94,11 @@ public abstract class PlayerMatcherTest extends TestCase {
 		this.server = server;
 	}
 
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", matcher.toString().contains("PlayerMatcher"));
+	}
+
 	@Before
 	public void setUp() {
 		setServer(mock(Server.class, RETURNS_SMART_NULLS));

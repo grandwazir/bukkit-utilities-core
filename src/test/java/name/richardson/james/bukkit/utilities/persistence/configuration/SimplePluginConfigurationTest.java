@@ -31,7 +31,7 @@ import org.junit.runners.JUnit4;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 
 @RunWith(JUnit4.class)
-public class SimplePluginConfigurationTest extends TestCase {
+public class SimplePluginConfigurationTest extends AbstractConfigurationTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();

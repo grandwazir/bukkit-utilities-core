@@ -88,8 +88,13 @@ public abstract class AbstractCommandContextTest extends TestCase {
 	}
 
 	@Test
-	public void sizeWhenArgumentsPassedReturnCorrectSize() {
+	public void whenArgumentsPassedReturnCorrectSize() {
 		assertEquals(ARGUMENTS.length - 2, getCommandContext().size());
+	}
+
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", commandContext.toString().contains("CommandContext"));
 	}
 
 	@Test

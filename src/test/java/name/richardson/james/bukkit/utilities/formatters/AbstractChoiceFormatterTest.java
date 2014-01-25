@@ -25,6 +25,11 @@ public class AbstractChoiceFormatterTest extends TestCase {
 		assertEquals("We have 2 bananas.", formatter.getMessage());
 	}
 
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", formatter.toString().contains("ChoiceFormatter"));
+	}
+
 	@Before
 	public void setUp()
 	throws Exception {

@@ -63,20 +63,6 @@ public class AbstractCommandContext implements CommandContext {
 		parseSwitches();
 	}
 
-	private final void parseSwitches() {
-		Matcher matcher = ARGUMENT_PATTERN_FOR_SWITCHES.matcher(argumentsAsString);
-		while (matcher.find()) {
-			switchesCollection.add(matcher.group(1));
-		}
-	}
-
-	private final void parseFlags() {
-		Matcher matcher = ARGUMENT_PATTERN_FOR_FLAGS.matcher(argumentsAsString);
-		while (matcher.find()) {
-			flagsMap.put(matcher.group(1), matcher.group(2));
-		}
-	}
-
 	private final void parseArgumentList() {
 		String argumentsList = argumentsAsString;
 		argumentsList = argumentsList.replaceAll(ARGUMENT_PATTERN_FOR_FLAGS.pattern(), "");
@@ -87,16 +73,18 @@ public class AbstractCommandContext implements CommandContext {
 		}
 	}
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("AbstractCommandContext{");
-		sb.append("argumentsAsString='").append(argumentsAsString).append('\'');
-		sb.append(", argumentsList=").append(argumentsList);
-		sb.append(", flagsMap=").append(flagsMap);
-		sb.append(", commandSender=").append(commandSender);
-		sb.append(", switchesCollection=").append(switchesCollection);
-		sb.append('}');
-		return sb.toString();
+	private final void parseFlags() {
+		Matcher matcher = ARGUMENT_PATTERN_FOR_FLAGS.matcher(argumentsAsString);
+		while (matcher.find()) {
+			flagsMap.put(matcher.group(1), matcher.group(2));
+		}
+	}
+
+	private final void parseSwitches() {
+		Matcher matcher = ARGUMENT_PATTERN_FOR_SWITCHES.matcher(argumentsAsString);
+		while (matcher.find()) {
+			switchesCollection.add(matcher.group(1));
+		}
 	}
 
 	/**
@@ -132,15 +120,6 @@ public class AbstractCommandContext implements CommandContext {
 		Validate.notNull(initialIndex);
 		Validate.isTrue(initialIndex < size(), "Initial index can not be greater than size!");
 		return StringUtils.join(getArgumentsList().subList(initialIndex, size()), " ");
-	}
-
-	/**
-	 * Get a list containing all argumentsList.
-	 *
-	 * @return a immutable list.
-	 */
-	protected final List<String> getArgumentsList() {
-		return Collections.unmodifiableList(argumentsList);
 	}
 
 	/**
@@ -191,6 +170,27 @@ public class AbstractCommandContext implements CommandContext {
 	@Override
 	public int size() {
 		return argumentsList.size();
+	}
+
+	/**
+	 * Get a list containing all argumentsList.
+	 *
+	 * @return a immutable list.
+	 */
+	protected final List<String> getArgumentsList() {
+		return Collections.unmodifiableList(argumentsList);
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractCommandContext{");
+		sb.append("argumentsAsString='").append(argumentsAsString).append('\'');
+		sb.append(", argumentsList=").append(argumentsList);
+		sb.append(", commandSender=").append(commandSender);
+		sb.append(", flagsMap=").append(flagsMap);
+		sb.append(", switchesCollection=").append(switchesCollection);
+		sb.append('}');
+		return sb.toString();
 	}
 
 }

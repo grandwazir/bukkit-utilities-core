@@ -64,4 +64,9 @@ public abstract class AbstractCommandInvokerTest extends TestCase {
 		Assert.assertTrue(getCommandInvoker().getCommands().containsValue(command));
 	}
 
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", commandInvoker.toString().contains("CommandInvoker"));
+	}
+
 }

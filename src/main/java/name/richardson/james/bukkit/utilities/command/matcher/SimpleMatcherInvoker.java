@@ -27,6 +27,14 @@ import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 
 public final class SimpleMatcherInvoker implements MatcherInvoker {
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("SimpleMatcherInvoker{");
+		sb.append("matchers=").append(matchers);
+		sb.append('}');
+		return sb.toString();
+	}
+
 	private final List<Matcher> matchers = new LinkedList<Matcher>();
 
 	/**
@@ -60,11 +68,4 @@ public final class SimpleMatcherInvoker implements MatcherInvoker {
 		return matches;
 	}
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("SimpleMatcherInvoker{");
-		sb.append("matchers=").append(matchers);
-		sb.append('}');
-		return sb.toString();
-	}
 }

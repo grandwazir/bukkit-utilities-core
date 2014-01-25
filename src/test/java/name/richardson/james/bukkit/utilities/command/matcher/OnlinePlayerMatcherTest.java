@@ -22,6 +22,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -42,6 +43,10 @@ public class OnlinePlayerMatcherTest extends PlayerMatcherTest {
 		return players;
 	}
 
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", getMatcher().toString().contains("OnlinePlayerMatcher"));
+	}
 
 
 }

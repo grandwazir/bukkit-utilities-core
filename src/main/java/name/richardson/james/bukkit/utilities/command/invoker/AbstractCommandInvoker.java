@@ -61,4 +61,5 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 		sb.append('}');
 		return sb.toString();
 	}
+
 }

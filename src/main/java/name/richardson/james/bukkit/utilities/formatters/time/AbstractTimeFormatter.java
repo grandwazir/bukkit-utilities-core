@@ -46,6 +46,14 @@ public abstract class AbstractTimeFormatter implements TimeFormatter {
 
 	private final Matcher inputFormatter = Pattern.compile("(\\d+)(\\w)").matcher("");
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("AbstractTimeFormatter{");
+		sb.append("inputFormatter=").append(inputFormatter);
+		sb.append('}');
+		return sb.toString();
+	}
+
 	/**
 	 * Return the time in milliseconds represented by the String.
 	 * <p/>
@@ -83,11 +91,4 @@ public abstract class AbstractTimeFormatter implements TimeFormatter {
 		return inputFormatter;
 	}
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("AbstractTimeFormatter{");
-		sb.append("inputFormatter=").append(inputFormatter);
-		sb.append('}');
-		return sb.toString();
-	}
 }

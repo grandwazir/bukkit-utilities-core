@@ -53,6 +53,7 @@ public class ApproximateTimeFormatter extends AbstractTimeFormatter {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("ApproximateTimeFormatter{");
 		sb.append("timeFormatter=").append(timeFormatter);
+		sb.append(", ").append(super.toString());
 		sb.append('}');
 		return sb.toString();
 	}

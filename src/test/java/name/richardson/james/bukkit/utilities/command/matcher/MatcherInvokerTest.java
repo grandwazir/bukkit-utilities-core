@@ -93,5 +93,9 @@ public abstract class MatcherInvokerTest extends TestCase {
 		this.invoker = invoker;
 	}
 
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", invoker.toString().contains("MatcherInvoker"));
+	}
 
 }

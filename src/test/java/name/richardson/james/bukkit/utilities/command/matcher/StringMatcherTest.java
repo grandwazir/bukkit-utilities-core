@@ -28,6 +28,11 @@ public class StringMatcherTest extends TestCase {
 		assertTrue("Two matches should have been returned!", results.size() == 2);
 	}
 
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", matcher.toString().contains("StringMatcher"));
+	}
+
 	@Before
 	public void setUp()
 	throws Exception {

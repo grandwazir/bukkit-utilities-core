@@ -37,7 +37,7 @@ public class NestedCommandContextTest extends AbstractCommandContextTest {
 	}
 
 	@Override
-	public void sizeWhenArgumentsPassedReturnCorrectSize() {
+	public void whenArgumentsPassedReturnCorrectSize() {
 		assertEquals(ARGUMENTS.length - 3, getCommandContext().size());
 	}
 

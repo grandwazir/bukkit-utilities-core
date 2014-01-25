@@ -69,7 +69,10 @@ public abstract class AbstractCommandTest extends TestCase {
 		assertNotNull(command.getUsage());
 	}
 
-
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", command.toString().contains("AbstractCommand"));
+	}
 
 	public final Command getCommand() {
 		return command;

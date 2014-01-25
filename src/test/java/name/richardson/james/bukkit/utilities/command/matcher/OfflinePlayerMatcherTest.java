@@ -55,5 +55,9 @@ public class OfflinePlayerMatcherTest extends PlayerMatcherTest {
 		return players;
 	}
 
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", getMatcher().toString().contains("OfflinePlayerMatcher"));
+	}
 
 }

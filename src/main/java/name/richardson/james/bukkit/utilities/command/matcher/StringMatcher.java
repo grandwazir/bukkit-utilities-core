@@ -29,5 +29,4 @@ public final class StringMatcher implements Matcher {
 		sb.append('}');
 		return sb.toString();
 	}
-
 }
