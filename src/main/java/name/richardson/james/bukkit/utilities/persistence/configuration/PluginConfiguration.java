@@ -24,7 +24,7 @@ import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 /**
  * Represents the basic configuration required for a plugin.
  */
-public interface PluginConfiguration {
+public interface PluginConfiguration extends Configuration {
 
 	/**
 	 * Return the branch that the updater should use.

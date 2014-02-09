@@ -37,7 +37,7 @@ import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
  * AbstractConfiguration is responsible for creating YAML configuration files, setting defaults from a provided {@link InputStream} and handling any exceptions
  * when the file is saved.
  */
-public abstract class AbstractConfiguration {
+public abstract class AbstractConfiguration implements Configuration {
 
 	private static final Localisation LOCALISATION = new StrictResourceBundleLocalisation();
 	private final YamlConfiguration defaults;
@@ -59,6 +59,7 @@ public abstract class AbstractConfiguration {
 		Validate.notNull(file, "Defaults can not be null!");
 		this.file = file;
 		this.defaults = YamlConfiguration.loadConfiguration(defaults);
+		this.load();
 	}
 
 	@Override
@@ -71,7 +72,8 @@ public abstract class AbstractConfiguration {
 		return sb.toString();
 	}
 
-	protected final void load()
+	@Override
+	public final void load()
 	throws IOException {
 		getLogger().log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_LOADING, this.getClass().getSimpleName()));
 		getLogger().log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_USING_PATH, this.getFile().getAbsolutePath()));
@@ -94,6 +96,7 @@ public abstract class AbstractConfiguration {
 	}
 
 	protected final YamlConfiguration getConfiguration() {
+		if (this.configuration == null) throw new IllegalStateException("Configuration has not yet been loaded!");
 		return this.configuration;
 	}
 
@@ -109,7 +112,8 @@ public abstract class AbstractConfiguration {
 		return LOCALISATION;
 	}
 
-	protected final void save()
+	@Override
+	public final void save()
 	throws IOException {
 		getLogger().log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_SAVING, this.getFile().getName()));
 		this.getConfiguration().save(this.getFile());
@@ -122,7 +126,8 @@ public abstract class AbstractConfiguration {
 	 * configuration. This is useful mainly for important configuration files which have values which must be set. This however does not write back these missing
 	 * values to file on saving.
 	 */
-	protected final void useRuntimeDefaults() {
+	@Override
+	public final void useRuntimeDefaults() {
 		this.getConfiguration().setDefaults(this.getDefaults());
 	}
 

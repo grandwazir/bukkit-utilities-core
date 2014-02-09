@@ -32,9 +32,6 @@ import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
-/**
- * Represents a basic plugin configuration. This is designed to be extended to create custom plugin configuration.
- */
 public class SimplePluginConfiguration extends AbstractConfiguration implements PluginConfiguration {
 
 	private static final String BRANCH_KEY = "automatic-updates.branch";
@@ -44,6 +41,8 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 
 	public SimplePluginConfiguration(final File file, final InputStream defaults) throws IOException {
 		super(file, defaults);
+		this.load();
+		this.useRuntimeDefaults();
 	}
 
 	public final Branch getAutomaticUpdaterBranch() {

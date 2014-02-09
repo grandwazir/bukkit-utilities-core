@@ -20,7 +20,7 @@ package name.richardson.james.bukkit.utilities.persistence.configuration;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 
-public interface DatabaseConfiguration {
+public interface DatabaseConfiguration extends Configuration {
 
 	public DataSourceConfig getDataSourceConfig();
 

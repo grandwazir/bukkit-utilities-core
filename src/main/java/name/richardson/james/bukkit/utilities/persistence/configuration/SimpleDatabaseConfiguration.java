@@ -20,9 +20,12 @@ package name.richardson.james.bukkit.utilities.persistence.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
@@ -98,7 +101,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 				getDataSourceConfig().setIsolationLevel(TransactionIsolation.getLevel(isolation));
 			}
 		} catch (RuntimeException e) {
-			logger.log(Level.WARNING, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, ISOLATION_KEY));
+			logger.log(Level.WARNING, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, ISOLATION_KEY, getDataSourceConfig().getIsolationLevel()));
 		}
 	}
 
