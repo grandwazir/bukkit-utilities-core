@@ -76,11 +76,11 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	synchronized public final void initalise() {
+		logger.log(Level.FINE, localisation.getMessage(PluginLocalisation.DATABASE_LOADING));
 		this.load();
 		if (!this.isSchemaValid() || this.rebuild) {
 			final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
 			generator = server.getDdlGenerator();
-			if (!this.logger.isLoggable(Level.FINEST)) setGeneratorDebug(generator, false);
 			this.drop();
 			this.create();
 			if (!this.isSchemaValid()) {
@@ -98,14 +98,12 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	protected String getDeleteDLLScript() {
 		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
 		final DdlGenerator generator = server.getDdlGenerator();
-		setGeneratorDebug(generator, false);
 		return generator.generateDropDdl();
 	}
 
 	protected String getGenerateDDLScript() {
 		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
 		final DdlGenerator generator = server.getDdlGenerator();
-		setGeneratorDebug(generator, false);
 		return generator.generateCreateDdl();
 	}
 
@@ -140,7 +138,6 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	@Override
 	public final void load() {
-		logger.log(Level.FINE, localisation.getMessage(PluginLocalisation.DATABASE_LOADING));
 		if (logger.isLoggable(Level.ALL)) {
 			this.serverConfig.setLoggingToJavaLogger(true);
 			this.serverConfig.setLoggingLevel(LogLevel.SQL);

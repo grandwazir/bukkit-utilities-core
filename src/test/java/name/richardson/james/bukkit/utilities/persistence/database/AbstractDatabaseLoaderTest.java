@@ -70,6 +70,12 @@ public abstract class AbstractDatabaseLoaderTest extends TestCase {
 		return serverConfig;
 	}
 
+
+	@Test
+	public void checkToStringIsOverriden() {
+		assertTrue(getDatabaseLoader().toString().contains("AbstractDatabaseLoader"));
+	}
+
 	protected final DatabaseLoader getDatabaseLoader() {
 		return databaseLoader;
 	}
