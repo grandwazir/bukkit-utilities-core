@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- MySQLDatabaseLoaderTest.java is part of bukkit-utilities.
+ DefaultDatabaseLoaderTest.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import junit.framework.TestCase;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,26 +38,25 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
-public class MySQLDatabaseLoaderTest extends AbstractDatabaseLoaderTest {
+public class DefaultDatabaseLoaderTest extends AbstractDatabaseLoaderTest {
+
+	private ServerConfig serverConfig;
 
 	@Before
 	public void setUp()
 	throws Exception {
-		ServerConfig serverConfig = getServerConfig();
+	  serverConfig = createDefaultServerConfig();
+		setDataSourceConfig();
+		setDatabaseLoader(serverConfig);
+	}
+
+	private void setDataSourceConfig() {
 		DataSourceConfig dataSourceConfig = serverConfig.getDataSourceConfig();
 		dataSourceConfig.setUrl("jdbc:mysql://127.0.0.1:3306/test");
 		dataSourceConfig.setPassword("");
 		dataSourceConfig.setUsername("travis");
 		dataSourceConfig.setDriver("com.mysql.jdbc.Driver");
 		dataSourceConfig.setIsolationLevel(8);
-		setDatabaseLoader(serverConfig);
-	}
-
-	public void tearDown()
-	throws Exception {
-		Method method = getDatabaseLoader().getClass().getSuperclass().getDeclaredMethod("drop");
-		method.setAccessible(true);
-		// method.invoke(getDatabaseLoader());
 	}
 
 }

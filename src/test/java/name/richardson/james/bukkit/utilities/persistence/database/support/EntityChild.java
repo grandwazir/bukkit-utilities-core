@@ -24,8 +24,19 @@ import java.util.List;
 @Entity
 public class EntityChild {
 
+	@Id
+	private
+	int id;
+
 	@ManyToOne(targetEntity = EntityParent.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	@PrimaryKeyJoinColumn(name = "parentId", referencedColumnName = "id")
 	private List<EntityChild> children;
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(final int id) {
+		this.id = id;
+	}
 }

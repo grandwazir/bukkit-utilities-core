@@ -18,14 +18,16 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database.support;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class EntityParent {
+
+	@Id
+	private
+	int id;
+
 
 	@OneToMany(targetEntity = EntityChild.class, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	private List<EntityChild> children;
@@ -34,8 +36,15 @@ public class EntityParent {
 		return children;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	public void setChildren(List<EntityChild> children) {
 		this.children = children;
 	}
 
+	public void setId(final int id) {
+		this.id = id;
+	}
 }

@@ -18,9 +18,15 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.avaje.ebean.EbeanServer;
@@ -38,6 +44,7 @@ import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleL
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
+@SuppressWarnings("UseOfSystemOutOrSystemErr")
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	private final ClassLoader classLoader;
@@ -47,7 +54,11 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseLoader.class);
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
+	private final Logger globalLogger = Logger.getLogger("");
+	private final Level globalLoggerInitialLevel = globalLogger.getLevel();
+	private final PrintStream out = System.out;
 	private EbeanServer ebeanserver;
+	private PrintStream err = System.err;
 	private DdlGenerator generator;
 
 	public AbstractDatabaseLoader(DatabaseConfiguration configuration) {
@@ -72,7 +83,9 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			if (!this.logger.isLoggable(Level.FINEST)) setGeneratorDebug(generator, false);
 			this.drop();
 			this.create();
-			logger.log(Level.INFO, localisation.getMessage(PluginLocalisation.DATABASE_REBUILT_SCHEMA));
+			if (!this.isSchemaValid()) {
+				throw new RuntimeException("Unable to initalise database!");
+			}
 		}
 	}
 
@@ -103,7 +116,12 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		// reload the database this allows for removing classes
 		String script = getGenerateDDLScript();
 		this.load();
-		generator.runScript(false, script);
+		try {
+			this.setSuppressMessages(true);
+			generator.runScript(false, script);
+		} finally {
+			this.setSuppressMessages(false);
+		}
 		this.afterDatabaseCreate();
 	}
 
@@ -111,28 +129,31 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	public final void drop() {
 		logger.log(Level.FINER, localisation.getMessage(PluginLocalisation.DATABASE_DROPPING_TABLES));
 		this.beforeDatabaseDrop();
-		generator.runScript(true, this.getDeleteDLLScript());
+		String script = this.getDeleteDLLScript();
+		try {
+			this.setSuppressMessages(true);
+			generator.runScript(true, script);
+		} finally {
+			this.setSuppressMessages(false);
+		}
 	}
 
 	@Override
 	public final void load() {
 		logger.log(Level.FINE, localisation.getMessage(PluginLocalisation.DATABASE_LOADING));
-		final Level level = java.util.logging.Logger.getLogger("").getLevel();
-		java.util.logging.Logger.getLogger("").setLevel(Level.OFF);
+		if (logger.isLoggable(Level.ALL)) {
+			this.serverConfig.setLoggingToJavaLogger(true);
+			this.serverConfig.setLoggingLevel(LogLevel.SQL);
+		}
 		ClassLoader currentClassLoader = null;
 		try {
 			this.serverConfig.setClasses(this.classes);
-			if (logger.isLoggable(Level.ALL)) {
-				this.serverConfig.setLoggingToJavaLogger(true);
-				this.serverConfig.setLoggingLevel(LogLevel.SQL);
-			}
-			// suppress normal ebean warnings and notifications
 			currentClassLoader = Thread.currentThread().getContextClassLoader();
 			Thread.currentThread().setContextClassLoader(this.classLoader);
+			this.setSuppressMessages(true);
 			this.ebeanserver = EbeanServerFactory.create(this.serverConfig);
 		} finally {
-			// re-enable logging
-			java.util.logging.Logger.getLogger("").setLevel(level);
+			this.setSuppressMessages(false);
 			if (currentClassLoader != null) {
 				Thread.currentThread().setContextClassLoader(currentClassLoader);
 			}
@@ -140,34 +161,48 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	/**
-	 * Ebean by default outputs a ton of exception data to the console which is ignored by the generator itself. This makes it difficult to actually find real
-	 * exceptions. This method disables this using reflection.
+	 * This is not an elegant function. It is used to suppress the warning output printed to system out and err by Ebean during the DDL generation.
+	 * Why someone would choice to use this two, especially when there is a logger available in that class is beyond me.
 	 *
-	 * @param generator
-	 * @param value
+	 * @param b
 	 */
-	protected final void setGeneratorDebug(DdlGenerator generator, boolean value) {
-		try {
-			Field field = generator.getClass().getDeclaredField("debug");
-			field.setAccessible(true);
-			field.set(generator, value);
-		} catch (Exception e) {
-			logger.warning("Unable to supress generator messages!");
+	private void setSuppressMessages(final boolean b) {
+		if (b) {
+			globalLogger.setLevel(Level.OFF);
+			System.setOut(new PrintStream(new OutputStream() {
+				@Override public void write(int b) throws IOException {}
+			}));
+			System.setErr(new PrintStream(new OutputStream() {
+				@Override public void write(int b) throws IOException {
+				}
+			}));
+		} else {
+			globalLogger.setLevel(globalLoggerInitialLevel);
+			System.setOut(out);
+			System.setErr(err);
 		}
 	}
 
 	@Override
 	public final boolean isSchemaValid() {
+		boolean valid = true;
 		for (final Class<?> ebean : this.classes) {
 			try {
+				this.setSuppressMessages(true);
 				this.ebeanserver.find(ebean).findRowCount();
-			} catch (final Exception exception) {
-				logger.log(Level.WARNING, localisation.getMessage(PluginLocalisation.DATABASE_INVALID_SCHEMA));
-				return false;
+			} catch (final Exception e) {
+				valid = false;
+				break;
+			} finally {
+				this.setSuppressMessages(false);
 			}
 		}
-		logger.log(Level.FINER, localisation.getMessage(PluginLocalisation.DATABASE_VALID_SCHEMA));
-		return true;
+		if (valid) {
+			logger.log(Level.FINER, localisation.getMessage(PluginLocalisation.DATABASE_VALID_SCHEMA));
+		} else {
+			logger.log(Level.WARNING, localisation.getMessage(PluginLocalisation.DATABASE_INVALID_SCHEMA));
+		}
+		return valid;
 	}
 
 	@Override
@@ -178,6 +213,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		sb.append(", datasourceConfig=").append(datasourceConfig);
 		sb.append(", ebeanserver=").append(ebeanserver);
 		sb.append(", generator=").append(generator);
+		sb.append(", globalLoggerInitialLevel=").append(globalLoggerInitialLevel);
 		sb.append(", localisation=").append(localisation);
 		sb.append(", rebuild=").append(rebuild);
 		sb.append(", serverConfig=").append(serverConfig);

@@ -35,17 +35,23 @@ import static org.mockito.Mockito.when;
 @RunWith(JUnit4.class)
 public class SQLiteDatabaseLoaderTest extends AbstractDatabaseLoaderTest {
 
+	private ServerConfig serverConfig;
+
 	@Before
 	public void setUp()
 	throws Exception {
-		ServerConfig serverConfig = getServerConfig();
+	  serverConfig = createDefaultServerConfig();
+		setDataSourceConfig();
+		setDatabaseLoader(serverConfig);
+	}
+
+	private void setDataSourceConfig() {
 		DataSourceConfig dataSourceConfig = serverConfig.getDataSourceConfig();
 		dataSourceConfig.setUrl("jdbc:sqlite::memory:");
 		dataSourceConfig.setPassword("");
 		dataSourceConfig.setUsername("travis");
 		dataSourceConfig.setDriver("org.sqlite.JDBC");
 		dataSourceConfig.setIsolationLevel(8);
-		setDatabaseLoader(serverConfig);
 	}
 
 }
