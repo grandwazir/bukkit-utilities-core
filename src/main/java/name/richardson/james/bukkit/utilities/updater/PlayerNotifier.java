@@ -54,7 +54,7 @@ public class PlayerNotifier extends AbstractListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify && updater.isNewVersionAvailable()) {
-			event.getPlayer().sendMessage(localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, pluginName, updater.getRemoteVersion()));
+			event.getPlayer().sendMessage(localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, pluginName, updater.getLatestRemoteVersion().getMajorVersion(), updater.getLatestRemoteVersion().getMinorVersion()));
 		}
 	}
 

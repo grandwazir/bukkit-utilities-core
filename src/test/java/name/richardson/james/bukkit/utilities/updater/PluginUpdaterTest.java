@@ -37,6 +37,11 @@ public abstract class PluginUpdaterTest extends TestCase {
 		assertEquals("State has not been set correctly!", PluginUpdater.State.NOTIFY, getUpdater().getState());
 	}
 
+	@Test
+	public void checkToStringIsOverriden() {
+		assertTrue(getUpdater().toString().contains("Updater"));
+	}
+
 	protected PluginUpdater getUpdater() {
 		return updater;
 	}

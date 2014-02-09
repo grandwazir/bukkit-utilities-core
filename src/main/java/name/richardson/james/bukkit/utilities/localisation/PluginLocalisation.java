@@ -46,7 +46,7 @@ public interface PluginLocalisation {
 	public static String UPDATER_MANUAL_UPDATE_REQUIRED = "updater.manual-update-required";
 	public static String UPDATER_DOWNLOADING = "updater.downloading";
 	public static String UPDATER_NEW_VERSION_AVAILABLE = "updater.new-version-available";
-
+	public static String UPDATER_ENCOUNTERED_EXCEPTION = "updater.unable-to-update";
 
 
 }

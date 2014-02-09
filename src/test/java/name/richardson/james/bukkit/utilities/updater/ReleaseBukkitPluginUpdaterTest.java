@@ -20,6 +20,8 @@ package name.richardson.james.bukkit.utilities.updater;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +30,12 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ReleaseBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
+	private static final ArtifactVersion REMOTE_VERSION = new DefaultArtifactVersion("2.2.0");
+	private static final ArtifactVersion LOCAL_VERSION = new DefaultArtifactVersion("2.1.0");
+
 	@Test
 	public void IdentifyCorrectRemoteVersion() {
-		assertEquals(getUpdater().getRemoteVersion(), "2.2.0");
+		assertEquals(getUpdater().getLatestRemoteVersion(), REMOTE_VERSION);
 	}
 
 	@Override
@@ -42,7 +47,7 @@ public class ReleaseBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 	@Override
 	public void returnsSuppliedLocalVersion()
 	throws Exception {
-		assertEquals(getUpdater().getLocalVersion(), "2.1.0");
+		assertEquals(getUpdater().getLocalVersion(), LOCAL_VERSION);
 	}
 
 	@Before

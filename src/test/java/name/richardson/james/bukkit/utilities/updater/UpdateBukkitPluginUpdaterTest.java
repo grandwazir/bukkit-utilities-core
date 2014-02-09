@@ -22,6 +22,8 @@ import java.io.File;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +31,9 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
+
+	private static final ArtifactVersion REMOTE_VERSION = new DefaultArtifactVersion("2.2.5");
+	private static final ArtifactVersion LOCAL_VERSION = new DefaultArtifactVersion("2.1.0");
 
 	@Override
 	public void returnsSuppliedBranch()
@@ -38,7 +43,7 @@ public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
 	@Test
 	public void identifyCorrectRemoteVersion() {
-		assertEquals(getUpdater().getRemoteVersion(), "2.2.5");
+		assertEquals(getUpdater().getLatestRemoteVersion(), REMOTE_VERSION);
 	}
 
 	@Override
@@ -50,7 +55,7 @@ public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 	@Override
 	public void returnsSuppliedLocalVersion()
 	throws Exception {
-		assertEquals(getUpdater().getLocalVersion(), "2.1.0");
+		assertEquals(getUpdater().getLocalVersion(), LOCAL_VERSION);
 	}
 
 	@Override
@@ -64,7 +69,6 @@ public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 		getUpdater().update();
 		File file = new File(temporaryFolder.getRoot(), "update");
 		File[] files = file.listFiles();
-		System.out.print(file.getAbsolutePath());
 		assertTrue(files[0].getName().equals("BanHammer.jar"));
 	}
 
@@ -72,7 +76,7 @@ public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 	public void setUp()
 	throws Exception {
 		PluginDescriptionFile descriptionFile = new PluginDescriptionFile("BanHammer", "2.1.0", null);
-		BukkitDevPluginUpdater updater = new BukkitDevPluginUpdater(descriptionFile, PluginUpdater.Branch.DEVELOPMENT, PluginUpdater.State.UPDATE, PROJECT_ID, temporaryFolder.newFolder("update"), "1.5.2");
+		PluginUpdater updater = new BukkitDevPluginUpdater(descriptionFile, PluginUpdater.Branch.DEVELOPMENT, PluginUpdater.State.UPDATE, PROJECT_ID, temporaryFolder.newFolder("update"), "1.5.2");
 		this.setUpdater(updater);
 		this.getUpdater().run();
 	}

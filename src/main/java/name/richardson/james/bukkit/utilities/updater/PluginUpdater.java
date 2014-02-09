@@ -17,6 +17,8 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.updater;
 
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+
 /**
  * The PluginUpdater interface defines how updaters should interact with other parts of BukkitUtilities.
  */
@@ -43,11 +45,9 @@ public interface PluginUpdater extends Runnable {
 	/**
 	 * Gets the local version of the plugin.
 	 *
-	 * Should be in a Maven style format.
-	 *
 	 * @return The current version of the local plugin
 	 */
-	public String getLocalVersion();
+	public ArtifactVersion getLocalVersion();
 
 	/**
 	 * Get the name of the plugin being updated
@@ -57,13 +57,13 @@ public interface PluginUpdater extends Runnable {
 	String getName();
 
 	/**
-	 * Get the current remote version of the plugin.
-	 *
-	 * This should be the latest released and available version matching the branch requested.
+	 * Get the latest remote version of the plugin.
 	 *
 	 * @return The current remote version of the plugin.
 	 */
-	public String getRemoteVersion();
+	public ArtifactVersion getLatestRemoteVersion();
+
+	String getPluginName();
 
 	/**
 	 * Get the current state of the updater.

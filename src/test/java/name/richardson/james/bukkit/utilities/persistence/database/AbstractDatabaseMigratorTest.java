@@ -47,6 +47,12 @@ public abstract class AbstractDatabaseMigratorTest extends TestCase {
 		assertNotNull(databaseMigrator.getOldDatabaseLoader());
 	}
 
+	@Test
+	public void checkToStringIsOverriden() {
+		assertTrue(databaseMigrator.toString().contains("DatabaseMigrator"));
+	}
+
+
 
 
 }
