@@ -31,14 +31,13 @@ import static org.mockito.Mockito.mock;
 public class NestedCommandContextTest extends AbstractCommandContextTest {
 
 	@Override
-	public void getJoinedArgumentsWhenMixedContextPassedReturnedStringOnlyIncludesArguments() {
-		String joinedArguments = StringUtils.join(ARGUMENTS, " ", 1, ARGUMENTS.length - 2);
-		assertEquals(joinedArguments, getCommandContext().getJoinedArguments(0));
+	public void joinAllNormalArgumentsCorrectly() {
+
 	}
 
 	@Override
-	public void whenArgumentsPassedReturnCorrectSize() {
-		assertEquals(ARGUMENTS.length - 3, getCommandContext().size());
+	public void ifArgumentIsValidReturnArgument() {
+		assertEquals("The returned argument is not expected!", getCommandContext().getArgument(0), ARGUMENTS[1]);
 	}
 
 	@Before

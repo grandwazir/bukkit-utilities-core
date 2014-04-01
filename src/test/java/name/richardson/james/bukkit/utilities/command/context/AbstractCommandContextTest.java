@@ -28,78 +28,62 @@ import org.junit.runners.JUnit4;
 public abstract class AbstractCommandContextTest extends TestCase {
 
 	public static final String EXAMPLE_UNICODE = "tämä";
-	public static final String[] ARGUMENTS = {"This", "is", "a", "test", "argument", "with", "unicode", "chars", EXAMPLE_UNICODE, "-silent", "t:12345"};
-	public static final String INVALID_FLAG = "blah";
-	public static final String SWITCH_FLAG_NAME = "silent";
+	public static final String SWITCH_VALUE = "12345";
+	public static final String[] ARGUMENTS = {"This", "is", "a", "test", "argument", "with", "unicode", "chars", EXAMPLE_UNICODE, "-silent", "t:" + SWITCH_VALUE};
+	public static final String INVALID_SWITCH = "blah";
+	public static final String VALID_SWITCH = "silent";
+
 	private CommandContext commandContext;
 
 	@Test
-	public void getCommandSenderwhenContextCreatedReturnsNotNull() {
-		assertNotNull(getCommandContext().getCommandSender());
+	public final void commandSenderIsNotNull() {
+		assertNotNull("A CommandSender must be assigned to the CommandContext!", getCommandContext().getCommandSender());
 	}
 
-	public CommandContext getCommandContext() {
+	protected CommandContext getCommandContext() {
 		return commandContext;
 	}
 
-	public void setCommandContext(CommandContext commandContext) {
+	protected void setCommandContext(CommandContext commandContext) {
 		this.commandContext = commandContext;
 	}
 
 	@Test
-	public void getFlagWhenFlagIsInvalidReturnNull() {
-		assertNull(getCommandContext().getFlag(INVALID_FLAG));
-	}
+	public abstract void joinAllNormalArgumentsCorrectly();
 
 	@Test
-	public void getFlagwhenFlagIsSwitchReturnNull() {
-		assertNull(getCommandContext().getFlag(SWITCH_FLAG_NAME));
-	}
+	public abstract void ifArgumentIsValidReturnArgument();
 
 	@Test
-	public void getJoinedArgumentsWhenMixedContextPassedReturnedStringOnlyIncludesArguments() {
-		String joinedArguments = StringUtils.join(ARGUMENTS, " ", 0, ARGUMENTS.length - 2);
-		assertEquals(joinedArguments, getCommandContext().getJoinedArguments(0));
+	public void joinedArgumentsContainsUnicode() {
+		String value = getCommandContext().getJoinedArguments(0);
+		assertTrue("Joined arguments have not been parsed correctly!", value.contains(EXAMPLE_UNICODE));
 	}
 
-	@Test
-	public void getStringWhenRequestedMethodIsOverriden() {
-		assertTrue(getCommandContext().toString().contains("CommandContext"));
+	@Test(expected = InvalidArgumentException.class)
+	public final void ifArgumentIsInvalidExpectException() {
+		getCommandContext().getArgument(Integer.MAX_VALUE);
 	}
 
-	@Test
-	public void getStringwhenIndexInvalidReturnNull() {
-		assertNull(getCommandContext().getString(99));
-	}
-
-	@Test
-	public void getStringwhenIndexValidReturnString() {
-		assertNotNull(getCommandContext().getString(0));
-	}
-
-	@Test
-	public void returnFalseWhenSwitchIsNotPresent() {
-		assertFalse(getCommandContext().hasSwitch(INVALID_FLAG));
+	@Test(expected = InvalidArgumentException.class)
+	public final void ifSwitchIsInvalidExpectException() {
+		getCommandContext().getSwitch(INVALID_SWITCH);
 	}
 
 	@Test
 	public void returnTrueWhenSwitchIsPresent() {
-		assertTrue(getCommandContext().hasSwitch(SWITCH_FLAG_NAME));
+		assertTrue(getCommandContext().hasSwitch(VALID_SWITCH));
 	}
 
 	@Test
-	public void whenArgumentsPassedReturnCorrectSize() {
-		assertEquals(ARGUMENTS.length - 2, getCommandContext().size());
+	public void returnValueFromSwitchWhenPresent() {
+		String value = getCommandContext().getSwitch(VALID_SWITCH);
+		assertEquals("Returned value is not the same as switch value!", SWITCH_VALUE, value);
 	}
 
 	@Test
-	public void checkToStringOverriden() {
-		assertTrue("toString has not been overridden", commandContext.toString().contains("CommandContext"));
-	}
-
-	@Test
-	public void whenStringContainsUnicodeDoNotStripUnicodeChars() {
-		assertTrue(getCommandContext().getJoinedArguments(0).contains(EXAMPLE_UNICODE));
+	public void toStringIsOverridden() {
+		assertTrue("toString() has not been overridden!", commandContext.toString().contains("CommandContext"));
 	}
 
 }

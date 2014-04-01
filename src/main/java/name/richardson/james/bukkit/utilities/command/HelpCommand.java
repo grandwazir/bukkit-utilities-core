@@ -133,7 +133,7 @@ public final class HelpCommand extends AbstractCommand {
 
 	private Command setCommandFromContext(CommandContext commandContext) {
 		if (commandContext.hasArgument(0)) {
-			return commandMap.get(commandContext.getString(0));
+			return commandMap.get(commandContext.getArgument(0));
 		} else {
 			return null;
 		}

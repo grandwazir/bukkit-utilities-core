@@ -35,12 +35,12 @@ public interface CommandContext {
 	CommandSender getCommandSender();
 
 	/**
-	 * Get the contents of the flag.
+	 * Get the contents of a switch.
 	 *
-	 * @param label the flag label to look up.
-	 * @return the contents of the flag or null if the flag is a switch or does not exist.
+	 * @param label the command switch to look up.
+	 * @return the value of the switch or true if no value is specified
 	 */
-	String getFlag(String label);
+	String getSwitch(String label);
 
 	/**
 	 * Join all the arguments from a specified index onwards into one String.
@@ -56,7 +56,7 @@ public interface CommandContext {
 	 * @param index the argument number to fetch.
 	 * @return the argument specified or null if there is nothing at that index.
 	 */
-	String getString(int index);
+	String getArgument(int index);
 
 	/**
 	 * Check to see if the context contains an argument.

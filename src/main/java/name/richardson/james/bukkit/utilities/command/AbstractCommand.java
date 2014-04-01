@@ -29,7 +29,7 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 	 * @since 6.1.0
 	 */
 	@Override
-	public void addMatcher(Matcher matcher) {
+	public final void addMatcher(Matcher matcher) {
 		matcherInvoker.addMatcher(matcher);
 	}
 
@@ -42,7 +42,7 @@ public abstract class AbstractCommand implements Command, MatcherInvoker {
 	 * @since 6.1.0
 	 */
 	@Override
-	public Set<String> getArgumentMatches(CommandContext commandContext) {
+	public final Set<String> getArgumentMatches(CommandContext commandContext) {
 		return matcherInvoker.getArgumentMatches(commandContext);
 	}
 

@@ -48,21 +48,19 @@ public class HelpCommandTest extends AbstractCommandTest {
 	private static final String INVALID_ARGUMENT = "frank";
 	private static final String PARTIAL_COMMAND_NAME = "tes";
 
+	private CommandContext commandContext;
+	private CommandSender commandSender;
 	private Command mockCommand;
 
 	@Test
-	public void respondWithCommandListIfNoArguments() {
-		CommandContext commandContext = getMockCommandContext();
-		CommandSender commandSender = commandContext.getCommandSender();
-		getCommand().execute(commandContext);
-		verify(commandSender, times(4)).sendMessage(anyString());
+	public void commandShouldAlwaysBeAccessible() {
+		assertTrue(getCommand().isAuthorised(null));
 	}
 
 	@Test
 	public void getArgumentMatchForPartialCommandName() {
-		CommandContext commandContext = getMockCommandContext();
 		when(commandContext.hasArgument(0)).thenReturn(true);
-		when(commandContext.getString(0)).thenReturn(PARTIAL_COMMAND_NAME);
+		when(commandContext.getArgument(0)).thenReturn(PARTIAL_COMMAND_NAME);
 		when(commandContext.size()).thenReturn(1);
 		Set<String> matches = getCommand().getArgumentMatches(commandContext);
 		assertEquals(new HashSet<String>(Arrays.asList(COMMAND_NAME)), matches);
@@ -70,61 +68,53 @@ public class HelpCommandTest extends AbstractCommandTest {
 
 	@Test
 	public void respondWithCommandDescriptionIfArgumentValid() {
-		CommandContext commandContext = getMockCommandContext();
-		CommandSender commandSender = commandContext.getCommandSender();
 		when(commandContext.hasArgument(0)).thenReturn(true);
-		when(commandContext.getString(0)).thenReturn(VALID_ARGUMENT);
+		when(commandContext.getArgument(0)).thenReturn(VALID_ARGUMENT);
 		getCommand().execute(commandContext);
 		verify(commandSender, times(2)).sendMessage(anyString());
 	}
 
 	@Test
 	public void respondWithCommandListIfArgumentInvalid() {
-		CommandContext commandContext = getMockCommandContext();
-		CommandSender commandSender = commandContext.getCommandSender();
 		when(commandContext.hasArgument(0)).thenReturn(true);
-		when(commandContext.getString(0)).thenReturn(INVALID_ARGUMENT);
+		when(commandContext.getArgument(0)).thenReturn(INVALID_ARGUMENT);
 		getCommand().execute(commandContext);
 		verify(commandSender, times(4)).sendMessage(anyString());
 	}
 
 	@Test
-	public void respondWithCommandListOnlyIncludingAccessibleCommandsIfNoArguments() {
-		CommandContext commandContext = getMockCommandContext();
-		CommandSender commandSender = commandContext.getCommandSender();
-		when(mockCommand.isAuthorised(Matchers.<Permissible>any())).thenReturn(false);
+	public void respondWithCommandListIfNoArguments() {
 		getCommand().execute(commandContext);
-		verify(commandSender, times(3)).sendMessage(anyString());
+		verify(commandSender, times(4)).sendMessage(anyString());
 	}
 
 	@Test
 	public void respondWithCommandListIfRequestedCommandIsInaccessible() {
-		CommandContext commandContext = getMockCommandContext();
-		CommandSender commandSender = commandContext.getCommandSender();
 		when(mockCommand.isAuthorised(Matchers.<Permissible>any())).thenReturn(false);
-		when(commandContext.getString(0)).thenReturn(VALID_ARGUMENT);
+		when(commandContext.getArgument(0)).thenReturn(VALID_ARGUMENT);
 		getCommand().execute(commandContext);
 		verify(commandSender, times(3)).sendMessage(anyString());
 	}
 
 	@Test
-	public void commandShouldAlwaysBeAccessible() {
-		assertTrue(getCommand().isAuthorised(null));
+	public void respondWithCommandListOnlyIncludingAccessibleCommandsIfNoArguments() {
+		when(mockCommand.isAuthorised(Matchers.<Permissible>any())).thenReturn(false);
+		getCommand().execute(commandContext);
+		verify(commandSender, times(3)).sendMessage(anyString());
 	}
 
 	@Before
 	public void setUp()
 	throws Exception {
 		mockCommand = mock(Command.class);
+		commandContext = getMockCommandContext();
+		commandSender = commandContext.getCommandSender();
 		when(mockCommand.getName()).thenReturn(COMMAND_NAME);
 		when(mockCommand.getUsage()).thenReturn(COMMAND_USAGE);
 		when(mockCommand.getDescription()).thenReturn(COMMAND_DESCRIPTION);
 		when(mockCommand.isAuthorised(Matchers.<Permissible>any())).thenReturn(true);
-		setCommand(new HelpCommand(getPluginDescriptionFile(), COMMAND_LABEL, new HashSet<Command>(Arrays.asList(mockCommand))));
-	}
-
-	public static PluginDescriptionFile getPluginDescriptionFile() {
-		return new PluginDescriptionFile(PLUGIN_NAME, PLUGIN_VERSION, null);
+		PluginDescriptionFile pluginDescriptionFile = new PluginDescriptionFile(PLUGIN_NAME, PLUGIN_VERSION, null);
+		setCommand(new HelpCommand(pluginDescriptionFile, COMMAND_LABEL, new HashSet<Command>(Arrays.asList(mockCommand))));
 	}
 
 }

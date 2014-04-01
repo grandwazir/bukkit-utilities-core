@@ -45,7 +45,7 @@ public abstract class MatcherInvokerTest extends TestCase {
 	public static CommandContext getMockCommandContext() {
 		CommandContext commandContext = mock(CommandContext.class);
 		when(commandContext.hasArgument(0)).thenReturn(true);
-		when(commandContext.getString(anyInt())).thenReturn(PROVIDED_ARGUMENTS);
+		when(commandContext.getArgument(anyInt())).thenReturn(PROVIDED_ARGUMENTS);
 		when(commandContext.size()).thenReturn(1);
 		return commandContext;
 	}

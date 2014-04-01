@@ -62,7 +62,7 @@ public final class SimpleMatcherInvoker implements MatcherInvoker {
 		Set<String> matches = new HashSet<String>();
 		if (matchers.size() > argumentIndex) {
 			Matcher matcher = matchers.get(argumentIndex);
-			String argument = commandContext.getString(argumentIndex);
+			String argument = commandContext.getArgument(argumentIndex);
 			matches.addAll(matcher.matches(argument));
 		}
 		return matches;

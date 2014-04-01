@@ -18,27 +18,15 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permissible;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
-import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
-import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvokerTest;
 
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +35,7 @@ public abstract class AbstractCommandTest extends TestCase {
 
 	private Command command;
 
-	public static CommandContext getMockCommandContext() {
+	public final static CommandContext getMockCommandContext() {
 		CommandContext commandContext = mock(CommandContext.class);
 		CommandSender commandSender = mock(CommandSender.class);
 		when(commandContext.getCommandSender()).thenReturn(commandSender);
@@ -55,35 +43,31 @@ public abstract class AbstractCommandTest extends TestCase {
 	}
 
 	@Test
-	public void checkCommandNameIsNotNull() {
-		assertNotNull(command.getName());
+	public void commandDescriptionIsNotNull() {
+		assertNotNull("A localised command description has not been set!", command.getDescription());
 	}
 
 	@Test
-	public void checkCommandDescriptionIsNotNull() {
-		assertNotNull(command.getDescription());
+	public void commandNameIsNotNull() {
+		assertNotNull("A localised command name has not been set!", command.getName());
 	}
 
 	@Test
-	public void checkCommandUsageIsNotNull() {
-		assertNotNull(command.getUsage());
+	public void commandUsageIsNotNull() {
+		assertNotNull("A localised command usage string has not been set!", command.getDescription());
 	}
 
 	@Test
-	public void checkToStringOverriden() {
-		assertTrue("toString has not been overridden", command.toString().contains("AbstractCommand"));
+	public void toStringIsOverridden() {
+		assertTrue("toString() has not been overridden!", command.toString().contains("AbstractCommand"));
 	}
 
-	public final Command getCommand() {
+	protected final Command getCommand() {
 		return command;
 	}
 
-	public final void setCommand(Command command) {
+	protected final void setCommand(Command command) {
 		this.command = command;
 	}
-
-
-
-
 
 }

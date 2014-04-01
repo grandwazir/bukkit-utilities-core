@@ -48,5 +48,7 @@ public interface PluginLocalisation {
 	public static String UPDATER_NEW_VERSION_AVAILABLE = "updater.new-version-available";
 	public static String UPDATER_ENCOUNTERED_EXCEPTION = "updater.unable-to-update";
 
+	public static String COMMAND_NO_PERMISSION = "command.no-permission";
+	public static String COMMAND_MUST_SPECIFY_PLAYER = "command.must-specify-player";
 
 }

@@ -104,7 +104,7 @@ public class AbstractCommandContext implements CommandContext {
 	 * @return the contents of the flag.
 	 */
 	@Override
-	public String getFlag(String label) {
+	public String getSwitch(String label) {
 		Validate.notNull(label);
 		return flagsMap.get(label);
 	}
@@ -129,13 +129,13 @@ public class AbstractCommandContext implements CommandContext {
 	 * @return the argument specified.
 	 */
 	@Override
-	public String getString(int index) {
+	public String getArgument(int index) {
 		Validate.notNull(index);
-		String s = null;
 		if (hasArgument(index)) {
-			s = argumentsList.get(index);
+		 	return argumentsList.get(index);
+		} else {
+			throw new InvalidArgumentException();
 		}
-		return s;
 	}
 
 	/**
