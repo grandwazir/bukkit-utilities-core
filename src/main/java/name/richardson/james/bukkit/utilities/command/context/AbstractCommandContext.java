@@ -19,7 +19,6 @@
 package name.richardson.james.bukkit.utilities.command.context;
 
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +28,7 @@ import org.bukkit.command.CommandSender;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**

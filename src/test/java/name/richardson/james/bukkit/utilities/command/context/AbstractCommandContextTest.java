@@ -19,10 +19,11 @@
 package name.richardson.james.bukkit.utilities.command.context;
 
 import junit.framework.TestCase;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 
 @RunWith(JUnit4.class)
 public abstract class AbstractCommandContextTest extends TestCase {
