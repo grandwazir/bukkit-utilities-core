@@ -44,21 +44,21 @@ public class PositionalArgumentTest extends AbstractArgumentTest {
 	@Test
 	public void shouldParseOptionWhenNonExistantCorrectly() {
 		getArgument().parseValue("test");
-		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getValue());
+		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getString());
 	}
 
 	@Override
 	@Test
 	public void shouldParseOptionsWithNoArgumentsCorrectly() {
 		getArgument().parseValue("");
-		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getValue());
+		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getString());
 	}
 
 	@Override
 	@Test
 	public void shouldParseValueCorrectly() {
 		getArgument().parseValue("test one");
-		assertEquals("Value has not been set correctly!", "one", getArgument().getValue());
+		assertEquals("Value has not been set correctly!", "one", getArgument().getString());
 	}
 
 	@Before

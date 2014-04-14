@@ -50,19 +50,19 @@ public class OptionArgumentTest extends AbstractArgumentTest {
 	@Override
 	public void shouldParseOptionWhenNonExistantCorrectly() {
 		getArgument().parseValue("-f");
-		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getValue());
+		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getString());
 	}
 
 	@Override
 	public void shouldParseOptionsWithNoArgumentsCorrectly() {
 		getArgument().parseValue("-p");
-		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.TRUE), getArgument().getValue());
+		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.TRUE), getArgument().getString());
 	}
 
 	@Test
 	public void shouldParseValueCorrectly() {
 		getArgument().parseValue("-p:grandwazir");
-		assertEquals("Value has not been set correctly!", "grandwazir", getArgument().getValue());
+		assertEquals("Value has not been set correctly!", "grandwazir", getArgument().getString());
 	}
 
 }

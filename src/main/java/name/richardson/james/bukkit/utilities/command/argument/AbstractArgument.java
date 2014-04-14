@@ -18,68 +18,69 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+
+import org.apache.commons.lang.StringUtils;
 
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 
-public abstract class AbstractArgument implements Argument {
+public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 
-	private final String desc;
-	private final String name;
-	private final Class<?> type;
+	private final ArgumentMetadata metadata;
 	private Matcher matcher;
 	private String value;
+	private Collection<String> values;
 
-	public AbstractArgument(String name, String desc, Class<?> type) {
-		this.name = name;
-		this.desc = desc;
-		this.type = type;
+	public AbstractArgument(final ArgumentMetadata metadata) {
+		this.metadata = metadata;
 	}
 
-	@Override
-	public String getDescription() {
-		return desc;
+	protected static final String[] getSeparatedValues(final String argument) {
+		return StringUtils.split(argument, ",");
+	}
+
+	public final String getId() {
+		return metadata.getId();
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return metadata.getName();
+	}
+
+	public final String getError() {
+		return metadata.getError();
 	}
 
 	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("AbstractArgument{");
-		sb.append("desc='").append(desc).append('\'');
-		sb.append(", matcher=").append(matcher);
-		sb.append(", name='").append(name).append('\'');
-		sb.append(", type=").append(type);
-		sb.append(", value='").append(value).append('\'');
-		sb.append('}');
-		return sb.toString();
+	public String getDescription() {
+		return metadata.getDescription();
 	}
 
 	@Override
-	public String getValue() {
-		return this.value;
+	public final String getString() {
+		String value = null;
+		Iterator<String> iterator = values.iterator();
+		if (iterator.hasNext()) value = iterator.next();
+		return value;
 	}
 
-	protected void setValue(final String value) {
-		this.value = value;
+	public final Collection<String> getStrings() {
+		return Collections.unmodifiableCollection(values);
 	}
 
-	@Override
-	public Object getType() {
-		return type;
+	protected final void setValue(final String value) {
+		this.values.clear();
+		this.values.add(value);
 	}
 
-	@Override
-	public Set<String> getMatches(String argument) {
-		return this.matcher.matches(argument);
-	}
-
-	@Override
-	public void setMatcher(final Matcher matcher) {
-		this.matcher = matcher;
+	protected final void setValues(final String[] values) {
+		this.values.clear();
+		for (String value : values) {
+			this.values.add(value);
+		}
 	}
 
 }

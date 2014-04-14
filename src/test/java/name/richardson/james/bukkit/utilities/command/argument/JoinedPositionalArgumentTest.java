@@ -25,7 +25,7 @@ public class JoinedPositionalArgumentTest extends PositionalArgumentTest {
 	@Override
 	public void shouldParseValueCorrectly() {
 		getArgument().parseValue("this is a test");
-		assertEquals("Value has not been set correctly!", "is a test", getArgument().getValue());
+		assertEquals("Value has not been set correctly!", "is a test", getArgument().getString());
 	}
 
 	@Override

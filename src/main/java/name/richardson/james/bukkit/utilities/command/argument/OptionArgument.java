@@ -18,42 +18,28 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OptionArgument extends AbstractArgument {
 
-	private final Pattern pattern;
+	public static final Pattern OPTION_PATTERN = Pattern.compile("(-\\w:)(\\S+)");
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("OptionArgument{");
-		sb.append("pattern=").append(pattern);
-		sb.append(", prefix='").append(prefix).append('\'');
-		sb.append(", ").append(super.toString());
-		sb.append('}');
-		return sb.toString();
-	}
-
-	private final String prefix;
-
-	public OptionArgument(String name, String desc, Class<?> type) {
-		super(name, desc, type);
-		prefix = "-" + name.substring(0,1).toLowerCase();
-		this.pattern = Pattern.compile(prefix + ":(\\w+)");
+	public OptionArgument(ArgumentMetadata metadata) {
+		super(metadata);
 	}
 
 	@Override
 	public void parseValue(final String argument) {
-		boolean containsOption = argument.contains(prefix);
-		if (containsOption) {
-			java.util.regex.Matcher matcher = pattern.matcher(argument);
-			if (matcher.find()) {
-				setValue(matcher.group(1));
-			} else {
-				setValue(String.valueOf(Boolean.TRUE));
+		Matcher matcher = OPTION_PATTERN.matcher(argument);
+		setValue(null);
+		while (matcher.find()) {
+			String option = matcher.group(0);
+			if (option.equals(getName()) || option.equals(getId())) {
+				String[] payload = getSeparatedValues(matcher.group(1));
+				setValues(payload);
+				break;
 			}
-		} else {
-			setValue(String.valueOf(Boolean.FALSE));
 		}
 	}
 

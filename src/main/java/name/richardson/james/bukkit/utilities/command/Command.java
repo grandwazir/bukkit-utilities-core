@@ -30,14 +30,6 @@ import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
 public interface Command extends MatcherInvoker {
 
 	/**
-	 * Execute a command using the provided {@link CommandContext}.
-	 *
-	 * @param commandContext the command context to execute this command within.
-	 * @since 6.0.0
-	 */
-	public void execute(CommandContext commandContext);
-
-	/**
 	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
 	 * with a command.
 	 *
@@ -67,5 +59,7 @@ public interface Command extends MatcherInvoker {
 	 * @return the localised usage message
 	 */
 	public String getUsage();
+
+	public void setCommandContext(CommandContext context);
 
 }

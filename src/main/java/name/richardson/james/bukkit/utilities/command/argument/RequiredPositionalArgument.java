@@ -20,14 +20,15 @@ package name.richardson.james.bukkit.utilities.command.argument;
 
 public class RequiredPositionalArgument extends PositionalArgument {
 
-	public RequiredPositionalArgument(final String name, final String desc, final Class<?> type, final int position) {
-		super(name, desc, type, position);
+	public RequiredPositionalArgument(ArgumentMetadata argumentMetadata, int position) {
+		super(argumentMetadata, position);
 	}
 
 	@Override
 	public void parseValue(final String argument)
 	throws InvalidArgumentException {
 		super.parseValue(argument);
-		if (getValue().equalsIgnoreCase(String.valueOf(Boolean.FALSE))) throw new InvalidArgumentException();
+		if (getString() == null) throw new InvalidArgumentException(getError());
 	}
+
 }

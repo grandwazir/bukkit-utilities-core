@@ -22,22 +22,19 @@ import org.apache.commons.lang.StringUtils;
 
 public class JoinedPositionalArgument extends PositionalArgument {
 
-	public JoinedPositionalArgument(final String name, final String desc, final Class<?> type, final int position) {
-		super(name, desc, type, position);
+	public JoinedPositionalArgument(ArgumentMetadata metadata, final int position) {
+		super(metadata, position);
 	}
 
 	@Override
-	public void parseValue(final String argument) {
+	public void parseValue(String argument) {
+		setValue(null);
+		argument = isolateArguments(argument);
 		if (argument != null && !argument.isEmpty()) {
-			String filteredArguments = argument.replaceAll(getArgumentIsolatorPattern(), "");
-			String[] arguments = StringUtils.split(filteredArguments);
+			String[] arguments = StringUtils.split(argument);
 			if (arguments.length - 1 >= getPosition()) {
 				setValue(StringUtils.join(arguments, " ", getPosition(), arguments.length));
-			} else {
-				setValue(String.valueOf(Boolean.FALSE));
 			}
-		} else {
-			setValue(String.valueOf(Boolean.FALSE));
 		}
 	}
 

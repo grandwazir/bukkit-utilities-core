@@ -29,6 +29,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.command.argument.Argument;
+import name.richardson.james.bukkit.utilities.command.argument.PositionalArgument;
+import name.richardson.james.bukkit.utilities.command.argument.PlayerMarshaller;
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.StringMatcher;
 import name.richardson.james.bukkit.utilities.formatters.MessageFormatter;
@@ -48,6 +51,8 @@ public final class HelpCommand extends AbstractCommand {
 	private final PluginDescriptionFile descriptionFile;
 	private final String label;
 	private final MessageFormatter localisation = new PermissiveResourceBundleLocalisation();
+	private final Argument commandArgument = new PositionalArgument("command-name", "the name of the command you want help with", String.class, 1);
+	private final PlayerMarshaller playerMarshaller = new PlayerMarshaller(commandArgument, null);
 
 	/**
 	 * Construct a HelpCommand using the label and commands.
@@ -70,6 +75,7 @@ public final class HelpCommand extends AbstractCommand {
 	@Override
 	public void execute(CommandContext commandContext) {
 		Validate.notNull(commandContext, "Command context may not be null!");
+		commandArgument.getString()
 		CommandSender commandSender = commandContext.getCommandSender();
 		Command command = setCommandFromContext(commandContext);
 		if (command == null) {

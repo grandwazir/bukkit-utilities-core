@@ -18,24 +18,14 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import java.util.Set;
+import java.util.Collection;
 
-import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
-
-public interface Argument {
-
-	public String getDescription();
-
-	public String getName();
+public interface Argument extends ArgumentMetadata {
 
 	public void parseValue(String argument) throws InvalidArgumentException;
 
-	public String getValue();
+	public String getString();
 
-	public Object getType();
-
-	public Set<String> getMatches(String argument);
-
-	public void setMatcher(Matcher matcher);
+	public Collection<String> getStrings();
 
 }

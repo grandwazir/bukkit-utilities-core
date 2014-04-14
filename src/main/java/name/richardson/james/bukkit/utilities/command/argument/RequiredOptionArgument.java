@@ -20,14 +20,14 @@ package name.richardson.james.bukkit.utilities.command.argument;
 
 public class RequiredOptionArgument extends OptionArgument {
 
-	public RequiredOptionArgument(final String name, final String desc, final Class<?> type) {
-		super(name, desc, type);
+	public RequiredOptionArgument(ArgumentMetadata metadata) {
+		super(metadata);
 	}
 
 	@Override
 	public void parseValue(final String argument) {
 		super.parseValue(argument);
-		if (getValue() == String.valueOf(Boolean.TRUE) || getValue() == String.valueOf(Boolean.FALSE)) throw new InvalidArgumentException();
+		if (getString() == null) throw new InvalidArgumentException(getError());
 	}
 
 }

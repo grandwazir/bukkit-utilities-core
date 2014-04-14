@@ -25,23 +25,20 @@ public class PositionalArgument extends AbstractArgument {
 	private static final String ARGUMENT_ISOLATOR_PATTERN = "(-\\w:\\w+)|(-\\w)";
 	private final int position;
 
-	public PositionalArgument(final String name, final String desc, final Class<?> type, int position) {
-		super(name, desc, type);
+	public PositionalArgument(ArgumentMetadata metadata, int position) {
+		super(metadata);
 		this.position = position;
 	}
 
 	@Override
-	public void parseValue(final String argument) {
+	public void parseValue(String argument) {
+		setValue(null);
+		argument = isolateArguments(argument);
 		if (argument != null && !argument.isEmpty()) {
-			String filteredArguments = argument.replaceAll(getArgumentIsolatorPattern(), "");
-			String[] arguments = StringUtils.split(filteredArguments);
+			String[] arguments = StringUtils.split(argument);
 			if (arguments.length - 1 >= getPosition()) {
 				setValue(arguments[getPosition()]);
-			} else {
-				setValue(String.valueOf(Boolean.FALSE));
 			}
-		} else {
-			setValue(String.valueOf(Boolean.FALSE));
 		}
 	}
 
@@ -49,8 +46,10 @@ public class PositionalArgument extends AbstractArgument {
 		return position;
 	}
 
-	protected static String getArgumentIsolatorPattern() {
-		return ARGUMENT_ISOLATOR_PATTERN;
+	protected static String isolateArguments(String arguments) {
+		String isolatedArguments = arguments.replaceAll(OptionArgument.OPTION_PATTERN.toString(), "");
+		isolatedArguments = isolatedArguments.replaceAll(SwitchArgument.SWITCH_PATTERN.toString(), "");
+		return isolatedArguments;
 	}
 
 	@Override
