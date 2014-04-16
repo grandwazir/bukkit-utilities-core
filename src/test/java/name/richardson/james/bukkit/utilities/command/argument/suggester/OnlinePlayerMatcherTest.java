@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- NestedCommandContextTest.java is part of bukkit-utilities.
+ OnlinePlayerMatcherTest.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,34 +16,36 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.context;
+package name.richardson.james.bukkit.utilities.command.argument.suggester;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)
-public class NestedCommandContextTest extends AbstractCommandContextTest {
-
-	@Override
-	public void joinAllNormalArgumentsCorrectly() {
-
-	}
-
-	@Override
-	public void ifArgumentIsValidReturnArgument() {
-		assertEquals("The returned argument is not expected!", getCommandContext().getArgument(0), ARGUMENTS[1]);
-	}
+public class OnlinePlayerMatcherTest extends PlayerMatcherTest {
 
 	@Before
-	public void setUp()
-	throws Exception {
-		CommandContext commandContext = new NestedCommandContext(ARGUMENTS, mock(CommandSender.class));
-		setCommandContext(commandContext);
+	public void setUp() {
+		super.setUp();
+		setSuggester(new OnlinePlayerSuggester(getServer()));
 	}
+
+	protected Player[] setPlayers() {
+		Player[] players = getPlayers();
+		when(getServer().getOnlinePlayers()).thenReturn(players);
+		return players;
+	}
+
+	@Test
+	public void checkToStringOverriden() {
+		assertTrue("toString has not been overridden", getSuggester().toString().contains("OnlinePlayerSuggester"));
+	}
+
+
 }

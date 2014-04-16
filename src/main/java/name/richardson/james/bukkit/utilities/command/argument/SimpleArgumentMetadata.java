@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredOptionArgument.java is part of BukkitUtilities.
+ * SimpleArgumentMetadata.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,18 +18,37 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+public class SimpleArgumentMetadata implements ArgumentMetadata {
 
-public class RequiredOptionArgument extends OptionArgument {
+	private final String id;
+	private final String name;
+	private final String desc;
+	private final String error;
 
-	public RequiredOptionArgument(ArgumentMetadata metadata, Suggester suggester) {
-		super(metadata, suggester);
+	public SimpleArgumentMetadata(final String id, final String name, final String desc, final String error) {
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.error = error;
 	}
 
 	@Override
-	public void parseValue(final String argument) {
-		super.parseValue(argument);
-		if (getString() == null) throw new InvalidArgumentException(getError());
+	public String getId() {
+		return id;
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String getError() {
+		return error;
+	}
+
+	@Override
+	public String getDescription() {
+		return desc;
+	}
 }

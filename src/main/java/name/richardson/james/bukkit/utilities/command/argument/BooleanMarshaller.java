@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredOptionArgument.java is part of BukkitUtilities.
+ * BooleanMarshaller.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,18 +18,30 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+import name.richardson.james.bukkit.utilities.command.argument.AbstractMarshaller;
+import name.richardson.james.bukkit.utilities.command.argument.Argument;
 
-public class RequiredOptionArgument extends OptionArgument {
+@SuppressWarnings("PublicMethodNotExposedInInterface")
+public class BooleanMarshaller extends AbstractMarshaller {
 
-	public RequiredOptionArgument(ArgumentMetadata metadata, Suggester suggester) {
-		super(metadata, suggester);
+	private final boolean defaultValue;
+
+	@SuppressWarnings("BooleanParameter")
+	public BooleanMarshaller(final Argument argument, boolean defaultValue) {
+		super(argument);
+		this.defaultValue = defaultValue;
 	}
 
-	@Override
-	public void parseValue(final String argument) {
-		super.parseValue(argument);
-		if (getString() == null) throw new InvalidArgumentException(getError());
+	public boolean isSet() {
+		Boolean value = null;
+		if (getString() == null) {
+			value = defaultValue;
+		} else {
+			value = Boolean.valueOf(getString());
+		}
+		return value;
 	}
+
+
 
 }

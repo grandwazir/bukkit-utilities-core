@@ -20,14 +20,14 @@ package name.richardson.james.bukkit.utilities.command;
 
 import org.bukkit.permissions.Permissible;
 
+import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.matcher.MatcherInvoker;
 
 /**
  * Executes actions on behalf of a user, notifies the user of the outcome. Used anywhere where a user is required instructions to a plugin interactively.
  * Commands also provide a method for users to check to see if they are authorised to use the command in the first place.
  */
-public interface Command extends MatcherInvoker {
+public interface Command extends Runnable, ArgumentInvoker {
 
 	/**
 	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
@@ -60,6 +60,11 @@ public interface Command extends MatcherInvoker {
 	 */
 	public String getUsage();
 
-	public void setCommandContext(CommandContext context);
+	/**
+	 * Set the command context that this command will run within
+	 *
+	 * @param context
+	 */
+	public void setContext(CommandContext context);
 
 }

@@ -18,24 +18,45 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
 public class JoinedPositionalArgument extends PositionalArgument {
 
-	public JoinedPositionalArgument(ArgumentMetadata metadata, final int position) {
-		super(metadata, position);
+	public JoinedPositionalArgument(ArgumentMetadata metadata, Suggester suggester, final int position) {
+		super(metadata, suggester, position);
 	}
 
 	@Override
-	public void parseValue(String argument) {
-		setValue(null);
-		argument = isolateArguments(argument);
-		if (argument != null && !argument.isEmpty()) {
-			String[] arguments = StringUtils.split(argument);
-			if (arguments.length - 1 >= getPosition()) {
-				setValue(StringUtils.join(arguments, " ", getPosition(), arguments.length));
+	public String getString() {
+		String value = null;
+		if (getStrings() != null && !getStrings().contains(null)) {
+			value = StringUtils.join(getStrings(), " ");
+		}
+		return value;
+	}
+
+	@Override
+	protected String[] isolateArguments(final String arguments) {
+		String[] values = null;
+		String[] isolatedArguments = removeOptionsAndSwitches(arguments);
+		if (isolatedArguments != null && isolatedArguments.length > 0) {
+			if (isolatedArguments.length - 1 >= getPosition()) {
+				values = (String[]) ArrayUtils.subarray(isolatedArguments, getPosition(), isolatedArguments.length);
 			}
 		}
+		return values;
+	}
+
+	@Override
+	public boolean isLastArgument(final String arguments) {
+		return removeOptionsAndSwitches(arguments).length - 1 >= getPosition();
 	}
 
 }

@@ -16,27 +16,15 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.matcher;
+package name.richardson.james.bukkit.utilities.command.argument.suggester;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.RETURNS_SMART_NULLS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -46,7 +34,7 @@ public class OfflinePlayerMatcherTest extends PlayerMatcherTest {
 	@Before
 	public void setUp() {
 		super.setUp();
-		setMatcher(new OfflinePlayerMatcher(getServer()));
+		setSuggester(new OfflinePlayerSuggester(getServer()));
 	}
 
 	protected Player[] setPlayers() {
@@ -57,7 +45,7 @@ public class OfflinePlayerMatcherTest extends PlayerMatcherTest {
 
 	@Test
 	public void checkToStringOverriden() {
-		assertTrue("toString has not been overridden", getMatcher().toString().contains("OfflinePlayerMatcher"));
+		assertTrue("toString has not been overridden", getSuggester().toString().contains("OfflinePlayerSuggester"));
 	}
 
 }

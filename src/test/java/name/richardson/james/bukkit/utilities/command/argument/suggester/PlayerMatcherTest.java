@@ -16,7 +16,7 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.matcher;
+package name.richardson.james.bukkit.utilities.command.argument.suggester;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +25,6 @@ import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
@@ -37,26 +36,26 @@ import static org.mockito.Mockito.when;
 
 public abstract class PlayerMatcherTest extends TestCase {
 
-	private Matcher matcher;
+	private Suggester suggester;
 	private Server server;
 
 	@Test
 	public void matches_WhenMatchesAvailable_ReturnSet() {
 		setPlayers();
-		assertFalse(getMatcher().matches("").isEmpty());
+		assertFalse(getSuggester().suggestValue("").isEmpty());
 	}
 
 	@Test
 	public void matches_WhenMatchesReturned_MaxSetSizeShouldBe50() {
 		setPlayers();
-		assertTrue(getMatcher().matches("").size() <= 50);
+		assertTrue(getSuggester().suggestValue("").size() <= 50);
 	}
 
 	@Test
 	public void matches_WhenArgumentPassed_ReturnOnlyValuesThatStartWithValue() {
 		Player[] players = getPlayers();
 		String playerName = players[0].getName().substring(0,4);
-		for(String matchedName : getMatcher().matches(playerName)) {
+		for(String matchedName : getSuggester().suggestValue(playerName)) {
 			assertTrue(matchedName.toLowerCase().startsWith(playerName.toLowerCase()));
 		}
 	}
@@ -69,7 +68,7 @@ public abstract class PlayerMatcherTest extends TestCase {
 
 	@Test
 	public void matches_WhenNoMatchAvailable_ReturnEmptySet() {
-		assertEquals(getMatcher().matches(""), Collections.EMPTY_SET);
+		assertEquals(getSuggester().suggestValue(""), Collections.EMPTY_SET);
 	}
 
 	protected Player[] getPlayers() {
@@ -82,12 +81,12 @@ public abstract class PlayerMatcherTest extends TestCase {
 		return playerList.toArray(new Player[55]);
 	}
 
-	protected Matcher getMatcher() {
-		return matcher;
+	protected Suggester getSuggester() {
+		return suggester;
 	}
 
-	protected void setMatcher(Matcher matcher) {
-		this.matcher = matcher;
+	protected void setSuggester(Suggester suggester) {
+		this.suggester = suggester;
 	}
 
 	protected void setServer(Server server) {
@@ -96,7 +95,7 @@ public abstract class PlayerMatcherTest extends TestCase {
 
 	@Test
 	public void checkToStringOverriden() {
-		assertTrue("toString has not been overridden", matcher.toString().contains("PlayerMatcher"));
+		assertTrue("toString has not been overridden", suggester.toString().contains("PlayerMatcher"));
 	}
 
 	@Before

@@ -18,22 +18,23 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
 
-import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
 public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 
 	private final ArgumentMetadata metadata;
-	private Matcher matcher;
+	private Suggester suggester;
 	private String value;
-	private Collection<String> values;
+	private Collection<String> values = new ArrayList<String>();
 
-	public AbstractArgument(final ArgumentMetadata metadata) {
+	public AbstractArgument(final ArgumentMetadata metadata, Suggester suggester) {
 		this.metadata = metadata;
 	}
 
@@ -46,7 +47,7 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 	}
 
 	@Override
-	public String getName() {
+	public final String getName() {
 		return metadata.getName();
 	}
 
@@ -55,20 +56,24 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 	}
 
 	@Override
-	public String getDescription() {
+	public final String getDescription() {
 		return metadata.getDescription();
 	}
 
 	@Override
-	public final String getString() {
+	public String getString() {
 		String value = null;
 		Iterator<String> iterator = values.iterator();
 		if (iterator.hasNext()) value = iterator.next();
 		return value;
 	}
 
-	public final Collection<String> getStrings() {
+	public Collection<String> getStrings() {
 		return Collections.unmodifiableCollection(values);
+	}
+
+	protected Suggester getSuggester() {
+		return suggester;
 	}
 
 	protected final void setValue(final String value) {

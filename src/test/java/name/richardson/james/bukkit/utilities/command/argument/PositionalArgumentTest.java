@@ -18,52 +18,48 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class PositionalArgumentTest extends AbstractArgumentTest {
 
 	@Override
-	protected String getName() {
-		return "player";
-	}
-
-	@Override
-	protected String getDescription() {
-		return "the name of the player";
-	}
-
-	@Override
-	protected Class<?> getType() {
-		return String.class;
-	}
-
-	@Override
-	@Test
-	public void shouldParseOptionWhenNonExistantCorrectly() {
+	public void shouldParseArgumentWhenNonExistantCorrectly() {
 		getArgument().parseValue("test");
-		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getString());
+		assertNull("Value should be null!", getArgument().getString());
 	}
 
 	@Override
-	@Test
-	public void shouldParseOptionsWithNoArgumentsCorrectly() {
+	public void shouldParseArgumentWithMultipleParametersCorrectly() {
+		getArgument().parseValue("test one two three");
+		List<String> values = Arrays.asList("one","two","three");
+		for (String value : values) {
+			assertTrue("Collection does not contain a value which should be set (" + value + ")", getArgument().getStrings().contains(value));
+		}
+	}
+
+	@Override
+	public void shouldParseArgumentWithNoParametersCorrectly() {
 		getArgument().parseValue("");
-		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getString());
+		assertNull("Value should be null!", getArgument().getString());
 	}
 
 	@Override
-	@Test
-	public void shouldParseValueCorrectly() {
+	public void shouldParseArgumentWithSingleParameterCorrectly() {
 		getArgument().parseValue("test one");
 		assertEquals("Value has not been set correctly!", "one", getArgument().getString());
 	}
 
 	@Before
 	public void setup() {
-		setArgument(new PositionalArgument(getName(), getDescription(), getType(), 1));
+		setArgument(new PositionalArgument(getCommandMetadata(), getSuggester(), 1));
 	}
 
 }

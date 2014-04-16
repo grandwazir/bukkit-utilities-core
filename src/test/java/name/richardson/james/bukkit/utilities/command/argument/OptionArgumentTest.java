@@ -18,51 +18,48 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.Arrays;
+
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class OptionArgumentTest extends AbstractArgumentTest {
 
 	@Before
 	public void setup() {
-		this.setArgument(new OptionArgument(getName(), getDescription(), getType()));
+		this.setArgument(new OptionArgument(getCommandMetadata(), getSuggester()));
 	}
 
 	@Override
-	protected String getName() {
-		return "p";
-	}
-
-	@Override
-	protected String getDescription() {
-		return "the name of the player to ban";
-	}
-
-	@Override
-	protected Class<?> getType() {
-		return String.class;
-	}
-
-	@Override
-	public void shouldParseOptionWhenNonExistantCorrectly() {
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldParseArgumentWhenNonExistantCorrectly() {
 		getArgument().parseValue("-f");
-		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.FALSE), getArgument().getString());
 	}
 
 	@Override
-	public void shouldParseOptionsWithNoArgumentsCorrectly() {
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldParseArgumentWithNoParametersCorrectly() {
 		getArgument().parseValue("-p");
-		assertEquals("Value has not been set correctly!", String.valueOf(Boolean.TRUE), getArgument().getString());
 	}
 
-	@Test
-	public void shouldParseValueCorrectly() {
-		getArgument().parseValue("-p:grandwazir");
-		assertEquals("Value has not been set correctly!", "grandwazir", getArgument().getString());
+	@Override
+	public void shouldParseArgumentWithSingleParameterCorrectly() {
+		final String playerName = "grandwazir";
+		getArgument().parseValue("-p:" + playerName);
+		assertEquals("Value has not been set correctly!", playerName, getArgument().getString());
+	}
+
+	@Override
+	public void shouldParseArgumentWithMultipleParametersCorrectly() {
+		final String playerNames = "grandwazir,frank,joe";
+		final String[] values = StringUtils.split(playerNames, ",");
+		getArgument().parseValue("-p:" + playerNames);
+		for (String value : values) {
+			assertTrue("Collection does not contain a value which should be set!", getArgument().getStrings().contains(value));
+		}
 	}
 
 }

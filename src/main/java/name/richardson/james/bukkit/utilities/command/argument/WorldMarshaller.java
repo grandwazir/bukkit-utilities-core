@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2013 James Richardson.
+ * Copyright (c) 2014 James Richardson.
  *
- * SimpleMatcherInvokerTest.java is part of BukkitUtilities.
+ * WorldMarshaller.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,17 +16,28 @@
  * bukkit-utilities. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.richardson.james.bukkit.utilities.command.matcher;
+package name.richardson.james.bukkit.utilities.command.argument;
 
-import org.junit.Before;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 
+public class WorldMarshaller extends AbstractMarshaller {
 
-public class SimpleMatcherInvokerTest extends MatcherInvokerTest {
+	private final Server server;
 
-	@Before
-	public void setUp()
-	throws Exception {
-		setInvoker(new SimpleMatcherInvoker());
+	public WorldMarshaller(final Argument argument, Server server) {
+		super(argument);
+		this.server = server;
 	}
+
+	public World getWorld() {
+		World world = null;
+		if (getString() != null) {
+			world = server.getWorld(getString());
+		}
+		return world;
+	}
+
 
 }

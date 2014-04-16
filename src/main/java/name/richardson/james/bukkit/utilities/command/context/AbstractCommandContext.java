@@ -134,7 +134,7 @@ public class AbstractCommandContext implements CommandContext {
 		if (hasArgument(index)) {
 		 	return argumentsList.get(index);
 		} else {
-			throw new InvalidArgumentException();
+			throw new InvalidArgumentException("frank");
 		}
 	}
 

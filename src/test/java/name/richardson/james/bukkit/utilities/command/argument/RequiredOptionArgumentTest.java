@@ -23,22 +23,10 @@ import org.junit.Test;
 
 public class RequiredOptionArgumentTest extends OptionArgumentTest {
 
-	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseOptionsWithNoArgumentsCorrectly() {
-		super.shouldParseOptionsWithNoArgumentsCorrectly();
-	}
-
-	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseOptionWhenNonExistantCorrectly() {
-		super.shouldParseOptionWhenNonExistantCorrectly();
-	}
-
 	@Before
 	@Override
 	public void setup() {
-		setArgument(new RequiredOptionArgument(getName(), getDescription(), getType()));
+		setArgument(new RequiredOptionArgument(getCommandMetadata(), getSuggester()));
 	}
 
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredOptionArgument.java is part of BukkitUtilities.
+ * RequiredPlayerMarshaller.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,18 +18,29 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+import java.util.Set;
 
-public class RequiredOptionArgument extends OptionArgument {
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
-	public RequiredOptionArgument(ArgumentMetadata metadata, Suggester suggester) {
-		super(metadata, suggester);
+public class RequiredPlayerMarshaller extends PlayerMarshaller {
+
+	public RequiredPlayerMarshaller(final Argument argument, final Server server) {
+		super(argument, server);
 	}
 
 	@Override
-	public void parseValue(final String argument) {
-		super.parseValue(argument);
-		if (getString() == null) throw new InvalidArgumentException(getError());
+	public Set<Player> getPlayers() {
+		Set<Player> players = super.getPlayers();
+		if (players.isEmpty()) throw new InvalidArgumentException(getError());
+		return players;
+	}
+
+	@Override
+	public Player getPlayer() {
+		Player player = super.getPlayer();
+		if (player == null) throw new InvalidArgumentException(getError());
+		return player;
 	}
 
 }

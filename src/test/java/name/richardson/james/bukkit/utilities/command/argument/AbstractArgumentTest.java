@@ -21,6 +21,8 @@ package name.richardson.james.bukkit.utilities.command.argument;
 import org.junit.Assert;
 import org.junit.Test;
 
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractArgumentTest {
@@ -29,17 +31,11 @@ public abstract class AbstractArgumentTest {
 
 	@Test
 	public void descriptionShouldMatchConstructorValue() {
-		Assert.assertEquals("Description does not match value given in constructor!", getArgument().getDescription(), getDescription());
+		Assert.assertEquals("Description does not match value given in constructor!", getArgument().getDescription(), getCommandMetadata().getDescription());
 	}
 
-	@Test
-	public void nameShouldMatchConstructorValue() {
-		Assert.assertEquals("Name does not match value given in constructor!", getArgument().getName(), getName());
-	}
-
-	@Test
-	public void typeShouldMatchConstructorValue() {
-		Assert.assertEquals("Type does not match value given in constructor!", getArgument().getType(), getType());
+	protected ArgumentMetadata getCommandMetadata() {
+		return new SimpleArgumentMetadata("p", "player", "the name of the player", "you must specify the name of the player!");
 	}
 
 	protected Argument getArgument() {
@@ -50,16 +46,35 @@ public abstract class AbstractArgumentTest {
 		this.argument = argument;
 	}
 
-	protected abstract String getName();
+	@Test
+	public void errorShouldMatchConstructorValue() {
+		Assert.assertEquals("Id does not match value given in constructor!", getArgument().getError(), getCommandMetadata().getError());
+	}
 
-	protected abstract String getDescription();
+	@Test
+	public void idShouldMatchConstructorValue() {
+		Assert.assertEquals("Id does not match value given in constructor!", getArgument().getId(), getCommandMetadata().getId());
+	}
 
-	protected abstract Class<?> getType();
+	@Test
+	public void nameShouldMatchConstructorValue() {
+		Assert.assertEquals("Name does not match value given in constructor!", getArgument().getName(), getCommandMetadata().getName());
+	}
 
-	public abstract void shouldParseOptionWhenNonExistantCorrectly();
+	@Test
+	public abstract void shouldParseArgumentWhenNonExistantCorrectly();
 
-	public abstract void shouldParseOptionsWithNoArgumentsCorrectly();
+	@Test
+	public abstract void shouldParseArgumentWithMultipleParametersCorrectly();
 
-	public abstract void shouldParseValueCorrectly();
+	@Test
+	public abstract void shouldParseArgumentWithNoParametersCorrectly();
+
+	@Test
+	public abstract void shouldParseArgumentWithSingleParameterCorrectly();
+
+	protected Suggester getSuggester() {
+		return null;
+	}
 
 }

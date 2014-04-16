@@ -23,14 +23,8 @@ import static org.junit.Assert.assertEquals;
 public class JoinedPositionalArgumentTest extends PositionalArgumentTest {
 
 	@Override
-	public void shouldParseValueCorrectly() {
-		getArgument().parseValue("this is a test");
-		assertEquals("Value has not been set correctly!", "is a test", getArgument().getString());
-	}
-
-	@Override
 	public void setup() {
-		setArgument(new JoinedPositionalArgument(getName(), getDescription(), getType(), 1));
+		setArgument(new JoinedPositionalArgument(getCommandMetadata(), getSuggester(), 1));
 	}
 
 }

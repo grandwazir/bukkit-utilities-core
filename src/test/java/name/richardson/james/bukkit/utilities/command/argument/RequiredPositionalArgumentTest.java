@@ -18,26 +18,25 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class RequiredPositionalArgumentTest extends PositionalArgumentTest {
 
 	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseOptionWhenNonExistantCorrectly() {
-		super.shouldParseOptionWhenNonExistantCorrectly();
+	public void setup() {
+		setArgument(new RequiredJoinedPositionalArgument(getCommandMetadata(), getSuggester(), 1));
 	}
 
 	@Override
 	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseOptionsWithNoArgumentsCorrectly() {
-		super.shouldParseOptionsWithNoArgumentsCorrectly();
+	public void shouldParseArgumentWhenNonExistantCorrectly() {
+		super.shouldParseArgumentWhenNonExistantCorrectly();
 	}
 
-	@Before
-	public void setup() {
-		setArgument(new RequiredPositionalArgument(getName(), getDescription(), getType(), 1));
+	@Override
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldParseArgumentWithNoParametersCorrectly() {
+		super.shouldParseArgumentWithNoParametersCorrectly();
 	}
 
 }

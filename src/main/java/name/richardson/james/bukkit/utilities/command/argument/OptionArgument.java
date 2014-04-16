@@ -18,29 +18,56 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+
 public class OptionArgument extends AbstractArgument {
 
-	public static final Pattern OPTION_PATTERN = Pattern.compile("(-\\w:)(\\S+)");
+	public static final Pattern OPTION_PATTERN = Pattern.compile("-(\\w):(\\S+)");
 
-	public OptionArgument(ArgumentMetadata metadata) {
-		super(metadata);
+	public OptionArgument(ArgumentMetadata metadata, Suggester suggester) {
+		super(metadata, suggester);
+	}
+
+	public final Set<String> suggestValue(String argument) {
+		Set<String> suggestions = new HashSet<String>();
+		String[] payload = isolateOption(argument);
+		if (payload != null && getSuggester() != null) {
+			getSuggester().suggestValue(payload[payload.length -1]);
+		}
+		return suggestions;
+	}
+
+	@Override
+	public boolean isLastArgument(final String arguments) {
+		Pattern pattern = Pattern.compile(OPTION_PATTERN.toString() + "$");
+		Matcher matcher = pattern.matcher(arguments);
+		return matcher.find();
 	}
 
 	@Override
 	public void parseValue(final String argument) {
-		Matcher matcher = OPTION_PATTERN.matcher(argument);
 		setValue(null);
+		String[] payload = isolateOption(argument);
+		if (payload != null) setValues(payload);
+	}
+
+	protected String[] isolateOption(String argument) {
+		String[] payload = null;
+		Matcher matcher = OPTION_PATTERN.matcher(argument);
 		while (matcher.find()) {
-			String option = matcher.group(0);
+			String option = matcher.group(1);
+			System.out.print(option);
 			if (option.equals(getName()) || option.equals(getId())) {
-				String[] payload = getSeparatedValues(matcher.group(1));
-				setValues(payload);
+				payload = getSeparatedValues(matcher.group(2));
 				break;
 			}
 		}
+		return payload;
 	}
 
 }

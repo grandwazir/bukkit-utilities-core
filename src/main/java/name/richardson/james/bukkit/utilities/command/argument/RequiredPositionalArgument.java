@@ -18,10 +18,12 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+
 public class RequiredPositionalArgument extends PositionalArgument {
 
-	public RequiredPositionalArgument(ArgumentMetadata argumentMetadata, int position) {
-		super(argumentMetadata, position);
+	public RequiredPositionalArgument(ArgumentMetadata argumentMetadata, Suggester suggester, int position) {
+		super(argumentMetadata, suggester, position);
 	}
 
 	@Override

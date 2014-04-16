@@ -18,47 +18,74 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
+
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
 public class PositionalArgument extends AbstractArgument {
 
-	private static final String ARGUMENT_ISOLATOR_PATTERN = "(-\\w:\\w+)|(-\\w)";
 	private final int position;
 
-	public PositionalArgument(ArgumentMetadata metadata, int position) {
-		super(metadata);
+	public PositionalArgument(ArgumentMetadata metadata, Suggester suggester, int position) {
+		super(metadata, suggester);
 		this.position = position;
+	}
+
+	public final Set<String> suggestValue(String argument) {
+		Set<String> suggestions = new HashSet<String>();
+		String[] arguments = isolateArguments(argument);
+		if (arguments != null && isLastArgument(argument)) {
+			if (arguments.length - 1 == getPosition() && getSuggester() != null) {
+				String[] values = PositionalArgument.getSeparatedValues(arguments[getPosition()]);
+				suggestions = getSuggester().suggestValue(values[values.length]);
+			}
+		}
+		return suggestions;
+	}
+
+	@Override
+	public boolean isLastArgument(String arguments) {
+		return removeOptionsAndSwitches(arguments).length - 1 == getPosition();
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("PositionalArgument{");
+		sb.append("position=").append(position);
+		sb.append(", ").append(super.toString());
+		sb.append('}');
+		return sb.toString();
 	}
 
 	@Override
 	public void parseValue(String argument) {
 		setValue(null);
-		argument = isolateArguments(argument);
-		if (argument != null && !argument.isEmpty()) {
-			String[] arguments = StringUtils.split(argument);
-			if (arguments.length - 1 >= getPosition()) {
-				setValue(arguments[getPosition()]);
+		String[] arguments = isolateArguments(argument);
+		if (arguments != null && arguments.length > 0) setValues(arguments);
+	}
+
+	protected String[] isolateArguments(String arguments) {
+		String[] values = null;
+		String[] isolatedArguments = removeOptionsAndSwitches(arguments);
+		if (isolatedArguments != null || isolatedArguments.length > 0) {
+			if (isolatedArguments.length - 1 >= getPosition()) {
+				values = PositionalArgument.getSeparatedValues(isolatedArguments[getPosition()]);
 			}
 		}
+		return values;
 	}
 
 	protected int getPosition() {
 		return position;
 	}
 
-	protected static String isolateArguments(String arguments) {
-		String isolatedArguments = arguments.replaceAll(OptionArgument.OPTION_PATTERN.toString(), "");
-		isolatedArguments = isolatedArguments.replaceAll(SwitchArgument.SWITCH_PATTERN.toString(), "");
-		return isolatedArguments;
-	}
-
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("PositionalArgument{");
-		sb.append("position=").append(getPosition());
-		sb.append(", ").append(super.toString());
-		sb.append('}');
-		return sb.toString();
+	protected static String[] removeOptionsAndSwitches(String arguments) {
+		arguments = arguments.replaceAll(OptionArgument.OPTION_PATTERN.toString(), "");
+		arguments = arguments.replaceAll(SwitchArgument.SWITCH_PATTERN.toString(), "");
+		return StringUtils.split(arguments);
 	}
 
 }

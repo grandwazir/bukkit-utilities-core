@@ -23,20 +23,20 @@ import org.junit.Test;
 public class RequiredJoinedPositionalArgumentTest extends JoinedPositionalArgumentTest {
 
 	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseOptionWhenNonExistantCorrectly() {
-		super.shouldParseOptionWhenNonExistantCorrectly();
-	}
-
-	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseOptionsWithNoArgumentsCorrectly() {
-		super.shouldParseOptionsWithNoArgumentsCorrectly();
-	}
-
-	@Override
 	public void setup() {
-		setArgument(new RequiredJoinedPositionalArgument(getName(), getDescription(), getType(), 1));
+		setArgument(new RequiredJoinedPositionalArgument(getCommandMetadata(), getSuggester(), 1));
+	}
+
+	@Override
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldParseArgumentWhenNonExistantCorrectly() {
+		super.shouldParseArgumentWhenNonExistantCorrectly();
+	}
+
+	@Override
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldParseArgumentWithNoParametersCorrectly() {
+		super.shouldParseArgumentWithNoParametersCorrectly();
 	}
 
 }

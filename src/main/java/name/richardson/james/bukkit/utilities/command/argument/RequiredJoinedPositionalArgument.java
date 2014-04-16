@@ -18,10 +18,12 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+
 public class RequiredJoinedPositionalArgument extends JoinedPositionalArgument {
 
-	public RequiredJoinedPositionalArgument(ArgumentMetadata metadata, int position) {
-		super(metadata, position);
+	public RequiredJoinedPositionalArgument(ArgumentMetadata metadata, Suggester suggester, int position) {
+		super(metadata, suggester, position);
 	}
 
 	@Override

@@ -83,9 +83,9 @@ public abstract class AbstractTimeFormatter implements TimeFormatter {
 	}
 
 	/**
-	 * The regular expression matcher used to parse the input for {@code getDurationInMilliseconds}.
+	 * The regular expression suggester used to parse the input for {@code getDurationInMilliseconds}.
 	 *
-	 * @return the matcher
+	 * @return the suggester
 	 */
 	protected final Matcher getInputFormatter() {
 		return inputFormatter;

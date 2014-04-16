@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredOptionArgument.java is part of BukkitUtilities.
+ * ArgumentInvoker.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,18 +18,16 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+import java.util.Set;
 
-public class RequiredOptionArgument extends OptionArgument {
+public interface ArgumentInvoker {
 
-	public RequiredOptionArgument(ArgumentMetadata metadata, Suggester suggester) {
-		super(metadata, suggester);
-	}
+	public void addArgument(Argument argument);
 
-	@Override
-	public void parseValue(final String argument) {
-		super.parseValue(argument);
-		if (getString() == null) throw new InvalidArgumentException(getError());
-	}
+	public void parseArguments(String arguments) throws InvalidArgumentException;
+
+	public Set<String> suggestArguments(String arguments);
+
+	public void removeArgument(Argument argument);
 
 }

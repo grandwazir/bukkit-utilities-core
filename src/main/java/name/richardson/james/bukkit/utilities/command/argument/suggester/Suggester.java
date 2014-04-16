@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- Matcher.java is part of bukkit-utilities.
+ Suggester.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,14 +16,14 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.matcher;
+package name.richardson.james.bukkit.utilities.command.argument.suggester;
 
 import java.util.Set;
 
 /**
- * A Matcher attempts to match a String against a known list of values and returns possible matches.
+ * A Suggester attempts to match a String against a known list of values and returns possible matches.
  */
-public interface Matcher {
+public interface Suggester {
 
 	/**
 	 * The maximum matches that will be returned. This is used to prevent flooding a player's chat with results.
@@ -36,6 +36,6 @@ public interface Matcher {
 	 * @param argument
 	 * @return the set of possible matches.
 	 */
-	public Set<String> matches(String argument);
+	public Set<String> suggestValue(String argument);
 
 }
