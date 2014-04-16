@@ -19,39 +19,61 @@
 package name.richardson.james.bukkit.utilities.command.argument;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.TestCase.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class SwitchArgumentTest extends AbstractArgumentTest {
+public class SwitchArgumentTest {
+
+	private static final String ID = "s";
+	private static final String NAME = "silent";
+
+	private Argument argument;
+
+	@Test
+	public void shouldBeTheLastArgument() {
+		assertTrue("Argument is the last one supplied and so should be true.", argument.isLastArgument("-" + ID));
+	}
+
+	@Test
+	public void shouldNotBeTheLastArgument() {
+		assertFalse("Argument is not the last one supplied and so should be false.", argument.isLastArgument("-" + ID + " frank"));
+	}
+
+	@Test
+	public void shouldNeverSuggestValues() {
+		assertTrue("This argument should never suggest values as auto completion makes no sense for this implementation.", argument.suggestValue("").isEmpty());
+	}
+
+	@Test
+	public void shouldBeNullWhenSwitchIsNotPresent() {
+		argument.parseValue("");
+		assertNull("Returned value should be null when argument not present.", argument.getString());
+	}
+
+	@Test
+	public void shouldNotBeNullWhenSwitchIsPresentUsingID() {
+		argument.parseValue("-" + ID);
+		assertNotNull("Returned value should not be null when argument is present.", argument.getString());
+	}
+
+	@Test
+	public void shouldNotBeNullWhenSwitchIsPresentUsingName() {
+		argument.parseValue("-" + NAME);
+		assertNotNull("Returned value should not be null when argument is present.", argument.getString());
+	}
 
 	@Before
 	public void setup() {
-		setArgument(new SwitchArgument(getCommandMetadata(), getSuggester()));
+		ArgumentMetadata metadata = mock(ArgumentMetadata.class);
+		when(metadata.getId()).thenReturn(ID);
+		when(metadata.getName()).thenReturn(NAME);
+		argument = new SwitchArgument(metadata);
 	}
 
-	@Override
-	public void shouldParseArgumentWhenNonExistantCorrectly() {
- 		getArgument().parseValue("test");
-		boolean value = getArgument().getString() != null;
-		assertFalse("Argument value should be false!", value);
-	}
-
-	@Override
-	public void shouldParseArgumentWithMultipleParametersCorrectly() {
-		// not required for this implementation
-	}
-
-	@Override
-	public void shouldParseArgumentWithNoParametersCorrectly() {
-		getArgument().parseValue("-p");
-		boolean value = getArgument().getString() != null;
-		System.out.print(getArgument().getString());
-		assertTrue("Argument value should be true!", value);
-	}
-
-	@Override
-	public void shouldParseArgumentWithSingleParameterCorrectly() {
-		// not required for this implementation
-	}
 }

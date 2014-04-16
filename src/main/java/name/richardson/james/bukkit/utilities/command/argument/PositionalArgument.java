@@ -83,8 +83,8 @@ public class PositionalArgument extends AbstractArgument {
 	}
 
 	protected static String[] removeOptionsAndSwitches(String arguments) {
-		arguments = arguments.replaceAll(OptionArgument.OPTION_PATTERN.toString(), "");
-		arguments = arguments.replaceAll(SwitchArgument.SWITCH_PATTERN.toString(), "");
+		arguments = arguments.replaceAll(OptionArgument.getPattern().toString(), "");
+		arguments = arguments.replaceAll(SwitchArgument.getPattern().toString(), "");
 		return StringUtils.split(arguments);
 	}
 

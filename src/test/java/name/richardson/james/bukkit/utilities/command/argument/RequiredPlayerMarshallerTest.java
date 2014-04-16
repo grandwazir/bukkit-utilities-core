@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * WorldMarshaller.java is part of BukkitUtilities.
+ * RequiredPlayerMarshallerTest.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -19,25 +19,33 @@
 package name.richardson.james.bukkit.utilities.command.argument;
 
 import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
-public class WorldMarshaller extends AbstractMarshaller {
+import org.junit.Before;
+import org.junit.Test;
 
-	private final Server server;
+import static org.mockito.Mockito.mock;
 
-	public WorldMarshaller(final Argument argument, Server server) {
-		super(argument);
-		this.server = server;
+public class RequiredPlayerMarshallerTest {
+
+	private Argument argument;
+	private RequiredPlayerMarshaller marshaller;
+	private Server server;
+
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldThrowExceptionWhenArgumentIsNull() {
+		marshaller.getPlayer();
 	}
 
-	public World getWorld() {
-		World world = null;
-		if (getString() != null) {
-			world = server.getWorld(getString());
-		}
-		return world;
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldThrowExceptionWhenCollectionIsEmpty() {
+		marshaller.getPlayers();
 	}
 
+	@Before
+	public void setup() {
+		argument = mock(Argument.class);
+		server = mock(Server.class);
+		marshaller = new RequiredPlayerMarshaller(argument, server);
+	}
 
 }

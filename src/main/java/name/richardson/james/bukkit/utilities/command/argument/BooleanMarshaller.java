@@ -24,22 +24,13 @@ import name.richardson.james.bukkit.utilities.command.argument.Argument;
 @SuppressWarnings("PublicMethodNotExposedInInterface")
 public class BooleanMarshaller extends AbstractMarshaller {
 
-	private final boolean defaultValue;
-
 	@SuppressWarnings("BooleanParameter")
-	public BooleanMarshaller(final Argument argument, boolean defaultValue) {
+	public BooleanMarshaller(final Argument argument) {
 		super(argument);
-		this.defaultValue = defaultValue;
 	}
 
 	public boolean isSet() {
-		Boolean value = null;
-		if (getString() == null) {
-			value = defaultValue;
-		} else {
-			value = Boolean.valueOf(getString());
-		}
-		return value;
+		return (getString() != null);
 	}
 
 

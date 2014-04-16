@@ -21,12 +21,35 @@ package name.richardson.james.bukkit.utilities.command.argument;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RequiredOptionArgumentTest extends OptionArgumentTest {
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+public class RequiredOptionArgumentTest {
+
+	private static final String ID = "p";
+	private static final String NAME = "player";
+	private Argument argument;
+
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldThrowExceptionWhenArgumentisNonExistant() {
+		argument.parseValue("");
+	}
+
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldThrowExceptionWhenArgumentHasNoData() {
+		argument.parseValue("-p:");
+	}
 
 	@Before
-	@Override
-	public void setup() {
-		setArgument(new RequiredOptionArgument(getCommandMetadata(), getSuggester()));
+	public void setUp()
+	throws Exception {
+		ArgumentMetadata metadata = mock(ArgumentMetadata.class);
+		when(metadata.getId()).thenReturn(ID);
+		when(metadata.getName()).thenReturn(NAME);
+		Suggester suggester = mock(Suggester.class);
+		argument = new RequiredOptionArgument(metadata, suggester);
 	}
 
 }

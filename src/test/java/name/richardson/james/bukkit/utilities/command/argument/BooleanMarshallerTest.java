@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredPositionalArgumentTest.java is part of BukkitUtilities.
+ * BooleanMarshallerTest.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -21,28 +21,32 @@ package name.richardson.james.bukkit.utilities.command.argument;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class RequiredPositionalArgumentTest {
-
-	private static final int POSITION = 1;
+public class BooleanMarshallerTest {
 
 	private Argument argument;
+	private BooleanMarshaller marshaller;
 
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldThrowExceptionWhenArgumentisNonExistant() {
-		argument.parseValue("");
+	@Test
+	public void shouldReturnTrueWhenArgumentIsSet() {
+		when(argument.getString()).thenReturn("hello");
+		assertTrue("Argument should return true when any value is set", marshaller.isSet());
 	}
 
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldThrowExceptionWhenArgumentHasNoData() {
-		argument.parseValue("one ");
+	@Test
+	public void shouldReturnFalseWhenArgumentIsNull() {
+		when(argument.getString()).thenReturn(null);
+		assertFalse("Argument should return false when no value is set", marshaller.isSet());
 	}
 
 	@Before
 	public void setup() {
-		ArgumentMetadata metadata = mock(ArgumentMetadata.class);
-		argument = new RequiredPositionalArgument(metadata, null, POSITION);
+		argument = mock(Argument.class);
+		marshaller = new BooleanMarshaller(argument);
 	}
 
 }

@@ -18,48 +18,62 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import java.util.Arrays;
-
-import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
-public class OptionArgumentTest extends AbstractArgumentTest {
+import static junit.framework.Assert.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-	@Before
-	public void setup() {
-		this.setArgument(new OptionArgument(getCommandMetadata(), getSuggester()));
+public class OptionArgumentTest {
+
+	private static final String ID = "p";
+	private static final String NAME = "player";
+
+	private Argument argument;
+
+	@Test
+	public void shouldBeTheLastArgument() {
+		assertTrue("Argument is the last one supplied and so should be true.", argument.isLastArgument("-" + ID + ":"));
 	}
 
-	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseArgumentWhenNonExistantCorrectly() {
-		getArgument().parseValue("-f");
+	@Test
+	public void shouldNotBeTheLastArgument() {
+		assertFalse("Argument is not the last one supplied and so should be false.", argument.isLastArgument("-" + ID + ":test frank"));
 	}
 
-	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseArgumentWithNoParametersCorrectly() {
-		getArgument().parseValue("-p");
+	@Test
+	public void shouldBeNullWhenOptionIsNotPresent() {
+		argument.parseValue("");
+		assertNull("Returned value should be null when argument not present.", argument.getString());
 	}
 
-	@Override
-	public void shouldParseArgumentWithSingleParameterCorrectly() {
-		final String playerName = "grandwazir";
-		getArgument().parseValue("-p:" + playerName);
-		assertEquals("Value has not been set correctly!", playerName, getArgument().getString());
+	@Test
+	public void shouldBeNullWhenOptionIsPresentButWithoutData() {
+		argument.parseValue("-" + ID +":");
+		assertNull("Returned value should be null when argument is present but without data.", argument.getString());
 	}
 
-	@Override
-	public void shouldParseArgumentWithMultipleParametersCorrectly() {
-		final String playerNames = "grandwazir,frank,joe";
-		final String[] values = StringUtils.split(playerNames, ",");
-		getArgument().parseValue("-p:" + playerNames);
-		for (String value : values) {
-			assertTrue("Collection does not contain a value which should be set!", getArgument().getStrings().contains(value));
+	@Test
+	public void shouldReturnAllDataWhenOptionIsPresentWithData() {
+		final String name = "frank";
+		argument.parseValue("-" + NAME + ":" + name + "," + name);
+		for (String value : argument.getStrings()) {
+			assertEquals("Returned value should equal passed data when argument is present.", name, value);
 		}
 	}
 
+	@Before
+	public void setUp()
+	throws Exception {
+		ArgumentMetadata metadata = mock(ArgumentMetadata.class);
+		when(metadata.getId()).thenReturn(ID);
+		when(metadata.getName()).thenReturn(NAME);
+		Suggester suggester = mock(Suggester.class);
+		argument = new OptionArgument(metadata, suggester);
+	}
 }

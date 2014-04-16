@@ -18,25 +18,32 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import org.junit.Before;
 import org.junit.Test;
 
-public class RequiredJoinedPositionalArgumentTest extends JoinedPositionalArgumentTest {
+import static org.mockito.Mockito.mock;
 
-	@Override
+public class RequiredJoinedPositionalArgumentTest {
+
+	private static final int POSITION = 1;
+
+	private Argument argument;
+
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldThrowExceptionWhenArgumentisNonExistant() {
+		argument.parseValue("");
+	}
+
+	@Test(expected = InvalidArgumentException.class)
+	public void shouldThrowExceptionWhenArgumentHasNoData() {
+		argument.parseValue("one ");
+	}
+
+	@Before
 	public void setup() {
-		setArgument(new RequiredJoinedPositionalArgument(getCommandMetadata(), getSuggester(), 1));
+		ArgumentMetadata metadata = mock(ArgumentMetadata.class);
+		argument = new RequiredJoinedPositionalArgument(metadata, POSITION);
 	}
 
-	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseArgumentWhenNonExistantCorrectly() {
-		super.shouldParseArgumentWhenNonExistantCorrectly();
-	}
-
-	@Override
-	@Test(expected = InvalidArgumentException.class)
-	public void shouldParseArgumentWithNoParametersCorrectly() {
-		super.shouldParseArgumentWithNoParametersCorrectly();
-	}
 
 }

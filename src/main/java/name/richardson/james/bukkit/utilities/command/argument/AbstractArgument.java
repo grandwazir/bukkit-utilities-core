@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -36,6 +37,7 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 
 	public AbstractArgument(final ArgumentMetadata metadata, Suggester suggester) {
 		this.metadata = metadata;
+		this.suggester = suggester;
 	}
 
 	protected static final String[] getSeparatedValues(final String argument) {

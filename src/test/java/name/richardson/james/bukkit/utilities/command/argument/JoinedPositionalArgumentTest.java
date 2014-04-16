@@ -18,13 +18,40 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
-public class JoinedPositionalArgumentTest extends PositionalArgumentTest {
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-	@Override
-	public void setup() {
-		setArgument(new JoinedPositionalArgument(getCommandMetadata(), getSuggester(), 1));
+public class JoinedPositionalArgumentTest {
+
+	private static final int POSITION = 1;
+
+	private Argument argument;
+
+	@Test
+	public void shouldBeNullWhenArgumentIsNotPresent() {
+		argument.parseValue("");
+		assertNull("Returned value should be null when argument not present.", argument.getString());
 	}
+
+	@Test
+	public void shouldReturnJoinedArgumentsWhenArgumentIsPresent() {
+		argument.parseValue("This is a test argument");
+		assertEquals("Returned value should equal passed data when argument is present.", "is a test argument", argument.getString());
+	}
+
+	@Before
+	public void setup()
+	throws Exception {
+		ArgumentMetadata metadata = mock(ArgumentMetadata.class);
+		argument = new JoinedPositionalArgument(metadata, POSITION);
+	}
+
+
+
 
 }

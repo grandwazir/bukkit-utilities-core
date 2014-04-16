@@ -29,8 +29,8 @@ import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggest
 
 public class JoinedPositionalArgument extends PositionalArgument {
 
-	public JoinedPositionalArgument(ArgumentMetadata metadata, Suggester suggester, final int position) {
-		super(metadata, suggester, position);
+	public JoinedPositionalArgument(ArgumentMetadata metadata, final int position) {
+		super(metadata, null, position);
 	}
 
 	@Override
@@ -52,11 +52,6 @@ public class JoinedPositionalArgument extends PositionalArgument {
 			}
 		}
 		return values;
-	}
-
-	@Override
-	public boolean isLastArgument(final String arguments) {
-		return removeOptionsAndSwitches(arguments).length - 1 >= getPosition();
 	}
 
 }

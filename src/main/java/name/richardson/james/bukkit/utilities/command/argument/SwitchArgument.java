@@ -23,25 +23,29 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
-
 public class SwitchArgument extends AbstractArgument {
 
-	public static final Pattern SWITCH_PATTERN = Pattern.compile("-(\\w+|\\w{1})");
+	private static final Pattern SWITCH_PATTERN = Pattern.compile("-(\\w+|\\w{1})");
 
-	public SwitchArgument(final ArgumentMetadata metadata, Suggester suggester) {
-		super(metadata, suggester);
+	public SwitchArgument(final ArgumentMetadata metadata) {
+		super(metadata, null);
+	}
+
+	public static Pattern getPattern() {
+		return SWITCH_PATTERN;
 	}
 
 	@Override
 	public boolean isLastArgument(final String arguments) {
-		return false;
+		Pattern pattern = Pattern.compile(getPattern().toString() + "$");
+		Matcher matcher = pattern.matcher(arguments);
+		return matcher.find();
 	}
 
 	@Override
 	public void parseValue(final String argument)
 	throws InvalidArgumentException {
-		Matcher matcher = SWITCH_PATTERN.matcher(argument);
+		Matcher matcher = getPattern().matcher(argument);
 		setValue(null);
 		while (matcher.find()) {
 			String match = matcher.group(1);
@@ -62,4 +66,5 @@ public class SwitchArgument extends AbstractArgument {
 	public Set<String> suggestValue(final String argument) {
 		return Collections.emptySet();
 	}
+
 }

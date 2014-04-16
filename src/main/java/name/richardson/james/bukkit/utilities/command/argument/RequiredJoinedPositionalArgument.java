@@ -22,8 +22,8 @@ import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggest
 
 public class RequiredJoinedPositionalArgument extends JoinedPositionalArgument {
 
-	public RequiredJoinedPositionalArgument(ArgumentMetadata metadata, Suggester suggester, int position) {
-		super(metadata, suggester, position);
+	public RequiredJoinedPositionalArgument(ArgumentMetadata metadata, int position) {
+		super(metadata, position);
 	}
 
 	@Override

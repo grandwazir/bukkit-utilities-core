@@ -39,7 +39,7 @@ public class PlayerMarshaller extends AbstractMarshaller {
 	public Player getPlayer() {
 		Player player = null;
 		if (getString() != null) {
-			player = server.getPlayer(getString());
+			player = server.getPlayerExact(getString());
 		}
 		return player;
 	}
