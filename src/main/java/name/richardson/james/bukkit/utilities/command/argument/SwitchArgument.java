@@ -27,7 +27,7 @@ import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggest
 
 public class SwitchArgument extends AbstractArgument {
 
-	public static final Pattern SWITCH_PATTERN = Pattern.compile("(-\\w\\s|-\\w+)");
+	public static final Pattern SWITCH_PATTERN = Pattern.compile("-(\\w+|\\w{1})");
 
 	public SwitchArgument(final ArgumentMetadata metadata, Suggester suggester) {
 		super(metadata, suggester);
@@ -44,7 +44,7 @@ public class SwitchArgument extends AbstractArgument {
 		Matcher matcher = SWITCH_PATTERN.matcher(argument);
 		setValue(null);
 		while (matcher.find()) {
-			String match = matcher.group();
+			String match = matcher.group(1);
 			if (match.equals(getName()) || match.equals(getId())) {
 				setValue(String.valueOf(Boolean.TRUE));
 				break;
