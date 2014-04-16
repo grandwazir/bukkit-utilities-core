@@ -51,8 +51,7 @@ public interface Argument extends ArgumentMetadata, Suggester {
 	/**
 	 * Check to see if this argument is the last argument.
 	 *
-	 * This does not mean that this would be the last argument to actually parse the
-	 * value, more that this argument was provided last by the user.
+	 * This does not mean that this would be the last argument to actually parse the value, more that this argument was provided last by the user.
 	 *
 	 * @param arguments
 	 * @return

@@ -16,18 +16,16 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.invoker;
+package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collection;
 import java.util.Map;
 
 import org.bukkit.command.TabExecutor;
 
-import name.richardson.james.bukkit.utilities.command.Command;
-
 /**
  * Manages and handles the execution of {@link name.richardson.james.bukkit.utilities.command.Command}s. It is responsible for creating a {@link
- * name.richardson.james.bukkit.utilities.command.context.CommandContext} and executing the correct command depending on the arguments provided.
+ * CommandContext} and executing the correct command depending on the arguments provided.
  */
 public interface CommandInvoker extends TabExecutor {
 

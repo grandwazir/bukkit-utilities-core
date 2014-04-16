@@ -21,7 +21,6 @@ package name.richardson.james.bukkit.utilities.command;
 import org.bukkit.permissions.Permissible;
 
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 
 /**
  * Executes actions on behalf of a user, notifies the user of the outcome. Used anywhere where a user is required instructions to a plugin interactively.

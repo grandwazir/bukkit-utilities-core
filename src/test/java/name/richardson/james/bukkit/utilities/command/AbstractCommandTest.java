@@ -25,8 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

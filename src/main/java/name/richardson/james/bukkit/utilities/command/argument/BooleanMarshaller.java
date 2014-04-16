@@ -18,9 +18,6 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import name.richardson.james.bukkit.utilities.command.argument.AbstractMarshaller;
-import name.richardson.james.bukkit.utilities.command.argument.Argument;
-
 @SuppressWarnings("PublicMethodNotExposedInInterface")
 public class BooleanMarshaller extends AbstractMarshaller {
 
@@ -32,7 +29,5 @@ public class BooleanMarshaller extends AbstractMarshaller {
 	public boolean isSet() {
 		return (getString() != null);
 	}
-
-
 
 }

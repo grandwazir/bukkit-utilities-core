@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.Command;
+import name.richardson.james.bukkit.utilities.command.CommandInvoker;
 
 /**
  * This abstract implementation provides final methods for all the methods specified in the CommandInvoker interface. It should be used for convenience when

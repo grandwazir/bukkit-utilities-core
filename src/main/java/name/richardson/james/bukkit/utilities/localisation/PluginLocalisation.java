@@ -24,6 +24,8 @@ public interface PluginLocalisation {
 	public static String PLUGIN_VERSION = "plugin.version";
 	public static String PLUGIN_DESCRIPTION = "plugin.description";
 
+	public static String COMMAND_INVALID_ARGUMENT = "command.invalid-argument-exception";
+
 	public static String CONFIGURATION_LOADING = "configuration.loading";
 	public static String CONFIGURATION_SAVING_DEFAULT = "configuration.saving-default";
 	public static String CONFIGURATION_USING_PATH = "configuration.using-path";

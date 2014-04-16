@@ -34,12 +34,40 @@ public class PositionalArgument extends AbstractArgument {
 		this.position = position;
 	}
 
+	@Override
+	public void parseValue(String argument) {
+		setValue(null);
+		String[] arguments = getMatch(argument);
+		if (arguments != null && arguments.length > 0) setValues(arguments);
+	}
+
+	protected String[] getMatch(String arguments) {
+		String[] values = null;
+		String[] isolatedArguments = removeOptionsAndSwitches(arguments);
+		if (isolatedArguments != null || isolatedArguments.length > 0) {
+			if (isolatedArguments.length - 1 >= getPosition()) {
+				values = getSeparatedValues(isolatedArguments[getPosition()]);
+			}
+		}
+		return values;
+	}
+
+	protected final String[] removeOptionsAndSwitches(String arguments) {
+		arguments = arguments.replaceAll(OptionArgument.getPattern().toString(), "");
+		arguments = arguments.replaceAll(SwitchArgument.getPattern().toString(), "");
+		return StringUtils.split(arguments);
+	}
+
+	protected int getPosition() {
+		return position;
+	}
+
 	public final Set<String> suggestValue(String argument) {
 		Set<String> suggestions = new HashSet<String>();
-		String[] arguments = isolateArguments(argument);
+		String[] arguments = getMatch(argument);
 		if (arguments != null && isLastArgument(argument)) {
 			if (arguments.length - 1 == getPosition() && getSuggester() != null) {
-				String[] values = PositionalArgument.getSeparatedValues(arguments[getPosition()]);
+				String[] values = getSeparatedValues(arguments[getPosition()]);
 				suggestions = getSuggester().suggestValue(values[values.length]);
 			}
 		}
@@ -49,43 +77,6 @@ public class PositionalArgument extends AbstractArgument {
 	@Override
 	public boolean isLastArgument(String arguments) {
 		return removeOptionsAndSwitches(arguments).length - 1 == getPosition();
-	}
-
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("PositionalArgument{");
-		sb.append("position=").append(position);
-		sb.append(", ").append(super.toString());
-		sb.append('}');
-		return sb.toString();
-	}
-
-	@Override
-	public void parseValue(String argument) {
-		setValue(null);
-		String[] arguments = isolateArguments(argument);
-		if (arguments != null && arguments.length > 0) setValues(arguments);
-	}
-
-	protected String[] isolateArguments(String arguments) {
-		String[] values = null;
-		String[] isolatedArguments = removeOptionsAndSwitches(arguments);
-		if (isolatedArguments != null || isolatedArguments.length > 0) {
-			if (isolatedArguments.length - 1 >= getPosition()) {
-				values = PositionalArgument.getSeparatedValues(isolatedArguments[getPosition()]);
-			}
-		}
-		return values;
-	}
-
-	protected int getPosition() {
-		return position;
-	}
-
-	protected static String[] removeOptionsAndSwitches(String arguments) {
-		arguments = arguments.replaceAll(OptionArgument.getPattern().toString(), "");
-		arguments = arguments.replaceAll(SwitchArgument.getPattern().toString(), "");
-		return StringUtils.split(arguments);
 	}
 
 }

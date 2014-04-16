@@ -42,20 +42,6 @@ public class SwitchArgument extends AbstractArgument {
 		return matcher.find();
 	}
 
-	@Override
-	public void parseValue(final String argument)
-	throws InvalidArgumentException {
-		Matcher matcher = getPattern().matcher(argument);
-		setValue(null);
-		while (matcher.find()) {
-			String match = matcher.group(1);
-			if (match.equals(getName()) || match.equals(getId())) {
-				setValue(String.valueOf(Boolean.TRUE));
-				break;
-			}
-		}
-	}
-
 	/**
 	 * Return all the possible matches.
 	 *
@@ -65,6 +51,20 @@ public class SwitchArgument extends AbstractArgument {
 	@Override
 	public Set<String> suggestValue(final String argument) {
 		return Collections.emptySet();
+	}
+
+	@Override
+	protected String[] getMatch(final String argument) {
+		String[] values = new String[1];
+		Matcher matcher = getPattern().matcher(argument);
+		while (matcher.find()) {
+			String match = matcher.group(1);
+			if (match.equals(getName()) || match.equals(getId())) {
+				values[0] = String.valueOf(Boolean.TRUE);
+				break;
+			}
+		}
+		return values;
 	}
 
 }

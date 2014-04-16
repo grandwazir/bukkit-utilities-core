@@ -16,7 +16,7 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.context;
+package name.richardson.james.bukkit.utilities.command;
 
 import org.bukkit.command.CommandSender;
 
@@ -34,51 +34,9 @@ public interface CommandContext {
 	 */
 	CommandSender getCommandSender();
 
-	/**
-	 * Get the contents of a switch.
-	 *
-	 * @param label the command switch to look up.
-	 * @return the value of the switch or true if no value is specified
-	 */
-	String getSwitch(String label);
+	boolean isConsoleCommandSender();
 
-	/**
-	 * Join all the arguments from a specified index onwards into one String.
-	 *
-	 * @param initialIndex the index to start at at
-	 * @return a String containing all the arguments separated by ' '.
-	 */
-	String getJoinedArguments(int initialIndex);
+	String getArguments();
 
-	/**
-	 * Get the argument at the specified index.
-	 *
-	 * @param index the argument number to fetch.
-	 * @return the argument specified or null if there is nothing at that index.
-	 */
-	String getArgument(int index);
-
-	/**
-	 * Check to see if the context contains an argument.
-	 *
-	 * @param index the argument number to check
-	 * @return true if the argument exists, false otherwise.
-	 */
-	boolean hasArgument(int index);
-
-	/**
-	 * Check to see if the context has a certain switch
-	 *
-	 * @param label the name of the switch to check
-	 * @return true if the switch exists, false otherwise.
-	 */
-	boolean hasSwitch(String switchName);
-
-	/**
-	 * Get the total number of arguments contained within this context. The total does not include the CommandSender or any optional flags.
-	 *
-	 * @return total number of arguments.
-	 */
-	int size();
 
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- NestedCommandContext.java is part of bukkit-utilities.
+ PassthroughCommandContext.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,26 +16,26 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.context;
+package name.richardson.james.bukkit.utilities.command;
 
 import org.bukkit.command.CommandSender;
 
-import org.apache.commons.lang.ArrayUtils;
+import name.richardson.james.bukkit.utilities.command.AbstractCommandContext;
 
 /**
- * A NestedCommandContext assumes that the first argument passed is the name of the command to be executed and removes it from the list before parsing the
- * remaining arguments.
+ * This implementation of CommandContext is simply an unmodified extension of AbstractCommandContext.
  */
-public class NestedCommandContext extends AbstractCommandContext {
+public class PassthroughCommandContext extends AbstractCommandContext {
 
 	/**
-	 * Constructs a NestedCommandContext from the provided arguments and CommandSender.
+	 * Constructs a PassthroughCommandContext from the provided arguments and CommandSender.
 	 *
 	 * @param arguments provided arguments
 	 * @param sender the CommandSender executing the command
 	 */
-	public NestedCommandContext(String[] arguments, CommandSender sender) {
-		super((String[]) ArrayUtils.remove(arguments, 0), sender);
+	public PassthroughCommandContext(String[] arguments, CommandSender sender) {
+		super(arguments, sender);
 	}
+
 
 }

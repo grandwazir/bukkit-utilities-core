@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -40,7 +39,7 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 		this.suggester = suggester;
 	}
 
-	protected static final String[] getSeparatedValues(final String argument) {
+	protected final String[] getSeparatedValues(final String argument) {
 		return StringUtils.split(argument, ",");
 	}
 
@@ -51,6 +50,12 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 	@Override
 	public final String getName() {
 		return metadata.getName();
+	}
+
+	public void parseValue(final String argument) {
+		setValue(null);
+		String[] match = getMatch(argument);
+		if (match != null) setValues(match);
 	}
 
 	public final String getError() {
@@ -73,6 +78,8 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 	public Collection<String> getStrings() {
 		return Collections.unmodifiableCollection(values);
 	}
+
+	protected abstract String[] getMatch(String argument);
 
 	protected Suggester getSuggester() {
 		return suggester;

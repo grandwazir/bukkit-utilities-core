@@ -24,7 +24,8 @@ public interface ArgumentInvoker {
 
 	public void addArgument(Argument argument);
 
-	public void parseArguments(String arguments) throws InvalidArgumentException;
+	public void parseArguments(String arguments)
+	throws InvalidArgumentException;
 
 	public Set<String> suggestArguments(String arguments);
 

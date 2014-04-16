@@ -18,14 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
 public class JoinedPositionalArgument extends PositionalArgument {
 
@@ -43,7 +37,7 @@ public class JoinedPositionalArgument extends PositionalArgument {
 	}
 
 	@Override
-	protected String[] isolateArguments(final String arguments) {
+	protected String[] getMatch(final String arguments) {
 		String[] values = null;
 		String[] isolatedArguments = removeOptionsAndSwitches(arguments);
 		if (isolatedArguments != null && isolatedArguments.length > 0) {

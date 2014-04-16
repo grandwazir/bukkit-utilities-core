@@ -27,9 +27,9 @@ import org.bukkit.Server;
 
 /**
  * Matches arguments against a list of OfflinePlayer names and returns any possible matches. Used for returning a list of possible player names for tab
- * completion when using commands interactively. <p/> At the moment all known offline players are iterated each time a match request is made making this suggester
- * potentially slow on busier servers. If possible use {@link OnlinePlayerSuggester} instead or implement a custom suggester that is more accurate for your
- * requirements.
+ * completion when using commands interactively. <p/> At the moment all known offline players are iterated each time a match request is made making this
+ * suggester potentially slow on busier servers. If possible use {@link OnlinePlayerSuggester} instead or implement a custom suggester that is more accurate for
+ * your requirements.
  */
 public class OfflinePlayerSuggester implements Suggester {
 

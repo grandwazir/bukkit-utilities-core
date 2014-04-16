@@ -18,7 +18,6 @@
 
 package name.richardson.james.bukkit.utilities.command.invoker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
@@ -26,9 +25,6 @@ import org.bukkit.command.CommandSender;
 import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.Command;
-import name.richardson.james.bukkit.utilities.command.context.CommandContext;
-import name.richardson.james.bukkit.utilities.command.context.NestedCommandContext;
-import name.richardson.james.bukkit.utilities.command.context.PassthroughCommandContext;
 
 /**
  * A FallthroughCommandInvoker attempts to match a command based on the first argument passed to it. If no command can be found the arguments `fall through` to

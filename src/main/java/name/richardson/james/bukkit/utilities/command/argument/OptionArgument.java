@@ -40,24 +40,18 @@ public class OptionArgument extends AbstractArgument {
 		return matcher.find();
 	}
 
-	@Override
-	public void parseValue(final String argument) {
-		setValue(null);
-		String[] match = getMatch(argument);
-		if (match != null) setValues(match);
-	}
-
 	public final Set<String> suggestValue(String argument) {
 		Set<String> suggestions = new HashSet<String>();
 		String[] match = getMatch(argument);
 		if (match != null && getSuggester() != null) {
-			int index = match.length -1;
+			int index = match.length - 1;
 			String value = match[index];
 			suggestions.addAll(getSuggester().suggestValue(match[index]));
 		}
 		return suggestions;
 	}
 
+	@Override
 	protected String[] getMatch(String argument) {
 		String[] match = null;
 		Matcher matcher = getPattern().matcher(argument);
