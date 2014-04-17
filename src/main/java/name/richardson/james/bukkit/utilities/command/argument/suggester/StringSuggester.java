@@ -2,6 +2,8 @@ package name.richardson.james.bukkit.utilities.command.argument.suggester;
 
 import java.util.*;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 public final class StringSuggester implements Suggester {
 
 	private Collection<String> strings = new HashSet<String>();
@@ -12,6 +14,7 @@ public final class StringSuggester implements Suggester {
 
 	@Override
 	public Set<String> suggestValue(String argument) {
+		System.out.print(argument);
 		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		argument = argument.toLowerCase(Locale.ENGLISH);
 		for (String string : this.strings) {
@@ -19,6 +22,7 @@ public final class StringSuggester implements Suggester {
 			if (!string.toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
 			results.add(string);
 		}
+		System.out.print(this.toString());
 		return results;
 	}
 

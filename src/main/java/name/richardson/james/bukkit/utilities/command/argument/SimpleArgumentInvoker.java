@@ -48,6 +48,7 @@ public class SimpleArgumentInvoker implements ArgumentInvoker {
 		Set<String> suggestions = new HashSet<String>();
 		for (Argument argument : this.arguments) {
 			if (argument.isLastArgument(arguments)) {
+				System.out.print("Delegating to " + argument.toString());
 				suggestions.addAll(argument.suggestValue(arguments));
 				break;
 			}

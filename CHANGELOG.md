@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (v7.0.0-SNAPSHOT)
 
+2014-04-17 18:49:05 +0100    fix NPE (James Richardson)  
 2014-04-17 18:46:14 +0100    fix missing key and commands not being sorted alphabetically (James Richardson)  
 2014-04-17 18:29:23 +0100    fix formatting issue with help command header (James Richardson)  
 2014-04-17 18:24:45 +0100    fix issue with name and description not been translated (James Richardson)  

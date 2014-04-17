@@ -77,15 +77,16 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
 		Command selectedCommand = getCommand(args);
-		CommandContext context = null;
 		List<String> suggestions = new ArrayList<String>();
-		if (command != null) {
-			context = new NestedCommandContext(args, sender);
+		if (selectedCommand != null) {
+			CommandContext context = new NestedCommandContext(args, sender);
+			String arguments = context.getArguments();
+			suggestions.addAll(selectedCommand.suggestArguments(arguments));
 		} else {
-			context = new PassthroughCommandContext(args, sender);
+			CommandContext context = new PassthroughCommandContext(args, sender);
+			String arguments = context.getArguments();
+			suggestions.addAll(fallthroughCommand.suggestArguments(arguments));
 		}
-		String arguments = context.getArguments();
-		suggestions.addAll(selectedCommand.suggestArguments(arguments));
 		return suggestions;
 	}
 

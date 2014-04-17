@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
@@ -77,7 +78,10 @@ public class PositionalArgument extends AbstractArgument {
 		if (arguments != null && isLastArgument(argument)) {
 			if (arguments.length - 1 == getPosition() && getSuggester() != null) {
 				String[] values = getSeparatedValues(arguments[getPosition()]);
-				suggestions = getSuggester().suggestValue(values[values.length]);
+				System.out.print("Delegating suggestions to: " + getSuggester().toString());
+				final Set<String> strings = getSuggester().suggestValue(values[values.length - 1]);
+				System.out.print("Value of returned suggestions is: " + strings.toString());
+				suggestions = getSuggester().suggestValue(values[values.length - 1]);
 			}
 		}
 		return suggestions;

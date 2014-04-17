@@ -36,6 +36,7 @@ import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisa
 public final class HelpCommand extends AbstractCommand {
 
 	private final Argument argument;
+	private final PositionalArgument command;
 	private final Map<String, Command> commands = new TreeMap<String, Command>();
 	private final String usagePrefix;
 
@@ -44,7 +45,9 @@ public final class HelpCommand extends AbstractCommand {
 		this.usagePrefix = ChatColor.RED + "/" + usagePrefix;
 		ArgumentMetadata metadata = new SimpleArgumentMetadata(HELPCOMMAND_ARGUMENT_ID, HELPCOMMAND_ARGUMENT_NAME, HELPCOMMAND_ARGUMENT_DESC, null);
 		Suggester suggester = createSuggester(commands);
-		argument = new PositionalArgument(metadata, suggester, 0);
+		command = new PositionalArgument(metadata, suggester, 0);
+		argument = new PositionalArgument(metadata, suggester, 1);
+		addArgument(command);
 		addArgument(argument);
 		addCommands(commands);
 	}
@@ -81,7 +84,7 @@ public final class HelpCommand extends AbstractCommand {
 				messages.add(usagePrefix + " " + command.getUsage());
 			}
 		} else {
-			messages.add(getLocalisation().formatAsHeaderMessage(HELPCOMMAND_COMMAND_USAGE_HEADER, selectedCommand.getName(), selectedCommand.getUsage()));
+			messages.add(getLocalisation().formatAsHeaderMessage(HELPCOMMAND_COMMAND_USAGE_HEADER, selectedCommand.getName(), selectedCommand.getDescription()));
 			messages.add(getLocalisation().formatAsInfoMessage(HELPCOMMAND_USAGE, usagePrefix, selectedCommand.getUsage()));
 		}
 		sender.sendMessage(messages.toArray(new String[messages.size()]));

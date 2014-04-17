@@ -37,6 +37,7 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 	public AbstractArgument(final ArgumentMetadata metadata, Suggester suggester) {
 		this.metadata = metadata;
 		this.suggester = suggester;
+		if (suggester != null) System.out.print(suggester.toString());
 	}
 
 	protected final String[] getSeparatedValues(final String argument) {
@@ -81,7 +82,7 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 
 	protected abstract String[] getMatch(String argument);
 
-	protected Suggester getSuggester() {
+	protected final Suggester getSuggester() {
 		return suggester;
 	}
 

@@ -18,10 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -30,6 +27,8 @@ import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.Command;
 import name.richardson.james.bukkit.utilities.command.CommandInvoker;
+import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
 /**
  * This abstract implementation provides final methods for all the methods specified in the CommandInvoker interface. It should be used for convenience when
@@ -44,6 +43,14 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 	public AbstractCommandInvoker(Plugin plugin, BukkitScheduler scheduler) {
 		this.plugin = plugin;
 		this.scheduler = scheduler;
+	}
+
+	protected static Suggester createSuggester(Iterable<Command> commands) {
+		Set<String> names = new HashSet<String>();
+		for (Command command : commands) {
+			names.add(command.getName());
+		}
+		return new StringSuggester(names);
 	}
 
 	@Override
