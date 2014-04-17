@@ -24,6 +24,15 @@ public class RequiredJoinedPositionalArgument extends JoinedPositionalArgument {
 		super(metadata, position);
 	}
 
+	public String getUsage() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("<");
+		builder.append(getName());
+		builder.append(">");
+		return builder.toString();
+	}
+
+
 	@Override
 	public void parseValue(final String argument)
 	throws InvalidArgumentException {

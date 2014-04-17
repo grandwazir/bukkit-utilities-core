@@ -16,14 +16,18 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.invoker;
+package name.richardson.james.bukkit.utilities.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import org.apache.commons.lang.Validate;
 
+import name.richardson.james.bukkit.utilities.command.AbstractCommandInvoker;
 import name.richardson.james.bukkit.utilities.command.Command;
 
 /**
@@ -34,24 +38,55 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 
 	private final Command fallthroughCommand;
 
-	/**
-	 * Constructs a FallthroughCommandInvoker with a default command.
-	 *
-	 * @param command the command that the invoker should execute if it is unable to match with any other command.
-	 */
-	public FallthroughCommandInvoker(Command command) {
-		Validate.notNull(command);
+	public FallthroughCommandInvoker(final Plugin plugin, final BukkitScheduler scheduler, Command command) {
+		super(plugin, scheduler);
 		this.fallthroughCommand = command;
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+		Command selectedCommand = getCommand(args);
+		if (selectedCommand != null) {
+			CommandContext commandContext = new NestedCommandContext(args, sender);
+			scheduleCommand(selectedCommand, commandContext);
+		} else {
+			CommandContext commandContext = new PassthroughCommandContext(args, sender);
+			scheduleCommand(fallthroughCommand, commandContext);
+		}
 		return true;
+	}
+
+	private void scheduleCommand(Command command, CommandContext context) {
+		command.setContext(context);
+		if (command.isAsynchronousCommand()) {
+			getScheduler().runTaskAsynchronously(getPlugin(), command);
+		} else {
+			getScheduler().runTask(getPlugin(), command);
+		}
+	}
+
+	private Command getCommand(String[] arguments) {
+		String name = (arguments.length == 0) ? null : arguments[0];
+		if (name != null && getCommands().containsKey(name)) {
+			return getCommands().get(name);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
-		return null;
+		Command selectedCommand = getCommand(args);
+		CommandContext context = null;
+		List<String> suggestions = new ArrayList<String>();
+		if (command != null) {
+			context = new NestedCommandContext(args, sender);
+		} else {
+			context = new PassthroughCommandContext(args, sender);
+		}
+		String arguments = context.getArguments();
+		suggestions.addAll(selectedCommand.suggestArguments(arguments));
+		return suggestions;
 	}
 
 	@Override

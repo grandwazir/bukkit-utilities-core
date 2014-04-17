@@ -61,4 +61,14 @@ public class SimpleArgumentInvoker implements ArgumentInvoker {
 		arguments.remove(argument);
 	}
 
+	@Override
+	public String getArgumentUsage() {
+		StringBuilder builder = new StringBuilder();
+		for (Argument argument : this.arguments) {
+			builder.append(argument.getUsage());
+			builder.append(" ");
+		}
+		return builder.toString().trim();
+	}
+
 }

@@ -52,6 +52,15 @@ public class PositionalArgument extends AbstractArgument {
 		return values;
 	}
 
+	public String getUsage() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		builder.append(getName());
+		builder.append("]");
+		return builder.toString();
+	}
+
+
 	protected final String[] removeOptionsAndSwitches(String arguments) {
 		arguments = arguments.replaceAll(OptionArgument.getPattern().toString(), "");
 		arguments = arguments.replaceAll(SwitchArgument.getPattern().toString(), "");

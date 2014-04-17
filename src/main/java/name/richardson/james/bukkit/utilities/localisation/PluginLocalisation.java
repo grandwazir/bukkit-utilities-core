@@ -35,7 +35,15 @@ public interface PluginLocalisation {
 
 	public static String HELPCOMMAND_HEADER = "helpcommand.header";
 	public static String HELPCOMMAND_HINT = "helpcommand.hint";
-	public static String HELPCOMMAND_COMMAND_DESC = "helpcommand.command-description";
+	public static String HELPCOMMAND_NAME = "helpcommand.name";
+	public static String HELPCOMMAND_DESC = "helpcommand.description";
+	public static String HELPCOMMAND_USAGE = "helpcommand.command-usage";
+	public static String HELPCOMMAND_COMMAND_USAGE_HEADER = "helpcommand.command-usage-header";
+	public static String HELPCOMMAND_ARGUMENT_USAGE = "helpcommand.argument-usage";
+
+	public static String HELPCOMMAND_ARGUMENT_ID = "helpcommand.argument.id";
+	public static String HELPCOMMAND_ARGUMENT_NAME = "helpcommand.argument.name";
+	public static String HELPCOMMAND_ARGUMENT_DESC = "helpcommand.argument.description";
 
 	public static String DATABASE_REBUILT_SCHEMA = "database.rebuilt-schema";
 	public static String DATABASE_CREATING = "database.creating";

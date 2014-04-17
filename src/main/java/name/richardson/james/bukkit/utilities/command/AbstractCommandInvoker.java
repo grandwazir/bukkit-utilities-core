@@ -16,12 +16,15 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.command.invoker;
+package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import org.apache.commons.lang.Validate;
 
@@ -35,6 +38,13 @@ import name.richardson.james.bukkit.utilities.command.CommandInvoker;
 public abstract class AbstractCommandInvoker implements CommandInvoker {
 
 	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
+	private final Plugin plugin;
+	private final BukkitScheduler scheduler;
+
+	public AbstractCommandInvoker(Plugin plugin, BukkitScheduler scheduler) {
+		this.plugin = plugin;
+		this.scheduler = scheduler;
+	}
 
 	@Override
 	public final void addCommand(Command command) {
@@ -63,4 +73,11 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 		return sb.toString();
 	}
 
+	protected final Plugin getPlugin() {
+		return plugin;
+	}
+
+	protected final BukkitScheduler getScheduler() {
+		return scheduler;
+	}
 }

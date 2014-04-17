@@ -58,6 +58,8 @@ public interface Argument extends ArgumentMetadata, Suggester {
 	 */
 	boolean isLastArgument(String arguments);
 
+	public String getUsage();
+
 	/**
 	 * Parse the provided arguments for a match and, if a match is made, set a value.
 	 *

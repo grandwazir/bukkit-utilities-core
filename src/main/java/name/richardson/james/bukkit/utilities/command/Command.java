@@ -66,4 +66,6 @@ public interface Command extends Runnable, ArgumentInvoker {
 	 */
 	public void setContext(CommandContext context);
 
+	public boolean isAsynchronousCommand();
+
 }

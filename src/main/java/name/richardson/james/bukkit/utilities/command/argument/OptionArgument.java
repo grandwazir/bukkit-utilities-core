@@ -65,6 +65,18 @@ public class OptionArgument extends AbstractArgument {
 		return match;
 	}
 
+	public String getUsage() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[-");
+		builder.append(getId());
+		builder.append("|");
+		builder.append(getName());
+		builder.append(":");
+		builder.append("value");
+		builder.append("]");
+		return builder.toString();
+	}
+
 	public static Pattern getPattern() {
 		return OPTION_PATTERN;
 	}

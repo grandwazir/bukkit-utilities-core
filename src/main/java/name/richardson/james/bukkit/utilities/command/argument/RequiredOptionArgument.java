@@ -27,6 +27,19 @@ public class RequiredOptionArgument extends OptionArgument {
 	}
 
 	@Override
+	public String getUsage() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("<-");
+		builder.append(getId());
+		builder.append("|");
+		builder.append(getName());
+		builder.append(":");
+		builder.append("value");
+		builder.append(">");
+		return builder.toString();
+	}
+
+	@Override
 	public void parseValue(final String argument) {
 		super.parseValue(argument);
 		if (getString() == null) throw new InvalidArgumentException(getError());

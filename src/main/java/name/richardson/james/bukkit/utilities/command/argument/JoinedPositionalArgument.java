@@ -36,6 +36,15 @@ public class JoinedPositionalArgument extends PositionalArgument {
 		return value;
 	}
 
+	public String getUsage() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		builder.append(getName());
+		builder.append("]");
+		return builder.toString();
+	}
+
+
 	@Override
 	protected String[] getMatch(final String arguments) {
 		String[] values = null;

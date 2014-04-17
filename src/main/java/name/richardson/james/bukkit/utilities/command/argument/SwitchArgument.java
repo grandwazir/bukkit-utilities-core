@@ -53,6 +53,17 @@ public class SwitchArgument extends AbstractArgument {
 		return Collections.emptySet();
 	}
 
+	public String getUsage() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[-");
+		builder.append(getId());
+		builder.append("|");
+		builder.append(getName());
+		builder.append("]");
+		return builder.toString();
+	}
+
+
 	@Override
 	protected String[] getMatch(final String argument) {
 		String[] values = new String[1];
