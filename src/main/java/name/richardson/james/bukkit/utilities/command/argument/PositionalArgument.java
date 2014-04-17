@@ -78,9 +78,7 @@ public class PositionalArgument extends AbstractArgument {
 		if (arguments != null && isLastArgument(argument)) {
 			if (arguments.length - 1 == getPosition() && getSuggester() != null) {
 				String[] values = getSeparatedValues(arguments[getPosition()]);
-				System.out.print("Delegating suggestions to: " + getSuggester().toString());
 				final Set<String> strings = getSuggester().suggestValue(values[values.length - 1]);
-				System.out.print("Value of returned suggestions is: " + strings.toString());
 				suggestions = getSuggester().suggestValue(values[values.length - 1]);
 			}
 		}
