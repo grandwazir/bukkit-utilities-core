@@ -62,7 +62,7 @@ public class SimpleArgumentInvoker implements ArgumentInvoker {
 	}
 
 	@Override
-	public String getArgumentUsage() {
+	public String getUsage() {
 		StringBuilder builder = new StringBuilder();
 		for (Argument argument : this.arguments) {
 			builder.append(argument.getUsage());

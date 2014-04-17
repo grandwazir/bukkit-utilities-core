@@ -55,6 +55,11 @@ public abstract class AbstractMarshaller implements Argument {
 	}
 
 	@Override
+	public final String getUsage() {
+		return argument.getUsage();
+	}
+
+	@Override
 	public boolean isLastArgument(final String arguments) {
 		return argument.isLastArgument(arguments);
 	}
