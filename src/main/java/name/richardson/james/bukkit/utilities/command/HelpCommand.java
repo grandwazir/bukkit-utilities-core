@@ -75,7 +75,7 @@ public final class HelpCommand extends AbstractCommand {
 		if (selectedCommand == null) {
 			messages.add(getLocalisation().formatAsHeaderMessage(HELPCOMMAND_HEADER, getLocalisation().getMessage(PLUGIN_NAME), getLocalisation().getMessage(PLUGIN_VERSION)));
 			messages.add(getLocalisation().formatAsHeaderMessage(PLUGIN_DESCRIPTION));
-			messages.add(getLocalisation().formatAsInfoMessage(HELPCOMMAND_HINT, "/" + usagePrefix, getUsage()));
+			messages.add(getLocalisation().formatAsWarningMessage(HELPCOMMAND_HINT, usagePrefix, getUsage()));
 			for (Command command : commands.values()) {
 				if (!command.isAuthorised(sender)) continue;
 				messages.add(usagePrefix + " " + command.getUsage());

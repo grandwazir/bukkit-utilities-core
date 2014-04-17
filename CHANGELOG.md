@@ -1,5 +1,8 @@
 # Changelog for BukkitUtilities (v7.0.0-SNAPSHOT)
 
+2014-04-17 18:24:45 +0100    fix issue with name and description not been translated (James Richardson)  
+2014-04-17 18:23:31 +0100    added forgotton marshallers (James Richardson)  
+2014-04-17 18:22:59 +0100    misc fixes (useful comment I know!) (James Richardson)  
 2014-04-17 07:37:03 +0100    fix build error (James Richardson)  
 2014-04-17 07:31:50 +0100    new HelpCommand (James Richardson)  
 2014-04-17 07:31:35 +0100    new abstract command (James Richardson)  
