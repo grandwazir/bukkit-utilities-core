@@ -70,7 +70,7 @@ public final class HelpCommand extends AbstractCommand {
 	@Override
 	protected void execute() {
 		List<String> messages = new ArrayList<String>();
-		Command selectedCommand = commands.get(argument.getString());
+		Command selectedCommand = (argument.getString() == null) ? null : commands.get(argument.getString());
 		CommandSender sender = getContext().getCommandSender();
 		if (selectedCommand == null) {
 			messages.add(getLocalisation().formatAsHeaderMessage(HELPCOMMAND_HEADER, getLocalisation().getMessage(PLUGIN_NAME), getLocalisation().getMessage(PLUGIN_VERSION)));
