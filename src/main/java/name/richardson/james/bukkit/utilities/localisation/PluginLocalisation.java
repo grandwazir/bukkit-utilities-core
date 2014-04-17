@@ -43,7 +43,7 @@ public interface PluginLocalisation {
 
 	public static String HELPCOMMAND_ARGUMENT_ID = "helpcommand.argument.id";
 	public static String HELPCOMMAND_ARGUMENT_NAME = "helpcommand.argument.name";
-	public static String HELPCOMMAND_ARGUMENT_DESC = "helpcommand.argument.description";
+	public static String HELPCOMMAND_ARGUMENT_DESC = "helpcommand.argument.desc";
 
 	public static String DATABASE_REBUILT_SCHEMA = "database.rebuilt-schema";
 	public static String DATABASE_CREATING = "database.creating";

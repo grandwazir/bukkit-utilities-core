@@ -78,7 +78,7 @@ public final class HelpCommand extends AbstractCommand {
 			messages.add(getLocalisation().formatAsInfoMessage(HELPCOMMAND_HINT, "/" + usagePrefix, getUsage()));
 			for (Command command : commands.values()) {
 				if (!command.isAuthorised(sender)) continue;
-				messages.add(getLocalisation().formatAsInfoMessage(HELPCOMMAND_USAGE, usagePrefix, command.getUsage()));
+				messages.add(usagePrefix + " " + command.getUsage());
 			}
 		} else {
 			messages.add(getLocalisation().formatAsHeaderMessage(HELPCOMMAND_COMMAND_USAGE_HEADER, selectedCommand.getName(), selectedCommand.getUsage()));

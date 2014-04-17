@@ -42,10 +42,10 @@ public abstract class AbstractCommand implements Command {
 	private CommandContext context;
 
 	public AbstractCommand(String name, String desc) {
-		this.name = name;
-		this.desc = desc;
-		argumentInvoker = new SimpleArgumentInvoker();
 		localisation = new StrictResourceBundleLocalisation();
+		argumentInvoker = new SimpleArgumentInvoker();
+		this.name = getLocalisation().getMessage(name);
+		this.desc = getLocalisation().getMessage(desc);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public abstract class AbstractCommand implements Command {
 
 	@Override
 	public String getUsage() {
-		String arguments = argumentInvoker.getUsage();
+		String arguments = getColouredArgumentUsage();
 		return ChatColor.YELLOW + getName() + " " + arguments;
 	}
 
@@ -88,7 +88,7 @@ public abstract class AbstractCommand implements Command {
 		} catch (InvalidArgumentException e) {
 			CommandSender sender = getContext().getCommandSender();
 			sender.sendMessage(getLocalisation().formatAsErrorMessage(PluginLocalisation.COMMAND_INVALID_ARGUMENT));
-			sender.sendMessage(getLocalisation().formatAsWarningMessage(e.getMessage()));
+			sender.sendMessage(ChatColor.YELLOW + e.getError());
 		}
 	}
 

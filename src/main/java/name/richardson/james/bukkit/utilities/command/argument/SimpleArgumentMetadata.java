@@ -18,18 +18,24 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
+
 public class SimpleArgumentMetadata implements ArgumentMetadata {
+
+	private final Localisation localisation = new StrictResourceBundleLocalisation();
 
 	private final String id;
 	private final String name;
 	private final String desc;
-	private final String error;
+
+	private String error;
 
 	public SimpleArgumentMetadata(final String id, final String name, final String desc, final String error) {
-		this.id = id;
-		this.name = name;
-		this.desc = desc;
-		this.error = error;
+		this.id = localisation.getMessage(id);
+		this.name = localisation.getMessage(name);
+		this.desc = localisation.getMessage(desc);
+		if (error != null) this.error = localisation.getMessage(error);
 	}
 
 	@Override

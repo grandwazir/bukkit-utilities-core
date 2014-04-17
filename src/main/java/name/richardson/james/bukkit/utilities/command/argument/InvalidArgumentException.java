@@ -20,7 +20,14 @@ package name.richardson.james.bukkit.utilities.command.argument;
 
 public class InvalidArgumentException extends RuntimeException {
 
-	public InvalidArgumentException(final String error) {
+	private final String error;
 
+	public InvalidArgumentException(final String error) {
+		this.error = error;
 	}
+
+	public String getError() {
+		return error;
+	}
+
 }

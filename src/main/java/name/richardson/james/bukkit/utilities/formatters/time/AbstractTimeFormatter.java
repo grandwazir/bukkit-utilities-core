@@ -65,18 +65,20 @@ public abstract class AbstractTimeFormatter implements TimeFormatter {
 	 */
 	public final long getDurationInMilliseconds(String timeString) {
 		long duration = 0;
-		getInputFormatter().reset(timeString.toLowerCase(Locale.ENGLISH));
-		while (getInputFormatter().find()) {
-			int value = Integer.parseInt(getInputFormatter().group(1));
-			String unit = getInputFormatter().group(2);
-			if (unit.equalsIgnoreCase("d")) {
-				duration = duration + TimeUnit.MILLISECONDS.convert(value, TimeUnit.DAYS);
-			} else if (unit.equalsIgnoreCase("h")) {
-				duration = duration + TimeUnit.MILLISECONDS.convert(value, TimeUnit.HOURS);
-			} else if (unit.equalsIgnoreCase("m")) {
-				duration = duration + TimeUnit.MILLISECONDS.convert(value, TimeUnit.MINUTES);
-			} else if (unit.equalsIgnoreCase("s")) {
-				duration = duration + TimeUnit.MILLISECONDS.convert(value, TimeUnit.SECONDS);
+		if (timeString != null) {
+			getInputFormatter().reset(timeString.toLowerCase(Locale.ENGLISH));
+			while (getInputFormatter().find()) {
+				int value = Integer.parseInt(getInputFormatter().group(1));
+				String unit = getInputFormatter().group(2);
+				if (unit.equalsIgnoreCase("d")) {
+					duration = duration + TimeUnit.MILLISECONDS.convert(value, TimeUnit.DAYS);
+				} else if (unit.equalsIgnoreCase("h")) {
+					duration = duration + TimeUnit.MILLISECONDS.convert(value, TimeUnit.HOURS);
+				} else if (unit.equalsIgnoreCase("m")) {
+					duration = duration + TimeUnit.MILLISECONDS.convert(value, TimeUnit.MINUTES);
+				} else if (unit.equalsIgnoreCase("s")) {
+					duration = duration + TimeUnit.MILLISECONDS.convert(value, TimeUnit.SECONDS);
+				}
 			}
 		}
 		return duration;
