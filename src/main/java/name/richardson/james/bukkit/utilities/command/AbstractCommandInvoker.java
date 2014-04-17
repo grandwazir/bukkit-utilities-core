@@ -37,7 +37,7 @@ import name.richardson.james.bukkit.utilities.command.CommandInvoker;
  */
 public abstract class AbstractCommandInvoker implements CommandInvoker {
 
-	private final Map<String, Command> commandMap = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
+	private final Map<String, Command> commandMap = new TreeMap<String, Command>();
 	private final Plugin plugin;
 	private final BukkitScheduler scheduler;
 

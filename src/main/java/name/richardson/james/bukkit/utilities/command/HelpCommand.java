@@ -36,7 +36,7 @@ import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisa
 public final class HelpCommand extends AbstractCommand {
 
 	private final Argument argument;
-	private final Map<String, Command> commands = new HashMap<String, Command>();
+	private final Map<String, Command> commands = new TreeMap<String, Command>();
 	private final String usagePrefix;
 
 	public HelpCommand(Iterable<Command> commands, String usagePrefix) {
