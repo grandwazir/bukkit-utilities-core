@@ -32,6 +32,7 @@ import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInv
 import name.richardson.james.bukkit.utilities.localisation.Localised;
 
 import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.INVOKER_INVALID_ARGUMENT;
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.INVOKER_NO_PERMISSION;
 
 public abstract class AbstractCommand implements Command {
 
@@ -80,13 +81,18 @@ public abstract class AbstractCommand implements Command {
 
 	public final void run() {
 		Validate.notNull(getContext());
-		try {
-			this.parseArguments(getContext().getArguments());
-			this.execute();
-		} catch (InvalidArgumentException e) {
+		if (isAuthorised(getContext().getCommandSender())) {
+			try {
+				this.parseArguments(getContext().getArguments());
+				this.execute();
+			} catch (InvalidArgumentException e) {
+				CommandSender sender = getContext().getCommandSender();
+				sender.sendMessage(INVOKER_INVALID_ARGUMENT.asErrorMessage());
+				sender.sendMessage(ChatColor.YELLOW + e.getError());
+			}
+		} else {
 			CommandSender sender = getContext().getCommandSender();
-			sender.sendMessage(INVOKER_INVALID_ARGUMENT.asErrorMessage());
-			sender.sendMessage(ChatColor.YELLOW + e.getError());
+			sender.sendMessage(INVOKER_NO_PERMISSION.asErrorMessage());
 		}
 	}
 
