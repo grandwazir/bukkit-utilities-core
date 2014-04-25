@@ -56,24 +56,6 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 		return true;
 	}
 
-	private void scheduleCommand(Command command, CommandContext context) {
-		command.setContext(context);
-		if (command.isAsynchronousCommand()) {
-			getScheduler().runTaskAsynchronously(getPlugin(), command);
-		} else {
-			getScheduler().runTask(getPlugin(), command);
-		}
-	}
-
-	private Command getCommand(String[] arguments) {
-		String name = (arguments.length == 0) ? null : arguments[0];
-		if (name != null && getCommands().containsKey(name)) {
-			return getCommands().get(name);
-		} else {
-			return null;
-		}
-	}
-
 	@Override
 	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
 		Command selectedCommand = getCommand(args);
