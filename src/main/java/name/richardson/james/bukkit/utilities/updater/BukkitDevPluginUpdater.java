@@ -17,7 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.*;
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
 
 public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 

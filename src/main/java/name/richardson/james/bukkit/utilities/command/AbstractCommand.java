@@ -30,7 +30,8 @@ import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInvoker;
 import name.richardson.james.bukkit.utilities.localisation.Localised;
-import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.INVOKER_INVALID_ARGUMENT;
 
 public abstract class AbstractCommand implements Command {
 
@@ -84,7 +85,7 @@ public abstract class AbstractCommand implements Command {
 			this.execute();
 		} catch (InvalidArgumentException e) {
 			CommandSender sender = getContext().getCommandSender();
-			sender.sendMessage(PluginLocalisation.BukkitUtilities.INVOKER_INVALID_ARGUMENT.asErrorMessage());
+			sender.sendMessage(INVOKER_INVALID_ARGUMENT.asErrorMessage());
 			sender.sendMessage(ChatColor.YELLOW + e.getError());
 		}
 	}

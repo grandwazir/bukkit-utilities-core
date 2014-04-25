@@ -29,7 +29,7 @@ import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
-import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.CONFIGURATION_OVERRIDE_VALUE;
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.CONFIGURATION_OVERRIDE_VALUE;
 
 public final class SimpleDatabaseConfiguration extends AbstractConfiguration implements DatabaseConfiguration {
 

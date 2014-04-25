@@ -31,7 +31,7 @@ import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentMet
 import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
-import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.*;
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
 
 public final class HelpCommand extends AbstractCommand {
 

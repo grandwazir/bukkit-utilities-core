@@ -34,42 +34,42 @@ public class DefaultMessageFormatterTest extends TestCase {
 
 	@Test
 	public void getFormattedHeaderMessage() {
-		assertMessageContainsOnlyOneColourCodeAtStart(formatter.formatAsHeaderMessage(TEST_MESSAGE));
+		assertMessageContainsOnlyOneColourCodeAtStart(formatter.asHeaderMessage(TEST_MESSAGE));
 	}
 
 	@Test
 	public void getFormattedHeaderMessageWithArguments() {
-		assertMessageWrapsArgumentsWithColourCodes(formatter.formatAsHeaderMessage(TEST_MESSAGE_WITH_ARGUMENTS));
+		assertMessageWrapsArgumentsWithColourCodes(formatter.asHeaderMessage(TEST_MESSAGE_WITH_ARGUMENTS));
 	}
 
 	@Test
 	public void getFormattedInfoMessage() {
-		assertMessageContainsOnlyOneColourCodeAtStart(formatter.formatAsInfoMessage(TEST_MESSAGE));
+		assertMessageContainsOnlyOneColourCodeAtStart(formatter.asInfoMessage(TEST_MESSAGE));
 	}
 
 	@Test
 	public void getFormattedInfoMessageWithArguments() {
-		assertMessageWrapsArgumentsWithColourCodes(formatter.formatAsInfoMessage(TEST_MESSAGE_WITH_ARGUMENTS));
+		assertMessageWrapsArgumentsWithColourCodes(formatter.asInfoMessage(TEST_MESSAGE_WITH_ARGUMENTS));
 	}
 
 	@Test
 	public void getFormattedWarningMessage() {
-		assertMessageContainsOnlyOneColourCodeAtStart(formatter.formatAsWarningMessage(TEST_MESSAGE));
+		assertMessageContainsOnlyOneColourCodeAtStart(formatter.asWarningMessage(TEST_MESSAGE));
 	}
 
 	@Test
 	public void getFormattedWarningMessageWithArguments() {
-		assertMessageWrapsArgumentsWithColourCodes(formatter.formatAsWarningMessage(TEST_MESSAGE_WITH_ARGUMENTS));
+		assertMessageWrapsArgumentsWithColourCodes(formatter.asWarningMessage(TEST_MESSAGE_WITH_ARGUMENTS));
 	}
 
 	@Test
 	public void getFormattedErrorMessage() {
-		assertMessageContainsOnlyOneColourCodeAtStart(formatter.formatAsErrorMessage(TEST_MESSAGE));
+		assertMessageContainsOnlyOneColourCodeAtStart(formatter.asErrorMessage(TEST_MESSAGE));
 	}
 
 	@Test
 	public void getFormattedErrorMessageWithArguments() {
-		assertMessageWrapsArgumentsWithColourCodes(formatter.formatAsErrorMessage(TEST_MESSAGE_WITH_ARGUMENTS));
+		assertMessageWrapsArgumentsWithColourCodes(formatter.asErrorMessage(TEST_MESSAGE_WITH_ARGUMENTS));
 	}
 
 

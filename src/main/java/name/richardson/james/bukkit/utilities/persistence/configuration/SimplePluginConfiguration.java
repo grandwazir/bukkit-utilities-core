@@ -26,7 +26,7 @@ import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
-import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.CONFIGURATION_INVALID_VALUE;
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.CONFIGURATION_INVALID_VALUE;
 
 public class SimplePluginConfiguration extends AbstractConfiguration implements PluginConfiguration {
 

@@ -34,9 +34,11 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.BukkitUtilities;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
 
 @SuppressWarnings("UseOfSystemOutOrSystemErr")
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
@@ -69,7 +71,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	synchronized public final void initalise() {
-		logger.log(Level.FINE, PluginLocalisation.BukkitUtilities.DATABASE_LOADING.asMessage());
+		logger.log(Level.FINE, DATABASE_LOADING.asMessage());
 		this.load();
 		if (!this.isSchemaValid() || this.rebuild) {
 			final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
@@ -102,7 +104,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	@Override
 	public final void create() {
-		logger.log(Level.INFO, PluginLocalisation.BukkitUtilities.DATABASE_CREATING.asMessage());
+		logger.log(Level.INFO, DATABASE_CREATING.asMessage());
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
 		String script = getGenerateDDLScript();
@@ -118,7 +120,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	@Override
 	public final void drop() {
-		logger.log(Level.FINER, PluginLocalisation.BukkitUtilities.DATABASE_DROPPING_TABLES.asMessage());
+		logger.log(Level.FINER, DATABASE_DROPPING_TABLES.asMessage());
 		this.beforeDatabaseDrop();
 		String script = this.getDeleteDLLScript();
 		try {
@@ -188,9 +190,9 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			}
 		}
 		if (valid) {
-			logger.log(Level.FINER, PluginLocalisation.BukkitUtilities.DATABASE_VALID_SCHEMA.asMessage());
+			logger.log(Level.FINER, DATABASE_VALID_SCHEMA.asMessage());
 		} else {
-			logger.log(Level.WARNING, PluginLocalisation.BukkitUtilities.DATABASE_INVALID_SCHEMA.asMessage());
+			logger.log(Level.WARNING, DATABASE_INVALID_SCHEMA.asMessage());
 		}
 		return valid;
 	}

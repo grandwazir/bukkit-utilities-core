@@ -6,9 +6,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import name.richardson.james.bukkit.utilities.localisation.Localised;
+
 public abstract class AbstractChoiceFormatter implements ChoiceFormatter {
 
-	private final Localisation localisation = new StrictResourceBundleLocalisation();
 	private Object[] arguments;
 	private String[] formats;
 	private double[] limits;
@@ -33,10 +34,10 @@ public abstract class AbstractChoiceFormatter implements ChoiceFormatter {
 	}
 
 	@Override
-	public final void setFormats(final String... args) {
+	public final void setFormats(final Localised... args) {
 		List<String> formats = new LinkedList<String>();
-		for (String key : args) {
-			formats.add(this.localisation.getMessage(key));
+		for (Localised key : args) {
+			formats.add(key.asMessage());
 		}
 		this.formats = formats.toArray(new String[formats.size()]);
 	}
@@ -52,7 +53,6 @@ public abstract class AbstractChoiceFormatter implements ChoiceFormatter {
 		sb.append("arguments=").append(Arrays.toString(arguments));
 		sb.append(", formats=").append(Arrays.toString(formats));
 		sb.append(", limits=").append(Arrays.toString(limits));
-		sb.append(", localisation=").append(localisation);
 		sb.append(", message='").append(message).append('\'');
 		sb.append('}');
 		return sb.toString();

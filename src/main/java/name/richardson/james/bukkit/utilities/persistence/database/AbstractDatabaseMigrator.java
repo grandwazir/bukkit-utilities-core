@@ -21,8 +21,9 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
+
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.DATABASE_UPGRADE_REQUIRED;
 
 /**
  * This class provides a reference implementation that takes two seperate database loaders and migrates the data from one to the other.
@@ -41,7 +42,6 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 	private final DatabaseLoader newDatabaseLoader;
 	private final DatabaseLoader oldDatabaseLoader;
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseMigrator.class);
-	private final Localisation localisation = new StrictResourceBundleLocalisation();
 
 	public AbstractDatabaseMigrator(DatabaseLoader oldDatabaseLoader, DatabaseLoader newDatabaseLoader) {
 		this.oldDatabaseLoader = oldDatabaseLoader;
@@ -74,7 +74,7 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 	public void initalise() {
 		this.newDatabaseLoader.load();
 		if (this.newDatabaseLoader.isSchemaValid() == false) {
-			logger.log(Level.WARNING, PluginLocalisation.DATABASE_UPGRADE_REQUIRED);
+			logger.log(Level.WARNING, DATABASE_UPGRADE_REQUIRED.asMessage());
 			this.oldDatabaseLoader.initalise();
 			this.beforeUpgrade(this.oldDatabaseLoader.getEbeanServer());
 			this.oldDatabaseLoader.drop();
@@ -86,7 +86,6 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("AbstractDatabaseMigrator{");
-		sb.append("localisation=").append(localisation);
 		sb.append(", newDatabaseLoader=").append(newDatabaseLoader);
 		sb.append(", oldDatabaseLoader=").append(oldDatabaseLoader);
 		sb.append('}');

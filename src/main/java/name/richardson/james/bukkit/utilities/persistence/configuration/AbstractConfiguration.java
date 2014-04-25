@@ -30,7 +30,7 @@ import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
-import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.*;
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
 
 /**
  * AbstractConfiguration is responsible for creating YAML configuration files, setting defaults from a provided {@link InputStream} and handling any exceptions

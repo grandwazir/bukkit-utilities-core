@@ -26,13 +26,14 @@ import org.bukkit.plugin.PluginManager;
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
 import name.richardson.james.bukkit.utilities.localisation.*;
 
+import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.UPDATER_NEW_VERSION_AVAILABLE;
+
 /**
  * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update available for the plugin. The players will be
  * notified when they join the server. The permission required for players to receive the notice is the name of the plugin in lowercase.
  */
 public class PlayerNotifier extends AbstractListener {
 
-	private final Localisation localisation = new StrictResourceBundleLocalisation();
 	private final String permission;
 	private final String pluginName;
 	private final PluginUpdater updater;
@@ -54,14 +55,13 @@ public class PlayerNotifier extends AbstractListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final boolean notify = event.getPlayer().hasPermission(this.permission);
 		if (notify && updater.isNewVersionAvailable()) {
-			event.getPlayer().sendMessage(localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, pluginName, updater.getLatestRemoteVersion().getMajorVersion(), updater.getLatestRemoteVersion().getMinorVersion()));
+			event.getPlayer().sendMessage(UPDATER_NEW_VERSION_AVAILABLE.asInfoMessage(pluginName, updater.getLatestRemoteVersion().getMajorVersion(), updater.getLatestRemoteVersion().getMinorVersion()));
 		}
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("PlayerNotifier{");
-		sb.append("localisation=").append(localisation);
 		sb.append(", permission='").append(permission).append('\'');
 		sb.append(", pluginName='").append(pluginName).append('\'');
 		sb.append(", updater=").append(updater);
