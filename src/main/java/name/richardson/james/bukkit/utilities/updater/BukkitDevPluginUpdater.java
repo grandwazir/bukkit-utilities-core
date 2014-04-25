@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
@@ -18,10 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
-import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
+import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.*;
 
 public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
@@ -37,7 +33,6 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
 	private static final String DL_HOST = "cursecdn.com";
 
-	private final Localisation localisation = new StrictResourceBundleLocalisation();
 	private final int projectId;
 	private final File updateFolder;
 	private final String gameVersion;
@@ -75,7 +70,6 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	 */
 	public boolean isNewVersionAvailable() {
 		if (getLocalVersion().compareTo(getLatestRemoteVersion()) == -1) {
-			getLogger().log(Level.INFO, localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, getPluginName(), parseArtifactVersionToString(getLatestRemoteVersion())));
 			return true;
 		} else {
 			return false;
@@ -88,18 +82,16 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 			final ArtifactVersion current = new DefaultArtifactVersion(this.gameVersion);
 			final ArtifactVersion target = new DefaultArtifactVersion(versionGameVersion);
 			if (current.getMajorVersion() != target.getMajorVersion()) {
-				getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.UPDATER_MANUAL_UPDATE_REQUIRED, versionLink));
+				getLogger().log(Level.WARNING, UPDATER_MANUAL_UPDATE_REQUIRED.asMessage(versionLink));
 				return;
 			} else {
 				try {
-					getLogger().log(Level.INFO, localisation.getMessage(PluginLocalisation.UPDATER_DOWNLOADING, versionLink));
+					getLogger().log(Level.INFO, UPDATER_DOWNLOADING.asMessage(versionLink));
 					File destination = new File(updateFolder, getName() + ".jar");
 					URLConnection urlConnection = getConnection(versionLink);
 					FileUtils.copyURLToFile(urlConnection.getURL(), destination);
-				} catch (MalformedURLException e) {
-					getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.UPDATER_ENCOUNTERED_EXCEPTION, e.getMessage()));
-				} catch (IOException e) {
-					getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.UPDATER_ENCOUNTERED_EXCEPTION, e.getMessage()));
+				} catch (Exception e) {
+					getLogger().log(Level.WARNING, UPDATER_ENCOUNTERED_EXCEPTION.asMessage(e.getMessage()));
 				}
 			}
 		}
@@ -118,7 +110,6 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("BukkitDevPluginUpdater{");
 		sb.append("gameVersion='").append(gameVersion).append('\'');
-		sb.append(", localisation=").append(localisation);
 		sb.append(", projectId=").append(projectId);
 		sb.append(", remoteVersion=").append(remoteVersion);
 		sb.append(", updateFolder=").append(updateFolder);
@@ -151,18 +142,14 @@ public class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				versionLink = (String) latest.get(API_LINK_VALUE);
 				versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
 				if (isNewVersionAvailable()) {
-					getLogger().log(Level.INFO, localisation.getMessage(PluginLocalisation.UPDATER_NEW_VERSION_AVAILABLE, getPluginName(), parseArtifactVersionToString(getLatestRemoteVersion())));
+					getLogger().log(Level.INFO, UPDATER_NEW_VERSION_AVAILABLE.asMessage(getPluginName(), parseArtifactVersionToString(getLatestRemoteVersion())));
 					break;
 				}
 			}
-		} catch (MalformedURLException e) {
-			getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.UPDATER_ENCOUNTERED_EXCEPTION, e.getMessage()));
-		} catch (IOException e) {
-			getLogger().log(Level.WARNING, localisation.getMessage(PluginLocalisation.UPDATER_ENCOUNTERED_EXCEPTION, e.getMessage()));
+		} catch (Exception e) {
+			getLogger().log(Level.WARNING, UPDATER_ENCOUNTERED_EXCEPTION.asMessage(e.getMessage()));
 		}
 	}
-
-
 
 	private boolean isCompatibleWithGameVersion() {
 		final Comparable current = new DefaultArtifactVersion(this.gameVersion);

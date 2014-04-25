@@ -2,17 +2,13 @@ package name.richardson.james.bukkit.utilities.logging;
 
 import java.util.logging.*;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.PermissiveResourceBundleLocalisation;
-
 /**
  * Provides final methods implementing PrefixedLogger. This class should be used as a base for implementing Loggers which care about how the actual messages are
  * localised. <p/> Internally will get the prefix for this logger by using {@link ResourceBundleByClassLocalisation} using this class name as the class.
  */
 public class PrefixedLogger extends Logger {
 
-	private static final Localisation LOCALISATION = new PermissiveResourceBundleLocalisation();
-	private static String PREFIX;
+	private static String prefix = "BukkitUtilities";
 	private final String debuggingPrefix;
 
 	/**
@@ -38,11 +34,11 @@ public class PrefixedLogger extends Logger {
 	}
 
 	public static String getPrefix() {
-		return PREFIX;
+		return prefix;
 	}
 
 	public static void setPrefix(final String prefix) {
-		PrefixedLogger.PREFIX = "[" + prefix + "]";
+		PrefixedLogger.prefix = "[" + prefix + "]";
 	}
 
 	@Override

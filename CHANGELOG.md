@@ -1,5 +1,9 @@
-# Changelog for BukkitUtilities (v7.0.0-SNAPSHOT)
+# Changelog for BukkitUtilities (v7.0.1-SNAPSHOT)
 
+
+**v7.0.0**  
+2014-04-17 20:09:11 +0100    remove debugging (James Richardson)  
+2014-04-17 20:08:31 +0100    fixed an annoying bug with tab completion (James Richardson)  
 2014-04-17 18:49:05 +0100    fix NPE (James Richardson)  
 2014-04-17 18:46:14 +0100    fix missing key and commands not being sorted alphabetically (James Richardson)  
 2014-04-17 18:29:23 +0100    fix formatting issue with help command header (James Richardson)  

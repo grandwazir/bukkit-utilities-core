@@ -18,47 +18,125 @@
 
 package name.richardson.james.bukkit.utilities.localisation;
 
-public interface PluginLocalisation {
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
-	public static String PLUGIN_NAME = "plugin.name";
-	public static String PLUGIN_VERSION = "plugin.version";
-	public static String PLUGIN_DESCRIPTION = "plugin.description";
+import name.richardson.james.bukkit.utilities.formatters.DefaultMessageFormatter;
+import name.richardson.james.bukkit.utilities.formatters.MessageFormatter;
 
-	public static String COMMAND_INVALID_ARGUMENT = "command.invalid-argument-exception";
+public class PluginLocalisation {
 
-	public static String CONFIGURATION_LOADING = "configuration.loading";
-	public static String CONFIGURATION_SAVING_DEFAULT = "configuration.saving-default";
-	public static String CONFIGURATION_USING_PATH = "configuration.using-path";
-	public static String CONFIGURATION_SAVING = "configuration.saving";
-	public static String CONFIGURATION_INVALID_VALUE = "configuration.invalid-value";
-	public static String CONFIGURATION_OVERRIDE_VALUE = "configuration.override-value";
+	public enum BukkitUtilities implements Localised, MessageFormatter {
+		PLUGIN_NAME ("plugin.name"),
+		PLUGIN_VERSION ("plugin.version"),
+		PLUGIN_DESCRIPTION ("plugin.description"),
 
-	public static String HELPCOMMAND_HEADER = "helpcommand.header";
-	public static String HELPCOMMAND_HINT = "helpcommand.hint";
-	public static String HELPCOMMAND_NAME = "helpcommand.name";
-	public static String HELPCOMMAND_DESC = "helpcommand.description";
-	public static String HELPCOMMAND_USAGE = "helpcommand.command-usage";
-	public static String HELPCOMMAND_COMMAND_USAGE_HEADER = "helpcommand.command-usage-header";
-	public static String HELPCOMMAND_ARGUMENT_USAGE = "helpcommand.argument-usage";
+		INVOKER_NO_PERMISSION("invoker.no-permission"),
+		INVOKER_INVALID_ARGUMENT("invoker.invalid-argument-exception"),
 
-	public static String HELPCOMMAND_ARGUMENT_ID = "helpcommand.argument.id";
-	public static String HELPCOMMAND_ARGUMENT_NAME = "helpcommand.argument.name";
-	public static String HELPCOMMAND_ARGUMENT_DESC = "helpcommand.argument.desc";
+		CONFIGURATION_LOADING ("configuration.loading"),
+		CONFIGURATION_SAVING_DEFAULT ("configuration.saving-default"),
+		CONFIGURATION_USING_PATH ("configuration.using-path"),
+		CONFIGURATION_SAVING ("configuration.saving"),
+		CONFIGURATION_INVALID_VALUE ("configuration.invalid-value"),
+		CONFIGURATION_OVERRIDE_VALUE ("configuration.override-value"),
 
-	public static String DATABASE_REBUILT_SCHEMA = "database.rebuilt-schema";
-	public static String DATABASE_CREATING = "database.creating";
-	public static String DATABASE_DROPPING_TABLES = "database.dropping-tables";
-	public static String DATABASE_LOADING = "database.loading";
-	public static String DATABASE_INVALID_SCHEMA = "database.invalid-schema";
-	public static String DATABASE_VALID_SCHEMA = "database.schema-is-valid";
-	public static String DATABASE_UPGRADE_REQUIRED = "database.upgrade-is-required";
+		HELPCOMMAND_HEADER ("command.help.header"),
+		HELPCOMMAND_HINT ("command.help.hint"),
+		HELPCOMMAND_NAME ("command.help.name"),
+		HELPCOMMAND_DESC ("command.help.description"),
+		HELPCOMMAND_USAGE ("command.help.command-usage"),
+		HELPCOMMAND_COMMAND_USAGE_HEADER ("command.help.command-usage-header"),
+		HELPCOMMAND_ARGUMENT_USAGE ("command.help.argument-usage"),
 
-	public static String UPDATER_MANUAL_UPDATE_REQUIRED = "updater.manual-update-required";
-	public static String UPDATER_DOWNLOADING = "updater.downloading";
-	public static String UPDATER_NEW_VERSION_AVAILABLE = "updater.new-version-available";
-	public static String UPDATER_ENCOUNTERED_EXCEPTION = "updater.unable-to-update";
+		HELPCOMMAND_ARGUMENT_ID ("argument.command.id"),
+		HELPCOMMAND_ARGUMENT_NAME ("argument.command.name"),
+		HELPCOMMAND_ARGUMENT_DESC ("argument.command.desc"),
 
-	public static String COMMAND_NO_PERMISSION = "command.no-permission";
-	public static String COMMAND_MUST_SPECIFY_PLAYER = "command.must-specify-player";
+		DATABASE_REBUILT_SCHEMA ("database.rebuilt-schema"),
+		DATABASE_CREATING ("database.creating"),
+		DATABASE_DROPPING_TABLES ("database.dropping-tables"),
+		DATABASE_LOADING ("database.loading"),
+		DATABASE_INVALID_SCHEMA ("database.invalid-schema"),
+		DATABASE_VALID_SCHEMA ("database.schema-is-valid"),
+		DATABASE_UPGRADE_REQUIRED ("database.upgrade-is-required"),
+
+		UPDATER_MANUAL_UPDATE_REQUIRED ("updater.manual-update-required"),
+		UPDATER_DOWNLOADING ("updater.downloading"),
+		UPDATER_NEW_VERSION_AVAILABLE ("updater.new-version-available"),
+		UPDATER_ENCOUNTERED_EXCEPTION ("updater.unable-to-update");
+
+
+		private final String key;
+
+		BukkitUtilities(final String key) {
+			this.key = key;
+		}
+
+		public String asErrorMessage(final Object... arguments) {
+			return PluginLocalisation.asErrorMessage(getKey(), arguments);
+		}
+
+		public String asHeaderMessage(final Object... arguments) {
+			return PluginLocalisation.asHeaderMessage(getKey(), arguments);
+		}
+
+		public String asInfoMessage(final Object... arguments) {
+			return PluginLocalisation.asInfoMessage(getKey(), arguments);
+		}
+
+		public String asMessage(final Object... arguments) {
+			return PluginLocalisation.asMessage(getKey(), arguments);
+		}
+
+		public String asWarningMessage(final Object... arguments) {
+			return PluginLocalisation.asWarningMessage(getKey(), arguments);
+		}
+
+		public String toString() {
+			return PluginLocalisation.asMessage(getKey());
+		}
+
+		public String getKey() {
+			return this.key;
+		}
+
+	}
+
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("localisation/Messages");
+	private static final MessageFormatter FORMATTER = new DefaultMessageFormatter();
+
+	protected final static String asErrorMessage(String key, final Object... arguments) {
+		String message = FORMATTER.asHeaderMessage(key);
+		return formatMessage(message, arguments);
+	}
+
+	protected final static String asHeaderMessage(String key, final Object... arguments) {
+		String message = FORMATTER.asHeaderMessage(key);
+		return MessageFormat.format(message, arguments);
+	}
+
+	protected final static String asInfoMessage(String key, final Object... arguments) {
+		String message = FORMATTER.asHeaderMessage(key);
+		return MessageFormat.format(message, arguments);
+	}
+
+	protected final static String asMessage(String key, final Object... arguments) {
+		String message = FORMATTER.asHeaderMessage(key);
+		return formatMessage(message, arguments);
+	}
+
+	protected final static String asWarningMessage(String key, final Object... arguments) {
+		String message = FORMATTER.asHeaderMessage(key);
+		return MessageFormat.format(message, arguments);
+	}
+
+	private static String formatMessage(String message, Object... arguments) {
+		return MessageFormat.format(message, arguments);
+	}
+
+	private static String getMessage(String key) {
+		return RESOURCE_BUNDLE.getString(key);
+	}
 
 }

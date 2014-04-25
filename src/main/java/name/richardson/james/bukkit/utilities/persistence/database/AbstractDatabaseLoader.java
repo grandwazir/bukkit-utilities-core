@@ -21,12 +21,8 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Field;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.avaje.ebean.EbeanServer;
@@ -38,9 +34,7 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
@@ -50,7 +44,6 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	private final ClassLoader classLoader;
 	private final List<Class<?>> classes;
 	private final DataSourceConfig datasourceConfig;
-	private final Localisation localisation = new StrictResourceBundleLocalisation();
 	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseLoader.class);
 	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
@@ -76,7 +69,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	synchronized public final void initalise() {
-		logger.log(Level.FINE, localisation.getMessage(PluginLocalisation.DATABASE_LOADING));
+		logger.log(Level.FINE, PluginLocalisation.BukkitUtilities.DATABASE_LOADING.asMessage());
 		this.load();
 		if (!this.isSchemaValid() || this.rebuild) {
 			final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
@@ -109,7 +102,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	@Override
 	public final void create() {
-		logger.log(Level.INFO, localisation.getMessage(PluginLocalisation.DATABASE_CREATING));
+		logger.log(Level.INFO, PluginLocalisation.BukkitUtilities.DATABASE_CREATING.asMessage());
 		this.beforeDatabaseCreate();
 		// reload the database this allows for removing classes
 		String script = getGenerateDDLScript();
@@ -125,7 +118,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	@Override
 	public final void drop() {
-		logger.log(Level.FINER, localisation.getMessage(PluginLocalisation.DATABASE_DROPPING_TABLES));
+		logger.log(Level.FINER, PluginLocalisation.BukkitUtilities.DATABASE_DROPPING_TABLES.asMessage());
 		this.beforeDatabaseDrop();
 		String script = this.getDeleteDLLScript();
 		try {
@@ -195,9 +188,9 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			}
 		}
 		if (valid) {
-			logger.log(Level.FINER, localisation.getMessage(PluginLocalisation.DATABASE_VALID_SCHEMA));
+			logger.log(Level.FINER, PluginLocalisation.BukkitUtilities.DATABASE_VALID_SCHEMA.asMessage());
 		} else {
-			logger.log(Level.WARNING, localisation.getMessage(PluginLocalisation.DATABASE_INVALID_SCHEMA));
+			logger.log(Level.WARNING, PluginLocalisation.BukkitUtilities.DATABASE_INVALID_SCHEMA.asMessage());
 		}
 		return valid;
 	}
@@ -211,7 +204,6 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 		sb.append(", ebeanserver=").append(ebeanserver);
 		sb.append(", generator=").append(generator);
 		sb.append(", globalLoggerInitialLevel=").append(globalLoggerInitialLevel);
-		sb.append(", localisation=").append(localisation);
 		sb.append(", rebuild=").append(rebuild);
 		sb.append(", serverConfig=").append(serverConfig);
 		sb.append('}');

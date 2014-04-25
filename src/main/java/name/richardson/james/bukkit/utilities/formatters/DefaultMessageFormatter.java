@@ -24,22 +24,26 @@ public class DefaultMessageFormatter implements MessageFormatter {
 	private static final ChatColor HEADER_HIGHLIGHT = ChatColor.AQUA;
 
 	@Override
-	public String formatAsHeaderMessage(String message) {
+	public String asHeaderMessage(final Object... arguments) {
+		String message = (String) arguments[0];
 		return HEADER + message.replaceAll("\\{", HEADER_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + HEADER);
 	}
 
 	@Override
-	public String formatAsInfoMessage(String message) {
+	public String asInfoMessage(final Object... arguments) {
+		String message = (String) arguments[0];
 		return INFO + message.replaceAll("\\{", INFO_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + INFO);
 	}
 
 	@Override
-	public String formatAsWarningMessage(String message) {
+	public String asWarningMessage(final Object... arguments) {
+		String message = (String) arguments[0];
 		return WARNING + message.replaceAll("\\{", WARNING_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + WARNING);
 	}
 
 	@Override
-	public String formatAsErrorMessage(String message) {
+	public String asErrorMessage(final Object... arguments) {
+		String message = (String) arguments[0];
 		return ERROR + message.replaceAll("\\{", ERROR_HIGHLIGHT + "\\{").replaceAll("\\}", "\\}" + ERROR);
 	}
 

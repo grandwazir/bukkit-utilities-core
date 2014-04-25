@@ -20,20 +20,16 @@ package name.richardson.james.bukkit.utilities.persistence.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
+
+import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.CONFIGURATION_OVERRIDE_VALUE;
 
 public final class SimpleDatabaseConfiguration extends AbstractConfiguration implements DatabaseConfiguration {
 
@@ -42,7 +38,6 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private static final String DRIVER_KEY = "driver";
 	private static final String ISOLATION_KEY = "isolation";
 	private static final String URL_KEY = "url";
-
 	private final File folder;
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 	private final String pluginName;
@@ -79,6 +74,11 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		return sb.toString();
 	}
 
+	@SuppressWarnings("ReplaceAllDot")
+	private String maskString(String string) {
+		return string.replaceAll(".", "*");
+	}
+
 	private String replaceDatabaseString(String input) {
 		input = input.replaceAll("\\{DIR\\}", this.folder.getAbsolutePath() + "/");
 		input = input.replaceAll("\\{NAME\\}", this.pluginName.replaceAll("[^\\w_-]", ""));
@@ -88,7 +88,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private void setDriver() {
 		final String driver = this.getConfiguration().getString(DRIVER_KEY);
 		if (driver != null) {
-			logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, DRIVER_KEY, driver));
+			logger.log(Level.CONFIG, CONFIGURATION_OVERRIDE_VALUE.asMessage(DRIVER_KEY, driver));
 			getDataSourceConfig().setDriver(driver);
 		}
 	}
@@ -97,18 +97,18 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 		try {
 			String isolation = this.getConfiguration().getString("isolation");
 			if (isolation != null) {
-				logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, ISOLATION_KEY, isolation));
+				logger.log(Level.CONFIG, CONFIGURATION_OVERRIDE_VALUE.asMessage(ISOLATION_KEY, isolation));
 				getDataSourceConfig().setIsolationLevel(TransactionIsolation.getLevel(isolation));
 			}
 		} catch (RuntimeException e) {
-			logger.log(Level.WARNING, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_INVALID_VALUE, ISOLATION_KEY, getDataSourceConfig().getIsolationLevel()));
+			logger.log(Level.WARNING, CONFIGURATION_OVERRIDE_VALUE.asMessage(ISOLATION_KEY, getDataSourceConfig().getIsolationLevel()));
 		}
 	}
 
 	private void setPassword() {
 		final String password = this.getConfiguration().getString(PASSWORD_KEY);
 		if (password != null) {
-			logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, PASSWORD_KEY, maskString(password)));
+			logger.log(Level.CONFIG, CONFIGURATION_OVERRIDE_VALUE.asMessage(PASSWORD_KEY, maskString(password)));
 			getDataSourceConfig().setPassword(password);
 		}
 	}
@@ -116,7 +116,7 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private void setUrl() {
 		final String url = this.getConfiguration().getString("url");
 		if (url != null) {
-			logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, URL_KEY, url));
+			logger.log(Level.CONFIG, CONFIGURATION_OVERRIDE_VALUE.asMessage(URL_KEY, url));
 			getDataSourceConfig().setUrl(replaceDatabaseString(url));
 		} else {
 			getDataSourceConfig().setUrl(replaceDatabaseString(getDataSourceConfig().getUrl()));
@@ -126,14 +126,9 @@ public final class SimpleDatabaseConfiguration extends AbstractConfiguration imp
 	private void setUserName() {
 		final String username = this.getConfiguration().getString(USERNAME_KEY);
 		if (username != null) {
-			logger.log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_OVERRIDE_VALUE, USERNAME_KEY, username));
+			logger.log(Level.CONFIG, CONFIGURATION_OVERRIDE_VALUE.asMessage(USERNAME_KEY, username));
 			getDataSourceConfig().setUsername(username);
 		}
-	}
-
-	@SuppressWarnings("ReplaceAllDot")
-	private String maskString(String string) {
-		return string.replaceAll(".", "*");
 	}
 
 }

@@ -31,19 +31,19 @@ import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentMet
 import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
-import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.*;
+import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.*;
 
 public final class HelpCommand extends AbstractCommand {
 
 	private final Argument argument;
-	private final PositionalArgument command;
+	private final Argument command;
 	private final Map<String, Command> commands = new TreeMap<String, Command>();
 	private final String usagePrefix;
 
 	public HelpCommand(Iterable<Command> commands, String usagePrefix) {
 		super(HELPCOMMAND_NAME, HELPCOMMAND_DESC);
 		this.usagePrefix = ChatColor.RED + "/" + usagePrefix;
-		ArgumentMetadata metadata = new SimpleArgumentMetadata(HELPCOMMAND_ARGUMENT_ID, HELPCOMMAND_ARGUMENT_NAME, HELPCOMMAND_ARGUMENT_DESC, null);
+		ArgumentMetadata metadata = new SimpleArgumentMetadata(HELPCOMMAND_ARGUMENT_ID, HELPCOMMAND_ARGUMENT_NAME, HELPCOMMAND_ARGUMENT_DESC);
 		Suggester suggester = createSuggester(commands);
 		command = new PositionalArgument(metadata, suggester, 0);
 		argument = new PositionalArgument(metadata, suggester, 1);
@@ -76,16 +76,16 @@ public final class HelpCommand extends AbstractCommand {
 		Command selectedCommand = (argument.getString() == null) ? null : commands.get(argument.getString());
 		CommandSender sender = getContext().getCommandSender();
 		if (selectedCommand == null) {
-			messages.add(getLocalisation().formatAsHeaderMessage(HELPCOMMAND_HEADER, getLocalisation().getMessage(PLUGIN_NAME), getLocalisation().getMessage(PLUGIN_VERSION)));
-			messages.add(getLocalisation().formatAsHeaderMessage(PLUGIN_DESCRIPTION));
-			messages.add(getLocalisation().formatAsWarningMessage(HELPCOMMAND_HINT, usagePrefix, getUsage()));
+			messages.add(HELPCOMMAND_HEADER.asHeaderMessage(PLUGIN_NAME, PLUGIN_VERSION));
+			messages.add(PLUGIN_DESCRIPTION.asHeaderMessage());
+			messages.add(HELPCOMMAND_HINT.asWarningMessage(usagePrefix, getUsage()));
 			for (Command command : commands.values()) {
 				if (!command.isAuthorised(sender)) continue;
 				messages.add(usagePrefix + " " + command.getUsage());
 			}
 		} else {
-			messages.add(getLocalisation().formatAsHeaderMessage(HELPCOMMAND_COMMAND_USAGE_HEADER, selectedCommand.getName(), selectedCommand.getDescription()));
-			messages.add(getLocalisation().formatAsInfoMessage(HELPCOMMAND_USAGE, usagePrefix, selectedCommand.getUsage()));
+			messages.add(HELPCOMMAND_COMMAND_USAGE_HEADER.asHeaderMessage(selectedCommand.getName(), selectedCommand.getDescription()));
+			messages.add(HELPCOMMAND_USAGE.asInfoMessage(usagePrefix, selectedCommand.getUsage()));
 		}
 		sender.sendMessage(messages.toArray(new String[messages.size()]));
 	}

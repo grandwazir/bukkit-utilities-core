@@ -29,23 +29,20 @@ import name.richardson.james.bukkit.utilities.command.argument.Argument;
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInvoker;
-import name.richardson.james.bukkit.utilities.localisation.FormattedLocalisation;
+import name.richardson.james.bukkit.utilities.localisation.Localised;
 import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 
 public abstract class AbstractCommand implements Command {
 
 	private final ArgumentInvoker argumentInvoker;
 	private final String desc;
-	private final FormattedLocalisation localisation;
 	private final String name;
 	private CommandContext context;
 
-	public AbstractCommand(String name, String desc) {
-		localisation = new StrictResourceBundleLocalisation();
+	public AbstractCommand(Localised name, Localised desc) {
 		argumentInvoker = new SimpleArgumentInvoker();
-		this.name = getLocalisation().getMessage(name);
-		this.desc = getLocalisation().getMessage(desc);
+		this.name = name.asMessage();
+		this.desc = desc.asMessage();
 	}
 
 	@Override
@@ -87,7 +84,7 @@ public abstract class AbstractCommand implements Command {
 			this.execute();
 		} catch (InvalidArgumentException e) {
 			CommandSender sender = getContext().getCommandSender();
-			sender.sendMessage(getLocalisation().formatAsErrorMessage(PluginLocalisation.COMMAND_INVALID_ARGUMENT));
+			sender.sendMessage(PluginLocalisation.BukkitUtilities.INVOKER_INVALID_ARGUMENT.asErrorMessage());
 			sender.sendMessage(ChatColor.YELLOW + e.getError());
 		}
 	}
@@ -106,10 +103,6 @@ public abstract class AbstractCommand implements Command {
 
 	protected final CommandContext getContext() {
 		return context;
-	}
-
-	protected final FormattedLocalisation getLocalisation() {
-		return localisation;
 	}
 
 	private String getColouredArgumentUsage() {

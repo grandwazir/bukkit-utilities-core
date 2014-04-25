@@ -28,10 +28,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.PluginLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.StrictResourceBundleLocalisation;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
+
+import static name.richardson.james.bukkit.utilities.localisation.PluginLocalisation.BukkitUtilities.*;
 
 /**
  * AbstractConfiguration is responsible for creating YAML configuration files, setting defaults from a provided {@link InputStream} and handling any exceptions
@@ -39,7 +38,6 @@ import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
  */
 public abstract class AbstractConfiguration implements Configuration {
 
-	private static final Localisation LOCALISATION = new StrictResourceBundleLocalisation();
 	private final YamlConfiguration defaults;
 	private final File file;
 	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
@@ -75,12 +73,12 @@ public abstract class AbstractConfiguration implements Configuration {
 	@Override
 	public final void load()
 	throws IOException {
-		getLogger().log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_LOADING, this.getClass().getSimpleName()));
-		getLogger().log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_USING_PATH, this.getFile().getAbsolutePath()));
+		getLogger().log(Level.CONFIG, CONFIGURATION_LOADING.asMessage(this.getClass().getSimpleName()));
+		getLogger().log(Level.CONFIG, CONFIGURATION_USING_PATH.asMessage(this.getFile().getAbsolutePath()));
 		if (!this.getFile().exists() || this.getFile().length() == 0) {
 			this.getDefaults().options().copyHeader(true);
 			this.getDefaults().options().copyDefaults(true);
-			getLogger().log(Level.WARNING, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_SAVING_DEFAULT, this.getFile().getName()));
+			getLogger().log(Level.WARNING, CONFIGURATION_SAVING_DEFAULT.asMessage(this.getFile().getName()));
 			getDefaults().save(this.getFile());
 		}
 		this.setConfiguration(YamlConfiguration.loadConfiguration(this.getFile()));
@@ -108,14 +106,10 @@ public abstract class AbstractConfiguration implements Configuration {
 		return logger;
 	}
 
-	protected static final Localisation getLocalisation() {
-		return LOCALISATION;
-	}
-
 	@Override
 	public final void save()
 	throws IOException {
-		getLogger().log(Level.CONFIG, getLocalisation().getMessage(PluginLocalisation.CONFIGURATION_SAVING, this.getFile().getName()));
+		getLogger().log(Level.CONFIG, CONFIGURATION_SAVING.asMessage(this.getFile().getName()));
 		this.getConfiguration().save(this.getFile());
 	}
 

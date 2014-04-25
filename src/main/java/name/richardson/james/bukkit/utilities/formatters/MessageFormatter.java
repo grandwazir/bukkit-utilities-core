@@ -5,12 +5,12 @@ package name.richardson.james.bukkit.utilities.formatters;
  */
 public interface MessageFormatter {
 
-	public String formatAsHeaderMessage(String message);
+	public String asHeaderMessage(Object... arguments);
 
-	public String formatAsInfoMessage(String message);
+	public String asInfoMessage(Object... arguments);
 
-	public String formatAsWarningMessage(String message);
+	public String asWarningMessage(Object... arguments);
 
-	public String formatAsErrorMessage(String message);
+	public String asErrorMessage(Object... arguments);
 
 }
