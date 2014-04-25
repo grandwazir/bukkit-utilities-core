@@ -44,10 +44,9 @@ public class PluginLocalisation {
 		HELPCOMMAND_HEADER ("command.help.header"),
 		HELPCOMMAND_HINT ("command.help.hint"),
 		HELPCOMMAND_NAME ("command.help.name"),
-		HELPCOMMAND_DESC ("command.help.description"),
-		HELPCOMMAND_USAGE ("command.help.command-usage"),
+		HELPCOMMAND_DESC ("command.help.desc"),
 		HELPCOMMAND_COMMAND_USAGE_HEADER ("command.help.command-usage-header"),
-		HELPCOMMAND_ARGUMENT_USAGE ("command.help.argument-usage"),
+		HELPCOMMAND_USAGE ("command.help.command-usage"),
 
 		HELPCOMMAND_ARGUMENT_ID ("argument.command.id"),
 		HELPCOMMAND_ARGUMENT_NAME ("argument.command.name"),
