@@ -8,7 +8,7 @@ import java.util.logging.*;
  */
 public class PrefixedLogger extends Logger {
 
-	private static String prefix = "BukkitUtilities";
+	private static String prefix = "[BukkitUtilities] ";
 	private final String debuggingPrefix;
 
 	/**
@@ -38,7 +38,7 @@ public class PrefixedLogger extends Logger {
 	}
 
 	public static void setPrefix(final String prefix) {
-		PrefixedLogger.prefix = "[" + prefix + "]";
+		PrefixedLogger.prefix = "[" + prefix + "] ";
 	}
 
 	@Override
