@@ -18,6 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface ArgumentInvoker {
@@ -32,5 +33,7 @@ public interface ArgumentInvoker {
 	public Set<String> suggestArguments(String arguments);
 
 	public void removeArgument(Argument argument);
+
+	public Collection<String> getExtendedUsage();
 
 }

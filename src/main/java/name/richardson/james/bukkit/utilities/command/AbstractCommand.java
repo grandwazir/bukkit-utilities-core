@@ -18,6 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
@@ -55,6 +56,11 @@ public abstract class AbstractCommand implements Command {
 	@Override
 	public String getDescription() {
 		return desc;
+	}
+
+	@Override
+	public Collection<String> getExtendedUsage() {
+		return argumentInvoker.getExtendedUsage();
 	}
 
 	@Override

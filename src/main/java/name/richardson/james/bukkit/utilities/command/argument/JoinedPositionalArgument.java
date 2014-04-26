@@ -30,7 +30,7 @@ public class JoinedPositionalArgument extends PositionalArgument {
 	@Override
 	public String getString() {
 		String value = null;
-		if (getStrings() != null && !getStrings().contains(null)) {
+		if (!getStrings().isEmpty()) {
 			value = StringUtils.join(getStrings(), " ");
 		}
 		return value;

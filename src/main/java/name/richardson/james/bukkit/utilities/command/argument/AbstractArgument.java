@@ -75,8 +75,12 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 		return value;
 	}
 
-	public Collection<String> getStrings() {
-		return Collections.unmodifiableCollection(values);
+	public final Collection<String> getStrings() {
+		if (values.contains(null) && values.size() == 1) {
+			return Collections.emptyList();
+		} else {
+			return Collections.unmodifiableCollection(values);
+		}
 	}
 
 	protected abstract String[] getMatch(String argument);

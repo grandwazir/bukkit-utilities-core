@@ -78,14 +78,15 @@ public final class HelpCommand extends AbstractCommand {
 		if (selectedCommand == null) {
 			messages.add(HELPCOMMAND_HEADER.asHeaderMessage(PLUGIN_NAME, PLUGIN_VERSION));
 			messages.add(PLUGIN_DESCRIPTION.asHeaderMessage());
-			messages.add(HELPCOMMAND_HINT.asWarningMessage(usagePrefix, getUsage()));
+			messages.add(HELPCOMMAND_HINT.asWarningMessage(usagePrefix));
 			for (Command command : commands.values()) {
 				if (!command.isAuthorised(sender)) continue;
 				messages.add(usagePrefix + " " + command.getUsage());
 			}
 		} else {
-			messages.add(HELPCOMMAND_COMMAND_USAGE_HEADER.asHeaderMessage(selectedCommand.getName(), selectedCommand.getDescription()));
+			messages.add(ChatColor.AQUA + selectedCommand.getDescription());
 			messages.add(HELPCOMMAND_USAGE.asInfoMessage(usagePrefix, selectedCommand.getUsage()));
+			messages.addAll(selectedCommand.getExtendedUsage());
 		}
 		sender.sendMessage(messages.toArray(new String[messages.size()]));
 	}

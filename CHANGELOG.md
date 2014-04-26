@@ -1,5 +1,12 @@
 # Changelog for BukkitUtilities (v7.0.1-SNAPSHOT)
 
+2014-04-25 22:44:59 +0100    check if players are authorised before executing a command (James Richardson)  
+2014-04-25 22:43:39 +0100    sort properties file (James Richardson)  
+2014-04-25 22:42:18 +0100    pull up two methods (James Richardson)  
+2014-04-25 22:39:56 +0100    fix prefix issue (James Richardson)  
+2014-04-25 22:39:10 +0100    switch to enum style (James Richardson)  
+2014-04-25 20:10:18 +0100    added missing keys (James Richardson)  
+2014-04-25 19:57:45 +0100    refactored localisation again to improve readability (James Richardson)  
 
 **v7.0.0**  
 2014-04-17 20:09:11 +0100    remove debugging (James Richardson)  

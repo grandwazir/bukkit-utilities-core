@@ -18,10 +18,9 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import org.bukkit.ChatColor;
 
 import org.apache.commons.lang.Validate;
 
@@ -59,6 +58,23 @@ public class SimpleArgumentInvoker implements ArgumentInvoker {
 	public void removeArgument(final Argument argument) {
 		Validate.notNull(argument);
 		arguments.remove(argument);
+	}
+
+	@Override
+	public Collection<String> getExtendedUsage() {
+		Collection<String> messages = new ArrayList<String>();
+		for (Argument argument : this.arguments) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(ChatColor.YELLOW);
+			builder.append("- ");
+			builder.append(argument.getName());
+			builder.append(ChatColor.GREEN);
+			builder.append(" (");
+			builder.append(argument.getDescription());
+			builder.append(")");
+			messages.add(builder.toString());
+		}
+		return messages;
 	}
 
 	@Override
