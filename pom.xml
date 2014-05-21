@@ -79,6 +79,11 @@
             <version>${maven-artifact-version}</version>
         </dependency>
         <dependency>
+            <groupId>com.vityuk</groupId>
+            <artifactId>ginger-core</artifactId>
+            <version>0.2.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>2.0-rc1</version>
