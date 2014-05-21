@@ -24,27 +24,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-
 /**
  * Provides a class which automatically registers itself as a listener with the Bukkit PluginManager. This class should be used for convenience when creating your own listeners.
  */
-public class AbstractListener implements Listener {
-
-	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
+public abstract class AbstractListener implements Listener {
 
 	public AbstractListener(final Plugin plugin, final PluginManager pluginManager) {
-		if (getLogger().isLoggable(Level.FINEST)) getLogger().log(Level.FINEST, "Registering " + this.getClass().getSimpleName() + " for events.");
 		pluginManager.registerEvents(this, plugin);
-	}
-
-	/**
-	 * Return the PrefixedLogger belonging to this class.
-	 *
-	 * @return the logger belonging to this class.
-	 */
-	protected final Logger getLogger() {
-		return logger;
 	}
 
 }
