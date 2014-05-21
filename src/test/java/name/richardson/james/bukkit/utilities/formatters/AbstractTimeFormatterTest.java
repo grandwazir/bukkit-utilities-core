@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import name.richardson.james.bukkit.utilities.formatters.time.TimeFormatter;
+import name.richardson.james.bukkit.utilities.time.TimeFormatter;
 
 @RunWith(JUnit4.class)
 public abstract class AbstractTimeFormatterTest extends TestCase {

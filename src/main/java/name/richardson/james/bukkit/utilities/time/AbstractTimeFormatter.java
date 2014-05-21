@@ -15,7 +15,7 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.utilities.formatters.time;
+package name.richardson.james.bukkit.utilities.time;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;

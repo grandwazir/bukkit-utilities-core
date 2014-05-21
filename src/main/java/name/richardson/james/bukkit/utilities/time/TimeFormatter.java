@@ -16,7 +16,7 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.formatters.time;
+package name.richardson.james.bukkit.utilities.time;
 
 /**
  * Converts times represented within Strings to milliseconds and back again.

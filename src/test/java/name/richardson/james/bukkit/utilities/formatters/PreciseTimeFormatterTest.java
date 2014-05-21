@@ -3,7 +3,7 @@ package name.richardson.james.bukkit.utilities.formatters;
 import org.junit.Before;
 import org.junit.Test;
 
-import name.richardson.james.bukkit.utilities.formatters.time.PreciseTimeFormatter;
+import name.richardson.james.bukkit.utilities.time.PreciseTimeFormatter;
 
 public class PreciseTimeFormatterTest extends AbstractTimeFormatterTest {
 
