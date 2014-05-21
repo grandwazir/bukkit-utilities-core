@@ -21,16 +21,11 @@ package name.richardson.james.bukkit.utilities.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.YamlConfigurationOptions;
 
 import org.apache.commons.lang.Validate;
-
-import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-
-import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
 
 /**
  * AbstractConfiguration is responsible for creating YAML configuration files, setting defaults from a provided {@link InputStream} and handling any exceptions
@@ -40,15 +35,13 @@ public abstract class AbstractConfiguration implements Configuration {
 
 	private final YamlConfiguration defaults;
 	private final File file;
-	private final Logger logger = PluginLoggerFactory.getLogger(this.getClass());
 	private YamlConfiguration configuration;
 
 	/**
 	 * Construct an AbstractConfiguration
 	 *
-	 * @param file the file where this configuration is stored
-	 * @param defaults the defaults that should be used for this configuration
-	 * @param useRuntimeDefaults {@code true} if the defaults should be applied if the value is missing in the configuration; {@code false} otherwise.
+	 * @param file  the file where this configuration is stored
+	 * @param defaults  the defaults that should be used for this configuration
 	 * @throws IOException
 	 */
 	public AbstractConfiguration(final File file, final InputStream defaults)
@@ -57,60 +50,29 @@ public abstract class AbstractConfiguration implements Configuration {
 		Validate.notNull(file, "Defaults can not be null!");
 		this.file = file;
 		this.defaults = YamlConfiguration.loadConfiguration(defaults);
-		this.load();
-	}
-
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("AbstractConfiguration{");
-		sb.append("configuration=").append(configuration);
-		sb.append(", defaults=").append(defaults);
-		sb.append(", file=").append(file);
-		sb.append('}');
-		return sb.toString();
+		load();
 	}
 
 	@Override
 	public final void load()
 	throws IOException {
-		getLogger().log(Level.CONFIG, CONFIGURATION_LOADING.asMessage(this.getClass().getSimpleName()));
-		getLogger().log(Level.CONFIG, CONFIGURATION_USING_PATH.asMessage(this.getFile().getAbsolutePath()));
-		if (!this.getFile().exists() || this.getFile().length() == 0) {
-			this.getDefaults().options().copyHeader(true);
-			this.getDefaults().options().copyDefaults(true);
-			getLogger().log(Level.WARNING, CONFIGURATION_SAVING_DEFAULT.asMessage(this.getFile().getName()));
-			getDefaults().save(this.getFile());
+		File storage = getFile();
+		YamlConfiguration defaults = getDefaults();
+		YamlConfigurationOptions options = defaults.options();
+		if (!storage.exists() || storage.length() == 0) {
+			options.copyHeader(true);
+			options.copyDefaults(true);
+			defaults.save(getFile());
 		}
-		this.setConfiguration(YamlConfiguration.loadConfiguration(this.getFile()));
-		this.getConfiguration().options().copyDefaults(false);
-	}
-
-	protected final YamlConfiguration getDefaults() {
-		return defaults;
-	}
-
-	protected final File getFile() {
-		return file;
-	}
-
-	protected final YamlConfiguration getConfiguration() {
-		if (this.configuration == null) throw new IllegalStateException("Configuration has not yet been loaded!");
-		return this.configuration;
-	}
-
-	protected void setConfiguration(final YamlConfiguration configuration) {
-		this.configuration = configuration;
-	}
-
-	protected final Logger getLogger() {
-		return logger;
+		setConfiguration(YamlConfiguration.loadConfiguration(getFile()));
+		options.copyDefaults(false);
 	}
 
 	@Override
 	public final void save()
 	throws IOException {
-		getLogger().log(Level.CONFIG, CONFIGURATION_SAVING.asMessage(this.getFile().getName()));
-		this.getConfiguration().save(this.getFile());
+		YamlConfiguration configuration = getConfiguration();
+		configuration.save(getFile());
 	}
 
 	/**
@@ -122,7 +84,25 @@ public abstract class AbstractConfiguration implements Configuration {
 	 */
 	@Override
 	public final void useRuntimeDefaults() {
-		this.getConfiguration().setDefaults(this.getDefaults());
+		YamlConfiguration configuration = getConfiguration();
+		configuration.setDefaults(getDefaults());
+	}
+
+	protected final YamlConfiguration getConfiguration() {
+		Validate.notNull(configuration, "Configuration has not yet been loaded!");
+		return configuration;
+	}
+
+	protected final YamlConfiguration getDefaults() {
+		return defaults;
+	}
+
+	protected final File getFile() {
+		return file;
+	}
+
+	protected final void setConfiguration(final YamlConfiguration configuration) {
+		this.configuration = configuration;
 	}
 
 }

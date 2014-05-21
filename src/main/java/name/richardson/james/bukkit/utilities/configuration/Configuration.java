@@ -22,12 +22,29 @@ import java.io.IOException;
 
 public interface Configuration {
 
+	/**
+	 * Attempt to load the configuration from disk.
+	 *
+	 * @throws IOException if the configuration could not be found or created.
+	 */
 	public void load()
 	throws IOException;
 
+	/**
+	 * Attempt to save the configuration to disk.
+	 *
+	 * @throws IOException if the configuration could not be saved.
+	 */
 	public void save()
 	throws IOException;
 
+	/**
+	 * Set this configuration to use runtime defaults.
+	 *
+	 * This means that the default configuration values specified when creating the configuration will apply in the absence of any missing values in the actual
+	 * configuration. This is useful mainly for important configuration files which have values which must be set. This however does not write back these missing
+	 * values to file on saving.
+	 */
 	public void useRuntimeDefaults();
 
 }

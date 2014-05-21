@@ -22,61 +22,81 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
 
-import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.CONFIGURATION_INVALID_VALUE;
-
 public class SimplePluginConfiguration extends AbstractConfiguration implements PluginConfiguration {
 
-	private static final String BRANCH_KEY = "automatic-updates.branch";
-	private static final String UPDATER_STATE_KEY = "automatic-updates.method";
-	private static final String LOGGING_KEY = "logging";
-	private static final String STATISTICS_KEY = "send-anonymous-statistics";
+	private enum Keys {
+		BRANCH("automatic-updates.branch"),
+		UPDATER_STATE("automatic-updates.method"),
+		LOGGING_LEVEL("logging"),
+	  STATISTICS("send-anonymous-statistics");
+		private final String path;
+
+		Keys(final String path) {
+			this.path = path;
+		}
+
+		private String getPath() {
+			return path;
+		}
+
+	}
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	public SimplePluginConfiguration(final File file, final InputStream defaults) throws IOException {
 		super(file, defaults);
-		this.load();
-		this.useRuntimeDefaults();
+		useRuntimeDefaults();
 	}
 
-	public final Branch getAutomaticUpdaterBranch() {
-			final PluginUpdater.Branch defaultBranch = PluginUpdater.Branch.STABLE;
-			try {
-				return PluginUpdater.Branch.valueOf(this.getConfiguration().getString(BRANCH_KEY).toUpperCase());
+	@Override public final Branch getAutomaticUpdaterBranch() {
+		PluginUpdater.Branch defaultBranch = PluginUpdater.Branch.STABLE;
+		YamlConfiguration configuration = getConfiguration();
+		try {
+			String value = configuration.getString(Keys.BRANCH.getPath());
+			return PluginUpdater.Branch.valueOf(value.toUpperCase());
 			} catch (final IllegalArgumentException e) {
-				getLogger().log(Level.WARNING, CONFIGURATION_INVALID_VALUE.asMessage(BRANCH_KEY, defaultBranch.name()));
-				this.getConfiguration().set(BRANCH_KEY, defaultBranch.name());
+			configuration.set(Keys.BRANCH.getPath(), defaultBranch.name());
 				return defaultBranch;
 			}
 		}
 
-	public final State getAutomaticUpdaterState() {
-		final PluginUpdater.State defaultState = PluginUpdater.State.NOTIFY;
+	@Override public final State getAutomaticUpdaterState() {
+		PluginUpdater.State defaultState = PluginUpdater.State.NOTIFY;
+		YamlConfiguration configuration = getConfiguration();
 		try {
-			return PluginUpdater.State.valueOf(this.getConfiguration().getString(UPDATER_STATE_KEY).toUpperCase());
+			String value = configuration.getString(Keys.UPDATER_STATE.getPath());
+			return PluginUpdater.State.valueOf(value.toUpperCase());
 		} catch (final IllegalArgumentException e) {
-			getLogger().log(Level.WARNING, CONFIGURATION_INVALID_VALUE.asMessage(UPDATER_STATE_KEY, defaultState.name()));
-			this.getConfiguration().set(UPDATER_STATE_KEY, defaultState.name());
+			configuration.set(Keys.UPDATER_STATE.getPath(), defaultState.name());
 			return defaultState;
 		}
 	}
 
-	public final Level getLogLevel() {
-		final Level defaultLevel = Level.INFO;
+	@Override public final Level getLogLevel() {
+		Level defaultLevel = Level.INFO;
+		YamlConfiguration configuration = getConfiguration();
 		try {
-			return Level.parse(this.getConfiguration().getString(LOGGING_KEY).toUpperCase());
+			String value = configuration.getString(Keys.LOGGING_LEVEL.getPath());
+			return Level.parse(value.toUpperCase());
 		} catch (final IllegalArgumentException e) {
-			getLogger().log(Level.WARNING, CONFIGURATION_INVALID_VALUE.asMessage(LOGGING_KEY, defaultLevel.getName()));
-			this.getConfiguration().set(LOGGING_KEY, defaultLevel.getName());
+			configuration.set(Keys.LOGGING_LEVEL.getPath(), defaultLevel.getName());
 			return defaultLevel;
 		}
 	}
 
-	public final boolean isCollectingStats() {
-		final boolean defaultValue = true;
-		return this.getConfiguration().getBoolean(STATISTICS_KEY, defaultValue);
+	@Override public final boolean isCollectingStats() {
+		boolean defaultValue = true;
+		YamlConfiguration configuration = getConfiguration();
+		return configuration.getBoolean(Keys.STATISTICS.getPath(), defaultValue);
 	}
 
 }
