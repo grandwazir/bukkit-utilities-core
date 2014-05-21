@@ -16,10 +16,9 @@
  * bukkit-utilities. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.richardson.james.bukkit.utilities.persistence.configuration;
+package name.richardson.james.bukkit.utilities.configuration;
 
 import java.io.File;
-import java.util.logging.Level;
 
 import junit.framework.TestCase;
 import org.codehaus.plexus.util.FileUtils;
@@ -29,8 +28,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import name.richardson.james.bukkit.utilities.updater.BukkitDevPluginUpdater;
 
 @RunWith(JUnit4.class)
 public class ValidPluginConfigurationTest extends TestCase {

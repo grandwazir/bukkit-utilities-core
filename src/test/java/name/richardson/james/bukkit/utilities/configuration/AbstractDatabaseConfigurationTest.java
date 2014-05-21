@@ -16,11 +16,10 @@
  * bukkit-utilities. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.richardson.james.bukkit.utilities.persistence.configuration;
+package name.richardson.james.bukkit.utilities.configuration;
 
 import com.avaje.ebean.config.ServerConfig;
 import junit.framework.TestCase;
-import org.junit.Test;
 
 public abstract class AbstractDatabaseConfigurationTest extends TestCase {
 

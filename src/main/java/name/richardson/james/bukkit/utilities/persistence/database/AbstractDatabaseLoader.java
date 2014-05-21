@@ -34,9 +34,8 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.localisation.BukkitUtilities;
 import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.configuration.DatabaseConfiguration;
 
 import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
 

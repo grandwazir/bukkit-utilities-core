@@ -16,21 +16,17 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.persistence.configuration;
+package name.richardson.james.bukkit.utilities.configuration;
 
-import java.io.File;
 import java.io.IOException;
 
 import com.avaje.ebean.config.ServerConfig;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import name.richardson.james.bukkit.utilities.persistence.configuration.SimpleDatabaseConfiguration;
 
 @RunWith(JUnit4.class)
 public class OveriddenDatabaseConfigurationTest extends AbstractDatabaseConfigurationTest {

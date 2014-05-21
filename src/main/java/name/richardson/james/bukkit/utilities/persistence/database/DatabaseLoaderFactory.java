@@ -18,7 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.persistence.database;
 
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.configuration.DatabaseConfiguration;
 
 /**
  * Create and return a suitable database loader depending on the database configuration provided. This is used to abstract away the implementation requirement

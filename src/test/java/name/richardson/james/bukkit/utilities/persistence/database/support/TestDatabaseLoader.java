@@ -24,7 +24,7 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import org.apache.commons.lang.RandomStringUtils;
 
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.database.DatabaseLoader;
 import name.richardson.james.bukkit.utilities.persistence.database.DatabaseLoaderFactory;
 

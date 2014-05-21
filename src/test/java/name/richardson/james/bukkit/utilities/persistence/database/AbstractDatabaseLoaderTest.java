@@ -21,17 +21,14 @@ package name.richardson.james.bukkit.utilities.persistence.database;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import com.avaje.ebean.LogLevel;
-import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.configuration.DatabaseConfiguration;
 import name.richardson.james.bukkit.utilities.persistence.database.support.EntityChild;
 import name.richardson.james.bukkit.utilities.persistence.database.support.EntityParent;
 
