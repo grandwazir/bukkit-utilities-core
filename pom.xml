@@ -14,9 +14,9 @@
         <maven-artifact-version>3.2.1</maven-artifact-version>
         <prettytime-version>3.2.5.Final</prettytime-version>
         <bukkit-version>1.7.9-R0.1</bukkit-version>
-        <junit-version>4.12</junit-version>
+        <junit-version>4.11</junit-version>
         <powermock-version>1.5.4</powermock-version>
-        <mockito-version>1.9.8</mockito-version>
+        <mockito-version>1.9.7</mockito-version>
     </properties>
 
     <!-- Set default source control information -->
@@ -92,7 +92,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito</artifactId>
             <version>${mockito-version}</version>
             <scope>test</scope>
         </dependency>
