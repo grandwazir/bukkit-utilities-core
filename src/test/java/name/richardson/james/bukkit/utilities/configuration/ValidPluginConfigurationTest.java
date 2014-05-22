@@ -56,11 +56,6 @@ public class ValidPluginConfigurationTest {
 		assertTrue("Comment header from configuration file has not been copied!", content.startsWith("#"));
 	}
 
-	@Test
-	public void checkToStringIsOverriden() {
-		assertTrue("toString has not been overridden!", configuration.toString().contains("AbstractConfiguration"));
-	}
-
 	@Before
 	public void setUp()
 	throws Exception {

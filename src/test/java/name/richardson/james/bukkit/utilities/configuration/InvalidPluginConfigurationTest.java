@@ -37,7 +37,6 @@ public class InvalidPluginConfigurationTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
-
 	private PluginConfiguration configuration;
 
 	@Test
