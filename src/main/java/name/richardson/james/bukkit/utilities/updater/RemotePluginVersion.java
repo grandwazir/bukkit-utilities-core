@@ -1,8 +1,5 @@
 package name.richardson.james.bukkit.utilities.updater;
 
-/**
- * Created by james on 22/05/14.
- */
 public class RemotePluginVersion extends PluginVersion {
 
 	private final String downloadPath;

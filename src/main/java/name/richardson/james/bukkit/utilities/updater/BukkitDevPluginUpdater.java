@@ -129,7 +129,8 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				} catch (Exception e) {
 					String message = MESSAGES.updateException(e.getMessage());
 					message = ChatColor.stripColor(message);
-					LOGGER.log(Level.WARN, message);				}
+					LOGGER.log(Level.WARN, message);
+				}
 			}
 		}
 	}
