@@ -15,8 +15,4 @@ public class RemotePluginVersion extends PluginVersion {
 		return downloadPath;
 	}
 
-	protected Version getGameVersion() {
-		return gameVersion;
-	}
-
 }

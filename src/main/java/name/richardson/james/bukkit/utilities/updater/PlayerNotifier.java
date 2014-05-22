@@ -36,7 +36,7 @@ import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
  */
 public class PlayerNotifier extends AbstractListener {
 
-	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:bukkit-utilities-core.properties").build();
+	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:localisation/bukkit-utilities-core.properties").build();
 	private static final LocalisedMessages MESSAGES = LOCALISATION.getLocalizable(LocalisedMessages.class);
 	private final String permission;
 	private final PluginUpdater updater;
