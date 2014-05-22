@@ -29,8 +29,10 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static org.junit.Assert.assertTrue;
+
 @RunWith(JUnit4.class)
-public class ValidPluginConfigurationTest extends TestCase {
+public class ValidPluginConfigurationTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();

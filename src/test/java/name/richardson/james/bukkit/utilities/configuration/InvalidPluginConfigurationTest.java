@@ -30,8 +30,10 @@ import org.junit.runners.JUnit4;
 
 import name.richardson.james.bukkit.utilities.updater.BukkitDevPluginUpdater;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(JUnit4.class)
-public class InvalidPluginConfigurationTest extends TestCase {
+public class InvalidPluginConfigurationTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
