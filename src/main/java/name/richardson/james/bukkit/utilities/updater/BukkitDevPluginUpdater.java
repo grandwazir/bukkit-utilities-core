@@ -6,10 +6,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import com.vityuk.ginger.Localization;
+import com.vityuk.ginger.LocalizationBuilder;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.codehaus.plexus.util.FileUtils;
@@ -17,10 +22,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
+import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
+	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:bukkit-utilities-core.properties").build();
+	private static final LocalisedMessages MESSAGES = LOCALISATION.getLocalizable(LocalisedMessages.class);
+	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String API_NAME_VALUE = "name";
 	private static final String API_LINK_VALUE = "downloadUrl";
 	private static final String API_RELEASE_TYPE_VALUE = "releaseType";
@@ -86,31 +95,41 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				remoteVersion = new RemotePluginVersion(versionName, requiredGameVersion, (String) latest.get(API_LINK_VALUE));
 				String versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
 				if (isNewVersionAvailable()) {
-					// getLogger().log(Level.INFO, UPDATER_NEW_VERSION_AVAILABLE.asMessage(getPluginName(), parseArtifactVersionToString(getLatestRemoteVersion())));
+					String message = MESSAGES.updateAvailable(getName(), remoteVersion.toString());
+					message = ChatColor.stripColor(message);
+					LOGGER.log(Level.INFO, message);
 					break;
 				}
 			}
 		} catch (Exception e) {
-			// getLogger().log(Level.WARNING, UPDATER_ENCOUNTERED_EXCEPTION.asMessage(e.getMessage()));
+			String message = MESSAGES.updateException(e.getMessage());
+			message = ChatColor.stripColor(message);
+			LOGGER.log(Level.WARN, message);
 		}
 	}
 
+	@SuppressWarnings({"CastToConcreteClass", "LocalVariableOfConcreteClass"})
 	@Override
 	public void update() {
 		if (isNewVersionAvailable() && getState() == State.UPDATE) {
 			Version localVersion = getLocalVersion();
-			Version remoteVersion = getLatestRemoteVersion();
+			RemotePluginVersion remoteVersion = (RemotePluginVersion) getLatestRemoteVersion();
 			if (localVersion.getMajorVersion() < remoteVersion.getMajorVersion()) {
-				// getLogger().log(Level.WARNING, UPDATER_MANUAL_UPDATE_REQUIRED.asMessage(versionLink));
+				String message = MESSAGES.updateRequired(getName(), remoteVersion.toString());
+				message = ChatColor.stripColor(message);
+				LOGGER.log(Level.INFO, message);
 			} else {
 				try {
-					// getLogger().log(Level.INFO, UPDATER_DOWNLOADING.asMessage(versionLink));
+					String message = MESSAGES.updateDownloading(getName(), remoteVersion.getDownloadPath());
+					message = ChatColor.stripColor(message);
+					LOGGER.log(Level.INFO, message);
 					File destination = new File(updateFolder, getName() + ".jar");
 					URLConnection urlConnection = getConnection(versionLink);
 					FileUtils.copyURLToFile(urlConnection.getURL(), destination);
 				} catch (Exception e) {
-					// getLogger().log(Level.WARNING, UPDATER_ENCOUNTERED_EXCEPTION.asMessage(e.getMessage()));
-				}
+					String message = MESSAGES.updateException(e.getMessage());
+					message = ChatColor.stripColor(message);
+					LOGGER.log(Level.WARN, message);				}
 			}
 		}
 	}

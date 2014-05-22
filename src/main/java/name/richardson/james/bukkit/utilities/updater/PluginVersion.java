@@ -65,4 +65,17 @@ public class PluginVersion implements Version {
 		return snapshot;
 	}
 
+	@Override public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(majorVersion);
+		builder.append(".");
+		builder.append(minorVersion);
+		builder.append(".");
+		builder.append(patchVersion);
+		if (snapshot) {
+			builder.append("-SNAPSHOT");
+		}
+		return builder.toString();
+	}
+
 }
