@@ -32,8 +32,8 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
-	private static final ArtifactVersion REMOTE_VERSION = new DefaultArtifactVersion("2.2.5");
-	private static final ArtifactVersion LOCAL_VERSION = new DefaultArtifactVersion("2.1.0");
+	private static final Version REMOTE_VERSION = new RemotePluginVersion("2.2.5", null, null);
+	private static final Version LOCAL_VERSION = new PluginVersion("2.1.0");
 
 	@Override
 	public void returnsSuppliedBranch()

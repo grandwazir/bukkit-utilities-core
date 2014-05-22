@@ -31,8 +31,8 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class BetaBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
-	private static final ArtifactVersion REMOTE_VERSION = new DefaultArtifactVersion("2.2.5");
-	private static final ArtifactVersion LOCAL_VERSION = new DefaultArtifactVersion("2.1.0");
+	private static final Version REMOTE_VERSION = new RemotePluginVersion("2.2.5", null, null);
+	private static final Version LOCAL_VERSION = new PluginVersion("2.1.0");
 
 	@Override
 	public void returnsSuppliedBranch()
@@ -42,19 +42,19 @@ public class BetaBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
 	@Test
 	public void IdentifyCorrectRemoteVersion() {
-		assertEquals(getUpdater().getLatestRemoteVersion(), REMOTE_VERSION);
+		assertEquals(REMOTE_VERSION, getUpdater().getLatestRemoteVersion());
 	}
 
 	@Override
 	public void returnsSuppliedPluginName()
 	throws Exception {
-		assertEquals(getUpdater().getName(), "BanHammer");
+		assertEquals("BanHammer", getUpdater().getName());
 	}
 
 	@Override
 	public void returnsSuppliedLocalVersion()
 	throws Exception {
-		assertEquals(getUpdater().getLocalVersion(), LOCAL_VERSION);
+		assertEquals(LOCAL_VERSION, getUpdater().getLocalVersion());
 	}
 
 	@Before

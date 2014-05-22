@@ -3,6 +3,8 @@ package name.richardson.james.bukkit.utilities.updater;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+
 public class PluginVersion implements Version {
 
 	@SuppressWarnings("HardcodedFileSeparator")
@@ -16,9 +18,9 @@ public class PluginVersion implements Version {
 		Pattern pattern = Pattern.compile(REGEX);
 		Matcher matcher = pattern.matcher(version);
 		matcher.find();
-		majorVersion = Integer.parseInt(matcher.group(0));
-		minorVersion = Integer.parseInt(matcher.group(1));
-		patchVersion = Integer.parseInt(matcher.group(2));
+		majorVersion = Integer.parseInt(matcher.group(1));
+		minorVersion = Integer.parseInt(matcher.group(2));
+		patchVersion = Integer.parseInt(matcher.group(3));
 		snapshot = version.contains("SNAPSHOT");
 	}
 
@@ -41,7 +43,7 @@ public class PluginVersion implements Version {
 			} else {
 				if (snapshot && !version.isSnapshot()) {
 					result = 1;
-				} else {
+				} else if (!snapshot && version.isSnapshot()) {
 					result = -1;
 				}
 			}
@@ -63,6 +65,18 @@ public class PluginVersion implements Version {
 
 	@Override public boolean isSnapshot() {
 		return snapshot;
+	}
+
+	@Override public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (!(obj instanceof PluginVersion)) return false;
+		PluginVersion version = (PluginVersion) obj;
+		EqualsBuilder equalsBuilder = new EqualsBuilder();
+		equalsBuilder.append(majorVersion, version.getMajorVersion());
+		equalsBuilder.append(minorVersion, version.getMinorVersion());
+		equalsBuilder.append(patchVersion, version.getPatchVersion());
+		return equalsBuilder.isEquals();
 	}
 
 	@Override public String toString() {

@@ -27,7 +27,7 @@ import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
 @SuppressWarnings("HardcodedFileSeparator")
 public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
-	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:bukkit-utilities-core.properties").build();
+	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:localisation/bukkit-utilities-core.properties").build();
 	private static final LocalisedMessages MESSAGES = LOCALISATION.getLocalizable(LocalisedMessages.class);
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String API_NAME_VALUE = "name";
@@ -44,7 +44,6 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	private final File updateFolder;
 	private Version remoteVersion;
 	private String versionGameVersion;
-	private String versionLink;
 
 	@SuppressWarnings("ConstructorWithTooManyParameters")
 	public BukkitDevPluginUpdater(PluginDescriptionFile descriptionFile, Branch branch, State state, int projectId, File updateFolder, String gameVersion) {
@@ -124,7 +123,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 					message = ChatColor.stripColor(message);
 					LOGGER.log(Level.INFO, message);
 					File destination = new File(updateFolder, getName() + ".jar");
-					URLConnection urlConnection = getConnection(versionLink);
+					URLConnection urlConnection = getConnection(remoteVersion.getDownloadPath());
 					FileUtils.copyURLToFile(urlConnection.getURL(), destination);
 				} catch (Exception e) {
 					String message = MESSAGES.updateException(e.getMessage());
