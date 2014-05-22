@@ -17,15 +17,7 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.updater;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.bukkit.plugin.PluginDescriptionFile;
-
-import org.apache.maven.artifact.versioning.ArtifactVersion;
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-
-import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 /**
  * This abstract class provides a default implementation for common methods of {@link PluginUpdater}. In addition it
@@ -36,21 +28,13 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 	private final Branch branch;
 	private final String name;
 	private final PluginUpdater.State state;
-	private final DefaultArtifactVersion version;
-	private final Logger logger;
-	private String pluginName;
+	private final Version version;
 
 	public AbstractPluginUpdater(PluginDescriptionFile descriptionFile, PluginUpdater.Branch branch, PluginUpdater.State state) {
-		this.name = descriptionFile.getName();
-		this.version = new DefaultArtifactVersion(descriptionFile.getVersion());
+		name = descriptionFile.getName();
+		version = new PluginVersion(descriptionFile.getVersion());
 		this.branch = branch;
 		this.state = state;
-		this.logger = PluginLoggerFactory.getLogger(this.getClass());
-		this.pluginName = descriptionFile.getName();
-	}
-
-	public static String parseArtifactVersionToString(ArtifactVersion version) {
-		return version.getMajorVersion() + "." + version.getMinorVersion() + "." + version.getIncrementalVersion();
 	}
 
 	@Override
@@ -64,31 +48,13 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 	}
 
 	@Override
-	public final String getPluginName() {
-		return pluginName;
-	}
-
-	@Override
 	public final PluginUpdater.State getState() {
 		return this.state;
 	}
 
-	public final ArtifactVersion getLocalVersion() {
+	@Override
+	public final Version getLocalVersion() {
 		return version;
 	}
 
-	protected final Logger getLogger() {
-		return logger;
-	}
-
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("AbstractPluginUpdater{");
-		sb.append("branch=").append(branch);
-		sb.append(", name='").append(name).append('\'');
-		sb.append(", state=").append(state);
-		sb.append(", version='").append(version).append('\'');
-		sb.append('}');
-		return sb.toString();
-	}
 }

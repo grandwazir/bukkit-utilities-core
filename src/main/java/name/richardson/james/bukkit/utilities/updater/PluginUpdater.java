@@ -47,7 +47,7 @@ public interface PluginUpdater extends Runnable {
 	 *
 	 * @return The current version of the local plugin
 	 */
-	public ArtifactVersion getLocalVersion();
+	public Version getLocalVersion();
 
 	/**
 	 * Get the name of the plugin being updated
@@ -61,9 +61,7 @@ public interface PluginUpdater extends Runnable {
 	 *
 	 * @return The current remote version of the plugin.
 	 */
-	public ArtifactVersion getLatestRemoteVersion();
-
-	String getPluginName();
+	public Version getLatestRemoteVersion();
 
 	/**
 	 * Get the current state of the updater.
