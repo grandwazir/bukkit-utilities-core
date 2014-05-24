@@ -22,8 +22,6 @@ import java.io.File;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import org.apache.maven.artifact.versioning.ArtifactVersion;
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,5 +1,29 @@
-# Changelog for BukkitUtilities (v7.0.1-SNAPSHOT)
+# Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-05-22 21:16:19 +0100    added tests for remaining classes (James Richardson)  
+2014-05-22 21:03:05 +0100    added localisation (James Richardson)  
+2014-05-22 20:30:52 +0100    remove invalid test (James Richardson)  
+2014-05-22 20:29:26 +0100    remove time files as they were moved to seperate repo (James Richardson)  
+2014-05-22 20:13:36 +0100    delete unused tests (James Richardson)  
+2014-05-22 01:45:07 +0100    refactor updater (James Richardson)  
+2014-05-22 01:15:42 +0100    refactored PluginUpdater (James Richardson)  
+2014-05-22 00:43:40 +0100    add PluginVersion used so we can remove dependency on MavenArtifact (James Richardson)  
+2014-05-22 00:31:12 +0100    make abstract listener actually abstract (James Richardson)  
+2014-05-22 00:29:38 +0100    add ginger localisation framework (James Richardson)  
+2014-05-22 00:26:56 +0100    delete localisation to make room for ginger (James Richardson)  
+2014-05-22 00:25:21 +0100    delete formatters no longer needed with new localisation library (James Richardson)  
+2014-05-22 00:25:06 +0100    move time to seperate package (James Richardson)  
+2014-05-22 00:24:08 +0100    delete database configuration will be moved into database module (James Richardson)  
+2014-05-22 00:22:36 +0100    minor tidy up to configuration package (James Richardson)  
+2014-05-21 22:27:02 +0100    simplify: remove logger wrapper (James Richardson)  
+2014-05-21 21:58:39 +0100    rename artifact (James Richardson)  
+2014-05-21 21:55:27 +0100    delete database stuff as it has been spun out into a different repo (James Richardson)  
+2014-05-21 21:54:54 +0100    move configuration to seperate package (James Richardson)  
+2014-05-21 21:52:50 +0100    remove commands which have been spun out to seperate repo (James Richardson)  
+2014-05-20 22:59:48 +0100    refactored pom (James Richardson)  
+
+**v7.0.1**  
+2014-04-26 16:15:56 +0100    preparing to release (James Richardson)  
 2014-04-25 22:44:59 +0100    check if players are authorised before executing a command (James Richardson)  
 2014-04-25 22:43:39 +0100    sort properties file (James Richardson)  
 2014-04-25 22:42:18 +0100    pull up two methods (James Richardson)  
@@ -70,7 +94,7 @@
 2013-08-27 21:30:08 +0100    fix remaining unlocalised logging messages (James Richardson)  
 2013-08-27 19:44:11 +0100    refactor code which previously depended on loggers looking up keys by themselves (James Richardson)  
 2013-08-27 19:34:33 +0100    remove test which is no longer valid (James Richardson)  
-2013-08-27 19:31:59 +0100    linked to grandwazir/BanHammer[#87](https://github.com/grandwazir/BukkitUtilities/bukkit-utilities/issues/87) Logger has difficulty finding ResourceBundles (James Richardson)  
+2013-08-27 19:31:59 +0100    linked to grandwazir/BanHammer[#87](https://github.com/grandwazir/BukkitUtilities (Core)/bukkit-utilities-core/issues/87) Logger has difficulty finding ResourceBundles (James Richardson)  
 
 **v6.0.3**  
 2013-08-23 18:35:08 +0100    fix bug where help command was not returning any help (useful!) (James Richardson)  
@@ -216,7 +240,7 @@
 2013-06-16 17:18:10 +0100    add LocalisedCommandSender this will handling localising messages and formatting arguments before sending them to a player (James Richardson)  
 2013-06-16 14:53:27 +0100    change pom (James Richardson)  
 2013-06-16 14:51:51 +0100    added .gitignore (James Richardson)  
-2013-06-01 20:08:58 +0100    fix [#3](https://github.com/grandwazir/BukkitUtilities/bukkit-utilities/issues/3) (James Richardson)  
+2013-06-01 20:08:58 +0100    fix [#3](https://github.com/grandwazir/BukkitUtilities (Core)/bukkit-utilities-core/issues/3) (James Richardson)  
 
 **v5.0.2**  
 2013-05-31 17:47:16 +0100    mismatch in localisation keys (James Richardson)  

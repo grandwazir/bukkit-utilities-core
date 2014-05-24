@@ -20,7 +20,6 @@ package name.richardson.james.bukkit.utilities.configuration;
 
 import java.util.logging.Level;
 
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

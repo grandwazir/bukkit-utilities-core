@@ -1,9 +1,6 @@
 package name.richardson.james.bukkit.utilities.updater;
 
-import org.bukkit.plugin.PluginDescriptionFile;
-
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
