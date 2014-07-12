@@ -37,7 +37,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		BRANCH("automatic-updates.branch"),
 		UPDATER_STATE("automatic-updates.method"),
 		LOGGING_LEVEL("logging"),
-	  STATISTICS("send-anonymous-statistics");
+		STATISTICS("send-anonymous-statistics");
 		private final String path;
 
 		Keys(final String path) {
@@ -52,7 +52,8 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	public SimplePluginConfiguration(final File file, final InputStream defaults) throws IOException {
+	public SimplePluginConfiguration(final File file, final InputStream defaults)
+	throws IOException {
 		super(file, defaults);
 		useRuntimeDefaults();
 	}
@@ -63,11 +64,11 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 		try {
 			String value = configuration.getString(Keys.BRANCH.getPath());
 			return PluginUpdater.Branch.valueOf(value.toUpperCase());
-			} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			configuration.set(Keys.BRANCH.getPath(), defaultBranch.name());
-				return defaultBranch;
-			}
+			return defaultBranch;
 		}
+	}
 
 	@Override public final State getAutomaticUpdaterState() {
 		PluginUpdater.State defaultState = PluginUpdater.State.NOTIFY;

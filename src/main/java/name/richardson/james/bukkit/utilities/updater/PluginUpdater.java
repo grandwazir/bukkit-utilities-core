@@ -17,8 +17,6 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.updater;
 
-import org.apache.maven.artifact.versioning.ArtifactVersion;
-
 /**
  * The PluginUpdater interface defines how updaters should interact with other parts of BukkitUtilities.
  */

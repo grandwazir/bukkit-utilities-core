@@ -5,7 +5,9 @@ import com.vityuk.ginger.Localizable;
 public interface LocalisedConstants extends Localizable {
 
 	String pluginName();
+
 	String pluginDescription();
+
 	String pluginVersion();
 
 }

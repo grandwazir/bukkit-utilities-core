@@ -15,8 +15,6 @@ import com.vityuk.ginger.LocalizationBuilder;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.maven.artifact.versioning.ArtifactVersion;
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.codehaus.plexus.util.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -54,9 +52,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	}
 
 	/**
-	 * Get the current remote version of the plugin.
-	 * <p/>
-	 * This should be the latest released and available version matching the branch requested.
+	 * Get the current remote version of the plugin. <p/> This should be the latest released and available version matching the branch requested.
 	 *
 	 * @return The current remote version of the plugin.
 	 */
@@ -79,12 +75,12 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	public void run() {
 		try {
 			URLConnection urlConnection = getConnection(API_HOST + API_QUERY + projectId);
-		  BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 			String response = reader.readLine();
 			JSONArray array = (JSONArray) JSONValue.parse(response);
 			java.util.ListIterator versions = array.listIterator(array.size());
 			Branch branch = getBranch();
-			while(versions.hasPrevious()) {
+			while (versions.hasPrevious()) {
 				JSONObject latest = (JSONObject) versions.previous();
 				String versionType = (String) latest.get(API_RELEASE_TYPE_VALUE);
 				if ((versionType.equals("beta") || versionType.equals("alpha")) && branch.equals(Branch.STABLE)) continue;
@@ -146,6 +142,5 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	private boolean isCompatibleWithGameVersion(Version target) {
 		return gameVersion.compareTo(target) >= 0;
 	}
-
 
 }

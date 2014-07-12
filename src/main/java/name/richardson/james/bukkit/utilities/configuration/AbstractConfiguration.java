@@ -40,8 +40,8 @@ public abstract class AbstractConfiguration implements Configuration {
 	/**
 	 * Construct an AbstractConfiguration
 	 *
-	 * @param file  the file where this configuration is stored
-	 * @param defaults  the defaults that should be used for this configuration
+	 * @param file the file where this configuration is stored
+	 * @param defaults the defaults that should be used for this configuration
 	 * @throws IOException
 	 */
 	public AbstractConfiguration(final File file, final InputStream defaults)

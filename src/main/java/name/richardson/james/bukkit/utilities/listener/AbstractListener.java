@@ -17,15 +17,13 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.listener;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 /**
- * Provides a class which automatically registers itself as a listener with the Bukkit PluginManager. This class should be used for convenience when creating your own listeners.
+ * Provides a class which automatically registers itself as a listener with the Bukkit PluginManager. This class should be used for convenience when creating
+ * your own listeners.
  */
 public abstract class AbstractListener implements Listener {
 

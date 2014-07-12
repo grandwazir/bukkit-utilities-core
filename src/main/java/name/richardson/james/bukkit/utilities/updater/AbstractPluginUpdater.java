@@ -20,8 +20,8 @@ package name.richardson.james.bukkit.utilities.updater;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
- * This abstract class provides a default implementation for common methods of {@link PluginUpdater}. In addition it
- * defines a list of branches and states that may be supported by Updaters.
+ * This abstract class provides a default implementation for common methods of {@link PluginUpdater}. In addition it defines a list of branches and states that
+ * may be supported by Updaters.
  */
 public abstract class AbstractPluginUpdater implements PluginUpdater {
 
