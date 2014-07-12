@@ -92,7 +92,6 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				String versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
 				if (isNewVersionAvailable()) {
 					String message = LOCALISED_MESSAGES.updateAvailable(getName(), remoteVersion.toString());
-					message = ChatColor.stripColor(message);
 					LOGGER.log(Level.INFO, message);
 					break;
 				}
@@ -112,12 +111,10 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 			RemotePluginVersion remoteVersion = (RemotePluginVersion) getLatestRemoteVersion();
 			if (localVersion.getMajorVersion() < remoteVersion.getMajorVersion()) {
 				String message = LOCALISED_MESSAGES.updateRequired(getName(), remoteVersion.toString());
-				message = ChatColor.stripColor(message);
 				LOGGER.log(Level.INFO, message);
 			} else {
 				try {
 					String message = LOCALISED_MESSAGES.updateDownloading(getName(), remoteVersion.getDownloadPath());
-					message = ChatColor.stripColor(message);
 					LOGGER.log(Level.INFO, message);
 					URL target = new URL(remoteVersion.getDownloadPath());
 					FileSystem system = FileSystems.getDefault();
@@ -125,7 +122,6 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 					java.nio.file.Files.copy(target.openStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 				} catch (Exception e) {
 					String message = LOCALISED_MESSAGES.updateException(e.getMessage());
-					message = ChatColor.stripColor(message);
 					LOGGER.log(Level.WARN, message);
 				}
 			}

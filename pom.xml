@@ -17,9 +17,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <prettytime-version>3.2.5.Final</prettytime-version>
         <bukkit-version>1.6.4-R2.0</bukkit-version>
-        <ginger-version>0.2.1</ginger-version>
         <log4j-version>2.0-rc1</log4j-version>
     </properties>
 
@@ -44,11 +42,6 @@
             <artifactId>bukkit</artifactId>
             <version>${bukkit-version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.vityuk</groupId>
-            <artifactId>ginger-core</artifactId>
-            <version>${ginger-version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>

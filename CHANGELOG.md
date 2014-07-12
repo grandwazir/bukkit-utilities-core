@@ -1,5 +1,8 @@
 # Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-07-12 15:04:19 +0100    added localisation based on the ginger library (James Richardson)  
+2014-07-12 14:18:14 +0100    remove old .txt changelog (James Richardson)  
+2014-07-12 14:12:34 +0100    refactored updater to lose a dependency lib library now requires Java 7. (Been 3 years I think people will have upgraded). (James Richardson)  
 2014-07-12 13:36:47 +0100    add parent pom repo to child pom (James Richardson)  
 2014-07-12 13:11:14 +0100    code cleanup and codeship push (James Richardson)  
 2014-05-24 11:35:58 +0100    organise imports and sort out pom (James Richardson)  
