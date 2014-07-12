@@ -21,13 +21,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
 
 @SuppressWarnings("HardcodedFileSeparator")
 public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
-	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:localisation/bukkit-utilities-core.properties").build();
-	private static final LocalisedMessages MESSAGES = LOCALISATION.getLocalizable(LocalisedMessages.class);
+	private static final LocalisedMessages LOCALISED_MESSAGES = Localisation.getMessages();
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String API_NAME_VALUE = "name";
 	private static final String API_LINK_VALUE = "downloadUrl";
@@ -91,14 +91,14 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				remoteVersion = new RemotePluginVersion(versionName, requiredGameVersion, (String) latest.get(API_LINK_VALUE));
 				String versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
 				if (isNewVersionAvailable()) {
-					String message = MESSAGES.updateAvailable(getName(), remoteVersion.toString());
+					String message = LOCALISED_MESSAGES.updateAvailable(getName(), remoteVersion.toString());
 					message = ChatColor.stripColor(message);
 					LOGGER.log(Level.INFO, message);
 					break;
 				}
 			}
 		} catch (Exception e) {
-			String message = MESSAGES.updateException(e.getMessage());
+			String message = LOCALISED_MESSAGES.updateException(e.getMessage());
 			message = ChatColor.stripColor(message);
 			LOGGER.log(Level.WARN, message);
 		}
@@ -111,12 +111,12 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 			Version localVersion = getLocalVersion();
 			RemotePluginVersion remoteVersion = (RemotePluginVersion) getLatestRemoteVersion();
 			if (localVersion.getMajorVersion() < remoteVersion.getMajorVersion()) {
-				String message = MESSAGES.updateRequired(getName(), remoteVersion.toString());
+				String message = LOCALISED_MESSAGES.updateRequired(getName(), remoteVersion.toString());
 				message = ChatColor.stripColor(message);
 				LOGGER.log(Level.INFO, message);
 			} else {
 				try {
-					String message = MESSAGES.updateDownloading(getName(), remoteVersion.getDownloadPath());
+					String message = LOCALISED_MESSAGES.updateDownloading(getName(), remoteVersion.getDownloadPath());
 					message = ChatColor.stripColor(message);
 					LOGGER.log(Level.INFO, message);
 					URL target = new URL(remoteVersion.getDownloadPath());
@@ -124,7 +124,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 					Path destination = system.getPath(updateFolder, getName() + ".jar");
 					java.nio.file.Files.copy(target.openStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 				} catch (Exception e) {
-					String message = MESSAGES.updateException(e.getMessage());
+					String message = LOCALISED_MESSAGES.updateException(e.getMessage());
 					message = ChatColor.stripColor(message);
 					LOGGER.log(Level.WARN, message);
 				}

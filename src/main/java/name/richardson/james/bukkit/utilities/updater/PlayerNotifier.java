@@ -28,6 +28,7 @@ import com.vityuk.ginger.Localization;
 import com.vityuk.ginger.LocalizationBuilder;
 
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
+import name.richardson.james.bukkit.utilities.localisation.Localisation;
 import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
 
 /**
@@ -36,8 +37,8 @@ import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
  */
 public class PlayerNotifier extends AbstractListener {
 
-	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:localisation/bukkit-utilities-core.properties").build();
-	private static final LocalisedMessages MESSAGES = LOCALISATION.getLocalizable(LocalisedMessages.class);
+	private static final LocalisedMessages LOCALISED_MESSAGES = Localisation.getMessages();
+
 	private final String permission;
 	private final PluginUpdater updater;
 
@@ -60,7 +61,7 @@ public class PlayerNotifier extends AbstractListener {
 		boolean hasPermission = player.hasPermission(permission);
 		if (hasPermission && updater.isNewVersionAvailable()) {
 			Version remoteVersion = updater.getLatestRemoteVersion();
-			String message = MESSAGES.updateAvailable(updater.getName(), remoteVersion.toString());
+			String message = LOCALISED_MESSAGES.updateAvailable(updater.getName(), remoteVersion.toString());
 			player.sendMessage(message);
 		}
 	}
