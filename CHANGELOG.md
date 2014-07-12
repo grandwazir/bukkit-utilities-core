@@ -1,5 +1,8 @@
 # Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-07-12 13:36:47 +0100    add parent pom repo to child pom (James Richardson)  
+2014-07-12 13:11:14 +0100    code cleanup and codeship push (James Richardson)  
+2014-05-24 11:35:58 +0100    organise imports and sort out pom (James Richardson)  
 2014-05-22 21:16:19 +0100    added tests for remaining classes (James Richardson)  
 2014-05-22 21:03:05 +0100    added localisation (James Richardson)  
 2014-05-22 20:30:52 +0100    remove invalid test (James Richardson)  

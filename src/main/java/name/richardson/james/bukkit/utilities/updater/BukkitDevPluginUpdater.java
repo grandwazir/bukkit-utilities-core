@@ -6,16 +6,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import com.vityuk.ginger.Localization;
 import com.vityuk.ginger.LocalizationBuilder;
+import com.vityuk.ginger.repackaged.guava.io.Files;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.plexus.util.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -39,7 +40,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	private static final String DL_HOST = "cursecdn.com";
 	private final Version gameVersion;
 	private final int projectId;
-	private final File updateFolder;
+	private final String updateFolder;
 	private Version remoteVersion;
 	private String versionGameVersion;
 
@@ -47,7 +48,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	public BukkitDevPluginUpdater(PluginDescriptionFile descriptionFile, Branch branch, State state, int projectId, File updateFolder, String gameVersion) {
 		super(descriptionFile, branch, state);
 		this.projectId = projectId;
-		this.updateFolder = updateFolder;
+		this.updateFolder = updateFolder.getPath();
 		this.gameVersion = new PluginVersion(gameVersion);
 	}
 
@@ -118,9 +119,10 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 					String message = MESSAGES.updateDownloading(getName(), remoteVersion.getDownloadPath());
 					message = ChatColor.stripColor(message);
 					LOGGER.log(Level.INFO, message);
-					File destination = new File(updateFolder, getName() + ".jar");
-					URLConnection urlConnection = getConnection(remoteVersion.getDownloadPath());
-					FileUtils.copyURLToFile(urlConnection.getURL(), destination);
+					URL target = new URL(remoteVersion.getDownloadPath());
+					FileSystem system = FileSystems.getDefault();
+					Path destination = system.getPath(updateFolder, getName() + ".jar");
+					java.nio.file.Files.copy(target.openStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 				} catch (Exception e) {
 					String message = MESSAGES.updateException(e.getMessage());
 					message = ChatColor.stripColor(message);
