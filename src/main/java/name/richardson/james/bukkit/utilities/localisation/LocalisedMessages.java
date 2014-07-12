@@ -1,8 +1,6 @@
 package name.richardson.james.bukkit.utilities.localisation;
 
-import com.vityuk.ginger.Localizable;
-
-public interface LocalisedMessages extends Localizable {
+public interface LocalisedMessages {
 
 	String updateAvailable(String pluginName, String version);
 
