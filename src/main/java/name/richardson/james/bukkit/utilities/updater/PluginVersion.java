@@ -24,26 +24,26 @@ public class PluginVersion implements Version {
 		snapshot = version.contains("SNAPSHOT");
 	}
 
-	@Override public int compareTo(final Version version) {
+	@Override public int compareTo(final Version o) {
 		int result = 0;
-		if (majorVersion > version.getMajorVersion()) {
+		if (majorVersion > o.getMajorVersion()) {
 			result = 1;
-		} else if (majorVersion < version.getMajorVersion()) {
+		} else if (majorVersion < o.getMajorVersion()) {
 			result = -1;
 		} else {
-			if (minorVersion > version.getMinorVersion()) {
+			if (minorVersion > o.getMinorVersion()) {
 				result = 1;
-			} else if (minorVersion < version.getMinorVersion()) {
+			} else if (minorVersion < o.getMinorVersion()) {
 				result = -1;
 			}
-			if (patchVersion > version.getPatchVersion()) {
+			if (patchVersion > o.getPatchVersion()) {
 				result = 1;
-			} else if (patchVersion < version.getPatchVersion()) {
+			} else if (patchVersion < o.getPatchVersion()) {
 				result = -1;
 			} else {
-				if (snapshot && !version.isSnapshot()) {
+				if (snapshot && !o.isSnapshot()) {
 					result = 1;
-				} else if (!snapshot && version.isSnapshot()) {
+				} else if (!snapshot && o.isSnapshot()) {
 					result = -1;
 				}
 			}
@@ -67,11 +67,12 @@ public class PluginVersion implements Version {
 		return snapshot;
 	}
 
+	@SuppressWarnings("InstanceofInterfaces")
 	@Override public boolean equals(final Object obj) {
 		if (obj == null) return false;
 		if (obj == this) return true;
 		if (!(obj instanceof PluginVersion)) return false;
-		PluginVersion version = (PluginVersion) obj;
+		Version version = (Version) obj;
 		EqualsBuilder equalsBuilder = new EqualsBuilder();
 		equalsBuilder.append(majorVersion, version.getMajorVersion());
 		equalsBuilder.append(minorVersion, version.getMinorVersion());

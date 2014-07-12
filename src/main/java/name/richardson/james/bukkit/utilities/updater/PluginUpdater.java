@@ -82,6 +82,6 @@ public interface PluginUpdater extends Runnable {
 	 */
 	public void update();
 
-	public void run();
+	@Override public void run();
 
 }

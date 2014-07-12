@@ -49,7 +49,7 @@ public abstract class AbstractPluginUpdater implements PluginUpdater {
 
 	@Override
 	public final PluginUpdater.State getState() {
-		return this.state;
+		return state;
 	}
 
 	@Override

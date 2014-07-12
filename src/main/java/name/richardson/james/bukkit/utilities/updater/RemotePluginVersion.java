@@ -3,11 +3,9 @@ package name.richardson.james.bukkit.utilities.updater;
 public class RemotePluginVersion extends PluginVersion {
 
 	private final String downloadPath;
-	private final Version gameVersion;
 
-	public RemotePluginVersion(final String version, Version gameVersion, String downloadPath) {
+	public RemotePluginVersion(final String version, String downloadPath) {
 		super(version);
-		this.gameVersion = gameVersion;
 		this.downloadPath = downloadPath;
 	}
 

@@ -11,9 +11,6 @@ import java.nio.file.*;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import com.vityuk.ginger.Localization;
-import com.vityuk.ginger.LocalizationBuilder;
-import com.vityuk.ginger.repackaged.guava.io.Files;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,7 +85,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				Version requiredGameVersion = new PluginVersion((String) latest.get(API_GAME_VERSION_VALUE));
 				if (!isCompatibleWithGameVersion(requiredGameVersion)) continue;
 				String versionName = (String) latest.get(API_NAME_VALUE);
-				remoteVersion = new RemotePluginVersion(versionName, requiredGameVersion, (String) latest.get(API_LINK_VALUE));
+				remoteVersion = new RemotePluginVersion(versionName, (String) latest.get(API_LINK_VALUE));
 				String versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
 				if (isNewVersionAvailable()) {
 					String message = LOCALISED_MESSAGES.updateAvailable(getName(), remoteVersion.toString());

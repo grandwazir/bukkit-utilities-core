@@ -28,7 +28,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ReleaseBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
-	private static final Version REMOTE_VERSION = new RemotePluginVersion("2.2.0", null, null);
+	private static final Version REMOTE_VERSION = new RemotePluginVersion("2.2.0", null);
 	private static final Version LOCAL_VERSION = new PluginVersion("2.1.0");
 
 	@Test
