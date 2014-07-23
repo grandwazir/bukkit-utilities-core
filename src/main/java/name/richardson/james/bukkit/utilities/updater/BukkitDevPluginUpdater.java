@@ -18,13 +18,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import name.richardson.james.bukkit.utilities.localisation.CoreLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
 
 @SuppressWarnings("HardcodedFileSeparator")
 public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
-	private static final LocalisedMessages LOCALISED_MESSAGES = Localisation.getMessages();
+	private static final CoreLocalisation LOCALISED_MESSAGES = Localisation.getMessages();
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String API_NAME_VALUE = "name";
 	private static final String API_LINK_VALUE = "downloadUrl";

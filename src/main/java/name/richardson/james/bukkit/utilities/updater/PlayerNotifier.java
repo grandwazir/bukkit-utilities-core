@@ -28,8 +28,8 @@ import com.vityuk.ginger.Localization;
 import com.vityuk.ginger.LocalizationBuilder;
 
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
+import name.richardson.james.bukkit.utilities.localisation.CoreLocalisation;
 import name.richardson.james.bukkit.utilities.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
 
 /**
  * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update available for the plugin. The players will be
@@ -37,7 +37,7 @@ import name.richardson.james.bukkit.utilities.localisation.LocalisedMessages;
  */
 public class PlayerNotifier extends AbstractListener {
 
-	private static final LocalisedMessages LOCALISED_MESSAGES = Localisation.getMessages();
+	private static final CoreLocalisation LOCALISED_MESSAGES = Localisation.getMessages();
 
 	private final String permission;
 	private final PluginUpdater updater;

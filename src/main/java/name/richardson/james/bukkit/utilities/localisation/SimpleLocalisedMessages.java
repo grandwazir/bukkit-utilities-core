@@ -3,7 +3,7 @@ package name.richardson.james.bukkit.utilities.localisation;
 import java.text.MessageFormat;
 
 @SuppressWarnings("ChainedMethodCall")
-public class SimpleLocalisedMessages extends AbstractLocalisedMessages implements LocalisedMessages {
+public class SimpleLocalisedMessages extends AbstractLocalisedMessages implements CoreLocalisation {
 
 	protected SimpleLocalisedMessages(final String path) {
 		super(path);
