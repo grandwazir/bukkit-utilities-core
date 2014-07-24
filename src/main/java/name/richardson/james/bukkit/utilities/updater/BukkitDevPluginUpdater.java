@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import org.apache.logging.log4j.Level;
@@ -18,13 +20,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import name.richardson.james.bukkit.utilities.localisation.CoreLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.Messages;
+import name.richardson.james.bukkit.utilities.localisation.MessagesFactory;
 
-@SuppressWarnings("HardcodedFileSeparator")
 public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
-	private static final CoreLocalisation LOCALISED_MESSAGES = Localisation.getMessages();
+	private static final Messages MESSAGES = MessagesFactory.getMessages();
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String API_NAME_VALUE = "name";
 	private static final String API_LINK_VALUE = "downloadUrl";
@@ -38,10 +39,9 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	private final Version gameVersion;
 	private final int projectId;
 	private final String updateFolder;
-	private Version remoteVersion;
+	private RemoteVersion remoteVersion;
 	private String versionGameVersion;
 
-	@SuppressWarnings("ConstructorWithTooManyParameters")
 	public BukkitDevPluginUpdater(PluginDescriptionFile descriptionFile, Branch branch, State state, int projectId, File updateFolder, String gameVersion) {
 		super(descriptionFile, branch, state);
 		this.projectId = projectId;
@@ -55,7 +55,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	 * @return The current remote version of the plugin.
 	 */
 	@Override
-	public Version getLatestRemoteVersion() {
+	public RemoteVersion getLatestRemoteVersion() {
 		return remoteVersion;
 	}
 
@@ -88,37 +88,35 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				remoteVersion = new RemotePluginVersion(versionName, (String) latest.get(API_LINK_VALUE));
 				String versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
 				if (isNewVersionAvailable()) {
-					String message = LOCALISED_MESSAGES.updateAvailable(getName(), remoteVersion.toString());
+					String message = MESSAGES.updateAvailable(getName(), remoteVersion.toString());
 					LOGGER.log(Level.INFO, message);
 					break;
 				}
 			}
 		} catch (Exception e) {
-			String message = LOCALISED_MESSAGES.updateException(e.getMessage());
-			message = ChatColor.stripColor(message);
+			String message = MESSAGES.updateException(e.getMessage());
 			LOGGER.log(Level.WARN, message);
 		}
 	}
 
-	@SuppressWarnings({"CastToConcreteClass", "LocalVariableOfConcreteClass"})
 	@Override
 	public void update() {
 		if (isNewVersionAvailable() && getState() == State.UPDATE) {
 			Version localVersion = getLocalVersion();
-			RemotePluginVersion remoteVersion = (RemotePluginVersion) getLatestRemoteVersion();
+			RemoteVersion remoteVersion = getLatestRemoteVersion();
 			if (localVersion.getMajorVersion() < remoteVersion.getMajorVersion()) {
-				String message = LOCALISED_MESSAGES.updateRequired(getName(), remoteVersion.toString());
+				String message = MESSAGES.updateRequired(getName(), remoteVersion.toString());
 				LOGGER.log(Level.INFO, message);
 			} else {
 				try {
-					String message = LOCALISED_MESSAGES.updateDownloading(getName(), remoteVersion.getDownloadPath());
+					String message = MESSAGES.updateDownloading(getName(), remoteVersion.getDownloadPath());
 					LOGGER.log(Level.INFO, message);
 					URL target = new URL(remoteVersion.getDownloadPath());
 					FileSystem system = FileSystems.getDefault();
 					Path destination = system.getPath(updateFolder, getName() + ".jar");
 					java.nio.file.Files.copy(target.openStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 				} catch (Exception e) {
-					String message = LOCALISED_MESSAGES.updateException(e.getMessage());
+					String message = MESSAGES.updateException(e.getMessage());
 					LOGGER.log(Level.WARN, message);
 				}
 			}

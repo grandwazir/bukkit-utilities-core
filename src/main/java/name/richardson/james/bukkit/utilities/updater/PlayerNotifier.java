@@ -24,12 +24,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.vityuk.ginger.Localization;
-import com.vityuk.ginger.LocalizationBuilder;
-
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
-import name.richardson.james.bukkit.utilities.localisation.CoreLocalisation;
-import name.richardson.james.bukkit.utilities.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.localisation.Messages;
+import name.richardson.james.bukkit.utilities.localisation.MessagesFactory;
 
 /**
  * The PlayerNotifier is responsible for notifying players which a specific permission that there is an update available for the plugin. The players will be
@@ -37,7 +34,7 @@ import name.richardson.james.bukkit.utilities.localisation.Localisation;
  */
 public class PlayerNotifier extends AbstractListener {
 
-	private static final CoreLocalisation LOCALISED_MESSAGES = Localisation.getMessages();
+	private static final Messages MESSAGES = MessagesFactory.getColouredMessages();
 
 	private final String permission;
 	private final PluginUpdater updater;
@@ -60,8 +57,8 @@ public class PlayerNotifier extends AbstractListener {
 		Player player = event.getPlayer();
 		boolean hasPermission = player.hasPermission(permission);
 		if (hasPermission && updater.isNewVersionAvailable()) {
-			Version remoteVersion = updater.getLatestRemoteVersion();
-			String message = LOCALISED_MESSAGES.updateAvailable(updater.getName(), remoteVersion.toString());
+			RemoteVersion remoteVersion = updater.getLatestRemoteVersion();
+			String message = MESSAGES.updateAvailable(updater.getName(), remoteVersion.toString());
 			player.sendMessage(message);
 		}
 	}

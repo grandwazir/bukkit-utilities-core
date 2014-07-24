@@ -59,7 +59,7 @@ public interface PluginUpdater extends Runnable {
 	 *
 	 * @return The current remote version of the plugin.
 	 */
-	public Version getLatestRemoteVersion();
+	public RemoteVersion getLatestRemoteVersion();
 
 	/**
 	 * Get the current state of the updater.
