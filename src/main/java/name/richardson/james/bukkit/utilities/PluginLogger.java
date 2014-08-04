@@ -1,6 +1,7 @@
 package name.richardson.james.bukkit.utilities;
 
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
@@ -14,7 +15,11 @@ public class PluginLogger extends Logger {
 
 	private PluginLogger(Class<?> owner) {
 		super(owner.getCanonicalName(), null);
-		setParent(Bukkit.getServer().getLogger());
+		setParent(getRootLogger());
+	}
+
+	private static Logger getRootLogger() {
+		return (Bukkit.getServer() != null) ? Bukkit.getServer().getLogger() : Logger.getGlobal();
 	}
 
 	public static Logger getLogger(final Class<?> owner) {
