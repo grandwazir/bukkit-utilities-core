@@ -10,12 +10,11 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -26,7 +25,7 @@ import name.richardson.james.bukkit.utilities.localisation.MessagesFactory;
 public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
 	private static final Messages MESSAGES = MessagesFactory.getMessages();
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = Logger.getLogger(BukkitDevPluginUpdater.class.getName());
 	private static final String API_NAME_VALUE = "name";
 	private static final String API_LINK_VALUE = "downloadUrl";
 	private static final String API_RELEASE_TYPE_VALUE = "releaseType";
@@ -95,7 +94,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 			}
 		} catch (Exception e) {
 			String message = MESSAGES.updateException(e.getClass().getSimpleName(), e.getMessage());
-			LOGGER.log(Level.WARN, message);
+			LOGGER.log(Level.WARNING, message);
 		}
 	}
 
@@ -117,7 +116,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 					java.nio.file.Files.copy(target.openStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 				} catch (Exception e) {
 					String message = MESSAGES.updateException(e.getClass().getSimpleName(), e.getMessage());
-					LOGGER.log(Level.WARN, message);
+					LOGGER.log(Level.WARNING, message);
 				}
 			}
 		}
