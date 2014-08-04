@@ -29,7 +29,7 @@ public class PlayerNotifierTest {
 	@Mock
 	private PluginUpdater pluginUpdater;
 	@Mock
-	private Version version;
+	private RemoteVersion version;
 
 	@Before
 	public void setUp()

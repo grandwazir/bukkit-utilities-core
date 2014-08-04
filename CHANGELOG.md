@@ -1,5 +1,9 @@
 # Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-07-24 17:50:53 +0100    add dependency on new localisation module (James Richardson)  
+2014-07-23 19:48:22 +0100    stash changes (James Richardson)  
+2014-07-12 15:45:04 +0100    cleanup after running code inspector (James Richardson)  
+2014-07-12 15:31:58 +0100    removed ginger. This is a shame since it is an excellent library. However when shaded it creates an additional 3.7mb in dependencies which makes it inpractical to distribute. Will reimplement the spirit of the libary. (James Richardson)  
 2014-07-12 15:04:19 +0100    added localisation based on the ginger library (James Richardson)  
 2014-07-12 14:18:14 +0100    remove old .txt changelog (James Richardson)  
 2014-07-12 14:12:34 +0100    refactored updater to lose a dependency lib library now requires Java 7. (Been 3 years I think people will have upgraded). (James Richardson)  
