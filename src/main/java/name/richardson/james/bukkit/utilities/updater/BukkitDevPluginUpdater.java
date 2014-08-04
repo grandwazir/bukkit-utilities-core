@@ -135,8 +135,6 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	private boolean isCompatibleWithGameVersion(Version target) {
 		boolean greaterThan = gameVersion.compareTo(target) >= 0;
 		boolean majorMinorMatch = (gameVersion.getMajorVersion() == target.getMajorVersion()) && (gameVersion.getMinorVersion() == target.getMinorVersion());
-		System.out.print(target + " > " + gameVersion);
-		System.out.print("Major minor match: " + majorMinorMatch);
 		return greaterThan && majorMinorMatch;
 	}
 
