@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import name.richardson.james.bukkit.utilities.PluginLogger;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.Branch;
 import name.richardson.james.bukkit.utilities.updater.PluginUpdater.State;
@@ -49,7 +50,7 @@ public class SimplePluginConfiguration extends AbstractConfiguration implements 
 
 	}
 
-	private static final Logger LOGGER = Logger.getLogger(SimplePluginConfiguration.class.getName());
+	private static final Logger LOGGER = PluginLogger.getLogger(SimplePluginConfiguration.class);
 
 	public SimplePluginConfiguration(final File file, final InputStream defaults)
 	throws IOException {

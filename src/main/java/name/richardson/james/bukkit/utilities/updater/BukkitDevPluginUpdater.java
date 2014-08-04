@@ -19,13 +19,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import name.richardson.james.bukkit.utilities.PluginLogger;
 import name.richardson.james.bukkit.utilities.localisation.Messages;
 import name.richardson.james.bukkit.utilities.localisation.MessagesFactory;
 
 public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 
 	private static final Messages MESSAGES = MessagesFactory.getMessages();
-	private static final Logger LOGGER = Logger.getLogger(BukkitDevPluginUpdater.class.getName());
+	private static final Logger LOGGER = PluginLogger.getLogger(BukkitDevPluginUpdater.class);
 	private static final String API_NAME_VALUE = "name";
 	private static final String API_LINK_VALUE = "downloadUrl";
 	private static final String API_RELEASE_TYPE_VALUE = "releaseType";

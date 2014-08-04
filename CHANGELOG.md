@@ -1,5 +1,11 @@
 # Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-08-04 18:52:43 +0100    stop trying to build on Java6 (James Richardson)  
+2014-08-04 18:51:19 +0100    fix stray reference (James Richardson)  
+2014-08-04 18:49:08 +0100    lose dependency on log4j. Improves backwards compatibility (James Richardson)  
+2014-08-04 18:34:21 +0100    colour codes are unnecessary now (James Richardson)  
+2014-08-04 18:33:43 +0100    include exception name in warning message (James Richardson)  
+2014-08-04 18:31:52 +0100    add template config.yml (James Richardson)  
 2014-07-24 17:50:53 +0100    add dependency on new localisation module (James Richardson)  
 2014-07-23 19:48:22 +0100    stash changes (James Richardson)  
 2014-07-12 15:45:04 +0100    cleanup after running code inspector (James Richardson)  
