@@ -1,5 +1,6 @@
 # Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-08-04 19:25:49 +0100    better stacktrace logging (James Richardson)  
 2014-08-04 19:18:33 +0100    add additional message to properties (James Richardson)  
 2014-08-04 19:17:40 +0100    add space after prefix (James Richardson)  
 2014-08-04 19:12:04 +0100    fix test error (James Richardson)  

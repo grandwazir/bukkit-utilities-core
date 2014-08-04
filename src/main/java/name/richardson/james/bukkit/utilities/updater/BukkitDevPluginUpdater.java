@@ -81,10 +81,10 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 			while (versions.hasPrevious()) {
 				JSONObject latest = (JSONObject) versions.previous();
 				String versionType = (String) latest.get(API_RELEASE_TYPE_VALUE);
-				if ((versionType.equals("beta") || versionType.equals("alpha")) && branch.equals(Branch.STABLE)) continue;
-				Version requiredGameVersion = new PluginVersion((String) latest.get(API_GAME_VERSION_VALUE));
-				if (!isCompatibleWithGameVersion(requiredGameVersion)) continue;
 				String versionName = (String) latest.get(API_NAME_VALUE);
+				Version requiredGameVersion = new PluginVersion((String) latest.get(API_GAME_VERSION_VALUE));
+				if ((versionType.equals("beta") || versionType.equals("alpha")) && branch.equals(Branch.STABLE)) continue;
+				if (!isCompatibleWithGameVersion(requiredGameVersion)) continue;
 				remoteVersion = new RemotePluginVersion(versionName, (String) latest.get(API_LINK_VALUE));
 				String versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
 				if (isNewVersionAvailable()) {
@@ -133,7 +133,11 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	}
 
 	private boolean isCompatibleWithGameVersion(Version target) {
-		return gameVersion.compareTo(target) >= 0;
+		boolean greaterThan = gameVersion.compareTo(target) >= 0;
+		boolean majorMinorMatch = (gameVersion.getMajorVersion() == target.getMajorVersion()) && (gameVersion.getMinorVersion() == target.getMinorVersion());
+		System.out.print(target + " > " + gameVersion);
+		System.out.print("Major minor match: " + majorMinorMatch);
+		return greaterThan && majorMinorMatch;
 	}
 
 }
