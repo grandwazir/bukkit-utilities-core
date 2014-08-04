@@ -95,7 +95,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 			}
 		} catch (Exception e) {
 			String message = MESSAGES.updateException(e.getClass().getSimpleName(), e.getMessage());
-			LOGGER.log(Level.WARNING, message);
+			LOGGER.log(Level.WARNING, message, e);
 		}
 	}
 
@@ -117,7 +117,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 					java.nio.file.Files.copy(target.openStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 				} catch (Exception e) {
 					String message = MESSAGES.updateException(e.getClass().getSimpleName(), e.getMessage());
-					LOGGER.log(Level.WARNING, message);
+					LOGGER.log(Level.WARNING, message, e);
 				}
 			}
 		}

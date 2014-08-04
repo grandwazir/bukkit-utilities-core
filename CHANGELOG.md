@@ -1,5 +1,7 @@
 # Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-08-04 19:18:33 +0100    add additional message to properties (James Richardson)  
+2014-08-04 19:17:40 +0100    add space after prefix (James Richardson)  
 2014-08-04 19:12:04 +0100    fix test error (James Richardson)  
 2014-08-04 19:08:15 +0100    add PluginLogger (James Richardson)  
 2014-08-04 18:52:43 +0100    stop trying to build on Java6 (James Richardson)  
