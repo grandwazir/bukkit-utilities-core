@@ -1,5 +1,9 @@
 # Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-08-04 20:18:13 +0100    remove logging messages (James Richardson)  
+2014-08-04 20:17:05 +0100    avoid requesting json from the curse api when we don't need it (James Richardson)  
+2014-08-04 20:06:47 +0100    fix travis.yml (James Richardson)  
+2014-08-04 20:01:51 +0100    game versions are now compatible if major and minor are the same (James Richardson)  
 2014-08-04 19:25:49 +0100    better stacktrace logging (James Richardson)  
 2014-08-04 19:18:33 +0100    add additional message to properties (James Richardson)  
 2014-08-04 19:17:40 +0100    add space after prefix (James Richardson)  
@@ -13,6 +17,8 @@
 2014-08-04 18:31:52 +0100    add template config.yml (James Richardson)  
 2014-07-24 17:50:53 +0100    add dependency on new localisation module (James Richardson)  
 2014-07-23 19:48:22 +0100    stash changes (James Richardson)  
+2014-07-12 15:56:54 +0100    implement methods # Please enter the commit message for your changes. Lines starting # with '#' will be ignored, and an empty message aborts the commit. # On branch experimental # Your branch is ahead of 'origin/experimental' by 27 commits. #   (use "git push" to publish your local commits) # # Changes to be committed: #	modified:   src/main/java/name/richardson/james/bukkit/banhammer/commands/AuditCommand.java #	modified:   src/main/java/name/richardson/james/bukkit/banhammer/model/PlayerRecord.java #	modified:   src/main/java/name/richardson/james/bukkit/banhammer/utilities/command/matcher/PlayerRecordMatcher.java # # Untracked files: #	sort #	sortn #	src/main/java/name/richardson/james/bukkit/banhammer/model/PlayerNotFoundException.java #	src/main/resources/localisation/bukkit-utilities-persistence.properties # (James Richardson)  
+2014-07-12 15:48:57 +0100    no longer test against openjdk6 (James Richardson)  
 2014-07-12 15:45:04 +0100    cleanup after running code inspector (James Richardson)  
 2014-07-12 15:31:58 +0100    removed ginger. This is a shame since it is an excellent library. However when shaded it creates an additional 3.7mb in dependencies which makes it inpractical to distribute. Will reimplement the spirit of the libary. (James Richardson)  
 2014-07-12 15:04:19 +0100    added localisation based on the ginger library (James Richardson)  

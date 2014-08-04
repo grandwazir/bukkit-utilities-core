@@ -30,22 +30,26 @@ public class PluginVersion implements Version {
 			result = 1;
 		} else if (majorVersion < o.getMajorVersion()) {
 			result = -1;
-		} else {
+		}
+		if (result == 0) {
 			if (minorVersion > o.getMinorVersion()) {
 				result = 1;
 			} else if (minorVersion < o.getMinorVersion()) {
 				result = -1;
 			}
+		}
+		if (result == 0) {
 			if (patchVersion > o.getPatchVersion()) {
 				result = 1;
 			} else if (patchVersion < o.getPatchVersion()) {
 				result = -1;
-			} else {
-				if (snapshot && !o.isSnapshot()) {
-					result = 1;
-				} else if (!snapshot && o.isSnapshot()) {
-					result = -1;
-				}
+			}
+		}
+		if (result == 0) {
+			if (snapshot && !o.isSnapshot()) {
+				result = 1;
+			} else if (!snapshot && o.isSnapshot()) {
+				result = -1;
 			}
 		}
 		return result;

@@ -65,6 +65,7 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 	 * @return return true if there is a version available, false otherwise.
 	 */
 	@Override public boolean isNewVersionAvailable() {
+		if (getLatestRemoteVersion() == null) return false;
 		Version localVersion = getLocalVersion();
 		return localVersion.compareTo(getLatestRemoteVersion()) == -1;
 	}
@@ -82,13 +83,15 @@ public final class BukkitDevPluginUpdater extends AbstractPluginUpdater {
 				JSONObject latest = (JSONObject) versions.previous();
 				String versionType = (String) latest.get(API_RELEASE_TYPE_VALUE);
 				String versionName = (String) latest.get(API_NAME_VALUE);
-				Version requiredGameVersion = new PluginVersion((String) latest.get(API_GAME_VERSION_VALUE));
+				RemoteVersion remotePluginVersion = new RemotePluginVersion(versionName, (String) latest.get(API_LINK_VALUE));
+				if (getLocalVersion().compareTo(remotePluginVersion) == 1) continue;
 				if ((versionType.equals("beta") || versionType.equals("alpha")) && branch.equals(Branch.STABLE)) continue;
+				Version requiredGameVersion = new PluginVersion((String) latest.get(API_GAME_VERSION_VALUE));
 				if (!isCompatibleWithGameVersion(requiredGameVersion)) continue;
-				remoteVersion = new RemotePluginVersion(versionName, (String) latest.get(API_LINK_VALUE));
 				String versionFileName = (String) latest.get(API_FILE_NAME_VALUE);
-				if (isNewVersionAvailable()) {
-					String message = MESSAGES.updateAvailable(getName(), remoteVersion.toString());
+				if (getLocalVersion().compareTo(remotePluginVersion) == -1) {
+					remoteVersion = remotePluginVersion;
+					String message = MESSAGES.updateAvailable(getName(), remotePluginVersion.toString());
 					LOGGER.log(Level.INFO, message);
 					break;
 				}
