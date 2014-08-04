@@ -29,7 +29,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class NoUpdateAvailableUpdaterTest extends BukkitDevPluginUpdaterTest {
 
-	private static final Version LOCAL_VERSION = new PluginVersion("2.4.0");
+	private static final Version LOCAL_VERSION = new PluginVersion("9.4.0");
 
 	@Override
 	public void returnsSuppliedBranch()
@@ -58,7 +58,7 @@ public class NoUpdateAvailableUpdaterTest extends BukkitDevPluginUpdaterTest {
 	@Before
 	public void setUp()
 	throws Exception {
-		PluginDescriptionFile descriptionFile = new PluginDescriptionFile("BanHammer", "2.4.0", null);
+		PluginDescriptionFile descriptionFile = new PluginDescriptionFile("BanHammer", "9.4.0", null);
 		BukkitDevPluginUpdater updater = new BukkitDevPluginUpdater(descriptionFile, PluginUpdater.Branch.DEVELOPMENT, PluginUpdater.State.NOTIFY, PROJECT_ID, temporaryFolder.newFolder(), "1.5.2");
 		setUpdater(updater);
 	}
