@@ -41,6 +41,7 @@ public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
 	@Test
 	public void identifyCorrectRemoteVersion() {
+		getUpdater().run();
 		assertEquals(getUpdater().getLatestRemoteVersion(), REMOTE_VERSION);
 	}
 
@@ -64,6 +65,7 @@ public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
 	@Test
 	public void downloadRemoteVersion() {
+		getUpdater().run();
 		getUpdater().update();
 		File file = new File(temporaryFolder.getRoot(), "update");
 		File[] files = file.listFiles();
@@ -75,8 +77,7 @@ public class UpdateBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 	throws Exception {
 		PluginDescriptionFile descriptionFile = new PluginDescriptionFile("BanHammer", "2.1.0", null);
 		PluginUpdater updater = new BukkitDevPluginUpdater(descriptionFile, PluginUpdater.Branch.DEVELOPMENT, PluginUpdater.State.UPDATE, PROJECT_ID, temporaryFolder.newFolder("update"), "1.5.2");
-		this.setUpdater(updater);
-		this.getUpdater().run();
+		setUpdater(updater);
 	}
 
 }
