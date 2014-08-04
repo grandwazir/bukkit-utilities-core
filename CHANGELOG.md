@@ -1,5 +1,7 @@
 # Changelog for BukkitUtilities (Core) (v8.0.0-SNAPSHOT)
 
+2014-08-04 19:12:04 +0100    fix test error (James Richardson)  
+2014-08-04 19:08:15 +0100    add PluginLogger (James Richardson)  
 2014-08-04 18:52:43 +0100    stop trying to build on Java6 (James Richardson)  
 2014-08-04 18:51:19 +0100    fix stray reference (James Richardson)  
 2014-08-04 18:49:08 +0100    lose dependency on log4j. Improves backwards compatibility (James Richardson)  

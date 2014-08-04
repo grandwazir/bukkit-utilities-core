@@ -34,26 +34,13 @@ public class PluginLogger extends Logger {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 		sb.append(prefix);
-		sb.append("]" );
+		sb.append("] ");
 		PluginLogger.prefix = sb.toString();
-	}
-
-	public String getDebuggingPrefix() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<");
-		sb.append(getName());
-		sb.append(">" );
-		return sb.toString();
 	}
 
 	@Override
 	public final void log(LogRecord record) {
-		if (isLoggable(Level.FINE)) {
-			record.setMessage(getDebuggingPrefix() + record.getMessage());
-
-		} else {
-			record.setMessage(getPrefix() + record.getMessage());
-		}
+		record.setMessage(getPrefix() + record.getMessage());
 		super.log(record);
 	}
 
