@@ -2,9 +2,5 @@ language: java
 after_script: "mvn -DserviceName=travis-ci cobertura:cobertura coveralls:cobertura"
 jdk:
   - oraclejdk7
-<<<<<<< HEAD
   - openjdk7 
-=======
   - openjdk7
- 
->>>>>>> experimental
