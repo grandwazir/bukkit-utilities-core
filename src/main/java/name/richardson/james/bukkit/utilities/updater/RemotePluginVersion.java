@@ -1,6 +1,6 @@
 package name.richardson.james.bukkit.utilities.updater;
 
-public class RemotePluginVersion extends PluginVersion {
+public class RemotePluginVersion extends PluginVersion implements RemoteVersion {
 
 	private final String downloadPath;
 
@@ -9,7 +9,7 @@ public class RemotePluginVersion extends PluginVersion {
 		this.downloadPath = downloadPath;
 	}
 
-	protected String getDownloadPath() {
+	@Override public String getDownloadPath() {
 		return downloadPath;
 	}
 

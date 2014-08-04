@@ -33,19 +33,19 @@ public class ReleaseBukkitPluginUpdaterTest extends BukkitDevPluginUpdaterTest {
 
 	@Test
 	public void IdentifyCorrectRemoteVersion() {
-		assertEquals(getUpdater().getLatestRemoteVersion(), REMOTE_VERSION);
+		assertEquals(REMOTE_VERSION, getUpdater().getLatestRemoteVersion());
 	}
 
 	@Override
 	public void returnsSuppliedPluginName()
 	throws Exception {
-		assertEquals(getUpdater().getName(), "BanHammer");
+		assertEquals("BanHammer", getUpdater().getName());
 	}
 
 	@Override
 	public void returnsSuppliedLocalVersion()
 	throws Exception {
-		assertEquals(getUpdater().getLocalVersion(), LOCAL_VERSION);
+		assertEquals(LOCAL_VERSION, getUpdater().getLocalVersion());
 	}
 
 	@Before
